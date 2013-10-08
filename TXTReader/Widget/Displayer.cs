@@ -173,6 +173,10 @@ namespace TXTReader.Widget {
                     for (int i = FirstLine; last_bottom < ActualHeight - Padding.Bottom - Padding.Top && i < Text.Length; ++i) {
                         var ft = createFormattedText(Text[i]);
                         drawingContext.DrawText(ft, new Point(Padding.Left, Padding.Top + last_bottom));
+                        //var geo = ft.BuildGeometry(new Point(Padding.Left, Padding.Top + last_bottom));
+                        //geo.Transform = new TranslateTransform(Padding.Left, Padding.Top + last_bottom);
+                        //geo.Transform.Value.Translate();
+                        //drawingContext.DrawGeometry(Foreground, new Pen(Brushes.Black, 1), geo);
                         last_bottom += ft.Height + ParaSpacing;
                         if (last_bottom < 0) {
                             Offset = last_bottom;
