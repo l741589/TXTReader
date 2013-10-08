@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="TXTReader.Widget.ChapterRulePanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="300">
+    <Grid Background="#FFE5E5E5" >
+        <Border Margin="8">
+            <Grid x:Name="panel">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+                <ToggleButton Grid.Row="0" x:Name="bn_list" Click="bn_list_Click" IsChecked="True">
+                    <DockPanel Width="{Binding ActualWidth, ElementName=bn_list, Mode=OneWay}" LastChildFill="False">
+                        <TextBlock Text="列表目录规则" Width="Auto" DockPanel.Dock="Left"/>
+                        <CheckBox Content="开启" DockPanel.Dock="Right" Margin="0,0,8,0" IsChecked="True" x:Name="cb_list"/>
+                    </DockPanel>
+                </ToggleButton>
+                <TextBox Grid.Row="1" AcceptsReturn="True"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" x:Name="lb_list"/>
+                
+                <ToggleButton Grid.Row="3" x:Name="bn_tree" Click="bn_tree_Click" IsChecked="True">
+                    <DockPanel Width="{Binding ActualWidth, ElementName=bn_tree, Mode=OneWay}" LastChildFill="False">
+                        <TextBlock Text="树状目录规则" Width="Auto" DockPanel.Dock="Left"/>
+                        <CheckBox Content="开启" DockPanel.Dock="Right" Margin="0,0,8,0" x:Name="cb_tree"/>
+                        <Button Content="-" Width="16" Height="16" DockPanel.Dock="Right" x:Name="bn_sub" Click="bn_sub_Click"/>
+                        <Button Content="+" Width="16" Height="16" DockPanel.Dock="Right" x:Name="bn_add" Click="bn_add_Click"/>                        
+                    </DockPanel>
+                </ToggleButton>
+                <UniformGrid  Grid.Row="4" Columns="1" x:Name="gp_tree">
+                    <TextBox AcceptsReturn="True"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+                    <TextBox AcceptsReturn="True"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+                </UniformGrid>
+                
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

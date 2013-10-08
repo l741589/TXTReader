@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="skin"
+    targetNamespace="http://txtreader.org/skin.xsd"
+    elementFormDefault="qualified"
+    xmlns="http://txtreader.org/skin.xsd"
+    xmlns:mstns="http://txtreader.org/skin.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+>
+  <xs:element name="skin" type="mstns:skin"/>
+  
+  <xs:complexType name="skin">
+    <xs:sequence>
+      <xs:element name="part" type="part" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="version" type="xs:string"/>
+  </xs:complexType>
+  
+  <xs:complexType name="part">
+    <xs:sequence>
+      <xs:element name="background" type="mstns:background" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="font" type="mstns:font" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="format" type="mstns:format" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="part" type="mstns:skin" minOccurs="0" maxOccurs="unbounded"/>      
+    </xs:sequence>
+    <xs:attribute name="margin" default="0" type="mstns:thickness"/>
+    <xs:attribute name="padding" default="0" type="mstns:thickness"/>
+  </xs:complexType>
+  
+  <xs:complexType name="background">
+    <xs:choice>
+      <xs:element name="color" type="mstns:color"/>
+      <xs:element name="img" type="xs:string"/>
+    </xs:choice>
+  </xs:complexType>
+  
+  <xs:complexType name="font">
+    <xs:all>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+      <xs:element name="color" type="mstns:color" minOccurs="0"/>
+      <xs:element name="size" type="xs:positiveInteger" minOccurs="0"/>      
+    </xs:all>
+  </xs:complexType>
+  
+  <xs:complexType name="format">
+    <xs:all>
+      <xs:element name="linespacing" minOccurs="0" type="xs:double"/>
+      <xs:element name="paraspacing" minOccurs="0" type="xs:double"/>
+      
+    </xs:all>
+  </xs:complexType>
+
+  <xs:simpleType name="dimen">
+    <xs:union memberTypes="mstns:autoable xs:nonNegativeInteger"/>
+  </xs:simpleType>
+
+  <xs:simpleType name="autoable">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="auto"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="color">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="^(#([0-9A-Fa-f]{3,4}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8}))$"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="thickness">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="^((\d+(\.\d*)?,){0,1}|(\d+(\.\d*)?,){3})\d+(\.\d*)?$"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

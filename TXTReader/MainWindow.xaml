@@ -1,0 +1,55 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:TXTReader" x:Class="TXTReader.MainWindow" x:Name="window"
+        xmlns:converter="clr-namespace:TXTReader.Converter"
+        xmlns:widget="clr-namespace:TXTReader.Widget"
+        Title="MainWindow" Height="350" Width="525" MouseMove="window_MouseMove" SizeChanged="window_SizeChanged" Loaded="window_Loaded" KeyDown="window_KeyDown" Closing="window_Closing">
+    <Window.Resources>
+        <converter:ToolPanelWidthCvt x:Key="toolPanelWidthCvt"/>
+        <converter:ToolPanelTargetLeftCvt x:Key="toolPanelTargetLeftCvt"/>  
+        <Storyboard x:Key="toolPanelShow">
+            <DoubleAnimation Duration="0:0:0.2"
+                AccelerationRatio="0.33" DecelerationRatio="0.33"
+                Storyboard.TargetProperty="(Canvas.Left)">
+                <DoubleAnimation.To>
+                    <MultiBinding Converter="{StaticResource toolPanelTargetLeftCvt}">
+                        <Binding Path="ActualWidth" ElementName="toolPanel"/>
+                        <Binding Path="ActualWidth" ElementName="canvas"/>
+                    </MultiBinding>
+                </DoubleAnimation.To>                
+            </DoubleAnimation>
+        </Storyboard>
+        <Storyboard x:Key="toolPanelHide">
+            <DoubleAnimation
+                AccelerationRatio="0.33" DecelerationRatio="0.33"
+                To="{Binding ActualWidth,ElementName=canvas}" Duration="0:0:0.2"                
+                BeginTime="0:0:1"
+                Storyboard.TargetProperty="(Canvas.Left)">
+            </DoubleAnimation>
+        </Storyboard>
+        <ContextMenu x:Key="mainContextMenu">
+            <MenuItem Header="打开(_O)" x:Name="mi_open" Click="mi_open_Click"/>
+            <MenuItem Header="关闭(_C)" x:Name="mi_close" Click="mi_close_Click"/>
+            <MenuItem Header="重开(_R)" x:Name="mi_reopen" Click="mi_reopen_Click"/>
+            <Separator/>
+            <MenuItem Header="滚屏(_S)" x:Name="mi_scroll" Click="mi_scroll_Click" IsCheckable="True"/>
+            <Separator/>
+            <MenuItem Header="退出(_X)" x:Name="mi_exit" Click="mi_exit_Click"/>
+        </ContextMenu>
+    </Window.Resources>    
+    <Canvas x:Name="canvas">
+        <widget:ToolPanels  x:Name="toolPanel"
+            Height="{Binding ActualHeight, ElementName=canvas}" 
+            Width="{Binding ActualWidth, ElementName=canvas, Converter={StaticResource toolPanelWidthCvt}}"
+            Canvas.Left="{Binding ActualWidth, ElementName=canvas}">
+            <widget:ToolPanels.Triggers>
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <EventTrigger.Actions>
+                        <BeginStoryboard Storyboard="{StaticResource toolPanelHide}"/>
+                    </EventTrigger.Actions>
+                </EventTrigger>
+            </widget:ToolPanels.Triggers>
+        </widget:ToolPanels>
+    </Canvas>
+</Window>

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<skin version="1.0" xmlns="http://txtreader.org/skin.xsd">
+  <part padding="32">
+    <background>
+      <color>#000080</color>
+      <!--img>E:/test.png</img-->
+    </background>
+    <font>
+      <name>隶书</name>
+      <size>32</size>
+      <color>#ffff00</color>
+    </font>
+    <format>
+      <linespacing>8</linespacing>
+      <paraspacing>32</paraspacing>
+    </format>
+  </part>
+</skin>
