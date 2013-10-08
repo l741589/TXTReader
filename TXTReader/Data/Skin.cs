@@ -26,7 +26,7 @@ namespace TXTReader.Data {
         public Color EffetColor { get; set; }//特效所用的颜色
 
         public int LineSpacing { get; set; }//行间距
-        public int paraspacing { get; set; }//段间距
+        public int ParaSpacing { get; set; }//段间距
 
         public Color BackColor { get; set; }//背景颜色
         public ImageSource BackImage { get; set; }//背景图片
