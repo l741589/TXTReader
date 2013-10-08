@@ -17,19 +17,16 @@ using System.Xml;
 using System.Diagnostics;
 using TXTReader.Util;
 using System.Windows.Threading;
+using TXTReader.Data;
 
 namespace TXTReader.Widget {
     public delegate void ShutdownHandler();
 
     public class Displayer : Control {
         public const int DEFAULT_SPEED = 5;
-        public double LineSpacing { get; set; }
-        public double ParaSpacing { get; set; }
         public String FileName { get; set; }
         public String[] Text { get; set; }
-        public Typeface Typeface { get; set; }
         public int FirstLine { get; set; }
-        public Brush BackBrush { get; set; }
         public double Offset { get; set; }
         public bool IsToUpdated { get; set; }
 
@@ -75,22 +72,25 @@ namespace TXTReader.Widget {
         public Displayer(XmlDocument xml) : base() { InitComponent(xml); }
 
         private void InitComponent(XmlDocument xml = null) {
-            LineSpacing = 4;
-            ParaSpacing = 8;
-            Focusable = true;
-            var ffs = Fonts.SystemTypefaces;
-            Typeface = new Typeface("宋体");
-            FontSize = 12;
-            Foreground = Brushes.Yellow;
-            BackBrush = Brushes.DarkBlue;
+            Skin Skin = Options.Instance.Skin;
+            Skin.LineSpacing = 4;
+            Skin.ParaSpacing = 8;
+            Skin.Font = new Typeface("宋体");
+            Skin.FontSize = 12;
+            Skin.Foreground = Brushes.Yellow;
+            Skin.BackColor = Colors.DarkBlue;
+            Skin.BackGroundType = BackGroundType.SolidColor;
+            Skin.Padding = new Thickness(16);
+
             FirstLine = 0;
-            Offset = 0;
-            Padding = new Thickness(16);
+            Offset = 0;            
             if (xml != null) parseSkin(xml);
+
             timer = new TRTimer();
             timer.Timer += timer_Timer;
             SetBinding(SpeedProperty, new Binding("Interval") { Source = timer });
-            Speed = DEFAULT_SPEED;
+
+            Options.Instance.Speed = DEFAULT_SPEED;
             IsToUpdated = true;
         }
 
@@ -112,19 +112,24 @@ namespace TXTReader.Widget {
         }
 
         private void parseSkin(XmlNode node) {
+            Skin sk = Options.Instance.Skin;
             switch (node.Name.ToLower()) {
-                case "part": Padding = (Thickness)new ThicknessConverter().ConvertFrom(node.Attributes["padding"].Value); break;
+                case "part": sk.Padding = (Thickness)new ThicknessConverter().ConvertFrom(node.Attributes["padding"].Value); break;
                 case "color":
-                    if (node.ParentNode.Name.ToLower().Equals("background"))
-                        BackBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(node.InnerText));
-                    else if (node.ParentNode.Name.ToLower().Equals("font"))
-                        Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(node.InnerText));
+                    if (node.ParentNode.Name.ToLower().Equals("background")) {
+                        sk.BackColor = (Color)ColorConverter.ConvertFromString(node.InnerText);
+                        sk.BackGroundType = BackGroundType.SolidColor;
+                    } else if (node.ParentNode.Name.ToLower().Equals("font"))
+                        sk.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(node.InnerText));
                     break;
-                case "img": BackBrush = new ImageBrush((ImageSource)new ImageSourceConverter().ConvertFromString(node.InnerText)); break;
+                case "img": {
+                        sk.BackImage = (ImageSource)new ImageSourceConverter().ConvertFromString(node.InnerText);
+                        sk.BackGroundType = BackGroundType.Image;
+                    } break;
                 case "name": FontFamily = new FontFamily(node.InnerText); break;
-                case "size": FontSize = double.Parse(node.InnerText); break;
-                case "linespacing": LineSpacing = double.Parse(node.InnerText); break;
-                case "paraspacing": ParaSpacing = double.Parse(node.InnerText); break;
+                case "size": sk.FontSize = double.Parse(node.InnerText); break;
+                case "linespacing": sk.LineSpacing = double.Parse(node.InnerText); break;
+                case "paraspacing": sk.ParaSpacing = double.Parse(node.InnerText); break;
                 default: break;
             }
 
@@ -132,7 +137,7 @@ namespace TXTReader.Widget {
             if (node.NextSibling != null) parseSkin(node.NextSibling);
 
             switch (node.Name.ToLower()) {
-                case "font": Typeface = new Typeface(FontFamily, FontStyle, FontWeight, FontStretch); break;
+                case "font": sk.Font = new Typeface(FontFamily, FontStyle, FontWeight, FontStretch); break;
                 default: break;
             }
         }
@@ -155,29 +160,31 @@ namespace TXTReader.Widget {
         }
 
         private FormattedText createFormattedText(String s) {
+            Skin sk = Options.Instance.Skin;
             FormattedText ft = null;
-            ft = new FormattedText(s, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, Typeface, FontSize, Foreground);
-            ft.MaxTextWidth = Math.Max(FontSize, ActualWidth - Padding.Left - Padding.Right);
+            ft = new FormattedText(s, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, sk.Font, sk.FontSize, sk.Foreground);
+            ft.MaxTextWidth = Math.Max(sk.FontSize, ActualWidth - sk.Padding.Left - sk.Padding.Right);
             ft.Trimming = TextTrimming.None;
             ft.TextAlignment = TextAlignment.Left;
-            ft.LineHeight = FontSize + LineSpacing;
+            ft.LineHeight = sk.FontSize + sk.LineSpacing;
             return ft;
         }
 
         protected override void OnRender(DrawingContext drawingContext) {
+            Skin sk = Options.Instance.Skin;
             if (ActualHeight > 0 && ActualWidth > 0) {
-                drawingContext.DrawRectangle(BackBrush, null, new Rect(0, 0, ActualWidth, ActualHeight));
+                drawingContext.DrawRectangle(sk.Background, null, new Rect(0, 0, ActualWidth, ActualHeight));
                 if (Text != null) {
                     Debug.WriteLine("<<<LN{0},OFF{1}", FirstLine, Offset);
                     double last_bottom = Offset;
-                    for (int i = FirstLine; last_bottom < ActualHeight - Padding.Bottom - Padding.Top && i < Text.Length; ++i) {
+                    for (int i = FirstLine; last_bottom < ActualHeight - sk.Padding.Bottom - sk.Padding.Top && i < Text.Length; ++i) {
                         var ft = createFormattedText(Text[i]);
-                        drawingContext.DrawText(ft, new Point(Padding.Left, Padding.Top + last_bottom));
+                        drawingContext.DrawText(ft, new Point(sk.Padding.Left, sk.Padding.Top + last_bottom));
                         //var geo = ft.BuildGeometry(new Point(Padding.Left, Padding.Top + last_bottom));
                         //geo.Transform = new TranslateTransform(Padding.Left, Padding.Top + last_bottom);
                         //geo.Transform.Value.Translate();
                         //drawingContext.DrawGeometry(Foreground, new Pen(Brushes.Black, 1), geo);
-                        last_bottom += ft.Height + ParaSpacing;
+                        last_bottom += ft.Height + sk.ParaSpacing;
                         if (last_bottom < 0) {
                             Offset = last_bottom;
                             ++FirstLine;
@@ -188,14 +195,14 @@ namespace TXTReader.Widget {
                     while (Offset > 0 && FirstLine > 0) {
                         --FirstLine;
                         FormattedText ft = createFormattedText(Text[FirstLine]);
-                        Offset -= ft.Height + ParaSpacing;
-                        drawingContext.DrawText(ft, new Point(Padding.Left, Padding.Top + Offset));
+                        Offset -= ft.Height + sk.ParaSpacing;
+                        drawingContext.DrawText(ft, new Point(sk.Padding.Left, sk.Padding.Top + Offset));
                     }
                     Geometry g1 = new RectangleGeometry(new Rect(0, 0, ActualWidth, ActualHeight));
-                    Geometry g2 = new RectangleGeometry(new Rect(Padding.Left, Padding.Top, ActualWidth - Padding.Right - Padding.Left, ActualHeight - Padding.Bottom - Padding.Top));
+                    Geometry g2 = new RectangleGeometry(new Rect(sk.Padding.Left, sk.Padding.Top, ActualWidth - sk.Padding.Right - sk.Padding.Left, ActualHeight - sk.Padding.Bottom - sk.Padding.Top));
                     PathGeometry g = Geometry.Combine(g1, g2, GeometryCombineMode.Exclude, null);
                     drawingContext.PushClip(g);
-                    drawingContext.DrawRectangle(BackBrush, null, new Rect(0, 0, ActualWidth, ActualHeight));
+                    drawingContext.DrawRectangle(sk.Background, null, new Rect(0, 0, ActualWidth, ActualHeight));
                     drawingContext.Pop();
                     Debug.WriteLine(">>>LN{0},OFF{1}", FirstLine, Offset);
                 }
@@ -228,8 +235,9 @@ namespace TXTReader.Widget {
         }
 
         protected override void OnMouseWheel(MouseWheelEventArgs e) {
+            Skin sk = Options.Instance.Skin;
             base.OnMouseWheel(e);
-            Offset += e.Delta * (FontSize + LineSpacing) / 120;
+            Offset += e.Delta * (sk.FontSize + sk.LineSpacing) / 120;
             Update();
         }
 
