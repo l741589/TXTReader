@@ -15,26 +15,27 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml;
 using System.Diagnostics;
-using TXTReader.Util;
 using System.Windows.Threading;
 using TXTReader.Data;
 
-namespace TXTReader.Widget {
+namespace TXTReader.Display {
     public delegate void ShutdownHandler();
 
-    public class Displayer : Control {
-        public const int DEFAULT_SPEED = 5;
+    public class Displayer : Control, IDisplayer {
+
         public String FileName { get; set; }
         public String[] Text { get; set; }
         public int FirstLine { get; set; }
         public double Offset { get; set; }
         public bool IsToUpdated { get; set; }
 
+        public static readonly DependencyProperty SkinProperty = DependencyProperty.Register("Skin", typeof(Skin), typeof(Displayer), new PropertyMetadata(new Skin()));
         public static readonly DependencyProperty SpeedProperty = DependencyProperty.Register("Speed", typeof(double), typeof(Displayer));
         public static readonly RoutedEvent ShutdownEvent = EventManager.RegisterRoutedEvent("Shutdown", RoutingStrategy.Direct, typeof(ShutdownHandler), typeof(Displayer));
 
         public event ShutdownHandler Shutdown { add { AddHandler(ShutdownEvent, value); } remove { RemoveHandler(ShutdownEvent, value); } }
-        public double Speed { get { return (double)GetValue(SpeedProperty); } set { SetValue(SpeedProperty, value); } }
+        private double Speed { get { return (double)GetValue(SpeedProperty); } set { SetValue(SpeedProperty, value); } }
+        private Skin Skin { get { return (Skin)GetValue(SkinProperty); } set { SetValue(SkinProperty, value); } }
 
         private TRTimer timer;
         private Point? lastPoint = null;
@@ -72,7 +73,10 @@ namespace TXTReader.Widget {
         public Displayer(XmlDocument xml) : base() { InitComponent(xml); }
 
         private void InitComponent(XmlDocument xml = null) {
-            Skin Skin = Options.Instance.Skin;
+            SetBinding(SpeedProperty, new Binding("Interval") { Source = timer });
+            SetBinding(SpeedProperty, new Binding("Speed") { Source = Options.Instance });
+            SetBinding(SkinProperty, new Binding("Skin") { Source = Options.Instance });
+
             Skin.LineSpacing = 4;
             Skin.ParaSpacing = 8;
             Skin.Font = new Typeface("宋体");
@@ -81,16 +85,17 @@ namespace TXTReader.Widget {
             Skin.BackColor = Colors.DarkBlue;
             Skin.BackGroundType = BackGroundType.SolidColor;
             Skin.Padding = new Thickness(16);
+            Skin.EffetSize = 1;
+            Skin.Effect = Brushes.Black;
+            Skin.EffectType = EffectType.Shadow;
 
             FirstLine = 0;
-            Offset = 0;            
+            Offset = 0;
             if (xml != null) parseSkin(xml);
 
             timer = new TRTimer();
             timer.Timer += timer_Timer;
-            SetBinding(SpeedProperty, new Binding("Interval") { Source = timer });
 
-            Options.Instance.Speed = DEFAULT_SPEED;
             IsToUpdated = true;
         }
 
@@ -112,24 +117,23 @@ namespace TXTReader.Widget {
         }
 
         private void parseSkin(XmlNode node) {
-            Skin sk = Options.Instance.Skin;
             switch (node.Name.ToLower()) {
-                case "part": sk.Padding = (Thickness)new ThicknessConverter().ConvertFrom(node.Attributes["padding"].Value); break;
+                case "part": Skin.Padding = (Thickness)new ThicknessConverter().ConvertFrom(node.Attributes["padding"].Value); break;
                 case "color":
                     if (node.ParentNode.Name.ToLower().Equals("background")) {
-                        sk.BackColor = (Color)ColorConverter.ConvertFromString(node.InnerText);
-                        sk.BackGroundType = BackGroundType.SolidColor;
+                        Skin.BackColor = (Color)ColorConverter.ConvertFromString(node.InnerText);
+                        Skin.BackGroundType = BackGroundType.SolidColor;
                     } else if (node.ParentNode.Name.ToLower().Equals("font"))
-                        sk.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(node.InnerText));
+                        Skin.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString(node.InnerText));
                     break;
                 case "img": {
-                        sk.BackImage = (ImageSource)new ImageSourceConverter().ConvertFromString(node.InnerText);
-                        sk.BackGroundType = BackGroundType.Image;
+                        Skin.BackImage = (ImageSource)new ImageSourceConverter().ConvertFromString(node.InnerText);
+                        Skin.BackGroundType = BackGroundType.Image;
                     } break;
                 case "name": FontFamily = new FontFamily(node.InnerText); break;
-                case "size": sk.FontSize = double.Parse(node.InnerText); break;
-                case "linespacing": sk.LineSpacing = double.Parse(node.InnerText); break;
-                case "paraspacing": sk.ParaSpacing = double.Parse(node.InnerText); break;
+                case "size": Skin.FontSize = double.Parse(node.InnerText); break;
+                case "linespacing": Skin.LineSpacing = double.Parse(node.InnerText); break;
+                case "paraspacing": Skin.ParaSpacing = double.Parse(node.InnerText); break;
                 default: break;
             }
 
@@ -137,7 +141,7 @@ namespace TXTReader.Widget {
             if (node.NextSibling != null) parseSkin(node.NextSibling);
 
             switch (node.Name.ToLower()) {
-                case "font": sk.Font = new Typeface(FontFamily, FontStyle, FontWeight, FontStretch); break;
+                case "font": Skin.Font = new Typeface(FontFamily, FontStyle, FontWeight, FontStretch); break;
                 default: break;
             }
         }
@@ -159,32 +163,43 @@ namespace TXTReader.Widget {
             Text = ss.ToArray();
         }
 
-        private FormattedText createFormattedText(String s) {
-            Skin sk = Options.Instance.Skin;
+        public FormattedText createFormattedText(String s) {
             FormattedText ft = null;
-            ft = new FormattedText(s, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, sk.Font, sk.FontSize, sk.Foreground);
-            ft.MaxTextWidth = Math.Max(sk.FontSize, ActualWidth - sk.Padding.Left - sk.Padding.Right);
+            ft = new FormattedText(s, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, Skin.Font, Skin.FontSize, Skin.Foreground);
+            ft.MaxTextWidth = Math.Max(Skin.FontSize, ActualWidth - Skin.Padding.Left - Skin.Padding.Right);
             ft.Trimming = TextTrimming.None;
             ft.TextAlignment = TextAlignment.Left;
-            ft.LineHeight = sk.FontSize + sk.LineSpacing;
+            ft.LineHeight = Skin.FontSize + Skin.LineSpacing;
             return ft;
         }
 
+        private void TextOut(DrawingContext dc, FormattedText ft, double x, double y) {
+            //var geo = ft.BuildGeometry(new Point(0,0)).Clone();            
+            //geo.Transform = new TranslateTransform(x, y);
+            //geo.Transform.Value.Translate();
+            //dc.DrawGeometry(Skin.Foreground, new Pen(Brushes.Black, 1), geo);
+            //for (int i = 1; i < 5; ++i) {
+            //    ft.SetForegroundBrush(Brushes.Black);
+            //    dc.DrawText(ft, new Point(x + i, y + i));
+            //}
+            //ft.SetForegroundBrush(Skin.Foreground);
+            //dc.DrawText(ft, new Point(x, y));
+            dc.DrawText(ft,new Point(x, y));
+
+        }
+
         protected override void OnRender(DrawingContext drawingContext) {
-            Skin sk = Options.Instance.Skin;
             if (ActualHeight > 0 && ActualWidth > 0) {
-                drawingContext.DrawRectangle(sk.Background, null, new Rect(0, 0, ActualWidth, ActualHeight));
+                drawingContext.DrawRectangle(Skin.Background, null, new Rect(0, 0, ActualWidth, ActualHeight));
                 if (Text != null) {
-                    Debug.WriteLine("<<<LN{0},OFF{1}", FirstLine, Offset);
+                    //Debug.WriteLine("<<<LN{0},OFF{1}", FirstLine, Offset);
+
+                    //绘制文本
                     double last_bottom = Offset;
-                    for (int i = FirstLine; last_bottom < ActualHeight - sk.Padding.Bottom - sk.Padding.Top && i < Text.Length; ++i) {
+                    for (int i = FirstLine; last_bottom < ActualHeight - Skin.Padding.Bottom - Skin.Padding.Top && i < Text.Length; ++i) {
                         var ft = createFormattedText(Text[i]);
-                        drawingContext.DrawText(ft, new Point(sk.Padding.Left, sk.Padding.Top + last_bottom));
-                        //var geo = ft.BuildGeometry(new Point(Padding.Left, Padding.Top + last_bottom));
-                        //geo.Transform = new TranslateTransform(Padding.Left, Padding.Top + last_bottom);
-                        //geo.Transform.Value.Translate();
-                        //drawingContext.DrawGeometry(Foreground, new Pen(Brushes.Black, 1), geo);
-                        last_bottom += ft.Height + sk.ParaSpacing;
+                        TextOut(drawingContext, ft, Skin.Padding.Left, Skin.Padding.Top + last_bottom);
+                        last_bottom += ft.Height + Skin.ParaSpacing;
                         if (last_bottom < 0) {
                             Offset = last_bottom;
                             ++FirstLine;
@@ -194,17 +209,20 @@ namespace TXTReader.Widget {
                     if (FirstLine == 0 && Offset > 0) Offset = 0;
                     while (Offset > 0 && FirstLine > 0) {
                         --FirstLine;
-                        FormattedText ft = createFormattedText(Text[FirstLine]);
-                        Offset -= ft.Height + sk.ParaSpacing;
-                        drawingContext.DrawText(ft, new Point(sk.Padding.Left, sk.Padding.Top + Offset));
+                        var ft = createFormattedText(Text[FirstLine]);
+                        Offset -= ft.Height + Skin.ParaSpacing;
+                        TextOut(drawingContext, ft, Skin.Padding.Left, Skin.Padding.Top + Offset);
                     }
+
+                    //裁剪外框
                     Geometry g1 = new RectangleGeometry(new Rect(0, 0, ActualWidth, ActualHeight));
-                    Geometry g2 = new RectangleGeometry(new Rect(sk.Padding.Left, sk.Padding.Top, ActualWidth - sk.Padding.Right - sk.Padding.Left, ActualHeight - sk.Padding.Bottom - sk.Padding.Top));
+                    Geometry g2 = new RectangleGeometry(new Rect(Skin.Padding.Left, Skin.Padding.Top, ActualWidth - Skin.Padding.Right - Skin.Padding.Left, ActualHeight - Skin.Padding.Bottom - Skin.Padding.Top));
                     PathGeometry g = Geometry.Combine(g1, g2, GeometryCombineMode.Exclude, null);
                     drawingContext.PushClip(g);
-                    drawingContext.DrawRectangle(sk.Background, null, new Rect(0, 0, ActualWidth, ActualHeight));
+                    drawingContext.DrawRectangle(Skin.Background, null, new Rect(0, 0, ActualWidth, ActualHeight));
                     drawingContext.Pop();
-                    Debug.WriteLine(">>>LN{0},OFF{1}", FirstLine, Offset);
+
+                    //Debug.WriteLine(">>>LN{0},OFF{1}", FirstLine, Offset);
                 }
             }
             IsToUpdated = false;
@@ -235,9 +253,8 @@ namespace TXTReader.Widget {
         }
 
         protected override void OnMouseWheel(MouseWheelEventArgs e) {
-            Skin sk = Options.Instance.Skin;
             base.OnMouseWheel(e);
-            Offset += e.Delta * (sk.FontSize + sk.LineSpacing) / 120;
+            Offset += e.Delta * (Skin.FontSize + Skin.LineSpacing) / 120;
             Update();
         }
 
@@ -248,10 +265,19 @@ namespace TXTReader.Widget {
             }
         }
 
+        protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo) {
+            base.OnRenderSizeChanged(sizeInfo);
+
+        }
+
         public void Update() {
             if (IsToUpdated) return;
             IsToUpdated = true;
             InvalidateVisual();
         }
+
+        public double CanvasHeight { get { return ActualHeight - Skin.Padding.Top - Skin.Padding.Bottom; } }
+        public double CanvasWidth { get { return ActualWidth - Skin.Padding.Left - Skin.Padding.Right; } }
+
     }
 }

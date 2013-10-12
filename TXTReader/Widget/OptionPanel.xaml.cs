@@ -21,5 +21,6 @@ namespace TXTReader.Widget {
         public OptionPanel() {
             InitializeComponent();
         }
+
     }
 }

@@ -8,10 +8,10 @@ using System.Windows.Media;
 
 namespace TXTReader.Data {
 
-    enum BackGroundType { SolidColor, Image }
-    enum TextEffect { None, Shadow, Stroke }//无，阴影，描边
+    public enum BackGroundType { SolidColor, Image }
+    public enum EffectType { None, Shadow, Stroke }//无，阴影，描边
 
-    class Skin {
+    public class Skin {
         private BackGroundType backGroundType;
         private Brush background = null;
 
@@ -20,8 +20,9 @@ namespace TXTReader.Data {
         public Brush Foreground { get; set; }//FontColor
         public Typeface Font { get; set; }
         public double FontSize { get; set; }
-        public TextEffect TextEffect { get; set; }//字体特效
-        public Color EffetColor { get; set; }//特效所用的颜色
+        public EffectType EffectType { get; set; }//字体特效
+        public Brush Effect { get; set; }//特效所用的颜色
+        public double EffetSize { get; set; }//特效的大小
 
         public double LineSpacing { get; set; }//行间距
         public double ParaSpacing { get; set; }//段间距
