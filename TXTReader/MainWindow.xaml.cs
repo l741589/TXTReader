@@ -15,9 +15,12 @@ using System.Windows.Shapes;
 using System.Windows.Media.Animation;
 using System.Xml;
 using TXTReader.Widget;
+using TXTReader.Display;
 using System.Diagnostics;
 using System.Windows.Threading;
-using TXTReader.Util;
+using TXTReader.Properties;
+using TXTReader.Utility;
+using TXTReader.Res;
 
 namespace TXTReader {
     /// <summary>
@@ -26,12 +29,13 @@ namespace TXTReader {
     public partial class MainWindow : Window {
         private readonly Storyboard toolPanelShow;
         private bool toolPanelShowing = false;
-        private Displayer displayer;
+        //private IDisplayer displayer;
 
         public MainWindow() {
             InitializeComponent();
             toolPanelShow = Resources["toolPanelShow"] as Storyboard;
             toolPanelShow.Completed += (arg0, arg1) => { toolPanelShowing = false; };
+            
             /*全屏
             WindowStyle = WindowStyle.None;
             ResizeMode = ResizeMode.NoResize;
@@ -41,7 +45,6 @@ namespace TXTReader {
 
 
         private void window_MouseMove(object sender, MouseEventArgs e) {
-            if (displayer != null) Title = displayer.FirstLine + ":" + displayer.Offset;
             if (e.GetPosition(canvas).X > canvas.ActualWidth - 32) {
                 if (!toolPanelShowing) {
                     toolPanelShowing = true;
@@ -58,55 +61,27 @@ namespace TXTReader {
             XmlDocument dom = new XmlDocument();
             try {
                 dom.Load("res/defaultskin.xml");
+                SkinParser.SetDefaultSkin();
+                SkinParser.ParseSkin(dom);
             } catch (Exception ex) {
                 Debug.Print(ex.StackTrace);
             }
-            displayer = new Displayer(dom);
-            canvas.Children.Add(displayer);
-            Canvas.SetLeft(displayer, 0);
-            Canvas.SetTop(displayer, 0);
-            Binding b = new Binding("ActualWidth");
-            b.ElementName = "canvas";
-            displayer.SetBinding(Displayer.WidthProperty, b);
-            b = new Binding("ActualHeight");
-            b.ElementName = "canvas";
-            displayer.SetBinding(Displayer.HeightProperty, b);
-            Canvas.SetZIndex(displayer, 0);
-            Canvas.SetZIndex(toolPanel, 1);
-            displayer.ContextMenu = Resources["mainContextMenu"] as ContextMenu;
-
-            b = new Binding("Value");
-            b.Source = toolPanel.pn_option.se_speed;
-            displayer.SetBinding(Displayer.SpeedProperty,b);
+            displayer.UpdateSkin();
+            displayer.SetBinding(Displayer4.SpeedProperty, new Binding("Value") { Source = toolPanel.pn_option.se_speed });                        
         }
 
-        private void mi_open_Click(object sender, RoutedEventArgs e) {
-            var dlg = new System.Windows.Forms.OpenFileDialog();
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                displayer.OpenFile(dlg.FileName);
-            }
-        }
-
-        private void mi_close_Click(object sender, RoutedEventArgs e) {
-            displayer.CloseFile();
-        }
-
-        private void mi_reopen_Click(object sender, RoutedEventArgs e) {
-            displayer.ReopenFile();
-        }
-
-        private void mi_exit_Click(object sender, RoutedEventArgs e) {
-            Close();
-        }
-
-        private void mi_scroll_Click(object sender, RoutedEventArgs e) {
-            displayer.IsScrolling = (sender as MenuItem).IsChecked;
+        void CompositionTarget_Rendering(object sender, EventArgs e) {
+            throw new NotImplementedException();
         }
 
         private void window_KeyDown(object sender, KeyEventArgs e) {
             switch(e.Key){
                 case Key.OemComma: --toolPanel.pn_option.se_speed.Value; break;
                 case Key.OemPeriod: ++toolPanel.pn_option.se_speed.Value; break;
+                case Key.Up: displayer.LineModify(+1); break;
+                case Key.Down: displayer.LineModify(-1); break;
+                case Key.PageUp: displayer.PageModify(+1); break;
+                case Key.PageDown: displayer.PageModify(-1); break;
             }
         }
 

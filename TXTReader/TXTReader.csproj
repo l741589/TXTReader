@@ -62,6 +62,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converter\ParaSpacingCvt.cs" />
     <Compile Include="Converter\ToolPanelTargetLeftCvt.cs" />
     <Compile Include="Converter\ToolPanelWidthCvt.cs" />
     <Compile Include="Data\Chapter.cs" />
@@ -71,11 +72,34 @@
     <Compile Include="Data\Skin.cs" />
     <Compile Include="Data\Trmex.cs" />
     <Compile Include="Data\Options.cs" />
-    <Compile Include="Util\TRTimer.cs" />
+    <Compile Include="Display\IDisplayer.cs" />
+    <Compile Include="Display\TextDisplayCache.cs" />
+    <Compile Include="Display\TRText.xaml.cs">
+      <DependentUpon>TRText.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\Displayer3.xaml.cs">
+      <DependentUpon>Displayer3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\TRText2.xaml.cs">
+      <DependentUpon>TRText2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\Displayer4.xaml.cs">
+      <DependentUpon>Displayer4.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\TRText3.xaml.cs">
+      <DependentUpon>TRText3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\ITRTimer.cs" />
+    <Compile Include="Display\TRTimer.cs" />
+    <Compile Include="Display\TRTimer2.cs" />
+    <Compile Include="Utility\SkinParser.cs" />
     <Compile Include="Widget\ChapterRulePanel.xaml.cs">
       <DependentUpon>ChapterRulePanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Widget\Displayer.cs" />
+    <Compile Include="Display\Displayer.cs" />
+    <Compile Include="Display\Displayer2.xaml.cs">
+      <DependentUpon>Displayer2.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Widget\OptionPanel.xaml.cs">
       <DependentUpon>OptionPanel.xaml</DependentUpon>
     </Compile>
@@ -85,6 +109,26 @@
     <Compile Include="Widget\ToolPanels.xaml.cs">
       <DependentUpon>ToolPanels.xaml</DependentUpon>
     </Compile>
+    <Page Include="Display\TRText.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Display\Displayer3.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Display\TRText2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Display\Displayer4.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Display\TRText3.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -97,11 +141,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="res\GlobalDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Widget\ChapterRulePanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Display\Displayer2.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

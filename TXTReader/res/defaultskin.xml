@@ -3,16 +3,16 @@
   <part padding="32">
     <background>
       <color>#000080</color>
-      <!--img>E:/test.png</img-->
+      <img>E:/test.png</img>
     </background>
     <font>
-      <name>隶书</name>
+      <name>微软雅黑</name>
       <size>32</size>
       <color>#ffff00</color>
     </font>
     <format>
       <linespacing>8</linespacing>
-      <paraspacing>32</paraspacing>
+      <paraspacing>16</paraspacing>
     </format>
   </part>
 </skin>
