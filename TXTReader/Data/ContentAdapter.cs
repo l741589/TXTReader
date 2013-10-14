@@ -10,12 +10,13 @@ namespace TXTReader.Data {
     interface ContentItemAdapter {
         ContentStatus ContentStatus { get; }
         String Title { get; }
+        String TotalTitle { get; }
+        List<String> Text { get; }
+        List<String> TotalText { get; }
+        int Level { get; }
         int Length { get; }
-        ContentItemAdapter FirstChild { get; }
-        ContentItemAdapter LastChild { get; }
+        LinkedList<ContentItemAdapter> Children { get; }
         ContentItemAdapter Parent { get; }
-        ContentItemAdapter Prevous { get; }
-        ContentItemAdapter Next { get; }
     }
 
     interface ContentAdapter : ContentItemAdapter { }

@@ -18,6 +18,7 @@ using TXTReader.Data;
 using System.Diagnostics;
 using TXTReader.Utility;
 using TXTReader.Res;
+using System.Collections;
 
 namespace TXTReader.Display {
     /// <summary>
@@ -74,9 +75,9 @@ namespace TXTReader.Display {
             canvas.SizeChanged += (d, e) => { Clear(); Update(); };
         }
 
-        void CopyText(String[] src, int piecelen = 4096) {
+        void CopyText(ICollection<String> src, int piecelen = 4096) {
             if (piecelen == 0) {
-                Text = src;
+                Text = src.ToArray();
                 return;
             }
             List<String> ss = new List<String>();
@@ -117,8 +118,11 @@ namespace TXTReader.Display {
 
         public void OpenFile(String filename) {
             FileName = filename;
-            CopyText(File.ReadAllLines(filename, Encoding.Default));
+            //CopyText(File.ReadAllLines(filename, Encoding.Default));
+            G.RootChapter.Load(filename, G.Trmex);
+            CopyText(G.RootChapter.TotalText);
             Update();
+
         }
 
         public void CloseFile() {
@@ -126,7 +130,8 @@ namespace TXTReader.Display {
             FileName = null;
             FirstLine = 0;
             Offset = 0;
-            Clear();
+            G.RootChapter.Clear();
+            Clear();            
             Update();
         }
 
@@ -136,8 +141,10 @@ namespace TXTReader.Display {
         }
 
         public void ReopenFile() {
-            CopyText(File.ReadAllLines(FileName, Encoding.Default));
-            Update();
+            G.RootChapter.Clear();
+            Clear();
+            Text = null;
+            OpenFile(FileName);
         }
 
 
