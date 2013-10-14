@@ -69,6 +69,7 @@
     <Compile Include="Data\ChapterDesc.cs" />
     <Compile Include="Data\ContentAdapter.cs" />
     <Compile Include="Data\FloatMessage.cs" />
+    <Compile Include="Data\RootChapter.cs" />
     <Compile Include="Data\Skin.cs" />
     <Compile Include="Data\Trmex.cs" />
     <Compile Include="Data\Options.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Display\ITRTimer.cs" />
     <Compile Include="Display\TRTimer.cs" />
     <Compile Include="Display\TRTimer2.cs" />
+    <Compile Include="Utility\G.cs" />
     <Compile Include="Utility\SkinParser.cs" />
     <Compile Include="Widget\ChapterRulePanel.xaml.cs">
       <DependentUpon>ChapterRulePanel.xaml</DependentUpon>
