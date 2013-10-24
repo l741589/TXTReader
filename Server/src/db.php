@@ -1,4 +1,4 @@
-<?php
+<?
 /**
  * Created by JetBrains PhpStorm.
  * User: van
@@ -8,21 +8,69 @@
  */
 
 class db {
+    /**
+     * @var
+     */
     protected $dbhost;
+    /**
+     * @var
+     */
     protected $dbname;
+    /**
+     * @var
+     */
     protected $dbuser;
+    /**
+     * @var
+     */
     protected $dbpassword;
+    /**
+     * @var
+     */
     protected $dbconn;
+    /**
+     * @var array
+     */
     var $tables = array("users", "books");
+    /**
+     * @var bool
+     */
     var $ready = false;
+    /**
+     * @var
+     */
     var $last_query;
+    /**
+     * @var
+     */
     var $result;
+    /**
+     * @var
+     */
     var $last_result;
+    /**
+     * @var
+     */
     var $last_error;
+    /**
+     * @var
+     */
     var $rows_affected;
+    /**
+     * @var
+     */
     var $num_rows;
+    /**
+     * @var
+     */
     var $inserted_id;
 
+    /**
+     * @param $dbhost
+     * @param $dbname
+     * @param $dbuser
+     * @param $dbpassword
+     */
     function __construct($dbhost,$dbname, $dbuser, $dbpassword) {
         register_shutdown_function(array($this, '__destruct'));
         $this->dbuser = $dbuser;
@@ -33,10 +81,16 @@ class db {
         $this->db_connect();
     }
 
+    /**
+     *
+     */
     function __destruct() {
         return true;
     }
 
+    /**
+     *
+     */
     function db_connect() {
         $this->dbconn = mysql_connect($this->dbhost, $this->dbuser, $this->dbpassword);
         if (!$this->dbconn)
@@ -48,6 +102,10 @@ class db {
         $this->db_select($this->dbname, $this->dbconn);
     }
 
+    /**
+     * @param $dbname
+     * @param null $dbconn
+     */
     function db_select($dbname, $dbconn = null) {
         if (is_null($dbconn)) {
             $dbconn = $this->dbconn;
@@ -58,6 +116,10 @@ class db {
         }
     }
 
+    /**
+     * @param $query
+     * @return bool|int|resource
+     */
     function query($query) {
         if (!$this->ready)
             return false;
@@ -97,37 +159,71 @@ class db {
         return $return_val;
     }
 
+    /**
+     * @param $table
+     * @param $data
+     * @param null $format
+     */
     function insert($table, $data, $format = null) {
         $this->inserted_id = 0;
-        $format = (array)$format;
+        $formats = $format = (array)$format;
         $fields = array_keys($data);
+        $fields_formatted = array();
+        foreach ($fields as $field) {
+            if (!empty($format)) {
+                $form = ($form = array_shift($formats)) ? $form : null;
+            }
+            else {
+                $form = '%s';
+            }
+            if (!is_null($form))
+                $fields_formatted[] = $form;
+        }
+        $sql = "insert into $table (".implode(',', $fields).") values (".implode(",", $fields_formatted).")";
+        return $this->query($this->prepare($sql, $data));
     }
 
-
-    function update() {
-
-    }
-
-    function delete() {
+    function update($table, $data, $cond, $format = null, $cond_format = null) {
 
     }
 
+    function delete($table, $cond, $cond_format = null) {
+
+    }
+
+    /**
+     *
+     */
     function get_val() {
 
     }
 
+    /**
+     *
+     */
     function get_row() {
 
     }
 
-    function get_cow() {
+    /**
+     *
+     */
+    function get_col() {
 
     }
 
+    /**
+     *
+     */
     function get_result() {
 
     }
 
+    /**
+     * @param $query
+     * @param $args
+     * @return string
+     */
     public function prepare($query, $args) {
         if (is_null($query))
             return ;
@@ -144,6 +240,9 @@ class db {
         return @vsprintf($query, $args);
     }
 
+    /**
+     *
+     */
     function flush() {
         $this->last_result = array();
         $this->last_query = null;
@@ -154,22 +253,19 @@ class db {
             mysql_free_result($this->result);
     }
 
+    /**
+     * @param $string
+     */
     function escape(&$string) {
         if (!is_float($string))
             addslashes($string);
     }
 
-    function print_error() {
-
+    /**
+     * @param $error
+     */
+    function print_error($error) {
+        return ;
     }
-}
-
-function connect() {
-    $conn = mysql_connect("127.0.0.1:3307", "root", "313633893") or die("Error: Could not connect to database");
-    mysql_select_db("txtreader", $conn) or die ("Error: Could not select database");
-}
-
-function close() {
-    mysql_close();
 }
 
