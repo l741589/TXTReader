@@ -17,7 +17,8 @@ class db_test extends PHPUnit_Framework_TestCase {
     protected  $db;
 
     protected function setUp() {
-        $this->db = new db("127.0.0.1:3307", "txtreader", "root", "313633893");
+        // databae arguments for need to be specified 
+        $this->db = new db("127.0.0.1:3307", "txtreader", "root", "");
     }
 
     public function test_db_connection() {
