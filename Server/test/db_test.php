@@ -20,6 +20,10 @@ class db_test extends PHPUnit_Framework_TestCase {
         $this->db = new db(DB_HOST, "txtreader", DB_USER, DB_PASSWORD);
     }
 
+    public function __destruct() {
+        $this->db->query("delete from users");
+    }
+
     public function test_db_connection() {
         $this->assertNotEmpty($this->db);
     }
@@ -77,10 +81,5 @@ class db_test extends PHPUnit_Framework_TestCase {
         $this->db->db_connect();
         $ret_val = $this->db->delete("users", array("username"=>"ccc", "password"=>"123456"));
         $this->assertEquals(1, $ret_val);
-    }
-
-    // clear all the test data
-    public function test_db_reset() {
-        $this->db->delete("users", array("1" => 1));
     }
 }

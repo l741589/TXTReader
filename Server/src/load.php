@@ -8,8 +8,8 @@
 
 require_once "config.php";
 
-// global
-global $db;
+global /** @var $db db */
+$db;
 
 require_db();
 
