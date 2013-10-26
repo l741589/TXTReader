@@ -7,17 +7,22 @@
  * To change this template use File | Settings | File Templates.
  */
 
-require_once __DIR__ . '/../src/load.php';
-require_once "PHPUnit/Extensions/Database/TestCase.php";
+require __DIR__ . '/../src/db.php';
+require __DIR__ . '/../src/config.php';
 
 class db_test extends PHPUnit_Framework_TestCase {
     /**
      * @var db
      */
+
     protected  $db;
 
     protected function setUp() {
         $this->db = new db(DB_HOST, "txtreader", DB_USER, DB_PASSWORD);
+    }
+
+    public function __destruct() {
+        $this->db->query("delete from users");
     }
 
     public function test_db_connection() {
@@ -78,9 +83,5 @@ class db_test extends PHPUnit_Framework_TestCase {
         $ret_val = $this->db->delete("users", array("username"=>"ccc", "password"=>"123456"));
         $this->assertEquals(1, $ret_val);
     }
-
-    // clear all the test data
-    public function test_db_reset() {
-        $this->db->delete("users", array("1" => 1));
-    }
 }
+?>

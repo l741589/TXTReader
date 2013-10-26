@@ -8,8 +8,8 @@
 
 require_once "config.php";
 
-// global
-global $db;
+global /** @var $db db */
+$db;
 
 require_db();
 
@@ -19,3 +19,4 @@ function require_db() {
 
     $db = new db(DB_HOST, DB_NAME, DB_USER, DB_PASSWORD);
 }
+?>
