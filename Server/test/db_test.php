@@ -8,6 +8,7 @@
  */
 
 require __DIR__ . '/../src/db.php';
+require_once __DIR__ . '/../src/config.php';
 require_once "PHPUnit/Extensions/Database/TestCase.php";
 
 class db_test extends PHPUnit_Framework_TestCase {
@@ -17,7 +18,7 @@ class db_test extends PHPUnit_Framework_TestCase {
     protected  $db;
 
     protected function setUp() {
-        $this->db = new db("127.0.0.1:3307", "txtreader", "root", "313633893");
+        $this->db = new db(DB_HOST, "txtreader", DB_USER, DB_PASSWORD);
     }
 
     public function test_db_connection() {
