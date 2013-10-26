@@ -17,8 +17,7 @@ class db_test extends PHPUnit_Framework_TestCase {
     protected  $db;
 
     protected function setUp() {
-        // databae arguments for need to be specified 
-        $this->db = new db("127.0.0.1:3307", "txtreader", "root", "");
+        $this->db = new db("127.0.0.1:3307", "txtreader", "root", "313633893");
     }
 
     public function test_db_connection() {
@@ -52,10 +51,27 @@ class db_test extends PHPUnit_Framework_TestCase {
         $ret_val = $this->db->insert("users", array("username"=>"ccc", "password"=>"111"));
         $this->assertEquals(1, $ret_val);
         $this->db->db_connect();
-        $ret_val = $this->db->insert("users", array("username"=>"ccc", "password"=>"111"), array("%s", "%s"));
+        $ret_val = $this->db->insert("users", array("username"=>"bbb", "password"=>"111"), array("%s", "%s"));
+        $this->assertEquals(1, $ret_val);
+    }
+
+    public function test_update() {
+        $this->db->db_connect();
+        $ret_val = $this->db->update("users", array("password" => "123456"), array("username"=>"ccc", "password"=>"111"));
         $this->assertEquals(1, $ret_val);
         $this->db->db_connect();
-        $ret_val = $this->db->insert("users", array("username"=>"ccc", "password"=>"111"), "%s, %s");
+        $ret_val = $this->db->update("users", array("password" => "222"), array("username"=>"bbb"), array("%s"));
         $this->assertEquals(1, $ret_val);
+    }
+
+    public function test_delete() {
+        $this->db->db_connect();
+        $ret_val = $this->db->delete("users", array("username"=>"ccc", "password"=>"123456"));
+        $this->assertEquals(1, $ret_val);
+    }
+
+    // clear all the test data
+    public function test_db_clear() {
+        $this->db->delete("users", array("1" => 1));
     }
 }

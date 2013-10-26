@@ -183,12 +183,73 @@ class db {
         return $this->query($this->prepare($sql, $data));
     }
 
+    /**
+     * @param $table
+     * @param $data
+     * @param $cond
+     * @param null $format
+     * @param null $cond_format
+     * @return bool|int|resource
+     */
     function update($table, $data, $cond, $format = null, $cond_format = null) {
+        if (!is_array($data) && !is_array($cond)) {
+            return false;
+        }
 
+        $formats = $format = (array) $format;
+        $cond_formats = $cond_format = (array) $cond_format;
+        $fields_formatted = $conds_formatted = array();
+        foreach(array_keys($data) as $field) {
+            if (!empty($format)) {
+                $form = ($form = array_shift($formats)) ? $form : null;
+            } else {
+                $form = '%s';
+            }
+            if (!is_null($form)) {
+                $fields_formatted[] = "$field = {$form}";
+            }
+        }
+        foreach(array_keys($cond) as $field) {
+            if (!empty($cond_format)) {
+                $form = ($form = array_shift($cond_formats)) ? $form : null;
+            } else {
+                $form = '%s';
+            }
+            if (!is_null($form)) {
+                $conds_formatted[] = "$field = {$form}";
+            }
+        }
+
+        $sql = "update $table set " . implode(',', $fields_formatted) . " where " . implode(' and ', $conds_formatted);
+        return $this->query($this->prepare($sql, array_merge(array_values($data), array_values($cond))));
     }
 
+    /**
+     * @param $table
+     * @param $cond
+     * @param null $cond_format
+     * @return bool|int|resource
+     */
     function delete($table, $cond, $cond_format = null) {
 
+        if (!is_array($cond))
+            return false;
+
+        $cond_formats = $cond_format = (array) $cond_format;
+        $cond_formatted = array();
+        foreach(array_keys($cond) as $fields) {
+            if (!empty($cond_format)) {
+                $form = ($form = array_shift($cond_formats)) ? $form : null;
+            } else {
+                $form = '%s';
+            }
+            if (!is_null($form)) {
+                $cond_formatted[] = "$fields = {$form}";
+            }
+        }
+
+        $sql = "delete from $table where " . implode(' and ', $cond_formatted);
+        return $this->query($this->prepare($sql, $cond));
     }
 
     /**
