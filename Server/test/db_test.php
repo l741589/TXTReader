@@ -7,8 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-require __DIR__ . '/../src/db.php';
-require_once __DIR__ . '/../src/config.php';
+require_once __DIR__ . '/../src/load.php';
 require_once "PHPUnit/Extensions/Database/TestCase.php";
 
 class db_test extends PHPUnit_Framework_TestCase {
@@ -33,34 +32,34 @@ class db_test extends PHPUnit_Framework_TestCase {
 
     public function test_func_query() {
         $sql = "insert into txtreader.users(username, password) values ('a', '1')";
-        $this->db->db_connect();
+        // $this->db->db_connect();
         $ret_val = $this->db->query($sql);
         $this->assertNotEquals(0, $ret_val);
         $this->assertEquals(1, $ret_val);
         $sql = "select * from txtreader.users where username = 'a'";
-        $this->db->db_connect();
+        // $this->db->db_connect();
         $ret_val = $this->db->query($sql);
         $this->assertNotEquals(0, $ret_val);
         $sql = "delete from txtreader.users where username = 'a'";
-        $this->db->db_connect();
+        // $this->db->db_connect();
         $ret_val = $this->db->query($sql);
         $this->assertNotEquals(0, $ret_val);
     }
 
     public function test_insert() {
-        $this->db->db_connect();
+        // $this->db->db_connect();
         $ret_val = $this->db->insert("users", array("username"=>"ccc", "password"=>"111"));
         $this->assertEquals(1, $ret_val);
-        $this->db->db_connect();
+        // $this->db->db_connect();
         $ret_val = $this->db->insert("users", array("username"=>"bbb", "password"=>"111"), array("%s", "%s"));
         $this->assertEquals(1, $ret_val);
     }
 
     public function test_update() {
-        $this->db->db_connect();
+        // $this->db->db_connect();
         $ret_val = $this->db->update("users", array("password" => "123456"), array("username"=>"ccc", "password"=>"111"));
         $this->assertEquals(1, $ret_val);
-        $this->db->db_connect();
+        // $this->db->db_connect();
         $ret_val = $this->db->update("users", array("password" => "222"), array("username"=>"bbb"), array("%s"));
         $this->assertEquals(1, $ret_val);
     }
