@@ -64,6 +64,15 @@ class db_test extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $ret_val);
     }
 
+    public function test_select() {
+        $this->db->db_connect();
+        $ret_val = $this->db->get_val("select id from users where username = 'ccc'");
+        $this->assertNotEquals(0, $ret_val);
+        $this->db->db_connect();
+        $ret_val = $this->db->get_val("select * from users where username = 'ccc'", 0, 2);
+        $this->assertNotEquals($ret_val, "123456");
+    }
+
     public function test_delete() {
         $this->db->db_connect();
         $ret_val = $this->db->delete("users", array("username"=>"ccc", "password"=>"123456"));
@@ -71,7 +80,7 @@ class db_test extends PHPUnit_Framework_TestCase {
     }
 
     // clear all the test data
-    public function test_db_clear() {
+    public function test_db_reset() {
         $this->db->delete("users", array("1" => 1));
     }
 }

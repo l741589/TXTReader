@@ -253,31 +253,72 @@ class db {
     }
 
     /**
-     *
+     * @param $query
+     * @param $x
+     * @param $y
+     * @return null
      */
-    function get_val() {
+    function get_val($query, $x = 0, $y = 0) {
+        if ($query) {
+            $this->query($query);
+        }
 
+        if (!empty($this->last_result[$y])) {
+            $values = array_values(get_object_vars($this->last_result[$y]));
+        }
+
+        return (isset($values[$x]) && $values[$x] != '') ? $values[$x] : null;
+    }
+
+    /**
+     * @param $query
+     * @param int $y
+     * @return array|null
+     */
+    function get_row($query, $y = 0) {
+        if ($query) {
+            $this->query($query);
+        }
+
+        if (!isset($this->last_result[$y]))
+            return null;
+
+        return get_object_vars($this->last_result[$y]);
+    }
+
+    /**
+     * @param $query
+     * @param int $x
+     * @return array
+     */
+    function get_col($query, $x = 0) {
+        if ($query)
+            $this->query($query);
+        $ret_arr = array();
+        for ($i = 0; $i < count($this->last_result); ++$i) {
+            $ret_arr[$i] = $this->get_val(null, $x, $i);
+        }
+        return $ret_arr;
     }
 
     /**
      *
      */
-    function get_row() {
+    function get_result($query) {
+        if ($query)
+            $this->query($query);
+        else
+            return null;
 
-    }
-
-    /**
-     *
-     */
-    function get_col() {
-
-    }
-
-    /**
-     *
-     */
-    function get_result() {
-
+        $ret = array();
+        foreach($this->last_result as $row) {
+            $var = get_object_vars($row);
+            $key = array_shift($var);
+            if (!isset($ret)) {
+                $ret[$key] = $row;
+            }
+        }
+        return $ret;
     }
 
     /**
