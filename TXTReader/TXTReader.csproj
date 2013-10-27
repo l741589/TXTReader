@@ -62,14 +62,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converter\BookmarkConverter.cs" />
+    <Compile Include="Converter\MyDateTimeConverter.cs" />
+    <Compile Include="Converter\NotConverter.cs" />
     <Compile Include="Converter\ParaSpacingCvt.cs" />
     <Compile Include="Converter\ToolPanelTargetLeftCvt.cs" />
     <Compile Include="Converter\ToolPanelWidthCvt.cs" />
+    <Compile Include="Converter\VisiblilityConverter.cs" />
+    <Compile Include="Data\Book.cs" />
+    <Compile Include="Data\Bookmark.cs" />
     <Compile Include="Data\Chapter.cs" />
     <Compile Include="Data\ChapterDesc.cs" />
     <Compile Include="Data\ContentAdapter.cs" />
     <Compile Include="Data\FloatMessage.cs" />
-    <Compile Include="Data\RootChapter.cs" />
+    <Compile Include="Data\Positionable.cs" />
     <Compile Include="Data\Skin.cs" />
     <Compile Include="Data\Trmex.cs" />
     <Compile Include="Data\Options.cs" />
@@ -93,8 +99,20 @@
     <Compile Include="Display\ITRTimer.cs" />
     <Compile Include="Display\TRTimer.cs" />
     <Compile Include="Display\TRTimer2.cs" />
+    <Compile Include="Utility\A.cs" />
+    <Compile Include="Utility\BookcaseParser.cs" />
+    <Compile Include="Utility\BookCollection.cs" />
+    <Compile Include="Utility\BookmarkParser.cs" />
     <Compile Include="Utility\G.cs" />
+    <Compile Include="Utility\Http.cs" />
     <Compile Include="Utility\SkinParser.cs" />
+    <Compile Include="WebApi\Douban.cs" />
+    <Compile Include="Widget\BookcasePanel.xaml.cs">
+      <DependentUpon>BookcasePanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widget\BookmarkPanel.xaml.cs">
+      <DependentUpon>BookmarkPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Widget\ChapterRulePanel.xaml.cs">
       <DependentUpon>ChapterRulePanel.xaml</DependentUpon>
     </Compile>
@@ -102,8 +120,14 @@
     <Compile Include="Display\Displayer2.xaml.cs">
       <DependentUpon>Displayer2.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Widget\DesignTool.xaml.cs">
+      <DependentUpon>DesignTool.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Widget\OptionPanel.xaml.cs">
       <DependentUpon>OptionPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widget\SimpleMenuButton.xaml.cs">
+      <DependentUpon>SimpleMenuButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="Widget\SpinEdit.xaml.cs">
       <DependentUpon>SpinEdit.xaml</DependentUpon>
@@ -151,6 +175,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Widget\BookcasePanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\BookmarkPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Widget\ChapterRulePanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -159,7 +191,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Widget\DesignTool.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Widget\OptionPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\SimpleMenuButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -207,6 +247,12 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\no_cover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\setting.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
