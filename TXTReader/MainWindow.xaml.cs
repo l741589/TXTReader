@@ -21,6 +21,7 @@ using System.Windows.Threading;
 using TXTReader.Properties;
 using TXTReader.Utility;
 using TXTReader.Res;
+using TXTReader.Data;
 
 namespace TXTReader {
     /// <summary>
@@ -35,7 +36,7 @@ namespace TXTReader {
             InitializeComponent();
             toolPanelShow = Resources["toolPanelShow"] as Storyboard;
             toolPanelShow.Completed += (arg0, arg1) => { toolPanelShowing = false; };
-            
+            BookcaseParser.Load();
             /*全屏
             WindowStyle = WindowStyle.None;
             ResizeMode = ResizeMode.NoResize;
@@ -43,18 +44,13 @@ namespace TXTReader {
             //*/
         }
 
-
-        private void window_MouseMove(object sender, MouseEventArgs e) {
+        protected override void OnMouseMove(MouseEventArgs e) {
             if (e.GetPosition(canvas).X > canvas.ActualWidth - 32) {
                 if (!toolPanelShowing) {
                     toolPanelShowing = true;
                     toolPanel.BeginStoryboard(toolPanelShow);
                 }
             }
-        }
-
-        private void window_SizeChanged(object sender, SizeChangedEventArgs e) {
-
         }
 
         private void window_Loaded(object sender, RoutedEventArgs e) {
@@ -67,15 +63,11 @@ namespace TXTReader {
                 Debug.Print(ex.StackTrace);
             }
             displayer.UpdateSkin();
-            displayer.SetBinding(Displayer4.SpeedProperty, new Binding("Value") { Source = toolPanel.pn_option.se_speed });                        
+            displayer.SetBinding(Displayer4.SpeedProperty, new Binding("Value") { Source = toolPanel.pn_option.se_speed });
         }
 
-        void CompositionTarget_Rendering(object sender, EventArgs e) {
-            throw new NotImplementedException();
-        }
-
-        private void window_KeyDown(object sender, KeyEventArgs e) {
-            switch(e.Key){
+        protected override void OnKeyDown(KeyEventArgs e) {
+            switch (e.Key) {
                 case Key.OemComma: --toolPanel.pn_option.se_speed.Value; break;
                 case Key.OemPeriod: ++toolPanel.pn_option.se_speed.Value; break;
                 case Key.Up: displayer.LineModify(+1); break;
@@ -85,8 +77,11 @@ namespace TXTReader {
             }
         }
 
-        private void window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-            if (displayer!=null) displayer.IsScrolling = false;
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e) {
+            displayer.CloseFile();
+            G.Timer.Stop();
+            BookcaseParser.Save();
         }
+
     }
 }

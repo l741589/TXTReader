@@ -3,7 +3,7 @@
   <part padding="32">
     <background>
       <color>#000080</color>
-      <img>E:/test.png</img>
+      <img>E:/test/bg0.bmp</img>
     </background>
     <font>
       <name>微软雅黑</name>

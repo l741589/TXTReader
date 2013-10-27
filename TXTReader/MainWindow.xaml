@@ -5,7 +5,7 @@
         xmlns:converter="clr-namespace:TXTReader.Converter"
         xmlns:widget="clr-namespace:TXTReader.Widget"
         xmlns:display="clr-namespace:TXTReader.Display"
-        Title="MainWindow" Height="350" Width="525" MouseMove="window_MouseMove" SizeChanged="window_SizeChanged" Loaded="window_Loaded" KeyDown="window_KeyDown" Closing="window_Closing">
+        Title="MainWindow" Height="350" Width="525" Loaded="window_Loaded">
     <Window.Resources>
         <converter:ToolPanelWidthCvt x:Key="toolPanelWidthCvt"/>
         <converter:ToolPanelTargetLeftCvt x:Key="toolPanelTargetLeftCvt"/>  

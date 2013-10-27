@@ -4,15 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
+using TXTReader.Utility;
 
 namespace TXTReader.Data
 {
     enum MatchType { NoMatch, List, Tree, Both };
     enum MatchLang { Trmex, Regex };
-    class Chapter : ContentItemAdapter
+    class Chapter : DependencyObject,ContentItemAdapter
     {
-        public string Title { get; protected set; }
-        public List<String> Text { get; private set; }
+        public string Title { get; set; }
+        public List<String> Text { get;  set; }
         public LinkedList<ContentItemAdapter> Children { get; private set; }
         public ContentItemAdapter Parent { get; private set; }
         private List<String> totalText = null;
@@ -95,6 +97,7 @@ namespace TXTReader.Data
                 Children.Clear();
                 Children = null;
             }
+            G.Bookmark.Clear();
             Parent = null;            
         }
     }

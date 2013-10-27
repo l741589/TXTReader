@@ -12,23 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Microsoft.Win32;
 
-namespace TXTReader.Widget
-{
+namespace TXTReader.Widget {
     /// <summary>
-    /// ToolPanel.xaml 的交互逻辑
+    /// DesignTool.xaml 的交互逻辑
     /// </summary>
-    public partial class ToolPanels : UserControl
-    {
-        public ToolPanels()
-        {
+    public partial class DesignTool : UserControl {
+        public DesignTool() {
             InitializeComponent();
-        }
-
-        private void ListBoxItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            OpenFileDialog f = new OpenFileDialog();
-            f.ShowDialog();
         }
     }
 }
