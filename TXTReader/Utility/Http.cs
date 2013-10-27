@@ -106,12 +106,12 @@ namespace TXTReader.Utility
         }
 
         public async Task RequestBytes(MemoryStream data) {
-            Stream dataStream = await request.GetRequestStreamAsync();
             if (data != null) {
+                Stream dataStream = await request.GetRequestStreamAsync();
                 byte[] byteArray = data.ToArray();
                 await dataStream.WriteAsync(byteArray, 0, byteArray.Length);
-            }
-            dataStream.Close();
+                dataStream.Close();
+            }            
         }
 
         public async Task<String> ResponseString() {
