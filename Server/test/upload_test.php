@@ -14,17 +14,21 @@ require __DIR__ . "/../src/upload.php";
 class upload_test extends PHPUnit_Framework_TestCase {
 
     protected $id;
+    /**
+     * @var db $db
+     */
     protected $db;
 
     protected function setUp() {
-        $this->db = new db(DB_HOST, "txtreader", DB_USER, DB_PASSWORD);
+        $this->db = new db(DB_HOST, DB_NAME, DB_USER, DB_PASSWORD);
         $this->db->insert("users", array("username"=>"ddd", "password"=>"123456"));
         $this->db->insert("users", array("username"=>"bbb", "password"=>"111"));
         $this->id = $this->db->inserted_id;
     }
 
     protected function tearDown() {
-        // $this->db->delete("users", array("1"=>"1"));
+        $this->db->delete("users", array("1"=>"1"));
+        $this->db->delete("books", array("1"=>"1"));
     }
 
     public function test_get_user_id() {
@@ -35,21 +39,21 @@ class upload_test extends PHPUnit_Framework_TestCase {
         $this->assertNull($ret_id);
     }
 
+    // This test must be in real server environment.
+    // In this test, I use Apache as server and set
+    // Server/src as DocumentRoot
     public function test_upload_file() {
-        $test_file_path = __DIR__ . "/../_files/test1.txt";
-        $size = filesize($test_file_path);
-        $_FILES = array(
-            'test' => array(
-            "name"=>"test1.txt",
-            'tmp_name'=>$test_file_path,
-            'type'=>'text/plain',
-            'size'=>$size,
-            'error'=>0
-        ));
-        $user_id = $this->id;
-
-        $ret = save_file($_FILES["test"], $user_id);
-        $this->assertEquals(true, $ret);
+        $target_url = "http://localhost:9111/src/upload.php";
+        // test1.txt is just a file
+        $file_with_full_path = realpath("../_files/test1.txt");
+        $post = array("username"=>"ddd", "password"=>"123456", "file"=>'@'.$file_with_full_path);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $target_url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        $result=curl_exec ($ch);
+        curl_close ($ch);
+        $this->assertEquals(1, $result);
     }
 }
 ?>
