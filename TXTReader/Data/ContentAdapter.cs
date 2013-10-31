@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TXTReader.Data {
-    enum ContentStatus { None, TooLong, TooShort, ConfusingIndex }
+    public enum ContentStatus { None, TooLong, TooShort, ConfusingIndex }
 
-    interface ContentItemAdapter {
+    public interface ContentItemAdapter {
         ContentStatus ContentStatus { get; }
         String Title { get; }
         String TotalTitle { get; }
@@ -19,5 +19,5 @@ namespace TXTReader.Data {
         ContentItemAdapter Parent { get; }
     }
 
-    interface ContentAdapter : ContentItemAdapter { }
+    public interface ContentAdapter : ContentItemAdapter { }
 }

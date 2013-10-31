@@ -9,46 +9,66 @@ using System.Windows.Media;
 using TXTReader.Utility;
 using System.Security.Policy;
 using System.Text.RegularExpressions;
+using TXTReader.WebApi;
 
 namespace TXTReader.Data {
-    class Book : Chapter, ContentAdapter, Positionable {
-
+    public class Book : Chapter, ContentAdapter, Positionable {
+        public const String NO_PREVIEW = "暂无预览";
         public static readonly DependencyProperty PositionProperty = DependencyProperty.Register("Position", typeof(int), typeof(Book));
         public static readonly DependencyProperty OffsetProperty = DependencyProperty.Register("Offset", typeof(double), typeof(Book));
         private ImageSource cover = null;
-        public bool IsLocal { get { return Source == null ? false : !Source.ToLower().StartsWith("http"); } }
+        public bool IsLocal { get { return Source == null ? false : !Source.ToLower().StartsWith(G.HTTP_HEAD); } }
         public ImageSource Cover { get { if (cover == null) return G.NoCover; else return cover; } set { cover = value; } }
         public int Position { get { return (int)GetValue(PositionProperty); } set { SetValue(PositionProperty, value); } }
         public double Offset { get { return (double)GetValue(OffsetProperty); } set { SetValue(OffsetProperty, value); } }
         public String Author { get; set; }
         public String Source { get; set; }
+        public DateTime LastLoadTime { get; set; }
+        public double SortArgument { get; set; }
         private String preview = null;
 
         public Book() : base() { }
         public Book(String src) : this() { Init(src); }
 
         public void Init(String src) {
-            Source = src;
-            if (IsLocal) Title = Path.GetFileNameWithoutExtension(src);
-            else {
-                var m = Regex.Match(src, @"(?<[\\/])(?<R>[\w\d_ ]+?)((?=$)|(?=\?)|(?=\.)");
-                var c = m.Groups["R"].Captures;
-                if (c.Count > 0) {
-                    Title = c[c.Count - 1].Value;
+            if (Path.GetExtension(src) == G.EXT_BOOK) {
+                BookcaseParser.Load(src, this);
+            } else {
+                Source = src;
+                SortArgument = 0;
+                if (IsLocal) Title = Path.GetFileNameWithoutExtension(src);
+                else {
+                    var m = Regex.Match(src, @"(?<[\\/])(?<R>[\w\d_ ]+?)((?=$)|(?=\?)|(?=\.)");
+                    var c = m.Groups["R"].Captures;
+                    if (c.Count > 0) {
+                        Title = c[c.Count - 1].Value;
+                    }
                 }
-
+                LastLoadTime = default(DateTime);
             }
+        }
+
+        public String GetPreview(int? position=null) {
+            if (position == null) position = Position;
+            if (TotalText == null || TotalText.Count == 0) {
+                if (preview != null) return preview;
+                return NO_PREVIEW;
+            }
+            if (position < 0) return preview;
+            if (position >= TotalText.Count) return preview;
+            int i = position.Value;
+            preview = TotalText[i++];
+            while (preview.Length < 256 && i < G.Book.TotalText.Count)
+                preview += "\n" + TotalText[i++];
+            return preview;
         }
 
         public String Preview {
             get {
-                if (TotalText == null) {
-                    if (preview != null) return preview;
-                    return "暂无预览";
-                }
-                if (Position < 0) return preview;
-                if (Position >= TotalText.Count) return preview;
-                return preview = TotalText[Position];
+                return GetPreview();
+            }
+            set {
+                if (value != null && value != "") preview = value;
             }
         }
 
@@ -86,6 +106,7 @@ namespace TXTReader.Data {
         public async Task Load(String file = null, Trmex trmex = null) {
             if (file == null) file = Source; else Source = file;
             if (trmex == null) trmex = G.Trmex;
+            LastLoadTime = DateTime.Now;
             if (IsLocal) {
                 Clear();
                 var ss = File.ReadAllLines(file, Encoding.Default);
@@ -108,12 +129,17 @@ namespace TXTReader.Data {
             }
         }
 
-        public async Task MoreInfo() {
-
+        public void MoreInfo() {
+            Douban.MoreInfo(this);
         }
 
         public async Task Localize() {
 
+        }
+
+        public override void Close() {
+            GetPreview();
+            base.Close();
         }
     }
 }

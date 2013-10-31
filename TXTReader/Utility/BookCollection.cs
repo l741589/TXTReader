@@ -11,7 +11,8 @@ namespace TXTReader.Utility {
     class BookCollection : ObservableCollection<Book>{
         protected override void InsertItem(int index, Book item) {
             base.InsertItem(index, item);
-            Douban.MoreInfo(item);
+            item.MoreInfo();
+            
         }
 
         protected override void RemoveItem(int index) {

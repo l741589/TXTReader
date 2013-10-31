@@ -10,7 +10,7 @@
         <ResourceDictionary>
             <converter:NotConverter x:Key="not"/>
             <converter:VisiblilityConverter x:Key="visibilityCvt"/>
-            
+            <converter:BookLengthConverter x:Key="lenCvt"/>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -23,11 +23,13 @@
             <RowDefinition Height="8"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBox DockPanel.Dock="Top" x:Name="tb_search" Grid.Column="0" Grid.Row="0"/>
+        <TextBox DockPanel.Dock="Top" x:Name="tb_search" Grid.Column="0" Grid.Row="0" KeyUp="tb_search_KeyUp" TextChanged="tb_search_TextChanged"/>
         <Button x:Name="bn_setting" Grid.Row="0" Grid.Column="1" Padding="0" MouseEnter="bn_setting_MouseEnter" MouseLeave="bn_setting_MouseLeave">
             <Image  Width="20" Height="20" Source="/TXTReader;component/res/setting.png"/>
         </Button>
-        <ListBox DockPanel.Dock="Bottom" x:Name="lb_book" ScrollViewer.HorizontalScrollBarVisibility="Disabled" AllowDrop="True" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
+        <ListBox DockPanel.Dock="Bottom" x:Name="lb_book" ScrollViewer.HorizontalScrollBarVisibility="Disabled" AllowDrop="True" 
+                 Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" KeyUp="lb_book_KeyUp"
+                 VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.ScrollUnit="Pixel">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -47,16 +49,18 @@
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Image Grid.RowSpan="3" Grid.Column="0" Grid.Row="0" Stretch="Fill" Source="{Binding Cover}"/>
+                        <Border BorderBrush="Gray" BorderThickness="1" Grid.Column="0" Grid.Row="0" Grid.RowSpan="3">
+                            <Image Stretch="Fill" Source="{Binding Cover,IsAsync=True}" />
+                        </Border>
                         <TextBlock Grid.Column="1" Grid.Row="0" FontSize="20" Grid.ColumnSpan="2" 
                                    TextTrimming="CharacterEllipsis" Text="{Binding Title}"/>
                         <TextBlock Grid.Column="1" Grid.Row="1" FontSize="10" TextAlignment="Left" 
                                    TextTrimming="CharacterEllipsis" Text="{Binding Author}"/>
                         <TextBlock Grid.Column="2" Grid.Row="1" FontSize="10" TextAlignment="Right" 
-                                   TextTrimming="CharacterEllipsis" Text="{Binding Length}"/>
+                                   TextTrimming="CharacterEllipsis" Text="{Binding Length,Converter={StaticResource ResourceKey=lenCvt}}"/>
                         <TextBlock Grid.Column="1" Grid.Row="2" FontSize="10" Grid.ColumnSpan="2" Foreground="Gray" 
                                    TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Text="{Binding Preview}" 
-                                   Visibility="{Binding IsLocal,Converter={StaticResource ResourceKey=visibilityCvt}}"/>
+                                   Visibility="{Binding IsLocal,IsAsync=False,Converter={StaticResource ResourceKey=visibilityCvt}}"/>
                         <Button Grid.Column="1" Grid.Row="2" FontSize="18" Grid.ColumnSpan="2" Content="下载"
                                    Visibility="{Binding Path=IsLocal,Converter={StaticResource ResourceKey=not},ConverterParameter={StaticResource ResourceKey=visibilityCvt}}"/>
                         <Grid.ContextMenu>

@@ -68,14 +68,5 @@ namespace TXTReader.Properties {
                 return ResourceManager.GetString("FILE_FILTER", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   查找类似 pack://application:,,,/res/no_cover.png 的本地化字符串。
-        /// </summary>
-        internal static string URI_NO_COVER {
-            get {
-                return ResourceManager.GetString("URI_NO_COVER", resourceCulture);
-            }
-        }
     }
 }

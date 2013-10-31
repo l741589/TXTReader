@@ -10,7 +10,7 @@ using System.IO;
 using System.Collections.ObjectModel;
 
 namespace TXTReader.Utility {
-    static class BookmarkParser {
+    class BookmarkParser : Parser{
 
         public const String S_BOOKMARK = "bookmark";
         public const String S_FILE = "file";
@@ -83,10 +83,16 @@ namespace TXTReader.Utility {
             if (s != null) bmk.IsAuto = true; else bmk.IsAuto = false;
             while (xr.Read()) {
                 if (xr.NodeType == XmlNodeType.EndElement && xr.Name == S_MARK) break;
-                if (xr.NodeType == XmlNodeType.Element) {
-                    if (xr.Name == S_POSITION) bmk.Position = xr.ReadElementContentAsInt();
-                    if (xr.Name == S_OFFSET) bmk.Offset = xr.ReadElementContentAsDouble();
-                    if (xr.Name == S_TIME) bmk.Time = DateTime.Parse(xr.ReadElementContentAsString());
+                var loop = true;
+                while (loop) {
+                    if (xr.NodeType == XmlNodeType.Element) {
+                        switch (xr.Name) {
+                            case S_POSITION: bmk.Position = xr.ReadElementContentAsInt(); break;
+                            case S_OFFSET: bmk.Offset = xr.ReadElementContentAsDouble(); break;
+                            case S_TIME: bmk.Time = DateTime.Parse(xr.ReadElementContentAsString()); break;
+                            default: loop = false; break;
+                        }
+                    } else loop = false;
                 }
                 if (xr.NodeType == XmlNodeType.EndElement && xr.Name == S_MARK) break;
             }
