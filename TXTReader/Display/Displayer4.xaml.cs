@@ -17,7 +17,6 @@ using System.Xml;
 using TXTReader.Data;
 using System.Diagnostics;
 using TXTReader.Utility;
-using TXTReader.Res;
 using System.Collections;
 
 namespace TXTReader.Display {
@@ -25,22 +24,23 @@ namespace TXTReader.Display {
     /// Displayer2.xaml 的交互逻辑
     /// </summary>
     public partial class Displayer4 : UserControl, IDisplayer {
-        public String FileName { get; set; }
-        public String[] Text { get; set; }
-        public int FirstLine { get; set; }
-        public double Offset { get; set; }
-
+        
         public static readonly DependencyProperty SpeedProperty = DependencyProperty.Register("Speed", typeof(double), typeof(Displayer4));
         public static readonly DependencyProperty IsScrollingProperty = DependencyProperty.Register("IsScrolling", typeof(bool), typeof(Displayer4), new PropertyMetadata(false, OnIsScrollingChanged));
         public static readonly RoutedEvent ShutdownEvent = EventManager.RegisterRoutedEvent("Shutdown", RoutingStrategy.Direct, typeof(ShutdownHandler), typeof(Displayer4));
+        public static readonly DependencyProperty FirstLineProperty = DependencyProperty.Register("FirstLine", typeof(int), typeof(Displayer4));
+        public static readonly DependencyProperty OffsetProperty = DependencyProperty.Register("Offset", typeof(double), typeof(Displayer4));
 
         public event ShutdownHandler Shutdown { add { AddHandler(ShutdownEvent, value); } remove { RemoveHandler(ShutdownEvent, value); } }
         public double Speed { get { return (double)GetValue(SpeedProperty); } set { SetValue(SpeedProperty, value); } }
         public bool IsScrolling { get { return (bool)GetValue(IsScrollingProperty); } set { SetValue(IsScrollingProperty, value); } }
+        public int FirstLine { get { return (int)GetValue(FirstLineProperty); } set { SetValue(FirstLineProperty, value); } }
+        public double Offset { get { return (double)GetValue(OffsetProperty); } set { SetValue(OffsetProperty, value); } }
+        private String[] text;
+        public String[] Text { get { return text; } set { text = value; } }
         public double CanvasHeight { get { return canvas.ActualHeight; } }
         public double CanvasWidth { get { return canvas.ActualWidth; } }
 
-        private ITRTimer timer = new TRTimer2();
         private Point? lastPoint = null;
         private Binding widthBinding;
         private Dictionary<int, TRText3> map = new Dictionary<int, TRText3>();
@@ -51,6 +51,8 @@ namespace TXTReader.Display {
             InitializeComponent();
             InitComponent();
         }
+
+        
 
         public static void OnSkinChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             Skin val = (Skin)e.NewValue;
@@ -71,42 +73,24 @@ namespace TXTReader.Display {
             FirstLine = 0;
             Offset = 0;
             UpdateSkin();
-            timer.Timer += timer_Timer;
+            G.Timer.Timer += timer_Timer;
             canvas.SizeChanged += (d, e) => { Clear(); Update(); };
         }
 
-        void CopyText(ICollection<String> src, int piecelen = 4096) {
-            if (piecelen == 0) {
-                Text = src.ToArray();
-                return;
-            }
-            List<String> ss = new List<String>();
-            foreach (String s in src) {
-                int i = 0;
-                for (; i < s.Length - piecelen; i += piecelen) {
-                    ss.Add(s.Substring(i, piecelen));
-                }
-                ss.Add(s.Substring(i));
-            }
-            Text = ss.ToArray();
-        }
-
-
         private static void OnIsScrollingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            var o = d as Displayer4;
             if ((bool)e.OldValue) {
-                o.timer.Stop();
+                G.Timer.Stop();
             }
             if ((bool)e.NewValue) {
-                o.timer.Start();
+                G.Timer.Start();
             }
         }
 
         public bool IsPausing {
-            get { return timer.Status == TRTimerStatus.PAUSED; }
+            get { return G.Timer.Status == TRTimerStatus.PAUSED; }
             set {
-                if (timer.Status != TRTimerStatus.PAUSED && value) timer.Pause();
-                else if (timer.Status == TRTimerStatus.PAUSED && !value) timer.Resume();
+                if (G.Timer.Status != TRTimerStatus.PAUSED && value) G.Timer.Pause();
+                else if (G.Timer.Status == TRTimerStatus.PAUSED && !value) G.Timer.Resume();
             }
         }
 
@@ -116,21 +100,33 @@ namespace TXTReader.Display {
             Update();
         }
 
-        public void OpenFile(String filename) {
-            FileName = filename;
-            //CopyText(File.ReadAllLines(filename, Encoding.Default));
-            G.RootChapter.Load(filename, G.Trmex);
-            CopyText(G.RootChapter.TotalText);
-            Update();
+        public async void OpenFile(String filename) {
+            if (G.FileName != filename) {
+                CloseFile();
+                G.FileName = filename;
+                await G.Book.Load(filename, G.Trmex);
+                SetBinding(FirstLineProperty, new Binding("Position") { Source = G.Book,Mode=BindingMode.TwoWay});
+                SetBinding(OffsetProperty, new Binding("Offset") { Source = G.Book, Mode = BindingMode.TwoWay });
+                A.CopyText(out text, G.Book.TotalText);
+                BookmarkParser.Load();
+                Update();
+            }
+        }
 
+        public void OpenBook(Book book) {
+            if (book == null) return;
+            G.Book = book;
+            OpenFile(book.Source);
         }
 
         public void CloseFile() {
+            //BookcaseParser.Save(G.Book);
+            BookmarkParser.Save();
             Text = null;
-            FileName = null;
+            G.FileName = null;
             FirstLine = 0;
             Offset = 0;
-            G.RootChapter.Clear();
+            G.Book.Clear();
             Clear();            
             Update();
         }
@@ -141,16 +137,16 @@ namespace TXTReader.Display {
         }
 
         public void ReopenFile() {
-            G.RootChapter.Clear();
+            G.Book.Clear();
             Clear();
             Text = null;
-            OpenFile(FileName);
+            OpenFile(G.FileName);
         }
 
 
         protected override void OnMouseDown(MouseButtonEventArgs e) {
             base.OnMouseDown(e);
-            timer.Pause();
+            G.Timer.Pause();
             lastPoint = e.GetPosition(this);            
         }
         
@@ -170,7 +166,7 @@ namespace TXTReader.Display {
         
         protected override void OnMouseUp(MouseButtonEventArgs e) {
             base.OnMouseUp(e);
-            timer.Resume();
+            G.Timer.Resume();
             lastPoint = null;
         }
         
@@ -243,6 +239,16 @@ namespace TXTReader.Display {
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 OpenFile(dlg.FileName);
             }
+        }
+
+        protected override void OnDrop(DragEventArgs e) {
+            if (e.Data.GetFormats().Contains(DataFormats.FileDrop)){
+                Array c = e.Data.GetData(DataFormats.FileDrop) as Array;
+                if (c == null || c.Length <= 0) return;
+                CloseFile();
+                OpenFile(c.GetValue(0).ToString());
+            }
+            base.OnDrop(e);
         }
 
         private void mi_close_Click(object sender, RoutedEventArgs e) { CloseFile(); }

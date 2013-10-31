@@ -174,16 +174,7 @@ namespace TXTReader.Display {
         }
 
         private void TextOut(DrawingContext dc, FormattedText ft, double x, double y) {
-            //var geo = ft.BuildGeometry(new Point(0,0)).Clone();            
-            //geo.Transform = new TranslateTransform(x, y);
-            //geo.Transform.Value.Translate();
-            //dc.DrawGeometry(Skin.Foreground, new Pen(Brushes.Black, 1), geo);
-            //for (int i = 1; i < 5; ++i) {
-            //    ft.SetForegroundBrush(Brushes.Black);
-            //    dc.DrawText(ft, new Point(x + i, y + i));
-            //}
-            //ft.SetForegroundBrush(Skin.Foreground);
-            //dc.DrawText(ft, new Point(x, y));
+           
             dc.DrawText(ft,new Point(x, y));
 
         }
@@ -267,7 +258,6 @@ namespace TXTReader.Display {
 
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo) {
             base.OnRenderSizeChanged(sizeInfo);
-
         }
 
         public void Update() {

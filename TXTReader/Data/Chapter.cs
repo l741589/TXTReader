@@ -4,18 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
+using TXTReader.Utility;
 
 namespace TXTReader.Data
 {
     enum MatchType { NoMatch, List, Tree, Both };
     enum MatchLang { Trmex, Regex };
-    class Chapter : ContentItemAdapter
+    public class Chapter : DependencyObject,ContentItemAdapter
     {
-        public string Title { get; protected set; }
-        public List<String> Text { get; private set; }
+        public string Title { get; set; }
+        public List<String> Text { get;  set; }
         public LinkedList<ContentItemAdapter> Children { get; private set; }
         public ContentItemAdapter Parent { get; private set; }
         private List<String> totalText = null;
+        private int len = 0;
 
         public List<String> TotalText {
             get {
@@ -50,14 +53,15 @@ namespace TXTReader.Data
 
         public int Length {
             get {
-                int len = 0;
-                if (Children == null)
+                if (len != 0) return len;
+                len = 0;
+                if(Text!=null)
                     foreach (var e in Text) len += e.Length;
-                else
+                if (Children != null)
                     foreach (var e in Children) len += e.Length;
                 return len;
             }
-            
+            set { len = value; }
         }
 
         public ContentItemAdapter FindChildByTitle(String title) {
@@ -86,15 +90,29 @@ namespace TXTReader.Data
             return this;
         }
 
-        public void Clear() {
+        public virtual void Clear() {
             Title = null;
             Text = null;
             totalText = null;
+            len = 0;
             if (Children != null) {
                 foreach (var e in Children) (e as Chapter).Clear();
                 Children.Clear();
                 Children = null;
             }
+            G.Bookmark.Clear();
+            Parent = null;            
+        }
+
+        public virtual void Close() {
+            Text = null;
+            totalText = null;
+            if (Children != null) {
+                foreach (var e in Children) (e as Chapter).Close();
+                Children.Clear();
+                Children = null;
+            }
+            G.Bookmark.Clear();
             Parent = null;            
         }
     }
