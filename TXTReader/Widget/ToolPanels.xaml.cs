@@ -30,5 +30,10 @@ namespace TXTReader.Widget
             OpenFileDialog f = new OpenFileDialog();
             f.ShowDialog();
         }
+
+        protected override void OnMouseDown(MouseButtonEventArgs e) {
+            e.Handled = true;
+            base.OnMouseDown(e);
+        }
     }
 }

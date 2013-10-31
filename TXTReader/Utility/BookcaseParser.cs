@@ -9,11 +9,14 @@ using System.Xml;
 using System.Windows.Media;
 
 namespace TXTReader.Utility {
-    class BookcaseParser {
+    class BookcaseParser :Parser{
 
         public const String S_SOURCE = "source";
         public const String S_COVER = "cover";
         public const String S_AUTHOR = "author";
+        public const String S_TIME = "time";
+        public const String S_LENGTH = "length";
+        public const String S_PREVIEW = "preview";
         public const String S_BOOK = "book";
 
         public static String GetBookPath(Book book) {
@@ -23,22 +26,25 @@ namespace TXTReader.Utility {
         public static void Load(){
             String[] files = Directory.GetFiles(G.PATH_BOOK);
             G.Books.Clear();
-            foreach (var f in files) G.Books.Add(Load(f));
+            foreach (var f in files)
+                G.Books.Add(new Book(f));
         }
 
-        public static Book Load(String filename) {
-            Book b = new Book();
-            XmlReader xr = XmlReader.Create(filename);
-            while (xr.Read()) {
-                if (xr.NodeType == XmlNodeType.Element) {
-                    switch (xr.Name) {
-                        case S_SOURCE:b.Init(xr.ReadElementContentAsString()); break;
-                        case S_AUTHOR:b.Author = xr.ReadElementContentAsString(); break;
-                        case S_COVER: b.Cover = (ImageSource)new ImageSourceConverter().ConvertFrom(xr.ReadElementContentAsString()); break;
-                    }
-                }
-            }
-            xr.Close();
+        public static Book Load(String filename, Book target = null) {
+            Book b = null;
+            if (target == null) b = new Book();
+            else b = target;
+            new Reader(filename)
+                .Read(S_SOURCE, (n) => { b.Init(n.InnerText); })
+                .Read(S_AUTHOR, (n) => { b.Author = n.InnerText; })
+                .Read(S_COVER, (n) => {
+                    String uri = n.InnerText;
+                    if (uri.StartsWith(G.HTTP_HEAD) || A.FileExists(uri))
+                        b.Cover = (ImageSource)new ImageSourceConverter().ConvertFrom(uri);
+                })
+                .Read(S_TIME, (n) => { b.LastLoadTime = DateTime.Parse(n.InnerText); })
+                .Read(S_LENGTH, (n) => { b.Length = int.Parse(n.InnerText); })
+                .Read(S_PREVIEW, (n) => { b.Preview = n.InnerText; });
             return b;
         }
 
@@ -48,28 +54,15 @@ namespace TXTReader.Utility {
 
         public static void Save(Book book) {
             if (book.Source == null) return;
-            XmlDocument xml = new XmlDocument();
-            var root=xml.CreateElement(S_BOOK);
-
-            var src = xml.CreateElement(S_SOURCE);
-            src.InnerText = book.Source;
-            root.AppendChild(src);
-
-            if (book.Author != null) {
-                var author = xml.CreateElement(S_AUTHOR);
-                author.InnerText = book.Author;
-                root.AppendChild(author);
-            }
-
-            if (book.Cover != null && book.Cover != G.NoCover) {
-                var cover = xml.CreateElement(S_COVER);
-                cover.InnerText = book.Cover.ToString();
-                root.AppendChild(cover);
-            }
-
-            XmlWriter wr = XmlWriter.Create(GetBookPath(book));
-            root.WriteTo(wr);
-            wr.Close();            
+            new Writer(S_BOOK)
+                .Write(S_SOURCE, book.Source)
+                .Write(S_AUTHOR, book.Author)
+                .Write(S_COVER, book.Cover, G.NoCover, null)
+                .Write(S_LENGTH, book.Length)
+                .Write(S_TIME, book.LastLoadTime)
+                .Write(S_PREVIEW, book.Preview, "", Book.NO_PREVIEW, null)
+            .WriteTo(GetBookPath(book));
         }
+      
     }
 }

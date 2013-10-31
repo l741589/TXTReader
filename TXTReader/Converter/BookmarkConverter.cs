@@ -22,11 +22,12 @@ namespace TXTReader.Converter {
                     return x*100 / y;
                 }
                 case "preview": default:{
-                    int i = (int)value;
+                    return G.Book.GetPreview((int)value);
+                    /*int i = (int)value;
                     String ret = G.Book.TotalText[i++];
                     while (ret.Length < 256 && i < G.Book.TotalText.Count)
                         ret += "\n" + G.Book.TotalText[i++];
-                    return ret;
+                    return ret;*/
                 }
             }
         }

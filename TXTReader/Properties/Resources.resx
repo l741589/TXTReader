@@ -120,8 +120,4 @@
   <data name="FILE_FILTER" xml:space="preserve">
     <value>文本文档(*.txt)|*.txt</value>
   </data>
-  <data name="URI_NO_COVER" xml:space="preserve">
-    <value>pack://application:,,,/res/no_cover.png</value>
-    <comment>封面暂缺</comment>
-  </data>
 </root>

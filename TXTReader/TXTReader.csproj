@@ -62,6 +62,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converter\BookLengthConverter.cs" />
     <Compile Include="Converter\BookmarkConverter.cs" />
     <Compile Include="Converter\MyDateTimeConverter.cs" />
     <Compile Include="Converter\NotConverter.cs" />
@@ -100,11 +101,13 @@
     <Compile Include="Display\TRTimer.cs" />
     <Compile Include="Display\TRTimer2.cs" />
     <Compile Include="Utility\A.cs" />
+    <Compile Include="Utility\ActionUtil.cs" />
     <Compile Include="Utility\BookcaseParser.cs" />
     <Compile Include="Utility\BookCollection.cs" />
     <Compile Include="Utility\BookmarkParser.cs" />
     <Compile Include="Utility\G.cs" />
     <Compile Include="Utility\Http.cs" />
+    <Compile Include="Utility\Parser.cs" />
     <Compile Include="Utility\SkinParser.cs" />
     <Compile Include="WebApi\Douban.cs" />
     <Compile Include="Widget\BookcasePanel.xaml.cs">
@@ -135,6 +138,7 @@
     <Compile Include="Widget\ToolPanels.xaml.cs">
       <DependentUpon>ToolPanels.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WorkThread.cs" />
     <Page Include="Display\TRText.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

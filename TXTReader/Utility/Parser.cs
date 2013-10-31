@@ -1,0 +1,169 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml;
+
+namespace TXTReader.Utility {
+    delegate void ParserReaderCallback(XmlNode n);
+    class Parser {
+
+        public static XmlNode AppendEmpty(XmlNode parent, String name) {
+            var node = parent.OwnerDocument.CreateElement(name);
+            parent.AppendChild(node);
+            return node;
+        }
+        public static XmlElement Append<T>(XmlNode parent, String name, T value) 
+        { return Append(parent, name, value,default(T)); }
+        public static XmlElement Append<T>(XmlNode parent, String name, T value, params T[] ignoreWhenEqual) {
+            if (ignoreWhenEqual != null && ignoreWhenEqual.Contains(value)) return null;
+            var node = parent.OwnerDocument.CreateElement(name);
+            
+            node.InnerText = value.ToString();
+            parent.AppendChild(node);
+            return node;
+        }
+
+
+        public static XmlNode AddAttribute<T>(XmlNode parent, String name, T value) 
+        { return AddAttribute(parent, name, value, default(T)); }
+        public static XmlNode AddAttribute<T>(XmlNode elem, String name, T value, params T[] ignoreWhenEqual) {
+            if (ignoreWhenEqual != null && ignoreWhenEqual.Contains(value)) return null;
+            XmlAttribute attr=elem.OwnerDocument.CreateAttribute(name);
+            attr.Value=value.ToString();
+            return elem;
+        }
+
+        public static void WriteTo(XmlDocument xml, String FileName) {
+            XmlWriter wrt = XmlWriter.Create(FileName);
+            xml.WriteTo(wrt);
+            wrt.Close();
+        }
+
+        public class Writer {
+            private XmlDocument xml;
+            private XmlNode bak;
+            private XmlNode node;
+            private uint nulldepth = 0;
+            public Writer(String rootname) {
+                xml = new XmlDocument();
+                bak = node = xml.CreateElement(rootname);
+                xml.AppendChild(node);
+                nulldepth = 0;
+            }
+
+            public Writer Write<T>(String name, T value, params T[] ignoreWhenEqual) {
+                return Start(name, value, ignoreWhenEqual).End;
+            }
+
+            public Writer Write<T>(String name, T value) {
+                return Start(name, value).End;
+            }
+
+            public Writer Write<T>(String name) {
+                return Start(name).End;
+            }
+
+            public Writer Start<T>(String name, T value, params T[] ignoreWhenEqual) {
+                node = Append<T>(node, name, value, ignoreWhenEqual);
+                if (node != null) bak = node;
+                else ++nulldepth;
+                return this;
+            }
+
+            public Writer Start<T>(String name, T value) {
+                node = Append<T>(node, name, value);
+                if (node != null) bak = node;
+                else ++nulldepth;
+                return this;
+            }
+
+            public Writer Start(String name) {
+                node = AppendEmpty(node, name);
+                if (node != null) bak = node;
+                else ++nulldepth;
+                return this;
+            }
+
+            public Writer End {
+                get {
+                    if (nulldepth == 0) node = node.ParentNode;
+                    else if ((--nulldepth) == 0) node = bak;
+                    if (node != null) bak = node;
+                    return this;
+                }
+            }
+
+            public Writer Attr<T>(String name, T value, T ignoreWhenEqual) {
+                AddAttribute(node, name, value, ignoreWhenEqual);
+                return this;
+            }
+
+            public Writer Attr<T>(String name,T value) {
+                AddAttribute(node, name, value);
+                return this;
+            }
+           
+
+            public void WriteTo(String FileName) {
+                Parser.WriteTo(xml, FileName);
+            }
+        }
+
+        public class Reader {
+            private XmlDocument xml;
+            private XmlNode node;
+            private XmlNode bak;
+            private uint nulldepth;
+
+            public Reader(String FileName) {                
+                xml = new XmlDocument();
+                xml.Load(FileName);
+                for (node = xml.FirstChild; node!=null&&node.NodeType != XmlNodeType.Element; node = node.NextSibling) ;
+                nulldepth = 0;             
+            }
+
+            public Reader Do(ParserReaderCallback callback) {
+                if (node!=null) callback.Invoke(node);
+                return this;
+            }
+
+            public Reader Child(String name) {
+                bool found = false;
+                if (node.ChildNodes != null) {
+                    foreach (XmlNode n in node.ChildNodes) {
+                        if (n.Name == name) {
+                            node = n;
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                if (!found) {
+                    node = null;
+                    ++nulldepth;
+                }
+                if (node != null) bak = node;
+                return this;
+            }
+
+            public Reader Parent {
+                get {
+                    if (nulldepth > 0) {
+                        --nulldepth;
+                        if (nulldepth == 0) node = bak;
+                    } else {
+                        node = node.ParentNode;
+                    }
+                    if (node != null) bak = node;
+                    return this;
+                }
+            }
+
+            public Reader Read(String name, ParserReaderCallback callback) {
+                return Child(name).Do(callback).Parent;
+            }
+        }
+    }
+}

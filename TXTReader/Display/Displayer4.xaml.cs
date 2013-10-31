@@ -17,7 +17,6 @@ using System.Xml;
 using TXTReader.Data;
 using System.Diagnostics;
 using TXTReader.Utility;
-using TXTReader.Res;
 using System.Collections;
 
 namespace TXTReader.Display {
@@ -51,8 +50,6 @@ namespace TXTReader.Display {
         public Displayer4() {
             InitializeComponent();
             InitComponent();
-            //CommandBindings.Add(new CommandBinding(ApplicationCommands.Open, CommandBinding_Executed, CommandBinding_CanExecute));
-            //G.MainWindow.CommandBindings.Add(new CommandBinding(ApplicationCommands.Open, Open_Executed, CommandBinding_CanExecute));
         }
 
         
@@ -116,7 +113,14 @@ namespace TXTReader.Display {
             }
         }
 
+        public void OpenBook(Book book) {
+            if (book == null) return;
+            G.Book = book;
+            OpenFile(book.Source);
+        }
+
         public void CloseFile() {
+            //BookcaseParser.Save(G.Book);
             BookmarkParser.Save();
             Text = null;
             G.FileName = null;
