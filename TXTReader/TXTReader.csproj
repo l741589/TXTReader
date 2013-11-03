@@ -137,6 +137,9 @@
     <Compile Include="Widget\SimpleMenuButton.xaml.cs">
       <DependentUpon>SimpleMenuButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Widget\SolidColorPickerCombobox.xaml.cs">
+      <DependentUpon>SolidColorPickerCombobox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Widget\SpinEdit.xaml.cs">
       <DependentUpon>SpinEdit.xaml</DependentUpon>
     </Compile>
@@ -213,6 +216,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Widget\SimpleMenuButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\SolidColorPickerCombobox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
