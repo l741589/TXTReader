@@ -23,17 +23,19 @@ namespace TXTReader.Data {
         /*/
         public static readonly String[] Num =
         {
-            "0〇零洞",
-            "1一壹⒈㈠①⑴Ⅰ壱幺么",
-            "2二贰⒉㈡②⑵Ⅱ弍两",
-            "3三叁⒊㈢③⑶Ⅲ弎参",
-            "4四肆⒋㈣④⑷Ⅳ亖",
-            "5五伍⒌㈤⑤⑸Ⅴ",
-            "6六陆⒍㈥⑥⑹Ⅵ",
-            "7七柒⒎㈦⑦⑺Ⅶ漆質",
-            "8八捌⒏㈧⑧⑻Ⅷ",
-            "9九玖⒐㈨⑨⑼Ⅸ",
-            "拾十⒑㈩⑩⑽Ⅹ",
+            "0０〇零洞",
+            "1１一壹⒈㈠①⑴Ⅰ壱幺么",
+            "2２二贰⒉㈡②⑵Ⅱ弍两",
+            "3３三叁⒊㈢③⑶Ⅲ弎叄参參",
+            "4４四肆⒋㈣④⑷Ⅳ亖",
+            "5５五伍⒌㈤⑤⑸Ⅴ",
+            "6６六陆⒍㈥⑥⑹Ⅵ",
+            "7７七柒⒎㈦⑦⑺Ⅶ漆質",
+            "8８八捌⒏㈧⑧⑻Ⅷ",
+            "9９九玖⒐㈨⑨⑼Ⅸ",
+        };
+        public static readonly String[] NumEx =
+        {
             "⒒⑾Ⅺ",
             "⒓⑿Ⅻ",
             "⒔⒀",
@@ -47,17 +49,19 @@ namespace TXTReader.Data {
         };
         public static readonly String[] NumUnit = 
         {
-            "十拾",
+            "十拾⒑㈩⑩⑽Ⅹ",
             "百佰陌",
             "千仟阡",
             "万萬",
             "亿億",
             "兆",
         };
+
+        public static String AllNums { get { return String.Join("", Num) + String.Join("", NumUnit) + String.Join("", NumEx); } }
         //*/
         #endregion
 
-        private static readonly String reservedWord = @"\.+*?[]{}#$% \t\n\r";
+        private static readonly String reservedWord = "\\.+*?[]{}#$% \t\n\r";
         private static readonly Regex R_QUOTE = new Regex(@"(?<!\\)""(?<C>(?:[^""]|\\"")*)(?<!\\)""");
         private static readonly Regex R_DOT = new Regex(@"(?<!\\)\.");
         private static readonly Regex R_STAR = new Regex(@"(?<!\\)\*");
@@ -83,7 +87,7 @@ namespace TXTReader.Data {
                 //对于以^开头,以$结尾的字符串,直接当做正则表达式处理,其中\#被视为包括汉字的数字
                 if (regex.First() == '^' && regex.Last() == '$') {
                     regex = regex.Substring(1, regex.Length - 2);
-                    regex = regex.Replace("\\#", "[" + String.Join("", Num) + String.Join("", NumUnit) + "]+");
+                    regex = regex.Replace("\\#", "[" + AllNums + "]+");
                     regexs.Add(regex);
                 } else {
                     regex = R_DOT.Replace(regex, "\\\\.");
@@ -113,7 +117,7 @@ namespace TXTReader.Data {
                     regex = R_EQ.Replace(regex, @"\\b[^\\s]+?\\b");
                     regex = R_GT.Replace(regex, @"[^\\s]+?\\b");
                     regex = R_LT.Replace(regex, @"\\b.*");
-                    regex = R_SHARP.Replace(regex, "[" + String.Join("", Num) + String.Join("", NumUnit) + "]+");
+                    regex = R_SHARP.Replace(regex, "[" + AllNums + "]+");
                     regex = "(?:" + regex + ")";
                     regex = Regex.Unescape(regex);
                     regexs.Add(regex);
@@ -136,6 +140,7 @@ namespace TXTReader.Data {
             r.regex = new Regex("^(?<ALL>" + td.regex + ")$");
             r.inserts = td.inserts;
             r.LC = td.LC;
+            r.LCs = null;
             return r;
         }
 
@@ -143,11 +148,12 @@ namespace TXTReader.Data {
         public static Trmex Compile(params IEnumerable<String>[] patterns) {
             Trmex r = new Trmex();
             r.LCs = new List<int>();
+            r.LC = 0;
             List<String> regexs = new List<String>();
             for (int i = 0; i < patterns.Count(); ++i) {
                 TrmexDesc td = Precompile(patterns[i], "T" + i);
                 r.inserts = r.inserts.Union(td.inserts) as Dictionary<String, String>;
-                regexs.Add(td.regex);
+                regexs.Add("(?:" + td.regex + ")");
                 r.LCs.Add(td.LC);
             }
             r.regex = new Regex("^(?<ALL>" + String.Join("|", regexs) + ")$");
@@ -171,6 +177,7 @@ namespace TXTReader.Data {
                 }
             }
             cd.Title = ret;
+            cd.Level = -1;
             if (LCs == null) {
                 for (int i = 0; i < LC; ++i) {
                     foreach (Capture c in m.Groups["L" + i].Captures) {
@@ -200,6 +207,10 @@ namespace TXTReader.Data {
                                     s = s.Insert(e.Key.Index - c.Index, e.Value);
                             cd.SubTitle.Add(s);
                         }
+                    }
+                    if (cd.SubTitle.Count > 0) {
+                        cd.Level = j;
+                        break;
                     }
                 }
             }

@@ -15,9 +15,14 @@ using System.Windows.Shapes;
 using System.Windows.Media.Animation;
 using System.Xml;
 using TXTReader.Widget;
+using TXTReader.Display;
 using System.Diagnostics;
 using System.Windows.Threading;
-using TXTReader.Util;
+using TXTReader.Properties;
+using TXTReader.Utility;
+using TXTReader.Res;
+using TXTReader.Data;
+using System.Threading;
 
 namespace TXTReader {
     /// <summary>
@@ -25,93 +30,69 @@ namespace TXTReader {
     /// </summary>
     public partial class MainWindow : Window {
         private readonly Storyboard toolPanelShow;
-        private bool toolPanelShowing = false;
-        private Displayer displayer;
+        private readonly Storyboard toolPanelHide;
+        //private IDisplayer displayer;
 
         public MainWindow() {
             InitializeComponent();
             toolPanelShow = Resources["toolPanelShow"] as Storyboard;
-            toolPanelShow.Completed += (arg0, arg1) => { toolPanelShowing = false; };
+            toolPanelHide = Resources["toolPanelHide"] as Storyboard;
             /*全屏
             WindowStyle = WindowStyle.None;
             ResizeMode = ResizeMode.NoResize;
             WindowState = WindowState.Maximized;
-            //*/
+            //*/            
         }
 
 
-        private void window_MouseMove(object sender, MouseEventArgs e) {
-            if (displayer != null) Title = displayer.FirstLine + ":" + displayer.Offset;
-            if (e.GetPosition(canvas).X > canvas.ActualWidth - 32) {
-                if (!toolPanelShowing) {
-                    toolPanelShowing = true;
-                    toolPanel.BeginStoryboard(toolPanelShow);
-                }
+        protected override void OnMouseMove(MouseEventArgs e) {
+            if (e.GetPosition(canvas).X > canvas.ActualWidth - 32 ){
+                ActionUtil.Run(toolPanel,toolPanelShow);
             }
-        }
-
-        private void window_SizeChanged(object sender, SizeChangedEventArgs e) {
-
         }
 
         private void window_Loaded(object sender, RoutedEventArgs e) {
-            XmlDocument dom = new XmlDocument();
-            try {
-                dom.Load("res/defaultskin.xml");
-            } catch (Exception ex) {
-                Debug.Print(ex.StackTrace);
-            }
-            displayer = new Displayer(dom);
-            canvas.Children.Add(displayer);
-            Canvas.SetLeft(displayer, 0);
-            Canvas.SetTop(displayer, 0);
-            Binding b = new Binding("ActualWidth");
-            b.ElementName = "canvas";
-            displayer.SetBinding(Displayer.WidthProperty, b);
-            b = new Binding("ActualHeight");
-            b.ElementName = "canvas";
-            displayer.SetBinding(Displayer.HeightProperty, b);
-            Canvas.SetZIndex(displayer, 0);
-            Canvas.SetZIndex(toolPanel, 1);
-            displayer.ContextMenu = Resources["mainContextMenu"] as ContextMenu;
-
-            b = new Binding("Value");
-            b.Source = toolPanel.pn_option.se_speed;
-            displayer.SetBinding(Displayer.SpeedProperty,b);
+                XmlDocument dom = new XmlDocument();
+                try {
+                    dom.Load("res/defaultskin.xml");
+                    SkinParser.SetDefaultSkin();
+                    SkinParser.ParseSkin(dom);
+                } catch (Exception ex) {
+                    Debug.Print(ex.StackTrace);
+                }
+                displayer.UpdateSkin();
+                displayer.SetBinding(Displayer4.SpeedProperty, new Binding("Value") { Source = toolPanel.pn_option.se_speed });
+                BookcaseParser.Load();
         }
 
-        private void mi_open_Click(object sender, RoutedEventArgs e) {
-            var dlg = new System.Windows.Forms.OpenFileDialog();
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                displayer.OpenFile(dlg.FileName);
-            }
-        }
-
-        private void mi_close_Click(object sender, RoutedEventArgs e) {
-            displayer.CloseFile();
-        }
-
-        private void mi_reopen_Click(object sender, RoutedEventArgs e) {
-            displayer.ReopenFile();
-        }
-
-        private void mi_exit_Click(object sender, RoutedEventArgs e) {
-            Close();
-        }
-
-        private void mi_scroll_Click(object sender, RoutedEventArgs e) {
-            displayer.IsScrolling = (sender as MenuItem).IsChecked;
-        }
-
-        private void window_KeyDown(object sender, KeyEventArgs e) {
-            switch(e.Key){
+        protected override void OnKeyDown(KeyEventArgs e) {
+            switch (e.Key) {
                 case Key.OemComma: --toolPanel.pn_option.se_speed.Value; break;
                 case Key.OemPeriod: ++toolPanel.pn_option.se_speed.Value; break;
-            }
+                case Key.Up: displayer.LineModify(+1); break;
+                case Key.Down: displayer.LineModify(-1); break;
+                case Key.PageUp: displayer.PageModify(+1); break;
+                case Key.PageDown: displayer.PageModify(-1); break;
+            }            
         }
 
-        private void window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-            if (displayer!=null) displayer.IsScrolling = false;
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e) {
+            BookcaseParser.Save();
+            displayer.CloseFile();
+            G.Timer.Stop();
+            G.WorkThread.Stop();
+            
         }
+
+        protected override void OnMouseDown(MouseButtonEventArgs e) {
+            base.OnMouseDown(e);
+            ActionUtil.Run(toolPanel, toolPanelHide);
+        }
+
+        private void canvas_SizeChanged(object sender, SizeChangedEventArgs e) {
+            Canvas.SetLeft(toolPanel, e.NewSize.Width);
+            ActionUtil.Run(toolPanel, toolPanelHide);
+        }
+
     }
 }

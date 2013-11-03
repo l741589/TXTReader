@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 
 namespace TXTReader.Widget
 {
@@ -23,6 +24,16 @@ namespace TXTReader.Widget
         public ToolPanels()
         {
             InitializeComponent();
+        }
+
+        private void ListBoxItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            OpenFileDialog f = new OpenFileDialog();
+            f.ShowDialog();
+        }
+
+        protected override void OnMouseDown(MouseButtonEventArgs e) {
+            e.Handled = true;
+            base.OnMouseDown(e);
         }
     }
 }

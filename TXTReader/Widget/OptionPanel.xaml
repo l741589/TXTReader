@@ -5,13 +5,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="300">
+             d:DesignHeight="600" d:DesignWidth="300" Padding="8">
     <Grid>
-        <Border Margin="8">
             <StackPanel Orientation="Vertical">
                 <Widget:SpinEdit MaxValue="6000" Value="5" MinValue="1" x:Name="se_speed"></Widget:SpinEdit>
                 <CheckBox Content="CheckBox"/>
             </StackPanel>
-        </Border>
     </Grid>
 </UserControl>
