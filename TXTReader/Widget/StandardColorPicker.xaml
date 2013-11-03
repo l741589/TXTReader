@@ -1,0 +1,30 @@
+﻿<UserControl
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+			 xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" 
+			 x:Class="TXTReader.Widget.StandardColorPicker" 
+			 mc:Ignorable="d" x:Name="usrCtrl">
+    <UniformGrid>
+        <Button Margin="2" x:Name="btnChooseColor" Click="btnChooseColor_Click">
+            <Button.Template>
+                <ControlTemplate>
+                    <Border BorderThickness="1" BorderBrush="Black">
+                        <Grid>
+                            <Grid.Background>
+                                <SolidColorBrush Color="{Binding SelectedColor, ElementName=usrCtrl}"/>
+                            </Grid.Background>
+                            <Rectangle Fill="White" Opacity="0.25" 
+								Width="{Binding ActualWidth, ElementName=txbColorString}"
+								Height="{Binding ActualHeight, ElementName=txbColorString}"/>
+                            <TextBlock x:Name="txbColorString" Margin="2" 
+								VerticalAlignment="Center" HorizontalAlignment="Center"
+								Text="{Binding SelectedColor, ElementName=usrCtrl}"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+    </UniformGrid>
+</UserControl>
