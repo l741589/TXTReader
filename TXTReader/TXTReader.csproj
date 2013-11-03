@@ -67,6 +67,7 @@
     <Compile Include="Converter\MyDateTimeConverter.cs" />
     <Compile Include="Converter\NotConverter.cs" />
     <Compile Include="Converter\ParaSpacingCvt.cs" />
+    <Compile Include="Converter\SolidColorCvt.cs" />
     <Compile Include="Converter\ToolPanelTargetLeftCvt.cs" />
     <Compile Include="Converter\ToolPanelWidthCvt.cs" />
     <Compile Include="Converter\VisiblilityConverter.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Utility\BookcaseParser.cs" />
     <Compile Include="Utility\BookCollection.cs" />
     <Compile Include="Utility\BookmarkParser.cs" />
+    <Compile Include="Utility\EnumTypesBinder.cs" />
     <Compile Include="Utility\G.cs" />
     <Compile Include="Utility\Http.cs" />
     <Compile Include="Utility\Parser.cs" />
@@ -125,6 +127,9 @@
     </Compile>
     <Compile Include="Widget\DesignTool.xaml.cs">
       <DependentUpon>DesignTool.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widget\FontPickerCombobox.xaml.cs">
+      <DependentUpon>FontPickerCombobox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Widget\OptionPanel.xaml.cs">
       <DependentUpon>OptionPanel.xaml</DependentUpon>
@@ -196,6 +201,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Widget\DesignTool.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\FontPickerCombobox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
