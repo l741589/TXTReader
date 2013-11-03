@@ -1,0 +1,175 @@
+﻿<UserControl x:Class="TXTReader.Widget.OptionPanel2"
+             xmlns:Widget="clr-namespace:TXTReader.Widget"
+             xmlns:local="clr-namespace:TXTReader.Data"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:cvt="clr-namespace:TXTReader.Converter"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="300" Padding="8">
+    <UserControl.Resources>
+        <!--<CollectionViewSource x:Key="systemFonts" Source="{x:Static Fonts.SystemFontFamilies}" />-->
+        <cvt:SolidColorCvt x:Key="brushCvt"></cvt:SolidColorCvt>
+        <ObjectDataProvider ObjectType="{x:Type local:EnumTypesBinder}" x:Key="enumTypesBinder">
+        </ObjectDataProvider>
+        <ObjectDataProvider ObjectType="{x:Type local:Options}" x:Key="localOptions"></ObjectDataProvider>
+        <!--<XmlDataProvider x:Key="defaultSkin" XPath="skin" Source="res\defaultskin.xml"></XmlDataProvider>-->
+        <Style TargetType="{x:Type CheckBox}">
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        </Style>
+        <Style TargetType="{x:Type ComboBox}">
+            <Setter Property="Margin" Value="2"></Setter>
+        </Style>
+        <Style TargetType="{x:Type Separator}">
+            <Setter Property="Margin" Value="0 2"></Setter>
+        </Style>
+        <Style TargetType="{x:Type DockPanel}">
+            <!--<Setter Property="LastChildFill" Value="False"></Setter>-->
+        </Style>
+    </UserControl.Resources>
+
+    <Grid DataContext="{DynamicResource localOptions}">
+        <Border Margin="8">
+            <StackPanel Orientation="Vertical">
+                <DockPanel>
+
+                    <Label Content="显示浮动信息"/>
+                    <CheckBox Name="ckbFloatMessage"
+                              IsChecked="{Binding Path=Instance.IsFloatMessageOpen, Mode=TwoWay}"/>
+                    <Label Content="时间"/>
+                    <CheckBox Name="ckbTime"
+                              IsEnabled="{Binding ElementName=ckbFloatMessage, Path=IsChecked}"
+                              IsChecked="{Binding Path=Instance.FloatMessage.Time, Mode=TwoWay}"/>
+                    <Label Content="帧率"/>
+                    <CheckBox Name="ckbFps"
+                              IsEnabled="{Binding ElementName=ckbFloatMessage, Path=IsChecked}"
+                              IsChecked="{Binding Path=Instance.FloatMessage.Fps, Mode=TwoWay}"/>
+
+                </DockPanel>
+                <DockPanel>
+                    <Label Content="速度"/>
+                    <CheckBox Name="ckbSpeed"
+                              IsEnabled="{Binding ElementName=ckbFloatMessage, Path=IsChecked}"
+                              IsChecked="{Binding Path=Instance.FloatMessage.Speed, Mode=TwoWay}"/>
+                    <Label Content="章节标题"/>
+                    <CheckBox Name="ckbChapterTitle"
+                              IsEnabled="{Binding ElementName=ckbFloatMessage, Path=IsChecked}"
+                              IsChecked="{Binding Path=Instance.FloatMessage.ChapterTitle, Mode=TwoWay}"/>
+                    <Label Content="进度"/>
+                    <CheckBox Name="ckbProgress"
+                              IsEnabled="{Binding ElementName=ckbFloatMessage, Path=IsChecked}"
+                              IsChecked="{Binding Path=Instance.FloatMessage.Progress, Mode=TwoWay}"/>
+                </DockPanel>
+                <Separator/>
+                <DockPanel>
+
+                    <Label Content="章节长度范围"/>
+                    <Widget:SpinEdit MaxValue="{Binding ElementName=seMaxLen,Path=Value}" 
+                                     Value="{Binding Path=Instance.MinChapterLength, Mode=TwoWay}"  
+                                     MinValue="1" 
+                                     x:Name="seMinLen"/>
+                    <Label Content="~"/>
+                    <Widget:SpinEdit Value="{Binding Path=Instance.MaxChapterLength, Mode=TwoWay}"  
+                                     MinValue="{Binding ElementName=seMinLen,Path=Value}" 
+                                     x:Name="seMaxLen"/>
+
+                </DockPanel>
+                <Separator/>
+                <DockPanel>
+                    <Label Content="滚速"/>
+                    <Widget:SpinEdit MaxValue="100" 
+                                     Value="{Binding Path=Instance.Speed, Mode=TwoWay}"  
+                                     MinValue="1" x:Name="seSpeed">
+                    </Widget:SpinEdit>
+                    <Label Content="行间距"/>
+                    <Widget:SpinEdit x:Name="seLineSpacing" 
+                                     Value="{Binding Path=Instance.Skin.LineSpacing, Mode=TwoWay}"/>
+                    <Label Content="段间距"/>
+                    <Widget:SpinEdit x:Name="seParaSpacing" 
+                                     Value="{Binding Path=Instance.Skin.ParaSpacing, Mode=TwoWay}"/>
+
+                </DockPanel>
+                <Separator/>
+                <DockPanel>
+                    <Label Content="字号"/>
+                    <Widget:SpinEdit x:Name="seFontSize" MinValue="1" MaxValue="100"
+                                     Value="{Binding Path=Instance.Skin.FontSize, Mode=TwoWay}"/>
+                    <Label Content="字体"/>
+                    <Widget:FontPickerCombobox x:Name="cbxFont" 
+                                               SelectedFont="宋体" 
+                                               SelectedFontChanged="cbxFont_SelectedFontChanged"/>
+                </DockPanel>
+                <DockPanel>
+                    <!--<ComboBox Name="cbxFontStyle" SelectedIndex="0">
+                        <ComboBoxItem Content="普通"/>
+                        <ComboBoxItem Content="粗体"/>
+                        <ComboBoxItem Content="斜体"/>
+                        <ComboBoxItem Content="粗斜体"/>
+                    </ComboBox>-->
+                    <Label Content="字色"/>
+                    <!--<Widget:SolidColorPickerCombobox x:Name="cbxFontColor" 
+                                                     SelectedColor="Black"
+                                                     SelectedColorChanged="cbxFontColor_SelectedColorChanged"/>-->
+                    <Widget:StandardColorPicker x:Name="cbxFontColor" 
+                                                     SelectedColor="{Binding Path=Instance.Skin.Foreground,Converter={StaticResource brushCvt},Mode=TwoWay}"
+                                                     SelectedColorChanged="cbxFontColor_SelectedColorChanged"/>
+                </DockPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox Name="cbxEffectType" 
+                              Grid.Row="0" Grid.Column="0"
+                              ItemsSource="{Binding Source={StaticResource enumTypesBinder}, Path=EffectsDict}"
+                              SelectedValue="{Binding Path=Instance.Skin.EffectType}"
+                              DisplayMemberPath="Value"
+                              SelectedValuePath="Key" >
+                        <!--SelectionChanged="cbxEffectType_SelectionChanged">-->
+                    </ComboBox>
+                    <Widget:SpinEdit x:Name="seEffectSize" 
+                                     Grid.Row="0" Grid.Column="1"
+                                     Value="{Binding Path=Instance.Skin.EffetSize, Mode=TwoWay}"/>
+                    <Label Grid.Row="0" Grid.Column="2" Content="特效色"/>
+                    <!--<Widget:SolidColorPickerCombobox x:Name="cbxEffectColor" 
+                                                     SelectedColor="Yellow"
+                                                     SelectedColorChanged="cbxEffectColor_SelectedColorChanged"/>-->
+                    <Widget:StandardColorPicker x:Name="cbxEffectColor" 
+                                                Grid.Row="0" Grid.Column="3"
+                                                     SelectedColor="{Binding Path=Instance.Skin.Effect,Converter={StaticResource brushCvt},Mode=TwoWay}"/>
+
+                    <Label Grid.Row="1" Grid.Column="0" Content="背景"/>
+                    <ComboBox Name="cbxBackgroundType" 
+                              Grid.Row="1" Grid.Column="1"
+                              ItemsSource="{Binding Source={StaticResource enumTypesBinder}, Path=BackGroundDict}"
+                              SelectedValue="{Binding Path=Instance.Skin.BackGroundType}"
+                              DisplayMemberPath="Value"
+                              SelectedValuePath="Key" 
+                              SelectionChanged="cbxBackgroundType_SelectionChanged">
+                    </ComboBox>
+                    <!--<Widget:SolidColorPickerCombobox x:Name="cbxBackgroundColor" Visibility="Visible" 
+                                                     SelectedColor="{Binding Path=Instance.Skin.BackColor}"
+                                                     SelectedColorChanged="cbxBackgroundColor_SelectedColorChanged"/>-->
+                    <Widget:StandardColorPicker x:Name="cbxBackgroundColor" Visibility="Visible" 
+                                                Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
+                                                     SelectedColor="{Binding Path=Instance.Skin.BackColor, Mode=TwoWay}"
+                                                SelectedColorChanged="cbxBackgroundColor_SelectedColorChanged_1"/>
+                    <Button Content="..." 
+                            Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
+                            Name="btnBackgroundImage" Visibility="Collapsed" 
+                            Click="btnBackgroundImage_Click"/>
+                </Grid>
+                <Separator/>
+
+                <!--<Button Name="btnTest" Content="TEST" Click="btnTest_Click" />-->
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

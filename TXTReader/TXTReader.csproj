@@ -135,6 +135,9 @@
     <Compile Include="Widget\OptionPanel.xaml.cs">
       <DependentUpon>OptionPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Widget\OptionPanel2.xaml.cs">
+      <DependentUpon>OptionPanel2.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Widget\SimpleMenuButton.xaml.cs">
       <DependentUpon>SimpleMenuButton.xaml</DependentUpon>
     </Compile>
@@ -216,6 +219,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Widget\OptionPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\OptionPanel2.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
