@@ -16,7 +16,6 @@ namespace TXTReader.Utility {
         static private Book book = null;
         static G() {
             Trmex = Trmex.Compile(new String[] { " \"第#卷\" \"第#章*\"", " \"第#卷\" \"[第]#章*\"", " \"外传*\"" });
-            Book = new Book();
             //NoCover = new BitmapImage(new Uri(Properties.Resources.URI_NO_COVER));
             //NoCover = (ImageSource)new ImageSourceConverter().ConvertFrom(Properties.Resources.URI_NO_COVER);
             NoCover = App.Current.Resources["src_nocover"] as ImageSource;
@@ -32,21 +31,27 @@ namespace TXTReader.Utility {
         public static String TXTREADER_HEAD { get { return "/TXTReader"; } }
 
         public static String PATH { get { return AppDomain.CurrentDomain.BaseDirectory; } }
-        public static String PATH_BOOK { get { return A.CheckDir(PATH + @"bookcase\"); } }        
-        public static String PATH_BOOKMARK { get { return A.CheckDir(PATH + @"bookmark\"); } }
+        public static String PATH_BOOK { get { return A.CheckDir(PATH + @"books\"); } }        
         public static String PATH_COVER { get { return A.CheckDir(PATH + @"cover\"); } }
 
         public static String EXT_BOOK { get { return ".trb"; } }
-        public static String EXT_BOOKMARK { get { return ".trm"; } }
         public static String EXT_OPTION { get { return ".tro"; } }
         public static String EXT_SKIN { get { return ".trs"; } }
 
         public static ImageSource NoCover { get; private set; }
         public static Trmex Trmex { get; set; }
-        public static Book Book { get { return book; } set { if (book != null) book.Close(); book = value; } }
+        public static Book Book {
+            get { return book; }
+            set {
+                if (book == value) return;
+                if (book != null) book.Close();
+                book = value;
+                if (book != null) book.Load();
+            }
+        }
         public static Options Options { get { return Options.Instance; } }
         public static ITRTimer Timer = new TRTimer2();
-        public static String FileName { get; set; }
+        public static String FileName { get { return book == null ? null : book.Source; } }
         public static MainWindow MainWindow { get { return App.Current.MainWindow as MainWindow; } }
         public static Displayer4 Displayer { get { return MainWindow.displayer; } }
         public static ObservableCollection<Bookmark> Bookmark { get; private set; }

@@ -27,7 +27,7 @@ namespace TXTReader.Data {
         public double SortArgument { get; set; }
         private String preview = null;
 
-        public Book() : base() { }
+        public Book() : base() { Position = 0; Offset = 0; }
         public Book(String src) : this() { Init(src); }
 
         public void Init(String src) {
@@ -103,19 +103,19 @@ namespace TXTReader.Data {
             return this;
         }
 
-        public async Task Load(String file = null, Trmex trmex = null) {
+        public void Load(String file = null) {
             if (file == null) file = Source; else Source = file;
-            if (trmex == null) trmex = G.Trmex;
-            LastLoadTime = DateTime.Now;
             if (IsLocal) {
                 Clear();
                 var ss = File.ReadAllLines(file, Encoding.Default);
                 Title = Path.GetFileNameWithoutExtension(file);
                 if (Text != null) Text.Clear();
-                Match(trmex, ss);
+                Match(G.Trmex, ss);
+                BookcaseParser.Load(this);                
             } else {
                 //TODO 添加Download逻辑
             }
+            LastLoadTime = DateTime.Now;
         }
 
         public String ToolTip {
@@ -133,12 +133,9 @@ namespace TXTReader.Data {
             Douban.MoreInfo(this);
         }
 
-        public async Task Localize() {
-
-        }
-
         public override void Close() {
             GetPreview();
+            BookcaseParser.Save(this);
             base.Close();
         }
     }

@@ -20,9 +20,9 @@ namespace TXTReader.Utility {
         public const String S_AUTO = "auto";
         public const String S_TIME = "time";
 
-        public static String FileName { get { return G.PATH_BOOKMARK + G.Book.Title + G.Book.Source.GetHashCode() + G.EXT_BOOKMARK; } }
+        //public static String FileName { get { return G.PATH_BOOKMARK + G.Book.Title + G.Book.Source.GetHashCode() + G.EXT_BOOKMARK; } }
 
-        private static void Save(XmlElement root,Positionable p,bool isAuto = false) {
+        /*private static void Save(XmlElement root,Positionable p,bool isAuto = false) {
             XmlDocument xml = root.OwnerDocument;
             var mark=xml.CreateElement(S_MARK);
             root.AppendChild(mark);
@@ -75,9 +75,9 @@ namespace TXTReader.Utility {
             XmlWriter wrt = XmlWriter.Create(FileName);
             xml.WriteTo(wrt);
             wrt.Close();
-        }
+        }*/
 
-        public static Bookmark LoadMark(XmlReader xr) {
+       /* public static Bookmark LoadMark(XmlReader xr) {
             Bookmark bmk = new Bookmark();
             var s = xr.GetAttribute(S_AUTO);
             if (s != null) bmk.IsAuto = true; else bmk.IsAuto = false;
@@ -122,6 +122,37 @@ namespace TXTReader.Utility {
                 Debug.WriteLine(e);
             }
             if (xr != null) xr.Close();
+        }*/
+
+        public static Reader Load(Reader r) {
+            r.Child(S_BOOKMARK).ForChildren(S_MARK, (n) => {
+                Bookmark bmk=new Bookmark();                
+                if (n.Attributes[S_AUTO] != null) bmk.IsAuto = true;else bmk.IsAuto=false;
+                new Reader(n)
+                    .Read(S_OFFSET, (m) => { bmk.Offset = double.Parse(m.InnerText); })
+                    .Read(S_POSITION, (m) => { bmk.Position = int.Parse(m.InnerText); })
+                    .Read(S_TIME, (m) => { bmk.Time = DateTime.Parse(m.InnerText); });
+                if (bmk.IsAuto) bmk.AssignTo(G.Book);
+                else G.Bookmark.Add(bmk);
+            });
+            return r.Parent;
+        }
+
+        public static Writer Save(Writer w) {
+            w=w.Start(S_BOOKMARK);
+            w=w.Start(S_MARK).Attr(S_AUTO,"true")
+                .Write(S_POSITION,G.Book.Position)
+                .Write(S_OFFSET,G.Book.Offset)
+                .Write(S_TIME,G.Book.LastLoadTime)
+            .End;
+            foreach (var e in G.Bookmark) {
+                w = w.Start(S_MARK)
+                    .Write(S_POSITION, e.Position)
+                    .Write(S_OFFSET,e.Offset)
+                    .Write(S_TIME, DateTime.Now)
+                .End;
+            }
+            return w.End;
         }
     }
 }

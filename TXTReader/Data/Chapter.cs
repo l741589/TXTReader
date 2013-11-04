@@ -113,7 +113,7 @@ namespace TXTReader.Data
                 Children = null;
             }
             G.Bookmark.Clear();
-            Parent = null;            
+            Parent = null;
         }
     }
 }
