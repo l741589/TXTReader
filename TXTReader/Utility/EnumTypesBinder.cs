@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TXTReader.Data;
 
-namespace TXTReader.Data
+namespace TXTReader.Utility
 {
     //this class is designed to make the enum types capable for data binding with a customized display name.
     public class EnumTypesBinder
