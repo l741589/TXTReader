@@ -15,24 +15,10 @@ namespace TXTReader.Data
 
     public class Skin
     {
-
-        //(NOT SOLVED)
         //the problem of binding in optionpanel.
         public Skin()
         {
-            //thought about SkinParser but obviously it doesn't work here.
-
-            //LineSpacing = 4;
-            //ParaSpacing = 8;
-            //Font = new Typeface("宋体");
-            //FontSize = 12;
-            //Foreground = Brushes.Yellow;
-            //BackColor = Colors.DarkBlue;
-            //BackGroundType = BackGroundType.SolidColor;
-            //Padding = new Thickness(16);
-            //EffetSize = 1;
-            //Effect = Brushes.Black;
-            //EffectType = EffectType.Shadow;
+            //no need to initialize after OptionPanel3.
         }
 
         private BackGroundType backGroundType;
@@ -74,7 +60,8 @@ namespace TXTReader.Data
         {
             get
             {
-                if (background != null) return background;
+                //what if the BackColor is changed?
+                //if (background != null) return background;
                 switch (BackGroundType)
                 {
                     case BackGroundType.SolidColor: return background = new SolidColorBrush(BackColor);
