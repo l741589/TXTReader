@@ -71,6 +71,7 @@
     <Compile Include="Converter\SolidColorCvt.cs" />
     <Compile Include="Converter\ToolPanelTargetLeftCvt.cs" />
     <Compile Include="Converter\ToolPanelWidthCvt.cs" />
+    <Compile Include="Converter\TypefaceToFontFamilyCvt.cs" />
     <Compile Include="Converter\VisiblilityConverter.cs" />
     <Compile Include="Data\Book.cs" />
     <Compile Include="Data\Bookmark.cs" />
