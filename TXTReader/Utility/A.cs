@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace TXTReader.Utility {
 
-    static class A {
+    static public class A {
         public static void CopyText(out String[] text,ICollection<String> src, int piecelen = 4096) {
             if (piecelen == 0) {
                 text = src.ToArray();
@@ -75,5 +77,35 @@ namespace TXTReader.Utility {
             lb.Items.SortDescriptions.Clear();
             foreach (SortDescription sd in sds) lb.Items.SortDescriptions.Add(sd);
         }
+
+        private static readonly String[] filenameReservedWord = new String[]{ "%", "\\", "/", "*", "?", "\"", "<", ">", "|", ":" };
+        private static readonly char[] filenameReservedChar = new char[] { '\\', '/', '*', '?', '"', '<', '>', '|', ':' };
+        private static readonly char[] fullFilenameReservedChar = new char[] { '*', '?', '"', '<', '>', '|' };
+        private static readonly Regex R_FILENAME_DECODER = new Regex(@"%[0-9a-fA-F]{2}");
+
+        public static bool IsFilename(String filename) {
+            return filename.IndexOfAny(filenameReservedChar) == -1;
+        }
+
+        public static bool IsFullFilename(String filename) {
+            return filename.IndexOfAny(fullFilenameReservedChar) == -1;
+        }
+
+        public static String EncodeFilename(String filename) {
+            String s = filename;
+            foreach (var c in filenameReservedWord) {
+                s = s.Replace(c, String.Format("%{0:x2}", (short)c[0]));
+            }
+            return s;
+        }
+
+        public static String DecodeFilename(String filename) {
+            return R_FILENAME_DECODER.Replace(filename, (n) => {
+                char c=(char)int.Parse(n.Value.Substring(1), System.Globalization.NumberStyles.HexNumber);
+                return c.ToString();
+            });
+        }
+
+        
     }
 }

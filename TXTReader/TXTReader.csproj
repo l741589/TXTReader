@@ -64,9 +64,11 @@
     </ApplicationDefinition>
     <Compile Include="Converter\BookLengthConverter.cs" />
     <Compile Include="Converter\BookmarkConverter.cs" />
+    <Compile Include="Converter\ChapterRuleNameConverter.cs" />
     <Compile Include="Converter\MyDateTimeConverter.cs" />
     <Compile Include="Converter\NotConverter.cs" />
     <Compile Include="Converter\ParaSpacingCvt.cs" />
+    <Compile Include="Converter\RuleDelButtonVisibilityConverter.cs" />
     <Compile Include="Converter\ToolPanelTargetLeftCvt.cs" />
     <Compile Include="Converter\ToolPanelWidthCvt.cs" />
     <Compile Include="Converter\VisiblilityConverter.cs" />
@@ -102,12 +104,14 @@
     <Compile Include="Display\TRTimer2.cs" />
     <Compile Include="Utility\A.cs" />
     <Compile Include="Utility\ActionUtil.cs" />
-    <Compile Include="Utility\BookcaseParser.cs" />
+    <Compile Include="Utility\BookParser.cs" />
     <Compile Include="Utility\BookCollection.cs" />
-    <Compile Include="Utility\BookmarkParser.cs" />
+    <Compile Include="Utility\BufferObject.cs" />
+    <Compile Include="Utility\RuleParser.cs" />
     <Compile Include="Utility\G.cs" />
     <Compile Include="Utility\Http.cs" />
     <Compile Include="Utility\Parser.cs" />
+    <Compile Include="Utility\Rules.cs" />
     <Compile Include="Utility\SkinParser.cs" />
     <Compile Include="WebApi\Douban.cs" />
     <Compile Include="Widget\BookcasePanel.xaml.cs">
@@ -116,8 +120,8 @@
     <Compile Include="Widget\BookmarkPanel.xaml.cs">
       <DependentUpon>BookmarkPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Widget\ChapterRulePanel.xaml.cs">
-      <DependentUpon>ChapterRulePanel.xaml</DependentUpon>
+    <Compile Include="Widget\RulePanel.xaml.cs">
+      <DependentUpon>RulePanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Display\Displayer.cs" />
     <Compile Include="Display\Displayer2.xaml.cs">
@@ -138,7 +142,6 @@
     <Compile Include="Widget\ToolPanels.xaml.cs">
       <DependentUpon>ToolPanels.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WorkThread.cs" />
     <Page Include="Display\TRText.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -171,10 +174,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="res\GlobalDictionary.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -187,7 +186,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Widget\ChapterRulePanel.xaml">
+    <Page Include="Widget\RulePanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -257,6 +256,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="res\setting.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\cross.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

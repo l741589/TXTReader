@@ -20,23 +20,18 @@ using System.Diagnostics;
 using System.Windows.Threading;
 using TXTReader.Properties;
 using TXTReader.Utility;
-using TXTReader.Res;
 using TXTReader.Data;
 using System.Threading;
+using System.IO;
 
 namespace TXTReader {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window {
-        private readonly Storyboard toolPanelShow;
-        private readonly Storyboard toolPanelHide;
-        //private IDisplayer displayer;
+    public partial class MainWindow : Window {   
 
         public MainWindow() {
-            InitializeComponent();
-            toolPanelShow = Resources["toolPanelShow"] as Storyboard;
-            toolPanelHide = Resources["toolPanelHide"] as Storyboard;
+            InitializeComponent();           
             /*全屏
             WindowStyle = WindowStyle.None;
             ResizeMode = ResizeMode.NoResize;
@@ -47,7 +42,7 @@ namespace TXTReader {
 
         protected override void OnMouseMove(MouseEventArgs e) {
             if (e.GetPosition(canvas).X > canvas.ActualWidth - 32 ){
-                ActionUtil.Run(toolPanel,toolPanelShow);
+                toolPanel.Show();
             }
         }
 
@@ -62,7 +57,7 @@ namespace TXTReader {
                 }
                 displayer.UpdateSkin();
                 displayer.SetBinding(Displayer4.SpeedProperty, new Binding("Value") { Source = toolPanel.pn_option.se_speed });
-                BookcaseParser.Load();
+                BookParser.Load();
         }
 
         protected override void OnKeyDown(KeyEventArgs e) {
@@ -77,22 +72,21 @@ namespace TXTReader {
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e) {
-            BookcaseParser.Save();
+            BookParser.Save();
+            try { RuleParser.Save(); } catch (IOException) { };
+
             displayer.CloseFile();
             G.Timer.Stop();
-            G.WorkThread.Stop();
-            
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e) {
             base.OnMouseDown(e);
-            ActionUtil.Run(toolPanel, toolPanelHide);
+            toolPanel.Hide();
         }
 
         private void canvas_SizeChanged(object sender, SizeChangedEventArgs e) {
             Canvas.SetLeft(toolPanel, e.NewSize.Width);
-            ActionUtil.Run(toolPanel, toolPanelHide);
-        }
-
+            toolPanel.Hide();
+        }        
     }
 }

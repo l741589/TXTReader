@@ -100,7 +100,7 @@ namespace TXTReader.Data
                 Children.Clear();
                 Children = null;
             }
-            G.Bookmark.Clear();
+            if (G.Bookmark!=null) G.Bookmark.Clear();
             Parent = null;            
         }
 

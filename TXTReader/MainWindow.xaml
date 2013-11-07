@@ -7,36 +7,7 @@
         xmlns:display="clr-namespace:TXTReader.Display"
         Title="MainWindow" Height="350" Width="525" Loaded="window_Loaded">
     <Window.Resources>
-        <converter:ToolPanelWidthCvt x:Key="toolPanelWidthCvt"/>
-        <converter:ToolPanelTargetLeftCvt x:Key="toolPanelTargetLeftCvt"/>
-        <Storyboard x:Key="toolPanelShow">
-            <DoubleAnimation Duration="0:0:0.2"
-                AccelerationRatio="0.33" DecelerationRatio="0.33"
-                Storyboard.TargetProperty="(Canvas.Left)">
-                <DoubleAnimation.To>
-                    <MultiBinding Converter="{StaticResource toolPanelTargetLeftCvt}">
-                        <Binding Path="ActualWidth" ElementName="toolPanel"/>
-                        <Binding Path="ActualWidth" ElementName="canvas"/>
-                    </MultiBinding>
-                </DoubleAnimation.To>
-            </DoubleAnimation>
-            <DoubleAnimation
-                To="100" Duration="0:0:0.2" 
-                Storyboard.TargetProperty="Opacity">
-            </DoubleAnimation>
-        </Storyboard>
-        <Storyboard x:Key="toolPanelHide">
-            <DoubleAnimation
-                AccelerationRatio="0.33" DecelerationRatio="0.33"
-                To="{Binding ActualWidth,ElementName=canvas}" Duration="0:0:0.2"                
-                Storyboard.TargetProperty="(Canvas.Left)">
-            </DoubleAnimation>
-            <DoubleAnimation
-                To="0" Duration="0:0:0.2" 
-                Storyboard.TargetProperty="Opacity"
-                >                
-            </DoubleAnimation>
-        </Storyboard>
+        <converter:ToolPanelWidthCvt x:Key="toolPanelWidthCvt"/>       
     </Window.Resources>
     <Canvas x:Name="canvas" SizeChanged="canvas_SizeChanged">
         <display:Displayer4 x:Name="displayer" Canvas.Left="0" Canvas.Top="0" 

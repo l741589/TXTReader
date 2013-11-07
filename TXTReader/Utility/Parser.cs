@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Diagnostics;
 
 namespace TXTReader.Utility {
     delegate void ParserNodeCallback(XmlNode n);
@@ -39,7 +40,12 @@ namespace TXTReader.Utility {
         }
 
         public static void WriteTo(XmlDocument xml, String FileName) {
-            XmlWriter wrt = XmlWriter.Create(FileName);
+            XmlWriterSettings xws=new XmlWriterSettings();
+            xws.Indent=true;
+            xws.ConformanceLevel = ConformanceLevel.Auto;
+            xws.IndentChars = "\t";
+            xws.OmitXmlDeclaration = false;
+            XmlWriter wrt = XmlWriter.Create(FileName, xws);
             xml.WriteTo(wrt);
             wrt.Close();
         }
@@ -126,10 +132,15 @@ namespace TXTReader.Utility {
             private String keyword;
 
             public Reader(String FileName) {
-                xml = new XmlDocument();
-                xml.Load(FileName);
-                for (node = xml.FirstChild; node != null && node.NodeType != XmlNodeType.Element; node = node.NextSibling) ;
-                nulldepth = 0;
+                try {
+                    xml = new XmlDocument();
+                    xml.Load(FileName);
+                    for (node = xml.FirstChild; node != null && node.NodeType != XmlNodeType.Element; node = node.NextSibling) ;
+                    nulldepth = 0;
+                } catch (Exception e) {
+                    Debug.WriteLine(e.StackTrace);
+                    xml = null;
+                }
             }
 
             public Reader(XmlNode node) {
@@ -142,15 +153,18 @@ namespace TXTReader.Utility {
             }
 
             public Reader Do(ParserNodeCallback callback) {
+                if (xml == null) return this;
                 if (node != null) callback.Invoke(node);
                 return this;
             }
 
             public Reader Do(ParserReaderCallback callback) {
+                if (xml == null) return this;
                 return callback(this);
             }
 
             public Reader Child(String name = null) {
+                if (xml == null) return this;
                 if (node == null) {
                     ++nulldepth;
                     return this;
@@ -176,6 +190,7 @@ namespace TXTReader.Utility {
 
             public Reader Next {
                 get {
+                    if (xml == null) return this;
                     if (node == null) return this;
                     for (XmlNode n = node.NextSibling; n != null; n = n.NextSibling)
                         if (n.Name == keyword || keyword == null) {
@@ -187,6 +202,7 @@ namespace TXTReader.Utility {
             }
 
             public Reader ForChildren(String name, ParserNodeCallback callback) {
+                if (xml == null) return this;
                 for (XmlNode n = Child(name).node; n != null;n=n.NextSibling) {
                     callback.Invoke(n);
                 }
@@ -197,6 +213,7 @@ namespace TXTReader.Utility {
 
             public Reader Parent {
                 get {
+                    if (xml == null) return this;
                     if (nulldepth > 0) {
                         --nulldepth;
                         if (nulldepth == 0) node = bak;
@@ -209,6 +226,7 @@ namespace TXTReader.Utility {
             }
 
             public Reader Read(String name, ParserNodeCallback callback) {
+                if (xml == null) return this;
                 return Child(name).Do(callback).Parent;
             }
         }

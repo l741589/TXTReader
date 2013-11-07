@@ -14,8 +14,6 @@ namespace TXTReader.Data {
             public int LC;
         }
 
-
-
         #region 数字
         /*
         public static readonly String[] Num = { "一二三四五六七八九零" };
@@ -61,6 +59,7 @@ namespace TXTReader.Data {
         //*/
         #endregion
 
+        #region 生成匹配用正则表达式
         private static readonly String reservedWord = "\\.+*?[]{}#$% \t\n\r";
         private static readonly Regex R_QUOTE = new Regex(@"(?<!\\)""(?<C>(?:[^""]|\\"")*)(?<!\\)""");
         private static readonly Regex R_DOT = new Regex(@"(?<!\\)\.");
@@ -84,8 +83,11 @@ namespace TXTReader.Data {
             int IC = 0;
             foreach (var pattern in patterns) {
                 String regex = pattern;
-                //对于以^开头,以$结尾的字符串,直接当做正则表达式处理,其中\#被视为包括汉字的数字
-                if (regex.First() == '^' && regex.Last() == '$') {
+                if (regex == null || regex == "" || (regex.Length >= 2 && regex[0] == '#' && regex[1] == '#')) {
+                    //对于空字符串，或以##开始的注释，忽略
+                } else if (regex.First() == '^' && regex.Last() == '$') {
+                    //对于以^开头,以$结尾的字符串,直接当做正则表达式处理,其中\#被视为包括汉字的数字
+                    //TODO 视为添加的语法，视为添加
                     regex = regex.Substring(1, regex.Length - 2);
                     regex = regex.Replace("\\#", "[" + AllNums + "]+");
                     regexs.Add(regex);
@@ -127,6 +129,7 @@ namespace TXTReader.Data {
             ret.LC = LC;
             return ret;
         }
+        #endregion
 
         public Dictionary<String, String> inserts = new Dictionary<String, String>();
         public Regex regex;
@@ -134,30 +137,36 @@ namespace TXTReader.Data {
         public int LC = 0;
 
         //List模式
-        public static Trmex Compile(IEnumerable<String> patterns) {
+        public Trmex(IEnumerable<String> patterns) {
             TrmexDesc td = Precompile(patterns);
-            Trmex r = new Trmex();
-            r.regex = new Regex("^(?<ALL>" + td.regex + ")$");
-            r.inserts = td.inserts;
-            r.LC = td.LC;
-            r.LCs = null;
-            return r;
+            regex = new Regex("^(?<ALL>" + td.regex + ")$");
+            inserts = td.inserts;
+            LC = td.LC;
+            LCs = null;
+        }
+
+        public static Trmex Compile(IEnumerable<String> patterns) {
+            return new Trmex(patterns);
         }
 
         //Tree模式
-        public static Trmex Compile(params IEnumerable<String>[] patterns) {
-            Trmex r = new Trmex();
-            r.LCs = new List<int>();
-            r.LC = 0;
+        public Trmex(IEnumerable<IEnumerable<String>> patterns) { compile(patterns.ToArray()); }
+
+        private void compile(IEnumerable<String>[] patterns) {
+            LCs = new List<int>();
+            LC = 0;
             List<String> regexs = new List<String>();
             for (int i = 0; i < patterns.Count(); ++i) {
                 TrmexDesc td = Precompile(patterns[i], "T" + i);
-                r.inserts = r.inserts.Union(td.inserts) as Dictionary<String, String>;
+                inserts = inserts.Union(td.inserts) as Dictionary<String, String>;
                 regexs.Add("(?:" + td.regex + ")");
-                r.LCs.Add(td.LC);
+                LCs.Add(td.LC);
             }
-            r.regex = new Regex("^(?<ALL>" + String.Join("|", regexs) + ")$");
-            return r;
+            regex = new Regex("^(?<ALL>" + String.Join("|", regexs) + ")$");
+        }
+
+        public static Trmex Compile(IEnumerable<IEnumerable<String>> patterns) {
+            return new Trmex(patterns);
         }
 
         public ChapterDesc Match(String src) {

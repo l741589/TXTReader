@@ -83,7 +83,6 @@
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ListBoxItem Content="添加" x:Name="lbi_add" MouseUp="lbi_add_MouseUp"/>
-                        <ListBoxItem Content="锁定" x:Name="lbi_lock"/>
                         <ListBoxItem Content="设置工作目录" x:Name="lbi_setdir"/>
                     </ItemsControl>
                 </Grid>

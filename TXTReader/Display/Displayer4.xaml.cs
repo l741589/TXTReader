@@ -120,10 +120,11 @@ namespace TXTReader.Display {
         }
 
         public void ReopenFile() {
-            G.Book.Clear();
+            Book tmp = G.Book;
+            G.Book = null;
             Clear();
             Text = null;
-            OpenFile(G.FileName);
+            OpenBook(tmp);
         }
 
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TXTReader.Data {
-    interface Positionable {
+    public interface Positionable {
         int Position { get; set; }
         double Offset { get; set; }
     }

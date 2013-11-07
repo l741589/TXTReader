@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TXTReader.Data;
+using TXTReader.Utility;
 
 namespace ManualUnitTest
 {
@@ -33,9 +34,16 @@ namespace ManualUnitTest
             //Console.WriteLine(String.Join("\n",cd.SubTitle));
             //Console.ReadKey();
 
-            String[] ss = new String[] { "\"第#卷\" \"第#章*\"" };
-            Trmex t = Trmex.Compile(ss);
+            //String[] ss = new String[] { "\"第#卷\" \"第#章*\"" };
+            //Trmex t = Trmex.Compile(ss);
             //t.Match()
+            String s = @"""%"", ""\\"", ""/"", ""*"", ""?"", ""\"""", ""<"", "">"", ""|"", "":"",""胡思公司收""";
+            Console.WriteLine(s);
+            s=A.EncodeFilename(s);
+            Console.WriteLine(s);
+            s=A.DecodeFilename(s);
+            Console.WriteLine(s);
+            Console.ReadKey();
         }
 
         static void printmatch(Match m)
