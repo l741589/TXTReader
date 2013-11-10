@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TXTReader.Data {
-    class Bookmark : Positionable {
+    public class Bookmark : Positionable {
         public bool IsAuto { get; set; }
         public int Position { get; set; }
         public double Offset { get; set; }

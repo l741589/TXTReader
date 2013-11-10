@@ -100,7 +100,7 @@ namespace TXTReader.Data
                 Children.Clear();
                 Children = null;
             }
-            G.Bookmark.Clear();
+            if (G.Bookmark!=null) G.Bookmark.Clear();
             Parent = null;            
         }
 
@@ -113,7 +113,11 @@ namespace TXTReader.Data
                 Children = null;
             }
             G.Bookmark.Clear();
-            Parent = null;            
+            Parent = null;
+        }
+
+        public override string ToString() {
+            return TotalTitle;
         }
     }
 }

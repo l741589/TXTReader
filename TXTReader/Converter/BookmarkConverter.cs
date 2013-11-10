@@ -5,11 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using TXTReader.Utility;
+using System.Diagnostics;
 
 namespace TXTReader.Converter {
     class BookmarkConverter : IValueConverter{
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+            Debug.Assert(G.Book != null,"书为空时不能有书签");
             switch (parameter as String) {                
                 case "progress":{
                     double x=(int)value;

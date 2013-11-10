@@ -4,11 +4,46 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converter="clr-namespace:TXTReader.Converter"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converter:ToolPanelWidthCvt x:Key="toolPanelWidthCvt"/>
+            <converter:ToolPanelTargetLeftCvt x:Key="toolPanelTargetLeftCvt"/>
+            <Storyboard x:Key="toolPanelShow">
+                <DoubleAnimation Duration="0:0:0.2"
+                AccelerationRatio="0.33" DecelerationRatio="0.33"
+                Storyboard.TargetProperty="(Canvas.Left)">
+                    <DoubleAnimation.To>
+                        <MultiBinding Converter="{StaticResource toolPanelTargetLeftCvt}">
+                            <Binding Path="ActualWidth" ElementName="toolPanel"/>
+                            <Binding Path="ActualWidth" ElementName="canvas"/>
+                        </MultiBinding>
+                    </DoubleAnimation.To>
+                </DoubleAnimation>
+                <DoubleAnimation
+                To="100" Duration="0:0:0.2" 
+                Storyboard.TargetProperty="Opacity">
+                </DoubleAnimation>
+            </Storyboard>
+            <Storyboard x:Key="toolPanelHide">
+                <DoubleAnimation
+                AccelerationRatio="0.33" DecelerationRatio="0.33"
+                To="{Binding ActualWidth,ElementName=canvas}" Duration="0:0:0.2"                
+                Storyboard.TargetProperty="(Canvas.Left)">
+                </DoubleAnimation>
+                <DoubleAnimation
+                To="0" Duration="0:0:0.2" 
+                Storyboard.TargetProperty="Opacity"
+                >
+                </DoubleAnimation>
+            </Storyboard>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <TabControl>
         <TabItem Header="划分">
-            <Widget:ChapterRulePanel x:Name="pn_rule"/>
+            <Widget:RulePanel x:Name="pn_rule"/>
         </TabItem>
         <TabItem Header="设置">
             <Widget:OptionPanel x:Name="pn_option"/>
@@ -21,7 +56,7 @@
         </TabItem>
         <TabItem Header="TEST">
             <StackPanel>
-                <Image Source="http://img3.douban.com/spic/s26012674.jpg"/>
+                <Widget:TrmexTextBox></Widget:TrmexTextBox>
             </StackPanel>
         </TabItem>
     </TabControl>

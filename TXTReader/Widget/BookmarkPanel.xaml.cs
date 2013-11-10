@@ -40,6 +40,7 @@ namespace TXTReader.Widget {
         private void lb_book_DoubleClick(object sender, MouseButtonEventArgs e) {
             var li = sender as ListBoxItem;
             var b = li.DataContext as Bookmark;
+            lb_bookmark.ItemsSource = G.Bookmark;
             b.AssignTo(G.Book);
             G.Displayer.Update();
         }
