@@ -190,6 +190,7 @@ namespace TXTReader.Widget {
             if (listlock) return;
             listlock = true;
             try {
+                G.ListTrmex = null;
                 int i = 0;
                 if (G.Rules.ListSelection != null && G.Rules.ListSelection != Rules.S_ADD) {
                     if (G.Rules.ListSelection != S_DBLNAME) File.Delete(G.Rules.ListSelection);
@@ -214,6 +215,7 @@ namespace TXTReader.Widget {
             if (treelock) return;
             treelock = true;
             try {
+                G.TreeTrmex = null;
                 int i = 0;
                 if (G.Rules.TreeSelection != null && G.Rules.TreeSelection != Rules.S_ADD) {
                     if (G.Rules.TreeSelection!=S_DBLNAME) File.Delete(G.Rules.TreeSelection);

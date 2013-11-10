@@ -115,5 +115,9 @@ namespace TXTReader.Data
             G.Bookmark.Clear();
             Parent = null;
         }
+
+        public override string ToString() {
+            return TotalTitle;
+        }
     }
 }
