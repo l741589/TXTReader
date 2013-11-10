@@ -86,8 +86,8 @@ namespace TXTReader.Data {
             foreach (var s in texts) {
                 var trmex = G.ListTrmex;
                 ChapterDesc r = null;
-                if (r == null) r = G.ListTrmex.Match(s);
-                //if (r == null) r = G.TreeTrmex.Match(s);
+                if (r == null && G.Rules.IsListEnable) r = G.ListTrmex.Match(s);
+                if (r == null && G.Rules.IsTreeEnable) r = G.TreeTrmex.Match(s);
                 if (r != null) {
                     if (trmex.LCs == null) {
                         node = Insert(r.SubTitle, 0, this);

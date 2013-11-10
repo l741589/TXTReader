@@ -73,8 +73,7 @@ namespace TXTReader {
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e) {
             BookParser.Save();
-            try { RuleParser.Save(); } catch (IOException) { };
-
+            RuleParser.Save();
             displayer.CloseFile();
             G.Timer.Stop();
         }

@@ -13,6 +13,9 @@ namespace TXTReader.Utility {
         private const String S_LIST = "list";
         private const String S_TREE = "tree";
         private const String S_SELECTION = "selection";
+        private const String S_ENABLE = "enable";
+        private const String S_TRUE = "true";
+        private const String S_FALSE = "false";
 
 
 
@@ -31,18 +34,26 @@ namespace TXTReader.Utility {
             if (optionfile != null) {
                 var r = new Reader(optionfile).Child(S_LIST)
                     .Read(S_SELECTION, (n) => { G.Rules.ListSelection = n.InnerText; })
+                    .Read(S_ENABLE, (n) => { G.Rules.IsListEnable = n.InnerText == S_TRUE; })
                     .Parent.Child(S_TREE)
                     .Read(S_SELECTION, (n) => { G.Rules.TreeSelection = n.InnerText; })
+                    .Read(S_ENABLE, (n) => { G.Rules.IsTreeEnable = n.InnerText == S_TRUE; })
                     .Parent;
             }
         }
 
         public static void Save() {
-            SaveList();
-            SaveTree();
+            try { SaveList(); } catch (IOException) { }
+            try { SaveTree(); } catch (IOException) { } 
             new Writer(S_ROOT)
-                .Start(S_LIST).Write(S_SELECTION, G.Rules.ListSelection).End
-                .Start(S_TREE).Write(S_SELECTION, G.Rules.TreeSelection).End
+                .Start(S_LIST)
+                    .Write(S_SELECTION, G.Rules.ListSelection)
+                    .Write(S_ENABLE, G.Rules.IsListEnable ? S_TRUE : S_FALSE)
+                .End
+                .Start(S_TREE)
+                    .Write(S_SELECTION, G.Rules.TreeSelection)
+                    .Write(S_ENABLE, G.Rules.IsTreeEnable ? S_TRUE : S_FALSE)
+                .End
             .WriteTo(G.PATH_RULEOPTION + S_ROOT + G.EXT_RULEOPTION);
         }
 

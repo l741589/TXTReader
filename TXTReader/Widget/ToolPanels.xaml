@@ -56,7 +56,7 @@
         </TabItem>
         <TabItem Header="TEST">
             <StackPanel>
-                <Image Source="http://img3.douban.com/spic/s26012674.jpg"/>
+                <Widget:TrmexTextBox></Widget:TrmexTextBox>
             </StackPanel>
         </TabItem>
     </TabControl>

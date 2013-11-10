@@ -25,6 +25,8 @@ namespace TXTReader.Utility {
 
         public ObservableCollection<String> List { get { return PrependAddItem(list); } }
         public ObservableCollection<String> Tree { get { return PrependAddItem(tree); } }
+        public bool IsListEnable { get { return RulePanel.cb_list.IsChecked == true; } set { RulePanel.cb_list.IsChecked = value; } }
+        public bool IsTreeEnable { get { return RulePanel.cb_tree.IsChecked == true; } set { RulePanel.cb_tree.IsChecked = value; } }
 
         public List<String> CurrentList {
             get { return RulePanel.ListRule; }

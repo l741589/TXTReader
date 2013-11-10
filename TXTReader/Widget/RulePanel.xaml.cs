@@ -239,6 +239,7 @@ namespace TXTReader.Widget {
             String s = b.DataContext.ToString();
             File.Delete(s);
             G.Rules.List.Remove(s);
+            var _ = G.Rules.ListSelection;
         }
 
         private void bn_deltree_Click(object sender, RoutedEventArgs e) {
@@ -246,6 +247,7 @@ namespace TXTReader.Widget {
             String s = b.DataContext.ToString();
             File.Delete(s);
             G.Rules.Tree.Remove(s);
+            var _ = G.Rules.TreeSelection;
         }
     }        
 }

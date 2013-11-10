@@ -142,6 +142,7 @@
     <Compile Include="Widget\ToolPanels.xaml.cs">
       <DependentUpon>ToolPanels.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Widget\TrmexTextBox.cs" />
     <Page Include="Display\TRText.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

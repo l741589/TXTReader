@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DirectedGraph GraphDirection="LeftToRight" Layout="Sugiyama" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+  <Nodes>
+    <Node Id="Switcher开关和平模式" Bounds="243.375,155.24,139.39381952,25.24" Label="switcher开关和平模式" />
+    <Node Id="主菜单" Bounds="135.6875,837.62,56,25.24" />
+    <Node Id="交易界面" Bounds="351.375,1214,120,140.48" Group="Expanded" />
+    <Node Id="人物资料卡界面" Bounds="290.375,1385,242,140.48" Group="Expanded" />
+    <Node Id="任务界面" Bounds="351.375,346.0000000225,120,140.479999955" Group="Expanded" />
+    <Node Id="使用按钮" Bounds="377.375,1043,67.957956626432,25.2399999999998" Label="使用按钮" />
+    <Node Id="信息发布系统" Bounds="345.375,230.62,132,85.24" Group="Expanded" />
+    <Node Id="列表项" Bounds="357.375,1003,108,140.48" Group="Expanded" Label="列表项" />
+    <Node Id="协议及免责通知" Bounds="0,837.62,104,25.24" />
+    <Node Id="卖出按钮" Bounds="377.375,1098.24,68,25.2399999999998" Label="卖出按钮" />
+    <Node Id="占有道路按钮" Bounds="420.375,1480.24,92,25.24" />
+    <Node Id="占有道路界面（地图）" Bounds="701.375,1442.62,140,25.24" />
+    <Node Id="地图标记自己地盘上的可贴条的" Bounds="243.375,39.9999999999999,336,85.24" Group="Expanded" Label="地图标记自己地盘上的可贴条的车" />
+    <Node Id="外观" Bounds="310.375,1480.24,80,25.24" Label="虚拟车外观" />
+    <Node Id="好友列表,标记白名单成员" Bounds="333.93,847.62,154.89,25.24" Label="好友列表,标记白名单成员" />
+    <Node Id="成就界面" Bounds="377.375,1611.62,68,25.2399999999998" />
+    <Node Id="抢车位" Bounds="223.375,-9.9475983006414E-14,376,200.48" Group="Expanded" />
+    <Node Id="排行榜界面" Bounds="371.375,1555.62,80,25.24" />
+    <Node Id="擦肩系统" Bounds="305.375,517,212,260.48" Group="Expanded" />
+    <Node Id="普通任务页" Bounds="371.375,441.2400000225,79.944704,25.239999955" Label="普通任务页" />
+    <Node Id="消息编辑界面" Bounds="725.375,260.62,92,25.24" />
+    <Node Id="添加好友按钮" Bounds="365.375,692.24,92,25.24" Label="添加好友按钮" />
+    <Node Id="添加好友界面（通过id添加，需验证）" Bounds="659.94,837.62,222.87,25.24" />
+    <Node Id="点击弹出菜单" Bounds="345.375,597,132,140.48" Group="Expanded" Label="点击弹出菜单" />
+    <Node Id="玩家寄售页" Bounds="371.375,1254,80,25.24" Label="玩家寄售页" />
+    <Node Id="目标车信息" Bounds="365.375,637,80,25.24" Label="目标车信息" />
+    <Node Id="社交界面" Bounds="313.93,807.62,194.89,85.24" Group="Expanded" />
+    <Node Id="神秘任务页" Bounds="371.375,386.0000000225,80,25.24" Label="神秘任务页" />
+    <Node Id="积分" Bounds="310.375,1425,50,25.24" Label="积分" />
+    <Node Id="系统商城页" Bounds="371.375,1309.24,80,25.24" Label="系统商城页" />
+    <Node Id="聊天模块" Bounds="653.375,634.62,236,25.24" Label="聊天模块（按住即可聊天，类似对讲机）" />
+    <Node Id="自己所有道具的列表" Bounds="337.375,963,148,200.48" Group="Expanded" Label="自己所有道具的列表" />
+    <Node Id="车标记可点开，弹出目标车信息，上面有贴条按钮。" Bounds="263.375,79.9999999999999,296,25.24" Label="车标记可点开，弹出目标车信息，上面有贴条按钮。" />
+    <Node Id="道具界面" Bounds="317.375,923,188,260.48" Group="Expanded" />
+    <Node Id="道路选择界面" Bounds="365.375,270.62,92,25.24" Label="道路选择界面" />
+    <Node Id="金币" Bounds="390.375,1425,50,25.24" Label="金币" />
+    <Node Id="鸟瞰图，目标车可点击" Bounds="325.375,557,172,200.48" Group="Expanded" Label="鸟瞰图显示附近的车" />
+  </Nodes>
+  <Links>
+    <Link Source="主菜单" Target="交易界面" Bounds="172.332946777344,862.859985351563,172.514556884766,358.863647460938" />
+    <Link Source="主菜单" Target="人物资料卡界面" Bounds="169.451126098633,862.859985351563,190.707870483398,514.129150390625" />
+    <Link Source="主菜单" Target="任务界面" Bounds="168.67561340332,472.351806640625,175.803970336914,365.268188476563" />
+    <Link Source="主菜单" Target="信息发布系统" Bounds="168.140090942383,322.765960693359,195.231338500977,514.854034423828" />
+    <Link Source="主菜单" Target="成就界面" Bounds="167.14567565918,862.859985351563,219.914657592773,743.411010742188" />
+    <Link Source="主菜单" Target="抢车位" Bounds="167.198486328125,208.772644042969,184.007507324219,628.847351074219" />
+    <Link Source="主菜单" Target="排行榜界面" Bounds="168.010223388672,862.859985351563,195.748107910156,690.912353515625" />
+    <Link Source="主菜单" Target="擦肩系统" Bounds="179.08561706543,739.820556640625,119.328536987305,97.7994384765625" />
+    <Link Source="主菜单" Target="社交界面" Bounds="191.6875,850.239990234375,113.242492675781,0" />
+    <Link Source="主菜单" Target="道具界面" Bounds="180.978378295898,862.859985351563,129.501480102539,105.741333007813" />
+    <Link Source="交易界面" Target="玩家寄售页" Category="Contains" />
+    <Link Source="交易界面" Target="系统商城页" Category="Contains" />
+    <Link Source="人物资料卡界面" Target="占有道路按钮" Category="Contains" />
+    <Link Source="人物资料卡界面" Target="占有道路界面（地图）" Bounds="532.375,1455.23999023438,160,0" />
+    <Link Source="人物资料卡界面" Target="外观" Category="Contains" />
+    <Link Source="人物资料卡界面" Target="积分" Category="Contains" />
+    <Link Source="人物资料卡界面" Target="金币" Category="Contains" />
+    <Link Source="任务界面" Target="普通任务页" Category="Contains" />
+    <Link Source="任务界面" Target="神秘任务页" Category="Contains" />
+    <Link Source="信息发布系统" Target="消息编辑界面" Bounds="477.375,273.239990234375,239,0" />
+    <Link Source="信息发布系统" Target="道路选择界面" Category="Contains" />
+    <Link Source="列表项" Target="使用按钮" Category="Contains" />
+    <Link Source="列表项" Target="卖出按钮" Category="Contains" />
+    <Link Source="协议及免责通知" Target="主菜单" Bounds="104,850.239990234375,22.6875,0" />
+    <Link Source="地图标记自己地盘上的可贴条的" Target="车标记可点开，弹出目标车信息，上面有贴条按钮。" Category="Contains" />
+    <Link Source="好友列表,标记白名单成员" Target="聊天模块" Bounds="432.704577464789,664.442902655641,309.59507759786,183.177087578734" />
+    <Link Source="抢车位" Target="Switcher开关和平模式" Category="Contains" />
+    <Link Source="抢车位" Target="地图标记自己地盘上的可贴条的" Category="Contains" />
+    <Link Source="擦肩系统" Target="聊天模块" Index="2147483647" Bounds="517.375,647.239990234375,127,0" Label="按住" LabelBounds="614.375,647.24,24,15.24" Weight="1" />
+    <Link Source="擦肩系统" Target="鸟瞰图，目标车可点击" Category="Contains" />
+    <Link Source="点击弹出菜单" Target="添加好友按钮" Category="Contains" />
+    <Link Source="点击弹出菜单" Target="目标车信息" Category="Contains" />
+    <Link Source="社交界面" Target="好友列表,标记白名单成员" Category="Contains" />
+    <Link Source="社交界面" Target="添加好友界面（通过id添加，需验证）" Bounds="508.820007324219,850.239990234375,142.119995117188,0" />
+    <Link Source="社交界面" Target="聊天模块" Index="2147483647" Bounds="486.957275390625,664.280639648438,254.197875976563,143.33935546875" Label="按住" LabelBounds="614.375,713.763888888889,24,15.2399999999998" Weight="1" />
+    <Link Source="自己所有道具的列表" Target="列表项" Category="Contains" />
+    <Link Source="道具界面" Target="自己所有道具的列表" Category="Contains" />
+    <Link Source="道路选择界面" Target="消息编辑界面" Bounds="457.375,274.767676278842,259.003470235294,7.19456279586552" />
+    <Link Source="鸟瞰图，目标车可点击" Target="点击弹出菜单" Category="Contains" />
+    <Link Source="鸟瞰图，目标车可点击" Target="聊天模块" Bounds="497.375,650.767675062129,147.003470220899,4.0834337160826" />
+  </Links>
+  <Categories>
+    <Category Id="Contains" Label="包含" Description="链接的源是否包含目标对象" CanBeDataDriven="False" CanLinkedNodesBeDataDriven="True" IncomingActionLabel="包含者" IsContainment="True" OutgoingActionLabel="包含" />
+  </Categories>
+  <Properties>
+    <Property Id="Bounds" DataType="System.Windows.Rect" />
+    <Property Id="CanBeDataDriven" Label="CanBeDataDriven" Description="CanBeDataDriven" DataType="System.Boolean" />
+    <Property Id="CanLinkedNodesBeDataDriven" Label="CanLinkedNodesBeDataDriven" Description="CanLinkedNodesBeDataDriven" DataType="System.Boolean" />
+    <Property Id="Expression" DataType="System.String" />
+    <Property Id="GraphDirection" DataType="Microsoft.VisualStudio.Diagrams.Layout.LayoutOrientation" />
+    <Property Id="Group" Label="组" Description="将节点显示为组" DataType="Microsoft.VisualStudio.GraphModel.GraphGroupStyle" />
+    <Property Id="GroupLabel" DataType="System.String" />
+    <Property Id="IncomingActionLabel" Label="IncomingActionLabel" Description="IncomingActionLabel" DataType="System.String" />
+    <Property Id="IsContainment" DataType="System.Boolean" />
+    <Property Id="IsEnabled" DataType="System.Boolean" />
+    <Property Id="Label" Label="标签" Description="可批注对象的可显示标签" DataType="System.String" />
+    <Property Id="LabelBounds" DataType="System.Windows.Rect" />
+    <Property Id="Layout" DataType="System.String" />
+    <Property Id="OutgoingActionLabel" Label="OutgoingActionLabel" Description="OutgoingActionLabel" DataType="System.String" />
+    <Property Id="TargetType" DataType="System.Type" />
+    <Property Id="Value" DataType="System.String" />
+    <Property Id="ValueLabel" DataType="System.String" />
+    <Property Id="Weight" Label="粗细" Description="粗细" DataType="System.Double" />
+  </Properties>
+  <Styles>
+    <Style TargetType="Node" GroupLabel="类别 4" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('Category4')" />
+      <Setter Property="Background" Value="#FF1BA1E2" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="类别 8" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('Category8')" />
+      <Setter Property="Background" Value="#FF44CCCC" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="类别 3" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('Category3')" />
+      <Setter Property="Background" Value="#FF3EBCED" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="类别 2" ValueLabel="具有类别">
+      <Condition Expression="HasCategory('Category2')" />
+      <Setter Property="Background" Value="#FF339933" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="注释" ValueLabel="包含注释">
+      <Condition Expression="HasCategory('Comment')" />
+      <Setter Property="Background" Value="#FFFFFACD" />
+      <Setter Property="Stroke" Value="#FFE5C365" />
+      <Setter Property="StrokeThickness" Value="1" />
+      <Setter Property="NodeRadius" Value="2" />
+      <Setter Property="MaxWidth" Value="250" />
+    </Style>
+  </Styles>
+</DirectedGraph>

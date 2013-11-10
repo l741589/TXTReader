@@ -31,7 +31,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            <ComboBox Grid.Row="0" x:Name="cbb_list" SelectionChanged="cbb_list_SelectionChanged" HorizontalContentAlignment="Stretch">
+            <ComboBox Grid.Row="0" x:Name="cbb_list" SelectionChanged="cbb_list_SelectionChanged" 
+                      HorizontalContentAlignment="Stretch" ToolTip="{Binding SelectedItem, RelativeSource={RelativeSource Self}}">
                 <ComboBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -64,7 +65,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            <ComboBox Grid.Row="0" x:Name="cbb_tree" SelectionChanged="cbb_tree_SelectionChanged" HorizontalContentAlignment="Stretch">
+            <ComboBox Grid.Row="0" x:Name="cbb_tree" SelectionChanged="cbb_tree_SelectionChanged" 
+                      HorizontalContentAlignment="Stretch" ToolTip="{Binding SelectedItem, RelativeSource={RelativeSource Self}}">
                 <ComboBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

@@ -26,6 +26,9 @@
       <SubType>Content</SubType>
     </Content>
     <Folder Include="ModelDefinition\" />
+    <Content Include="Graph2.dgml">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="ModelDefinition\TXTReaderUsercase.uml">
       <SubType>Content</SubType>
     </Content>

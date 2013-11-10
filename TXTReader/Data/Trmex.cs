@@ -158,7 +158,8 @@ namespace TXTReader.Data {
             List<String> regexs = new List<String>();
             for (int i = 0; i < patterns.Count(); ++i) {
                 TrmexDesc td = Precompile(patterns[i], "T" + i);
-                inserts = inserts.Union(td.inserts) as Dictionary<String, String>;
+                if (inserts == null) inserts = td.inserts;
+                else inserts = inserts.Union(td.inserts) as Dictionary<String, String>;
                 regexs.Add("(?:" + td.regex + ")");
                 LCs.Add(td.LC);
             }
