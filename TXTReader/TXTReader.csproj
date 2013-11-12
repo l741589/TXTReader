@@ -120,6 +120,10 @@
     <Compile Include="Widget\BookmarkPanel.xaml.cs">
       <DependentUpon>BookmarkPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Widget\FloatMessage.xaml.cs">
+      <DependentUpon>FloatMessage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widget\FloatMessageManager.cs" />
     <Compile Include="Widget\RulePanel.xaml.cs">
       <DependentUpon>RulePanel.xaml</DependentUpon>
     </Compile>
@@ -184,6 +188,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Widget\BookmarkPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\FloatMessage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
