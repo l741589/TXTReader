@@ -7,12 +7,14 @@
  * To change this template use File | Settings | File Templates.
  */
 
-require_once __DIR__ . '/../src/load.php';
+require __DIR__ . '/../src/db.php';
+require __DIR__ . '/../src/config.php';
 
 class db_test extends PHPUnit_Framework_TestCase {
     /**
      * @var db
      */
+
     protected  $db;
 
     protected function setUp() {

@@ -9,12 +9,15 @@
 
 require_once "load.php";
 
+
+if (is_array($_POST) && count($_POST))
+    upload();
+
 /**
  * @param $username
  * @param $password
  * @return null|int
  */
-
 function get_user_id($username, $password) {
     global $db;
 
@@ -40,7 +43,7 @@ function save_file($file, $user_id) {
     $tmp_file = $file['tmp_name'];
 
     // using 'or' is for that for now I haven't tried send a post
-    if ($tmp_file or is_uploaded_file($tmp_file)) {
+    if ($tmp_file and is_uploaded_file($tmp_file)) {
         $file_in = fopen($tmp_file, "rb");
         $file_data = bin2hex(fread($file_in, $size));
         fclose($file_in);
@@ -55,11 +58,14 @@ function save_file($file, $user_id) {
 }
 
 function upload() {
+    if (!is_array($_POST))
+        die("error0");
     extract($_POST);
     isset($username) and isset($password) or die("error1");
     $id = get_user_id($username, $password);
-    if ($id)
+    if (!$id)
         die("error2");
+
     save_file($_FILES["file"], $id) or die("error3");
 }
-
+?>

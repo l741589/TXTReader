@@ -5,47 +5,16 @@
         xmlns:converter="clr-namespace:TXTReader.Converter"
         xmlns:widget="clr-namespace:TXTReader.Widget"
         xmlns:display="clr-namespace:TXTReader.Display"
-        Title="MainWindow" Height="350" Width="525" MouseMove="window_MouseMove" SizeChanged="window_SizeChanged" Loaded="window_Loaded" KeyDown="window_KeyDown" Closing="window_Closing">
+        Title="MainWindow" Height="350" Width="525" Loaded="window_Loaded">
     <Window.Resources>
-        <converter:ToolPanelWidthCvt x:Key="toolPanelWidthCvt"/>
-        <converter:ToolPanelTargetLeftCvt x:Key="toolPanelTargetLeftCvt"/>  
-        <Storyboard x:Key="toolPanelShow">
-            <DoubleAnimation Duration="0:0:0.2"
-                AccelerationRatio="0.33" DecelerationRatio="0.33"
-                Storyboard.TargetProperty="(Canvas.Left)">
-                <DoubleAnimation.To>
-                    <MultiBinding Converter="{StaticResource toolPanelTargetLeftCvt}">
-                        <Binding Path="ActualWidth" ElementName="toolPanel"/>
-                        <Binding Path="ActualWidth" ElementName="canvas"/>
-                    </MultiBinding>
-                </DoubleAnimation.To>                
-            </DoubleAnimation>
-        </Storyboard>
-        <Storyboard x:Key="toolPanelHide">
-            <DoubleAnimation
-                AccelerationRatio="0.33" DecelerationRatio="0.33"
-                To="{Binding ActualWidth,ElementName=canvas}" Duration="0:0:0.2"                
-                BeginTime="0:0:1"
-                Storyboard.TargetProperty="(Canvas.Left)">
-            </DoubleAnimation>
-        </Storyboard>        
-    </Window.Resources>    
-    <Canvas x:Name="canvas">
+        <converter:ToolPanelWidthCvt x:Key="toolPanelWidthCvt"/>       
+    </Window.Resources>
+    <Canvas x:Name="canvas" SizeChanged="canvas_SizeChanged">
         <display:Displayer4 x:Name="displayer" Canvas.Left="0" Canvas.Top="0" 
                             Height="{Binding ActualHeight,ElementName=canvas}" Width="{Binding ActualWidth, ElementName=canvas}">
-                            <!-- Speed="{Binding Value,ElementName=toolPanel.pn_option.se_speed}"> -->
         </display:Displayer4>
         <widget:ToolPanels  x:Name="toolPanel"
             Height="{Binding ActualHeight, ElementName=canvas}" 
-            Width="{Binding ActualWidth, ElementName=canvas, Converter={StaticResource toolPanelWidthCvt}}"
-            Canvas.Left="{Binding ActualWidth, ElementName=canvas}">
-            <widget:ToolPanels.Triggers>
-                <EventTrigger RoutedEvent="MouseLeave">
-                    <EventTrigger.Actions>
-                        <BeginStoryboard Storyboard="{StaticResource toolPanelHide}"/>
-                    </EventTrigger.Actions>
-                </EventTrigger>
-            </widget:ToolPanels.Triggers>
-        </widget:ToolPanels>
+            Width="{Binding ActualWidth, ElementName=canvas, Converter={StaticResource toolPanelWidthCvt}}" OpacityMask="#E6000000"/>
     </Canvas>
 </Window>

@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Diagnostics;
 using TXTReader.Data;
+using TXTReader.Utility;
 
 namespace TXTReader.Display {
     /// <summary>
@@ -29,7 +30,7 @@ namespace TXTReader.Display {
             InitializeComponent();
             Displayer = displayer;
             Index = index;
-            Text = Displayer.Text[index];            
+            Text = displayer.Text[index];            
         }
 
         public TRText Previous { get; set; }
@@ -75,7 +76,7 @@ namespace TXTReader.Display {
         }
 
         public TRText Append(){
-            if (Index >= Displayer.Text.Length - 1) return null;
+            if (Index >= Text.Length - 1) return null;
             TRText t = new TRText(Displayer, Index + 1);
             t.Next = Next;
             Next = t;

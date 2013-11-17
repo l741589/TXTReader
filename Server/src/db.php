@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * Created by JetBrains PhpStorm.
  * User: van
@@ -7,6 +7,9 @@
  * To change this template use File | Settings | File Templates.
  */
 
+/**
+ * Class db
+ */
 class db {
     /**
      * @var
@@ -370,4 +373,4 @@ class db {
         return ;
     }
 }
-
+?>
