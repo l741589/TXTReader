@@ -19,3 +19,4 @@ function require_db() {
 
     $db = new db(DB_HOST, DB_NAME, DB_USER, DB_PASSWORD);
 }
+?>

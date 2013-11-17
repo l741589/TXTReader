@@ -34,6 +34,7 @@ class upload_test extends PHPUnit_Framework_TestCase {
     }
 
     public function test_upload_file() {
+        curl_exec();
         $test_file_path = __DIR__ . "/../_files/test1.txt";
         $size = filesize($test_file_path);
         $_FILES = array(

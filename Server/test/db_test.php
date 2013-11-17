@@ -8,7 +8,6 @@
  */
 
 require_once __DIR__ . '/../src/load.php';
-require_once "PHPUnit/Extensions/Database/TestCase.php";
 
 class db_test extends PHPUnit_Framework_TestCase {
     /**
@@ -83,3 +82,4 @@ class db_test extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $ret_val);
     }
 }
+?>
