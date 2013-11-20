@@ -39,8 +39,8 @@ namespace TXTReader.Widget
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e) {
-            e.Handled = true;
             base.OnMouseDown(e);
+            e.Handled = true;
         }
 
         public void Show() {
@@ -50,7 +50,7 @@ namespace TXTReader.Widget
 
         public void Hide() {
             ActionUtil.Run(this, toolPanelHide);
-            G.Timer.Resume();
+            if (!G.MainWindow.IsHolding) G.Timer.Resume();
             G.Displayer.Focus();
         }
     }

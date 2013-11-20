@@ -107,6 +107,8 @@
     <Compile Include="Utility\BookParser.cs" />
     <Compile Include="Utility\BookCollection.cs" />
     <Compile Include="Utility\BufferObject.cs" />
+    <Compile Include="Utility\KeyHook.cs" />
+    <Compile Include="Utility\MessageConst.cs" />
     <Compile Include="Utility\RuleParser.cs" />
     <Compile Include="Utility\G.cs" />
     <Compile Include="Utility\Http.cs" />
@@ -123,7 +125,9 @@
     <Compile Include="Widget\FloatMessage.xaml.cs">
       <DependentUpon>FloatMessage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Widget\FloatMessageManager.cs" />
+    <Compile Include="Widget\FloatMessagePanel.xaml.cs">
+      <DependentUpon>FloatMessagePanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Widget\RulePanel.xaml.cs">
       <DependentUpon>RulePanel.xaml</DependentUpon>
     </Compile>
@@ -147,6 +151,7 @@
       <DependentUpon>ToolPanels.xaml</DependentUpon>
     </Compile>
     <Compile Include="Widget\TrmexTextBox.cs" />
+    <Compile Include="Widget\TRNotifyIcon.cs" />
     <Page Include="Display\TRText.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -192,6 +197,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Widget\FloatMessage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\FloatMessagePanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

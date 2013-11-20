@@ -23,7 +23,9 @@ namespace TXTReader.Utility {
             Timer = new TRTimer2();
             Books = new BookCollection();
             Rules = new Rules();
+            KeyHook = new KeyHook();
         }
+        public static bool IsRunning = true;
         public static String HTTP_HEAD { get { return "http://"; } }
         public static String FILE_HEAD { get { return "file:///"; } }
         public static String PACK_HEAD { get { return "pack://"; } }
@@ -44,24 +46,16 @@ namespace TXTReader.Utility {
         public static String EXT_LISTRULE { get { return ".trml"; } }
         public static String EXT_TREERULE { get { return ".trmt"; } }
         public static String EXT_RULEOPTION { get { return ".trmo"; } }
-
       
         public static ImageSource NoCover { get; private set; }
-        public static Book Book {
-            get { return book; }
-            set {
-                if (book == value) return; 
-                if (book != null) book.Close(); 
-                book = value; 
-                if (book != null) book.Load();
-                MainWindow.toolPanel.pn_bookmark.lb_bookmark.ItemsSource = G.Bookmark;
-            }
-        }
+        public static Book Book { get { return book; } set { A.ReplaceBook(ref book, value); } }
         public static Options Options { get { return Options.Instance; } }
         public static ITRTimer Timer = new TRTimer2();
         public static String FileName { get { return book == null ? null : book.Source; } }
         public static MainWindow MainWindow { get { return App.Current.MainWindow as MainWindow; } }
         public static Displayer4 Displayer { get { return MainWindow.displayer; } }
+        public static TRNotifyIcon NotifyIcon { get; set; }
+        public static KeyHook KeyHook { get; private set; }
  
         public static ObservableCollection<Bookmark> Bookmark { get { return Book == null ? null : Book.Bookmark; } }
         public static BookCollection Books { get; private set; }
@@ -69,5 +63,6 @@ namespace TXTReader.Utility {
         public static Trmex ListTrmex { get { if (listTrmex != null) return listTrmex; else  return listTrmex = new Trmex(Rules.CurrentList); } set { listTrmex = value; } }
         public static Trmex TreeTrmex { get { if (treeTrmex != null) return treeTrmex; else  return treeTrmex = new Trmex(Rules.CurrentTree); } set { treeTrmex = value; } }
         public static Rules Rules { get; private set; }
+        public static FloatMessagePanel FloatMessagePanel { get { return MainWindow.floatMessagePanel; } }
     }
 }

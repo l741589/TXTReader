@@ -9,6 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using TXTReader.Data;
 
 namespace TXTReader.Utility {
 
@@ -106,6 +107,15 @@ namespace TXTReader.Utility {
             });
         }
 
-        
+        public static void ReplaceBook(ref Book book,Book value) {
+            if (book == value) return;
+            if (book != null) book.Close();
+            book = value;
+            if (book != null) {
+                book.Load();
+                G.FloatMessagePanel.UpdateBinding();
+            }
+            G.MainWindow.toolPanel.pn_bookmark.lb_bookmark.ItemsSource = G.Bookmark;
+        }
     }
 }

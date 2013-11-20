@@ -18,26 +18,34 @@ using TXTReader.Data;
 using System.Diagnostics;
 using TXTReader.Utility;
 using System.Collections;
+using System.Threading;
 
 namespace TXTReader.Display {
     /// <summary>
     /// Displayer2.xaml 的交互逻辑
     /// </summary>
     public partial class Displayer4 : UserControl, IDisplayer {
-        
+
+        private int fps;
+        private String[] text;
+
         public static readonly DependencyProperty SpeedProperty = DependencyProperty.Register("Speed", typeof(double), typeof(Displayer4));
-        public static readonly DependencyProperty IsScrollingProperty = DependencyProperty.Register("IsScrolling", typeof(bool), typeof(Displayer4), new PropertyMetadata(false, OnIsScrollingChanged));
+        public static readonly DependencyProperty FpsProperty = DependencyProperty.Register("Fps", typeof(int), typeof(Displayer4));
+        public static readonly DependencyProperty IsScrollingProperty = DependencyProperty.Register("IsScrolling", typeof(bool), typeof(Displayer4), new PropertyMetadata(false, OnIsScrollingChanged));        
         public static readonly RoutedEvent ShutdownEvent = EventManager.RegisterRoutedEvent("Shutdown", RoutingStrategy.Direct, typeof(ShutdownHandler), typeof(Displayer4));
 
         public event ShutdownHandler Shutdown { add { AddHandler(ShutdownEvent, value); } remove { RemoveHandler(ShutdownEvent, value); } }
         public double Speed { get { return (double)GetValue(SpeedProperty); } set { SetValue(SpeedProperty, value); } }
         public bool IsScrolling { get { return (bool)GetValue(IsScrollingProperty); } set { SetValue(IsScrollingProperty, value); } }
+        public int Fps { get { return (int)GetValue(FpsProperty); } set { SetValue(FpsProperty, value); } }
         public int FirstLine { get { return G.Book != null ? G.Book.Position : 0; } set { if (G.Book != null) G.Book.Position = value; } }
         public double Offset { get { return G.Book != null ? G.Book.Offset : 0; } set { if (G.Book != null) G.Book.Offset = value; } }
-        private String[] text;
+        
         public String[] Text { get { return text; } set { text = value; } }
         public double CanvasHeight { get { return canvas.ActualHeight; } }
         public double CanvasWidth { get { return canvas.ActualWidth; } }
+        
+        
 
         private Point? lastPoint = null;
         private Binding widthBinding;
@@ -69,6 +77,7 @@ namespace TXTReader.Display {
             UpdateSkin();
             G.Timer.Timer += timer_Timer;
             canvas.SizeChanged += (d, e) => { Clear(); Update(); };
+            fpsTimer();
         }
 
         private static void OnIsScrollingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
@@ -129,12 +138,14 @@ namespace TXTReader.Display {
 
 
         protected override void OnMouseDown(MouseButtonEventArgs e) {
+            if (G.MainWindow.IsHolding) return;
             base.OnMouseDown(e);
             G.Timer.Pause();
-            lastPoint = e.GetPosition(this);            
+            lastPoint = e.GetPosition(this);
         }
         
         protected override void OnMouseMove(MouseEventArgs e) {
+            if (G.MainWindow.IsHolding) return;
             base.OnMouseMove(e);
             if (e.LeftButton.Equals(MouseButtonState.Pressed)) {
                 Point curPoint = e.GetPosition(this);
@@ -149,17 +160,20 @@ namespace TXTReader.Display {
         }
         
         protected override void OnMouseUp(MouseButtonEventArgs e) {
+            if (G.MainWindow.IsHolding) return;
             base.OnMouseUp(e);
-            G.Timer.Resume();
+            if (G.MainWindow.IsHolding) G.Timer.Resume();
             lastPoint = null;
         }
         
         protected override void OnMouseWheel(MouseWheelEventArgs e) {
+            if (G.MainWindow.IsHolding) return;
             base.OnMouseWheel(e);
             LineModify((double)e.Delta / 120);
         }
         
         protected override void OnMouseDoubleClick(MouseButtonEventArgs e) {
+            if (G.MainWindow.IsHolding) return;
             base.OnMouseDoubleClick(e);
             if (e.ChangedButton == MouseButton.Left) {
                 IsScrolling = !IsScrolling;
@@ -182,6 +196,7 @@ namespace TXTReader.Display {
         }
 
         public void Update() {
+            ++fps;
             bool reupdate = false;
             if (Text == null) {
                 canvas.Children.Clear();
@@ -233,6 +248,15 @@ namespace TXTReader.Display {
                 OpenFile(c.GetValue(0).ToString());
             }
             base.OnDrop(e);
+        }
+
+        
+        async void fpsTimer() {
+            while (G.IsRunning) {
+                await Task.Run(() => { Thread.Sleep(1000); });
+                Fps = fps;
+                fps = 0;
+            }
         }
 
         private void mi_close_Click(object sender, RoutedEventArgs e) { CloseFile(); }

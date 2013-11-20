@@ -13,6 +13,9 @@
         <display:Displayer4 x:Name="displayer" Canvas.Left="0" Canvas.Top="0" 
                             Height="{Binding ActualHeight,ElementName=canvas}" Width="{Binding ActualWidth, ElementName=canvas}">
         </display:Displayer4>
+        <widget:FloatMessagePanel x:Name="floatMessagePanel" Canvas.Left="0" Canvas.Top="0" 
+                            Height="{Binding ActualHeight,ElementName=canvas}" Width="{Binding ActualWidth, ElementName=canvas}">
+        </widget:FloatMessagePanel>
         <widget:ToolPanels  x:Name="toolPanel"
             Height="{Binding ActualHeight, ElementName=canvas}" 
             Width="{Binding ActualWidth, ElementName=canvas, Converter={StaticResource toolPanelWidthCvt}}" OpacityMask="#E6000000"/>

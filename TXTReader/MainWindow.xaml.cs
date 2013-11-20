@@ -28,7 +28,10 @@ namespace TXTReader {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window {   
+    public partial class MainWindow : Window {
+
+        public bool IsHolding { get; set; }
+        private System.Windows.Point? lastPoint = null;
 
         public MainWindow() {
             InitializeComponent();           
@@ -39,25 +42,34 @@ namespace TXTReader {
             //*/            
         }
 
+        public void Hold() {
+            if (IsHolding) return;
+            IsHolding = true;
+            toolPanel.Hide();
+            Cursor = Cursors.SizeAll;
+            G.Timer.Pause();
+        }
 
-        protected override void OnMouseMove(MouseEventArgs e) {
-            if (e.GetPosition(canvas).X > canvas.ActualWidth - 32 ){
-                toolPanel.Show();
-            }
+        public void ReleaseHold() {
+            if (!IsHolding) return;
+            IsHolding = false;
+            Cursor = Cursors.Arrow;
+            G.Timer.Resume();
         }
 
         private void window_Loaded(object sender, RoutedEventArgs e) {
-                XmlDocument dom = new XmlDocument();
-                try {
-                    dom.Load("res/defaultskin.xml");
-                    SkinParser.SetDefaultSkin();
-                    SkinParser.ParseSkin(dom);
-                } catch (Exception ex) {
-                    Debug.Print(ex.StackTrace);
-                }
-                displayer.UpdateSkin();
-                displayer.SetBinding(Displayer4.SpeedProperty, new Binding("Value") { Source = toolPanel.pn_option.se_speed });
-                BookParser.Load();
+            XmlDocument dom = new XmlDocument();
+            try {
+                dom.Load("res/defaultskin.xml");
+                SkinParser.SetDefaultSkin();
+                SkinParser.ParseSkin(dom);
+            } catch (Exception ex) {
+                Debug.Print(ex.StackTrace);
+            }
+            displayer.UpdateSkin();
+            displayer.SetBinding(Displayer4.SpeedProperty, new Binding("Value") { Source = toolPanel.pn_option.se_speed });
+            BookParser.Load();
+            G.NotifyIcon = new TRNotifyIcon();
         }
 
         protected override void OnKeyDown(KeyEventArgs e) {
@@ -68,6 +80,14 @@ namespace TXTReader {
                 case Key.Down: displayer.LineModify(-1); break;
                 case Key.PageUp: displayer.PageModify(+1); break;
                 case Key.PageDown: displayer.PageModify(-1); break;
+                case Key.LeftShift: Hold(); break;
+                case Key.Escape: Toggle(); break;
+            }            
+        }
+
+        protected override void OnKeyUp(KeyEventArgs e) {
+            switch (e.Key) {
+                case Key.LeftShift: ReleaseHold(); break;
             }            
         }
 
@@ -76,16 +96,55 @@ namespace TXTReader {
             RuleParser.Save();
             displayer.CloseFile();
             G.Timer.Stop();
+            G.IsRunning = false;
+            G.NotifyIcon.Close();
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e) {
             base.OnMouseDown(e);
             toolPanel.Hide();
+            if (e.ChangedButton == MouseButton.Left) {
+                if (WindowState == WindowState.Normal) lastPoint = e.GetPosition(this);
+                G.Timer.Pause();
+            }
         }
+
+        protected override void OnMouseMove(MouseEventArgs e) {
+            if (!IsHolding) {
+                if (e.GetPosition(canvas).X > canvas.ActualWidth - 32) {
+                    toolPanel.Show();
+                }
+            } else {
+                if (lastPoint != null) {
+                    var p = e.GetPosition(this);
+                    var v = lastPoint.Value - p;
+                    Left -= v.X;
+                    Top -= v.Y;
+                }
+                
+            }
+        }
+
+        protected override void OnMouseUp(MouseButtonEventArgs e) {
+            lastPoint = null;
+            if (!IsHolding) G.Timer.Resume();
+        }
+
 
         private void canvas_SizeChanged(object sender, SizeChangedEventArgs e) {
             Canvas.SetLeft(toolPanel, e.NewSize.Width);
             toolPanel.Hide();
-        }        
+        }
+
+        public void Toggle() {
+            if (IsVisible) {
+                G.Timer.Pause();
+                Visibility = Visibility.Hidden;                
+            } else {
+                Visibility = Visibility.Visible;
+                Focus();
+                G.Timer.Resume();
+            }
+        }
     }
 }
