@@ -57,7 +57,7 @@ namespace TXTReader.Widget {
         }
 
         private void UserControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
-            if (G.MainWindow.IsHolding) {
+            if (G.MainWindow.IsHold(MainWindow.HCF_MOVE)) {
                 if (Parent != Panel.pn_moving) {
                     (Parent as Panel).Children.Remove(this);
                     var p = e.GetPosition(Panel.pn_moving);

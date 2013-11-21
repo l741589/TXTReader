@@ -141,6 +141,9 @@
     <Compile Include="Widget\OptionPanel.xaml.cs">
       <DependentUpon>OptionPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Widget\SearchBar.xaml.cs">
+      <DependentUpon>SearchBar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Widget\SimpleMenuButton.xaml.cs">
       <DependentUpon>SimpleMenuButton.xaml</DependentUpon>
     </Compile>
@@ -152,6 +155,9 @@
     </Compile>
     <Compile Include="Widget\TrmexTextBox.cs" />
     <Compile Include="Widget\TRNotifyIcon.cs" />
+    <Compile Include="Widget\TRProgressBar.xaml.cs">
+      <DependentUpon>TRProgressBar.xaml</DependentUpon>
+    </Compile>
     <Page Include="Display\TRText.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -220,6 +226,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Widget\SearchBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Widget\SimpleMenuButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -229,6 +239,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Widget\ToolPanels.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\TRProgressBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

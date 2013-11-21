@@ -116,6 +116,7 @@ namespace TXTReader.Utility {
                 G.FloatMessagePanel.UpdateBinding();
             }
             G.MainWindow.toolPanel.pn_bookmark.lb_bookmark.ItemsSource = G.Bookmark;
+            G.MainWindow.progressBar.UpdateBinding();
         }
     }
 }

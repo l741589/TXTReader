@@ -135,9 +135,24 @@ namespace TXTReader.Data {
         public Regex regex;
         public List<int> LCs = null;
         public int LC = 0;
+        public String source;
+        //Line模式
+        public Trmex(String pattern) {
+            source = pattern;
+            TrmexDesc td = Precompile(new String[] { pattern });
+            regex = new Regex("^(?<ALL>" + td.regex + ")$");
+            inserts = td.inserts;
+            LC = td.LC;
+            LCs = null;
+        }
+
+        public static Trmex Compile(String pattern) {
+            return new Trmex(pattern);
+        }
 
         //List模式
         public Trmex(IEnumerable<String> patterns) {
+            source = "[" + String.Join(",",patterns) + "]";
             TrmexDesc td = Precompile(patterns);
             regex = new Regex("^(?<ALL>" + td.regex + ")$");
             inserts = td.inserts;
@@ -153,6 +168,9 @@ namespace TXTReader.Data {
         public Trmex(IEnumerable<IEnumerable<String>> patterns) { compile(patterns.ToArray()); }
 
         private void compile(IEnumerable<String>[] patterns) {
+            List<String> srcs = new List<String>();
+            foreach (var ss in patterns) srcs.Add("[" + String.Join(",", ss) + "]");
+            source = "[" + String.Join(",", srcs) + "]";
             LCs = new List<int>();
             LC = 0;
             List<String> regexs = new List<String>();
@@ -168,6 +186,10 @@ namespace TXTReader.Data {
 
         public static Trmex Compile(IEnumerable<IEnumerable<String>> patterns) {
             return new Trmex(patterns);
+        }
+
+        public bool IsMatch(String src) {
+            return regex.IsMatch(src);
         }
 
         public ChapterDesc Match(String src) {
@@ -225,6 +247,10 @@ namespace TXTReader.Data {
                 }
             }
             return cd;
+        }
+
+        public override string ToString() {
+            return source;
         }
     }
 }
