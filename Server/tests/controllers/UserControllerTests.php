@@ -1,0 +1,54 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Limbo
+ * Date: 13-11-20
+ * Time: 下午7:43
+ */
+
+class UserControllerTests extends CIUnit_TestCase{
+
+    protected  $data = array(
+        'username' => 'test_user_2',
+        'password' => 'test_password'
+    );
+
+    public function __construct() {
+        $this->CI = set_controller("User_Controller");
+    }
+    public function setUp() {
+    }
+
+    public function testSignUp() {
+        // clear db before all test
+        $this->clearDb();
+        $_POST = $this->data;
+        $this->CI->signup();
+        $this->CI->db->where('username', $this->data['username']);
+        $query = $this->CI->db->get('users');
+        $this->assertEquals(1, $query->num_rows());
+//        // resignup
+//        $this->CI->signup();
+//        $this->CI->db->where('username', $this->data['username']);
+//        $query = $this->CI->db->get('users');
+//        $this->assertEquals(1, $query->num_rows());
+    }
+
+    public function testLogin() {
+        $_POST['username'] = $this->data['username'];
+        $res = $this->CI->login();
+        $this->assertEquals(false, $res);
+        $_POST['password'] = $this->data['password'];
+        $res = $this->CI->login();
+        $this->assertEquals(true, $res);
+    }
+
+    public function testLoggedOut() {
+
+    }
+
+    function clearDb() {
+        $this->CI->db->where('username', $this->data['username']);
+        $this->CI->db->delete('users');
+    }
+}
