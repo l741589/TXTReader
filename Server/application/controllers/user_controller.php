@@ -6,6 +6,8 @@
  * Time: 下午1:52
  */
 
+require_once APPPATH."/core/session_controller.php";
+
 class User_Controller extends Session_Controller {
 
     private $_user_model;
@@ -44,12 +46,16 @@ class User_Controller extends Session_Controller {
             } else {
                 $username = $this->input->post('username');
                 $password = $this->input->post('password');
-                return $this->_user_model->password_check($username, $password);
+                if ($this->_user_model->password_check($username, $password)) {
+                    $this->add_session($username);
+                    return true;
+                } else
+                    return false;
             }
         }
     }
 
     function logged_out() {
-
+        return $this->del_session();
     }
 }

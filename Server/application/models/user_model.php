@@ -32,7 +32,7 @@ class User_Model extends CI_Model {
     function add_user($username, $password) {
         $this->username = $username;
         $this->password = $password;
-        if (!$this->is_valid_username())
+        if (!$this->_is_valid_username())
             return false;
         $this->db->insert("users", $this);
         if ($this->db->affected_rows() > 0) {

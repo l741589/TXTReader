@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Created by PhpStorm.
  * User: Limbo
@@ -13,10 +13,9 @@ class UserControllerTests extends CIUnit_TestCase{
         'password' => 'test_password'
     );
 
-    public function __construct() {
-        $this->CI = set_controller("User_Controller");
-    }
     public function setUp() {
+        $this->CI = set_controller("User_Controller");
+        $this->CI->load->library('session');
     }
 
     public function testSignUp() {
@@ -27,11 +26,11 @@ class UserControllerTests extends CIUnit_TestCase{
         $this->CI->db->where('username', $this->data['username']);
         $query = $this->CI->db->get('users');
         $this->assertEquals(1, $query->num_rows());
+//        var_dump($this->CI->session->all_userdata());
 //        // resignup
-//        $this->CI->signup();
-//        $this->CI->db->where('username', $this->data['username']);
-//        $query = $this->CI->db->get('users');
-//        $this->assertEquals(1, $query->num_rows());
+//        $res = $this->CI->signup();
+//        $this->assertEquals(false, $res);
+        $this->CI->del_session();
     }
 
     public function testLogin() {
@@ -41,12 +40,9 @@ class UserControllerTests extends CIUnit_TestCase{
         $_POST['password'] = $this->data['password'];
         $res = $this->CI->login();
         $this->assertEquals(true, $res);
+        $sess_data = $this->CI->session->all_userdata();
         $this->assertEquals(true, $this->CI->is_logged_in());
-        var_dump($this->CI->session->all_userdata());
-    }
-
-    public function testLoggedOut() {
-
+//        $this->assertEquals(true, isset($sess_data['session_id']));
     }
 
     function clearDb() {
