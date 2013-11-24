@@ -41,6 +41,8 @@ class UserControllerTests extends CIUnit_TestCase{
         $_POST['password'] = $this->data['password'];
         $res = $this->CI->login();
         $this->assertEquals(true, $res);
+        $this->assertEquals(true, $this->CI->is_logged_in());
+        var_dump($this->CI->session->all_userdata());
     }
 
     public function testLoggedOut() {

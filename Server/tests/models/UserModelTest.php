@@ -12,6 +12,10 @@ class UserModelTest extends CIUnit_TestCase{
         'username' => 'test_user_1',
         'password' => 'test_password'
     );
+    protected $new_data = array(
+        'username' => 'test_user_1',
+        'password' => 'new_password'
+    );
     private  $_model;
 
     public function setUp() {
@@ -23,14 +27,10 @@ class UserModelTest extends CIUnit_TestCase{
     public function testNewUser() {
         // clear db before test
         $this->clearDb();
-        $this->_model->new_user($this->data['username'], $this->data['password']);
+        $this->_model->add_user($this->data['username'], $this->data['password']);
         $this->CI->db->where('username', $this->data['username']);
         $query = $this->CI->db->get('users');
         $this->assertEquals(1, $query->num_rows());
-    }
-
-    public function testUpdateUser() {
-
     }
 
     public function testGetByUsername() {
@@ -48,11 +48,15 @@ class UserModelTest extends CIUnit_TestCase{
         $this->assertEquals(false, $res);
     }
 
-    public function testAddSession() {
-
+    public function testUpdateUser() {
+        $this->_model->update_user($this->new_data['username'], $this->new_data['password']);
+        $this->CI->db->where('username', $this->new_data['username']);
+        $query = $this->CI->db->get('users');
+        $row = $query->first_row('array');
+        $this->assertEquals($this->new_data['password'], $row['password']);
     }
 
-    public function testDelSession() {
+    function testValidUsername() {
 
     }
 

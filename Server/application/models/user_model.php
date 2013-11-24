@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Created by PhpStorm.
  * User: Limbo
@@ -7,14 +7,28 @@
  */
 
 class User_Model extends CI_Model {
+    /**
+     * @var string
+     */
     var $username = "";
+    /**
+     * @var string
+     */
     var $password = "";
 
+    /**
+     *
+     */
     function __construct() {
         parent::__construct();
         $this->load->database();
     }
 
+    /**
+     * @param $username
+     * @param $password
+     * @return bool
+     */
     function add_user($username, $password) {
         $this->username = $username;
         $this->password = $password;
@@ -22,23 +36,33 @@ class User_Model extends CI_Model {
             return false;
         $this->db->insert("users", $this);
         if ($this->db->affected_rows() > 0) {
-            $this->login($username);
             return true;
         } else {
             return false;
         }
     }
 
+    /**
+     * @param $username
+     * @param $password
+     */
     function update_user($username, $password) {
         $this->username = $username;
         $this->password = $password;
         $this->db->update('users', $this);
     }
 
-    function is_valid_username() {
+    /**
+     * @return bool
+     */
+    function _is_valid_username() {
         return true;
     }
 
+    /**
+     * @param $username
+     * @return bool
+     */
     function get_by_username($username) {
         $this->db->where('username', $username);
         $query = $this->db->get('users');
@@ -49,24 +73,16 @@ class User_Model extends CI_Model {
         }
     }
 
+    /**
+     * @param $username
+     * @param $password
+     * @return bool
+     */
     function password_check($username, $password) {
         if ($user = $this->get_by_username($username)) {
             return $user->password == $password ? true : false;
         } else {
             return false;
         }
-    }
-
-    function add_session($username) {
-        $data = array("username" => $username, "logged_in" =>true);
-        $this->session->set_userdata($data);
-    }
-
-    function del_session() {
-        if ($this->logged_in == true) {
-            $this->session->sess_destroy();
-            return true;
-        } else
-            return false;
     }
 }
