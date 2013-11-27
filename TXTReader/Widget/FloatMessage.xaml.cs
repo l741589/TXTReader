@@ -22,10 +22,10 @@ namespace TXTReader.Widget {
     /// </summary>
     public partial class FloatMessage : UserControl {
 
-        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(String), typeof(FloatMessage), new PropertyMetadata(ValueChanged));
+        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(object), typeof(FloatMessage), new PropertyMetadata(ValueChanged));
         public static readonly DependencyProperty FormatProperty = DependencyProperty.Register("Format", typeof(String), typeof(FloatMessage), new PropertyMetadata(ValueChanged));
 
-        public String Value { get { return (String)GetValue(ValueProperty); } set { SetValue(ValueProperty, value); } }
+        public object Value { get { return GetValue(ValueProperty); } set { SetValue(ValueProperty, value); } }
         public String Format { get { return (String)GetValue(FormatProperty); } set { SetValue(FormatProperty, value); } }
         private System.Windows.Point? lastPoint = null;
 

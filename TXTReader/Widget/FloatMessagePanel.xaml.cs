@@ -29,7 +29,7 @@ namespace TXTReader.Widget {
         public FloatMessagePanel() {
             InitializeComponent();
             Time = new FloatMessage(this);
-            Position = new FloatMessage(this) { Format = "{0}L" };
+            Position = new FloatMessage(this) { Format = "{0:#.00%}" };
             Fps = new FloatMessage(this) { Format = "{0}Fps" };
             Title = new FloatMessage(this);
             pn_lefttop.Children.Add(Time);
@@ -50,7 +50,7 @@ namespace TXTReader.Widget {
             BindingOperations.ClearAllBindings(Position.tb);
             BindingOperations.ClearAllBindings(Fps.tb);
             if (G.Book != null) {
-                Position.SetBinding(FloatMessage.ValueProperty, new Binding("Position") { Source = G.Book });
+                Position.SetBinding(FloatMessage.ValueProperty, new Binding("Percent") { Source = G.MainWindow.progressBar });
                 Title.Value = G.Book.Title;
             }
             Fps.SetBinding(FloatMessage.ValueProperty, new Binding("Fps") { Source = G.Displayer });

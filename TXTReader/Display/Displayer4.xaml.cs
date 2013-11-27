@@ -63,6 +63,7 @@ namespace TXTReader.Display {
             if ((Thickness)d.GetValue(PaddingProperty) != val.Padding) d.SetValue(PaddingProperty, val.Padding);
             if ((Brush)d.GetValue(BackgroundProperty) != val.Background) d.SetValue(PaddingProperty, val.Background);
             if ((Brush)d.GetValue(ForegroundProperty) != val.Background) d.SetValue(ForegroundProperty, val.Foreground);
+            
         }
 
         public void UpdateSkin() {
@@ -72,7 +73,8 @@ namespace TXTReader.Display {
 
         private void InitComponent() {
             SetBinding(SpeedProperty, new Binding("Speed") { Source = Options.Instance, Mode = BindingMode.TwoWay });
-            SetBinding(IsScrollingProperty, new Binding("IsChecked") { Source = mi_scroll, Mode = BindingMode.TwoWay });
+            //SetBinding(IsScrollingProperty, new Binding("IsChecked") { Source = mi_scroll, Mode = BindingMode.TwoWay });
+            
             widthBinding = new Binding("ActualWidth") { Source = canvas };
             UpdateSkin();
             G.Timer.Timer += timer_Timer;
@@ -233,12 +235,13 @@ namespace TXTReader.Display {
             if (reupdate) Update();
         }
 
-        private void mi_open_Click(object sender, RoutedEventArgs e) {
+     /*   private void mi_open_Click(object sender, RoutedEventArgs e) {
             var dlg = new System.Windows.Forms.OpenFileDialog();
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
                 OpenFile(dlg.FileName);
             }
         }
+*/
 
         protected override void OnDrop(DragEventArgs e) {
             if (e.Data.GetFormats().Contains(DataFormats.FileDrop)){
@@ -259,12 +262,10 @@ namespace TXTReader.Display {
             }
         }
 
-        private void mi_close_Click(object sender, RoutedEventArgs e) { CloseFile(); }
-        private void mi_reopen_Click(object sender, RoutedEventArgs e) { ReopenFile(); }
-        private void mi_exit_Click(object sender, RoutedEventArgs e) { App.Current.MainWindow.Close(); }
+//        private void mi_close_Click(object sender, RoutedEventArgs e) { CloseFile(); }
+   //     private void mi_reopen_Click(object sender, RoutedEventArgs e) { ReopenFile(); }
+  //      private void mi_exit_Click(object sender, RoutedEventArgs e) { App.Current.MainWindow.Close(); }
         public void LineModify(double n = 1) { Offset += lineHeight * n; Update(); }
-        public void PageModify(double n = 1) { Offset += (CanvasHeight - lineHeight) * n; Update(); }
-
-     
+        public void PageModify(double n = 1) { Offset += (CanvasHeight - lineHeight) * n; Update(); }         
     }
 }

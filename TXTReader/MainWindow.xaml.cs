@@ -23,6 +23,7 @@ using TXTReader.Utility;
 using TXTReader.Data;
 using System.Threading;
 using System.IO;
+using TXTReader.Commands;
 
 namespace TXTReader {
     /// <summary>
@@ -43,14 +44,44 @@ namespace TXTReader {
         public bool IsHolding { get { return HoldCode > 0; } set { if (value && !IsHolding) Hold(HC_NORNAL); } }
         private System.Windows.Point? lastPoint = null;
 
+        
+
         public MainWindow() {
-            InitializeComponent();           
+            InitializeComponent();
+
             /*全屏
             WindowStyle = WindowStyle.None;
             ResizeMode = ResizeMode.NoResize;
             WindowState = WindowState.Maximized;
-            //*/            
+            //*/
+            Focus();
         }
+
+        private bool lastIsBordered = true;
+        public bool IsBordered { get { return (bool)GetValue(IsBorderedProperty); } set { SetValue(IsBorderedProperty, value); } }
+        public static readonly DependencyProperty IsBorderedProperty = DependencyProperty.Register("IsBordered", typeof(bool), typeof(MainWindow), new PropertyMetadata(true, (d, e) => {
+            MainWindow w = d as MainWindow;            
+            if (e.NewValue.Equals(true)) {
+                w.WindowStyle = WindowStyle.SingleBorderWindow;
+                w.ResizeMode = ResizeMode.CanResize;
+            }else if (e.NewValue.Equals(false)) {
+                w.WindowStyle = WindowStyle.None;
+                w.ResizeMode = ResizeMode.NoResize;
+            }
+        }));
+
+        public bool IsFullScreen { get { return (bool)GetValue(IsFullScreenProperty); } set { SetValue(IsFullScreenProperty, value); } }
+        public static readonly DependencyProperty IsFullScreenProperty = DependencyProperty.Register("IsFullScreen", typeof(bool), typeof(MainWindow), new PropertyMetadata(false, (d, e) => {
+            MainWindow w = d as MainWindow;
+            if (e.NewValue.Equals(true)) {
+                w.lastIsBordered = w.IsBordered;
+                w.IsBordered = false;
+                w.WindowState = WindowState.Maximized;
+            } else if (e.NewValue.Equals(false)) {
+                w.IsBordered = w.lastIsBordered;
+                w.WindowState = WindowState.Normal;
+            }
+        }));
 
         public bool IsHold(int flag) {
             return (HoldCode & flag) != 0;
@@ -110,15 +141,16 @@ namespace TXTReader {
                 case Key.Down: displayer.LineModify(-1); break;
                 case Key.PageUp: displayer.PageModify(+1); break;
                 case Key.PageDown: displayer.PageModify(-1); break;
-                case Key.LeftShift: Hold(HC_MOVE); break;
-                case Key.Escape: Toggle(); break;
+                case Key.LeftShift: Hold(HC_MOVE); break;                
             }            
         }
 
         protected override void OnKeyUp(KeyEventArgs e) {
             switch (e.Key) {
                 case Key.LeftShift: ReleaseHold(HC_MOVE); break;
-            }            
+            }
+            ContextMenu c;
+
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e) {
@@ -141,7 +173,7 @@ namespace TXTReader {
         }
 
         protected override void OnMouseMove(MouseEventArgs e) {
-            var p=e.GetPosition(canvas);
+            var p=e.GetPosition(root);
             if (!IsHolding) {
                 if (p.X > canvas.ActualWidth - 32) {
                     toolPanel.Show();
@@ -172,7 +204,10 @@ namespace TXTReader {
             ActionUtil.Clear();
         }
 
-        public void Toggle() {
+        static bool toggled = false;
+        public async void Toggle() {
+            if (toggled) return;
+            toggled = true;
             if (IsVisible) {
                 G.Timer.Pause();
                 Visibility = Visibility.Hidden;                
@@ -181,14 +216,43 @@ namespace TXTReader {
                 Focus();
                 G.Timer.Resume();
             }
+            await Task.Run(() => { Thread.Sleep(100); });
+            toggled = false;
         }
 
-        private void find_CanExecute(object sender, CanExecuteRoutedEventArgs e) {
-            e.CanExecute = G.Book != null;
+        private void find_CanExecute(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = G.Book != null; }
+        private void find_Executed(object sender, ExecutedRoutedEventArgs e) { Hold(HC_FIND); }
+
+        private void open_CanExecute(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute= true; }
+        private void open_Executed(object sender, ExecutedRoutedEventArgs e) {
+            var dlg = new System.Windows.Forms.OpenFileDialog();
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                G.Displayer.OpenFile(dlg.FileName);
+            }
         }
 
-        private void find_Executed(object sender, ExecutedRoutedEventArgs e) {
-            Hold(HC_FIND);           
+        private void close_CanExecute(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = G.Book != null; }
+        private void close_Executed(object sender, ExecutedRoutedEventArgs e) { G.Displayer.CloseFile(); }
+
+        private void bossKey_CanExecute(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
+        private void bossKey_Executed(object sender, ExecutedRoutedEventArgs e) { Toggle(); }
+
+        private void exit_CanExecute(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
+        private void exit_Executed(object sender, ExecutedRoutedEventArgs e) { Close(); }
+
+        private void reopen_CanExecute(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = G.Book != null; }
+        private void reopen_Executed(object sender, ExecutedRoutedEventArgs e) { G.Displayer.ReopenFile(); }
+
+        private void mi_scroll_Loaded(object sender, RoutedEventArgs e) {
+            (sender as MenuItem).SetBinding(MenuItem.IsCheckedProperty, new Binding("IsScrolling") { Source = G.Displayer });
+        }
+
+        private void mi_border_Loaded(object sender, RoutedEventArgs e) {
+            (sender as MenuItem).SetBinding(MenuItem.IsCheckedProperty, new Binding("IsBordered") { Source = this });
+        }
+
+        private void mi_fullscreen_Loaded(object sender, RoutedEventArgs e) {
+            (sender as MenuItem).SetBinding(MenuItem.IsCheckedProperty, new Binding("IsFullScreen") { Source = this });
         }
     }
 }

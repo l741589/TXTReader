@@ -41,7 +41,7 @@
             </Storyboard>
         </ResourceDictionary>
     </UserControl.Resources>
-    <TabControl>
+    <TabControl x:Name="tab">
         <TabItem Header="划分">
             <Widget:RulePanel x:Name="pn_rule"/>
         </TabItem>

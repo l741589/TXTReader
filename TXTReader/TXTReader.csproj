@@ -62,6 +62,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\MyCommands.cs" />
     <Compile Include="Converter\BookLengthConverter.cs" />
     <Compile Include="Converter\BookmarkConverter.cs" />
     <Compile Include="Converter\ChapterRuleNameConverter.cs" />
@@ -69,9 +70,11 @@
     <Compile Include="Converter\NotConverter.cs" />
     <Compile Include="Converter\ParaSpacingCvt.cs" />
     <Compile Include="Converter\RuleDelButtonVisibilityConverter.cs" />
+    <Compile Include="Converter\SizeableConverter.cs" />
     <Compile Include="Converter\ToolPanelTargetLeftCvt.cs" />
     <Compile Include="Converter\ToolPanelWidthCvt.cs" />
     <Compile Include="Converter\VisiblilityConverter.cs" />
+    <Compile Include="Converter\WindowStyleConverter.cs" />
     <Compile Include="Data\Book.cs" />
     <Compile Include="Data\Bookmark.cs" />
     <Compile Include="Data\Chapter.cs" />

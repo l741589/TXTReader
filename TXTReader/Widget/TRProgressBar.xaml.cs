@@ -26,11 +26,19 @@ namespace TXTReader.Widget {
         private Storyboard show;
         private Storyboard hide;
 
+        public double Percent { get { return (double)GetValue(PercentProperty); } set { SetValue(PercentProperty, value); } }
+        public static readonly DependencyProperty PercentProperty = DependencyProperty.Register("Percent", typeof(double), typeof(TRProgressBar));
+
         public TRProgressBar() {
             InitializeComponent();
             UpdateBinding();
             show = Resources["show"] as Storyboard;
             hide = Resources["hide"] as Storyboard;
+            ValueChanged += TRProgressBar_ValueChanged;
+        }
+
+        void TRProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            Percent = e.NewValue / Maximum;
         }
 
         private void ProgressBar_MouseDown(object sender, MouseButtonEventArgs e) {

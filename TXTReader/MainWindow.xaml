@@ -1,29 +1,55 @@
 ﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:TXTReader" x:Class="TXTReader.MainWindow" x:Name="window"
+        x:Class="TXTReader.MainWindow" x:Name="window"
+        xmlns:local="clr-namespace:TXTReader" 
         xmlns:converter="clr-namespace:TXTReader.Converter"
         xmlns:widget="clr-namespace:TXTReader.Widget"
         xmlns:display="clr-namespace:TXTReader.Display"
-        Title="MainWindow" Height="350" Width="525" Loaded="window_Loaded">
+        xmlns:cmd="clr-namespace:TXTReader.Commands"
+        xmlns:util="clr-namespace:TXTReader.Utility"
+        Title="MainWindow" Loaded="window_Loaded"  Height="350" Width="525" >
     <Window.Resources>
-        <converter:ToolPanelWidthCvt x:Key="toolPanelWidthCvt"/>       
+        <converter:WindowStyleConverter x:Key="WindowStyleConverter"/>
+        <converter:SizeableConverter x:Key="SizeableConverter"/>
+        <converter:ToolPanelWidthCvt x:Key="toolPanelWidthCvt"/>
+        <ContextMenu x:Key="mainContextMenu">
+            <MenuItem Header="打开(_O)" Command="ApplicationCommands.Open"/>
+            <MenuItem Header="关闭(_C)" Command="ApplicationCommands.Close"/>
+            <MenuItem Header="重开(_R)" Command="cmd:MyCommands.Reopen"/>
+            <Separator/>
+            <MenuItem Header="搜索(_F)" Command="ApplicationCommands.Find"/>
+            <Separator/>
+            <MenuItem Header="滚屏(_S)" IsCheckable="True" Loaded="mi_scroll_Loaded"/>
+            <Separator/>
+            <MenuItem Header="边框" IsCheckable="True" Loaded="mi_border_Loaded"/>
+            <MenuItem Header="全屏" IsCheckable="True" Loaded="mi_fullscreen_Loaded"/>
+            <Separator/>
+            <MenuItem Command="cmd:MyCommands.BossKey"/>
+            <MenuItem Command="cmd:MyCommands.Exit"/>
+        </ContextMenu>
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Find" x:Name="find"  CanExecute="find_CanExecute" Executed="find_Executed"/>
+        <CommandBinding Command="ApplicationCommands.Open" x:Name="open"  CanExecute="open_CanExecute"  Executed="open_Executed"/>
+        <CommandBinding Command="ApplicationCommands.Close" x:Name="close"  CanExecute="close_CanExecute" Executed="close_Executed"/>
+        <CommandBinding Command="cmd:MyCommands.BossKey" x:Name="bossKey"  CanExecute="bossKey_CanExecute" Executed="bossKey_Executed"/>
+        <CommandBinding Command="cmd:MyCommands.Reopen" x:Name="reopen" CanExecute="reopen_CanExecute" Executed="reopen_Executed"/>
+        <CommandBinding Command="cmd:MyCommands.Exit" x:Name="exit" CanExecute="exit_CanExecute" Executed="exit_Executed"/>
     </Window.CommandBindings>
-    <DockPanel>
+    <DockPanel x:Name="root">
         <widget:TRProgressBar x:Name="progressBar" DockPanel.Dock="Bottom" Height="8"/>
         <Canvas x:Name="canvas" SizeChanged="canvas_SizeChanged">
-            <display:Displayer4 x:Name="displayer" Canvas.Left="0" Canvas.Top="0"  Panel.ZIndex="0"
-                            Height="{Binding ActualHeight,ElementName=canvas}" Width="{Binding ActualWidth, ElementName=canvas}">
+            <display:Displayer4 x:Name="displayer" Canvas.Left="0" Canvas.Top="0"  Panel.ZIndex="0" 
+                                Height="{Binding ActualHeight,ElementName=canvas}" Width="{Binding ActualWidth, ElementName=canvas}"
+                                ContextMenu="{StaticResource mainContextMenu}">
             </display:Displayer4>
             <widget:FloatMessagePanel x:Name="floatMessagePanel" Canvas.Left="0" Canvas.Top="0" Panel.ZIndex="1"
                             Height="{Binding ActualHeight,ElementName=canvas}" Width="{Binding ActualWidth, ElementName=canvas}">
             </widget:FloatMessagePanel>
             <widget:ToolPanels  x:Name="toolPanel" Panel.ZIndex="5"
             Height="{Binding ActualHeight, ElementName=canvas}" 
-            Width="{Binding ActualWidth, ElementName=canvas, Converter={StaticResource toolPanelWidthCvt}}" OpacityMask="#E6000000"/>
+            Width="{Binding ActualWidth, ElementName=canvas, Converter={StaticResource toolPanelWidthCvt}}"/>
             <widget:SearchBar x:Name="sb_search" Canvas.Left="0" Canvas.Top="0" Visibility="Hidden" Panel.ZIndex="2"></widget:SearchBar>
         </Canvas>
     </DockPanel>

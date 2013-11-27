@@ -31,11 +31,7 @@ namespace TXTReader.Widget
             InitializeComponent();
             toolPanelShow = Resources["toolPanelShow"] as Storyboard;
             toolPanelHide = Resources["toolPanelHide"] as Storyboard;
-        }
-
-        private void ListBoxItem_MouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            OpenFileDialog f = new OpenFileDialog();
-            f.ShowDialog();
+            (tab.Items[0] as Control).Focus();
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e) {
