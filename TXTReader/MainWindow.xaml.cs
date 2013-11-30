@@ -56,14 +56,21 @@ namespace TXTReader {
                     Debug.Print(ex.StackTrace);
                 }
                 displayer.UpdateSkin();
-                displayer.SetBinding(Displayer4.SpeedProperty, new Binding("Value") { Source = toolPanel.pn_option.se_speed });
+
+                //bind to the options instance instead. (later on)
+                displayer.SetBinding(Displayer4.SpeedProperty, new Binding("Value") { Source = toolPanel.pn_option.seSpeed });
+                
+                //call this method to update binding targets in options UI 
+                //  when the options instance is modified out of the OptionPanel.
+                this.toolPanel.pn_option.UpdateOptionsUI();
+
                 BookParser.Load();
         }
 
         protected override void OnKeyDown(KeyEventArgs e) {
             switch (e.Key) {
-                case Key.OemComma: --toolPanel.pn_option.se_speed.Value; break;
-                case Key.OemPeriod: ++toolPanel.pn_option.se_speed.Value; break;
+                case Key.OemComma: --toolPanel.pn_option.seSpeed.Value; break;
+                case Key.OemPeriod: ++toolPanel.pn_option.seSpeed.Value; break;
                 case Key.Up: displayer.LineModify(+1); break;
                 case Key.Down: displayer.LineModify(-1); break;
                 case Key.PageUp: displayer.PageModify(+1); break;
