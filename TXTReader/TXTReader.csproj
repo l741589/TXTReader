@@ -109,7 +109,6 @@
     <Compile Include="Utility\ActionUtil.cs" />
     <Compile Include="Utility\BookParser.cs" />
     <Compile Include="Utility\BookCollection.cs" />
-    <Compile Include="Utility\BookmarkParser.cs" />
     <Compile Include="Utility\EnumTypesBinder.cs" />
     <Compile Include="Utility\BufferObject.cs" />
     <Compile Include="Utility\RuleParser.cs" />
