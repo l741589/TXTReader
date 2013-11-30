@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DirectedGraph Layout="ForceDirected" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+  <Nodes>
+    <Node Id="P2P中介" Bounds="704.331883376801,81.2978543090821,65.7233333333334,25.24" Label="P2P中介" UseManualLocation="True" />
+    <Node Id="P2P传输" Bounds="537.887478841146,66.9629417587359,65.7233333333334,25.24" UseManualLocation="True" />
+    <Node Id="上传" Bounds="706.434402059093,195.152277832031,50.046128,25.24" Label="上传" UseManualLocation="True" />
+    <Node Id="上传1" Bounds="544.002858804348,193.22814453125,50,25.24" Label="上传" UseManualLocation="True" />
+    <Node Id="下载" Bounds="708.689925740733,139.912165527344,50.046128,25.24" Label="下载" UseManualLocation="True" />
+    <Node Id="下载1" Bounds="545.8271484375,137.988039504963,50,25.24" Label="下载" UseManualLocation="True" />
+    <Node Id="书架" Bounds="392.170066128418,203.897466148443,50.0846724306639,25.2400002928516" Label="书架" UseManualLocation="True" />
+    <Node Id="书签" Bounds="205.674094448731,174.884853721652,50.0846724306639,25.2400002928516" Label="书签" UseManualLocation="True" />
+    <Node Id="书签文件解析器设计" Bounds="113.969848007812,-4.09595058059399,127.963136015625,25.240000010625" Label="书签文件解析器设计" UseManualLocation="True" />
+    <Node Id="书签文件设计" Bounds="135.843017261719,69.1856961479216,91.981568015625,25.240000010625" Label="书签文件设计" UseManualLocation="True" />
+    <Node Id="书籍额外信息描述文件设计" Bounds="300.18858244043,72.1618400688531,163.944704015625,25.240000010625" Label="书籍额外信息描述文件设计" UseManualLocation="True" />
+    <Node Id="书籍额外信息文件解析器" Bounds="307.319345279297,-9.50307692333436,151.950848015625,25.240000010625" Label="书籍额外信息文件解析器" UseManualLocation="True" />
+    <Node Id="基本控制" Bounds="280.479720624975,411.472911122654,67.9938560156249,25.240000010625" Label="基本控制" UseManualLocation="True" />
+    <Node Id="客户端" Bounds="93.9698480078125,-49.5031592492987,548.078228582983,507.903090187228" Group="Expanded" />
+    <Node Id="数据库" Bounds="805.32144921339,164.222102050781,56,25.24" Label="数据库" UseManualLocation="True" />
+    <Node Id="服务端" Bounds="684.331883376801,41.2977543090821,196.989565836589,261.083148913574" Group="Expanded" UseManualLocation="True" />
+    <Node Id="本地书架" Bounds="346.195851533203,131.75499497608,67.9938560156249,25.240000010625" Label="本地书架" UseManualLocation="True" />
+    <Node Id="查询" Bounds="711.777999471202,257.140803222656,50.0461280000001,25.24" Label="查询" UseManualLocation="True" />
+    <Node Id="查询2" Bounds="539.813826251855,249.91450012207,50,25.24" Label="查询" UseManualLocation="True" />
+    <Node Id="校对加强" Bounds="357.404500214844,356.232793437994,67.9938560156249,25.240000010625" Label="校对加强" UseManualLocation="True" />
+    <Node Id="校对算法" Bounds="384.097228559545,413.159830927305,67.9938560156252,25.240000010625" Label="校对算法" UseManualLocation="True" />
+    <Node Id="皮肤" Bounds="170.021460781738,276.872187087912,50.0846724306641,25.2400002928516" Label="皮肤" UseManualLocation="True" />
+    <Node Id="皮肤描述文件解析器" Bounds="122.516580258764,409.592738031797,127.963136015625,25.240000010625" Label="皮肤描述文件解析器" UseManualLocation="True" />
+    <Node Id="皮肤描述文件设计" Bounds="131.686698376812,332.112287380314,115.969280015625,25.240000010625" Label="皮肤描述文件设计" UseManualLocation="True" />
+    <Node Id="看书" Bounds="288.347446142862,276.058934871002,73.0385366693533,25.2399998594524" Label="看书/界面" UseManualLocation="True" />
+    <Node Id="章节划分" Bounds="417.577504365234,279.137563335455,67.9938560156249,25.240000010625" Label="章节划分" UseManualLocation="True" />
+    <Node Id="章节划分语言解析算法" Bounds="482.09108457517,411.509257196836,139.956992015625,25.240000010625" Label="章节划分语言解析算法" UseManualLocation="True" />
+    <Node Id="章节划分语言设计" Bounds="455.398332275746,351.844752191953,115.969280015625,25.240000010625" Label="章节划分语言设计" UseManualLocation="True" />
+    <Node Id="网络书库" Bounds="444.1897175,148.65733872608,67.9938560156252,25.240000010625" Label="网络书库" UseManualLocation="True" />
+  </Nodes>
+  <Links>
+    <Link Source="P2P中介" Target="数据库" Bounds="751.822975338988,106.537854309082,60.054300505076,51.8055396616386" />
+    <Link Source="P2P传输" Target="P2P中介" Bounds="603.610812174479,82.4131221205342,91.7542879498719,7.90228097926803" />
+    <Link Source="P2P传输" Target="P2P传输" Bounds="554.318298339844,36.9629325866699,32.8607788085938,29.9999961853027" />
+    <Link Source="P2P传输" Target="网络书库" Bounds="499.233282959518,92.2029315185547,57.2169833482461,50.4989460888939" />
+    <Link Source="上传" Target="上传1" Bounds="603.002176408453,206.250837403581,103.432187570063,1.22506405809546" />
+    <Link Source="上传" Target="数据库" Bounds="756.480530059093,187.958966195843,40.2291627255577,12.2152603511413" />
+    <Link Source="上传1" Target="上传" Bounds="594.002807617188,206.144247728639,103.432187570063,1.22506405809546" />
+    <Link Source="上传1" Target="网络书库" Bounds="511.980217784799,177.862579381583,32.9676537807362,16.1798758250791" />
+    <Link Source="下载" Target="下载1" Bounds="604.826520566269,151.009659000112,103.863428129043,1.22691481981565" />
+    <Link Source="下载" Target="数据库" Bounds="758.736053740733,158.639167891223,37.8420194655105,9.23553176101257" />
+    <Link Source="下载1" Target="下载" Bounds="595.8271484375,150.903351484245,103.863428129043,1.22691481981565" />
+    <Link Source="下载1" Target="网络书库" Bounds="521.12447311214,153.487260653875,24.7026753253598,2.84498580109766" />
+    <Link Source="书签文件解析器设计" Target="书签文件设计" Bounds="178.620010460649,21.1440783744531,2.0690534891115,39.0542506565819" />
+    <Link Source="书签文件解析器设计" Target="书籍额外信息文件解析器" Bounds="241.932984023437,5.35444657882785,56.389479860219,1.48485778905992" Label="子组件" LabelBounds="252.07507784749,-13.1431247668667,36,15.2400000000007" />
+    <Link Source="书签文件设计" Target="书签" Bounds="187.670165499443,94.4257251029687,33.432109016962,72.2904190607851" />
+    <Link Source="书签文件设计" Target="书籍额外信息描述文件设计" Bounds="227.824585277344,82.4889808890108,63.3649902005826,0.941373308972516" Label="属于" LabelBounds="247.536789825619,63.719667519145,24,15.2400000000007" />
+    <Link Source="书籍额外信息描述文件设计" Target="本地书架" Bounds="380.906651068902,97.4018577535138,0.837488615271582,25.358059266404" />
+    <Link Source="书籍额外信息文件解析器" Target="书籍额外信息描述文件设计" Bounds="382.461094256517,15.7369407613263,0.658459084754838,47.4257842993959" />
+    <Link Source="基本控制" Target="看书" Bounds="315.444958194963,310.272576351193,7.76491694242009,101.200334771461" />
+    <Link Source="客户端" Target="P2P传输" Category="Contains" />
+    <Link Source="客户端" Target="上传1" Category="Contains" />
+    <Link Source="客户端" Target="下载1" Category="Contains" />
+    <Link Source="客户端" Target="书架" Category="Contains" />
+    <Link Source="客户端" Target="书签" Category="Contains" />
+    <Link Source="客户端" Target="书签文件解析器设计" Category="Contains" />
+    <Link Source="客户端" Target="书签文件设计" Category="Contains" />
+    <Link Source="客户端" Target="书籍额外信息描述文件设计" Category="Contains" />
+    <Link Source="客户端" Target="书籍额外信息文件解析器" Category="Contains" />
+    <Link Source="客户端" Target="基本控制" Category="Contains" />
+    <Link Source="客户端" Target="本地书架" Category="Contains" />
+    <Link Source="客户端" Target="查询2" Category="Contains" />
+    <Link Source="客户端" Target="校对加强" Category="Contains" />
+    <Link Source="客户端" Target="校对算法" Category="Contains" />
+    <Link Source="客户端" Target="皮肤" Category="Contains" />
+    <Link Source="客户端" Target="皮肤描述文件解析器" Category="Contains" />
+    <Link Source="客户端" Target="皮肤描述文件设计" Category="Contains" />
+    <Link Source="客户端" Target="看书" Category="Contains" />
+    <Link Source="客户端" Target="章节划分" Category="Contains" />
+    <Link Source="客户端" Target="章节划分语言解析算法" Category="Contains" />
+    <Link Source="客户端" Target="章节划分语言设计" Category="Contains" />
+    <Link Source="客户端" Target="网络书库" Category="Contains" />
+    <Link Source="服务端" Target="P2P中介" Category="Contains" />
+    <Link Source="服务端" Target="上传" Category="Contains" />
+    <Link Source="服务端" Target="下载" Category="Contains" />
+    <Link Source="服务端" Target="数据库" Category="Contains" />
+    <Link Source="服务端" Target="查询" Category="Contains" />
+    <Link Source="本地书架" Target="书架" Bounds="386.668682218067,156.99501266074,19.9589040245356,38.8951751526863" />
+    <Link Source="查询" Target="数据库" Bounds="749.910235819762,195.70394113152,63.8182578215049,61.4368620911365" />
+    <Link Source="查询" Target="查询2" Bounds="598.805909030262,263.962728493796,112.972052360363,4.74669263039408" />
+    <Link Source="查询2" Target="查询" Bounds="589.813842773438,263.584913151492,112.972052360363,4.74669263039408" />
+    <Link Source="查询2" Target="网络书库" Bounds="494.833978747898,180.736159757962,59.1832405235083,69.1783403641082" />
+    <Link Source="校对加强" Target="章节划分" Bounds="401.251367209642,311.47237320277,34.9356245841007,44.7604379092594" />
+    <Link Source="校对算法" Target="校对加强" Bounds="401.139734108201,389.621491072222,11.0369823236099,23.5383398550831" />
+    <Link Source="皮肤" Target="看书" Bounds="220.106133212402,288.964136509223,59.2414895598508,0.371156944638642" />
+    <Link Source="皮肤描述文件解析器" Target="皮肤描述文件设计" Bounds="187.014997325501,366.344761476382,1.77121045750201,43.2479765554148" />
+    <Link Source="皮肤描述文件设计" Target="皮肤" Bounds="190.903286219095,311.069609554218,2.0541555345423,21.0426902451574" />
+    <Link Source="章节划分语言解析算法" Target="章节划分语言设计" Bounds="526.462259266185,384.636255765436,17.4244944006946,26.8730014314003" />
+    <Link Source="章节划分语言设计" Target="章节划分" Bounds="468.131980188646,311.234685901866,34.5227444372093,40.6100662900875" />
+    <Link Source="网络书库" Target="书架" Bounds="437.812252254773,173.897359014102,26.444393758195,23.9575205650518" />
+  </Links>
+  <Categories>
+    <Category Id="Contains" Label="包含" Description="链接的源是否包含目标对象" CanBeDataDriven="False" CanLinkedNodesBeDataDriven="True" IncomingActionLabel="包含者" IsContainment="True" OutgoingActionLabel="包含" />
+  </Categories>
+  <Properties>
+    <Property Id="Bounds" DataType="System.Windows.Rect" />
+    <Property Id="CanBeDataDriven" Label="CanBeDataDriven" Description="CanBeDataDriven" DataType="System.Boolean" />
+    <Property Id="CanLinkedNodesBeDataDriven" Label="CanLinkedNodesBeDataDriven" Description="CanLinkedNodesBeDataDriven" DataType="System.Boolean" />
+    <Property Id="Expression" DataType="System.String" />
+    <Property Id="Group" Label="组" Description="将节点显示为组" DataType="Microsoft.VisualStudio.GraphModel.GraphGroupStyle" />
+    <Property Id="GroupLabel" DataType="System.String" />
+    <Property Id="IncomingActionLabel" Label="IncomingActionLabel" Description="IncomingActionLabel" DataType="System.String" />
+    <Property Id="IsContainment" DataType="System.Boolean" />
+    <Property Id="IsEnabled" DataType="System.Boolean" />
+    <Property Id="Label" Label="标签" Description="可批注对象的可显示标签" DataType="System.String" />
+    <Property Id="LabelBounds" DataType="System.Windows.Rect" />
+    <Property Id="Layout" DataType="System.String" />
+    <Property Id="OutgoingActionLabel" Label="OutgoingActionLabel" Description="OutgoingActionLabel" DataType="System.String" />
+    <Property Id="TargetType" DataType="System.Type" />
+    <Property Id="UseManualLocation" DataType="System.Boolean" />
+    <Property Id="Value" DataType="System.String" />
+    <Property Id="ValueLabel" DataType="System.String" />
+  </Properties>
+  <Styles>
+    <Style TargetType="Node" GroupLabel="注释" ValueLabel="包含注释">
+      <Condition Expression="HasCategory('Comment')" />
+      <Setter Property="Background" Value="#FFFFFACD" />
+      <Setter Property="Stroke" Value="#FFE5C365" />
+      <Setter Property="StrokeThickness" Value="1" />
+      <Setter Property="NodeRadius" Value="2" />
+      <Setter Property="MaxWidth" Value="250" />
+    </Style>
+  </Styles>
+</DirectedGraph>

@@ -19,7 +19,6 @@ namespace TXTReader.Data {
         public static readonly DependencyProperty MaxChapterLengthProperty = DependencyProperty.Register("MaxChapterLength", typeof(int), typeof(Options), new PropertyMetadata(15000));
         public static readonly DependencyProperty MinChapterLengthProperty = DependencyProperty.Register("MinChapterLength", typeof(int), typeof(Options), new PropertyMetadata(1000));
 
-
         public Skin Skin { get { return (Skin)GetValue(SkinProperty); } set { SetValue(SkinProperty, value); } }
         public int Speed { get { return (int)GetValue(SpeedProperty); } set { SetValue(SpeedProperty, value); } }
         public FloatMessage FloatMessage { get { return (FloatMessage)GetValue(FloatMessageProperty); } set { SetValue(FloatMessageProperty, value); } }

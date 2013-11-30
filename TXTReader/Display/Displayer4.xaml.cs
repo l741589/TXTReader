@@ -28,14 +28,12 @@ namespace TXTReader.Display {
         public static readonly DependencyProperty SpeedProperty = DependencyProperty.Register("Speed", typeof(double), typeof(Displayer4));
         public static readonly DependencyProperty IsScrollingProperty = DependencyProperty.Register("IsScrolling", typeof(bool), typeof(Displayer4), new PropertyMetadata(false, OnIsScrollingChanged));
         public static readonly RoutedEvent ShutdownEvent = EventManager.RegisterRoutedEvent("Shutdown", RoutingStrategy.Direct, typeof(ShutdownHandler), typeof(Displayer4));
-        public static readonly DependencyProperty FirstLineProperty = DependencyProperty.Register("FirstLine", typeof(int), typeof(Displayer4));
-        public static readonly DependencyProperty OffsetProperty = DependencyProperty.Register("Offset", typeof(double), typeof(Displayer4));
 
         public event ShutdownHandler Shutdown { add { AddHandler(ShutdownEvent, value); } remove { RemoveHandler(ShutdownEvent, value); } }
         public double Speed { get { return (double)GetValue(SpeedProperty); } set { SetValue(SpeedProperty, value); } }
         public bool IsScrolling { get { return (bool)GetValue(IsScrollingProperty); } set { SetValue(IsScrollingProperty, value); } }
-        public int FirstLine { get { return (int)GetValue(FirstLineProperty); } set { SetValue(FirstLineProperty, value); } }
-        public double Offset { get { return (double)GetValue(OffsetProperty); } set { SetValue(OffsetProperty, value); } }
+        public int FirstLine { get { return G.Book != null ? G.Book.Position : 0; } set { if (G.Book != null) G.Book.Position = value; } }
+        public double Offset { get { return G.Book != null ? G.Book.Offset : 0; } set { if (G.Book != null) G.Book.Offset = value; } }
         private String[] text;
         public String[] Text { get { return text; } set { text = value; } }
         public double CanvasHeight { get { return canvas.ActualHeight; } }
@@ -50,9 +48,7 @@ namespace TXTReader.Display {
         public Displayer4() {
             InitializeComponent();
             InitComponent();
-        }
-
-        
+        }        
 
         public static void OnSkinChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             Skin val = (Skin)e.NewValue;
@@ -70,8 +66,6 @@ namespace TXTReader.Display {
             SetBinding(SpeedProperty, new Binding("Speed") { Source = Options.Instance, Mode = BindingMode.TwoWay });
             SetBinding(IsScrollingProperty, new Binding("IsChecked") { Source = mi_scroll, Mode = BindingMode.TwoWay });
             widthBinding = new Binding("ActualWidth") { Source = canvas };
-            FirstLine = 0;
-            Offset = 0;
             UpdateSkin();
             G.Timer.Timer += timer_Timer;
             canvas.SizeChanged += (d, e) => { Clear(); Update(); };
@@ -100,34 +94,23 @@ namespace TXTReader.Display {
             Update();
         }
 
-        public async void OpenFile(String filename) {
-            if (G.FileName != filename) {
-                CloseFile();
-                G.FileName = filename;
-                await G.Book.Load(filename, G.Trmex);
-                SetBinding(FirstLineProperty, new Binding("Position") { Source = G.Book,Mode=BindingMode.TwoWay});
-                SetBinding(OffsetProperty, new Binding("Offset") { Source = G.Book, Mode = BindingMode.TwoWay });
+        public void OpenFile(String filename) {
+            OpenBook(new Book(filename));
+        }
+
+        public void OpenBook(Book book) {
+            if (G.Book != book) {
+                Clear();
+                G.Book = book;
                 A.CopyText(out text, G.Book.TotalText);
-                BookmarkParser.Load();
                 Update();
             }
         }
 
-        public void OpenBook(Book book) {
-            if (book == null) return;
-            G.Book = book;
-            OpenFile(book.Source);
-        }
-
         public void CloseFile() {
-            //BookcaseParser.Save(G.Book);
-            BookmarkParser.Save();
             Text = null;
-            G.FileName = null;
-            FirstLine = 0;
-            Offset = 0;
-            G.Book.Clear();
-            Clear();            
+            G.Book = null;
+            Clear();          
             Update();
         }
 
@@ -137,10 +120,11 @@ namespace TXTReader.Display {
         }
 
         public void ReopenFile() {
-            G.Book.Clear();
+            Book tmp = G.Book;
+            G.Book = null;
             Clear();
             Text = null;
-            OpenFile(G.FileName);
+            OpenBook(tmp);
         }
 
 
@@ -230,7 +214,7 @@ namespace TXTReader.Display {
             set.Clear();
             foreach (var e in map) if (e.Value.Updated == false) set.Add(e.Key);
             foreach (var e in set) { canvas.Children.Remove(map[e]); map.Remove(e); }
-            Debug.WriteLine(canvas.Children.Count);
+            //Debug.WriteLine(canvas.Children.Count);
             if (reupdate) Update();
         }
 

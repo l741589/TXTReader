@@ -10,6 +10,7 @@ using TXTReader.Utility;
 using System.Security.Policy;
 using System.Text.RegularExpressions;
 using TXTReader.WebApi;
+using System.Collections.ObjectModel;
 
 namespace TXTReader.Data {
     public class Book : Chapter, ContentAdapter, Positionable {
@@ -26,24 +27,22 @@ namespace TXTReader.Data {
         public DateTime LastLoadTime { get; set; }
         public double SortArgument { get; set; }
         private String preview = null;
+        public ObservableCollection<Bookmark> Bookmark { get; private set; }
 
-        public Book() : base() { }
+        public Book()
+            : base() {
+            Position = 0; Offset = 0;
+            Bookmark = new ObservableCollection<Bookmark>();
+        }
         public Book(String src) : this() { Init(src); }
 
-        public void Init(String src) {
+        public void Init(String src) {            
             if (Path.GetExtension(src) == G.EXT_BOOK) {
-                BookcaseParser.Load(src, this);
+                BookParser.Load(src, this);
             } else {
                 Source = src;
                 SortArgument = 0;
-                if (IsLocal) Title = Path.GetFileNameWithoutExtension(src);
-                else {
-                    var m = Regex.Match(src, @"(?<[\\/])(?<R>[\w\d_ ]+?)((?=$)|(?=\?)|(?=\.)");
-                    var c = m.Groups["R"].Captures;
-                    if (c.Count > 0) {
-                        Title = c[c.Count - 1].Value;
-                    }
-                }
+                Title = Path.GetFileNameWithoutExtension(src);
                 LastLoadTime = default(DateTime);
             }
         }
@@ -82,10 +81,13 @@ namespace TXTReader.Data {
             return ret;
         }
 
-        public Chapter Match(Trmex trmex, ICollection<String> texts) {
+        public Chapter Match(ICollection<String> texts) {
             Chapter node = this;
             foreach (var s in texts) {
-                var r = trmex.Match(s);
+                var trmex = G.ListTrmex;
+                ChapterDesc r = null;
+                if (r == null && G.Rules.IsListEnable) r = G.ListTrmex.Match(s);
+                if (r == null && G.Rules.IsTreeEnable) r = G.TreeTrmex.Match(s);
                 if (r != null) {
                     if (trmex.LCs == null) {
                         node = Insert(r.SubTitle, 0, this);
@@ -103,19 +105,19 @@ namespace TXTReader.Data {
             return this;
         }
 
-        public async Task Load(String file = null, Trmex trmex = null) {
+        public void Load(String file = null) {
             if (file == null) file = Source; else Source = file;
-            if (trmex == null) trmex = G.Trmex;
-            LastLoadTime = DateTime.Now;
             if (IsLocal) {
                 Clear();
                 var ss = File.ReadAllLines(file, Encoding.Default);
                 Title = Path.GetFileNameWithoutExtension(file);
                 if (Text != null) Text.Clear();
-                Match(trmex, ss);
+                Match(ss);
+                BookParser.Load(this);                
             } else {
                 //TODO 添加Download逻辑
             }
+            LastLoadTime = DateTime.Now;
         }
 
         public String ToolTip {
@@ -133,12 +135,9 @@ namespace TXTReader.Data {
             Douban.MoreInfo(this);
         }
 
-        public async Task Localize() {
-
-        }
-
         public override void Close() {
             GetPreview();
+            BookParser.Save(this);
             base.Close();
         }
     }

@@ -17,7 +17,7 @@ namespace TXTReader.Utility {
 
         protected override void RemoveItem(int index) {
             Book item=this[index];
-            File.Delete(BookcaseParser.GetBookPath(item));
+            File.Delete(BookParser.GetBookPath(item));
             base.RemoveItem(index);
         }
     }
