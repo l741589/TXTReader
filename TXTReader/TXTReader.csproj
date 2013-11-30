@@ -158,6 +158,9 @@
     <Compile Include="Widget\StandardColorPicker.xaml.cs">
       <DependentUpon>StandardColorPicker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Widget\ThicknessSEGroup.xaml.cs">
+      <DependentUpon>ThicknessSEGroup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Widget\ToolPanels.xaml.cs">
       <DependentUpon>ToolPanels.xaml</DependentUpon>
     </Compile>
@@ -247,6 +250,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Widget\StandardColorPicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\ThicknessSEGroup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
