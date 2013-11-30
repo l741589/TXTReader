@@ -31,7 +31,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            <ComboBox Grid.Row="0" x:Name="cbb_list" SelectionChanged="cbb_list_SelectionChanged" 
+            <ComboBox Grid.Row="0" x:Name="cbb_list"
                       HorizontalContentAlignment="Stretch" ToolTip="{Binding SelectedItem, RelativeSource={RelativeSource Self}}">
                 <ComboBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
@@ -50,7 +50,7 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <TextBox Grid.Row="1" AcceptsReturn="True"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" x:Name="lb_list"/>
+            <TextBox Grid.Row="1" AcceptsReturn="True"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" x:Name="lb_list" TextChanged="lb_list_TextChanged"/>
         </Grid>
         <ToggleButton Grid.Row="3" x:Name="bn_tree" Click="bn_tree_Click" IsChecked="True">
             <DockPanel Width="{Binding ActualWidth, ElementName=bn_tree, Mode=OneWay}" LastChildFill="False">
@@ -65,7 +65,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            <ComboBox Grid.Row="0" x:Name="cbb_tree" SelectionChanged="cbb_tree_SelectionChanged" 
+            <ComboBox Grid.Row="0" x:Name="cbb_tree"
                       HorizontalContentAlignment="Stretch" ToolTip="{Binding SelectedItem, RelativeSource={RelativeSource Self}}">
                 <ComboBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
@@ -84,10 +84,37 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <UniformGrid  Grid.Row="1" Columns="1" x:Name="gp_tree">
-                <TextBox AcceptsReturn="True"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
-                <TextBox AcceptsReturn="True"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
-            </UniformGrid>
+            <ListView Grid.Row="1" x:Name="ic_tree" Padding="0">   
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Padding" Value="0"/>
+                        <Setter Property="Margin" Value="0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                    <Grid>
+                                        <ContentPresenter/>
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="{x:Null}" />
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Background" Value="{x:Null}" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBox AcceptsReturn="True"  VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" TextChanged="lb_tree_TextChanged" Text="{Binding DataContext,RelativeSource={RelativeSource self}}" Margin="0"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </Grid>
     </Grid>
 </UserControl>

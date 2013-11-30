@@ -17,19 +17,13 @@ namespace TXTReader.Utility {
         private const String S_TRUE = "true";
         private const String S_FALSE = "false";
 
-
-
         public static void Load() {
             String[] files = Directory.GetFiles(G.PATH_RULE);
-            String ls = Rules.S_ADD;
-            String ts = Rules.S_ADD;
             String optionfile = null;
             foreach (String file in files) {
-
                 if (Path.GetExtension(file).ToLower() == G.EXT_LISTRULE) G.Rules.List.Add(file);
                 else if (Path.GetExtension(file).ToLower() == G.EXT_TREERULE) G.Rules.Tree.Add(file);
                 else if (Path.GetExtension(file).ToLower() == G.EXT_RULEOPTION) optionfile = file;
-
             }
             if (optionfile != null) {
                 var r = new Reader(optionfile).Child(S_LIST)
@@ -64,7 +58,7 @@ namespace TXTReader.Utility {
                 new Reader(filename).ForChildren(S_LINE, (n) => {
                     ss.Add(n.InnerText);
                 });
-                G.Rules.CurrentList = ss;
+                G.Rules.ListRule = ss;
             } else if (Path.GetExtension(filename) == G.EXT_TREERULE) {
                 List<List<String>> sss = new List<List<String>>();
                 new Reader(filename).ForChildren(S_LEVEL, (n) => {
@@ -74,15 +68,16 @@ namespace TXTReader.Utility {
                     });
                     if (ss.Count != 0) sss.Add(ss);
                 });
-                G.Rules.CurrentTree = sss;                
+                G.Rules.TreeRule = sss;                
             }
             return true;
         }
 
         public static String SaveList() {
-            if (G.Rules.CurrentList == null) return null;
+            if (G.Rules == null) return null;
+            if (G.Rules.ListRule == null) return null;
             String filename = null;
-            foreach (var s in G.Rules.CurrentList)
+            foreach (var s in G.Rules.ListRule)
                 if (s != null && s.Trim() != "") {
                     filename = s.Trim();
                     break;
@@ -91,15 +86,16 @@ namespace TXTReader.Utility {
             filename = G.PATH_LISTRULE + A.EncodeFilename(filename) + G.EXT_LISTRULE;
             if (File.Exists(filename)) throw new IOException("doublicate filename");
             var w=new Writer(S_ROOT);
-            foreach (var s in G.Rules.CurrentList) w = w.Write(S_LINE, s);
+            foreach (var s in G.Rules.ListRule) w = w.Write(S_LINE, s);
             w.WriteTo(filename);
             return filename;
         }
 
         public static String SaveTree() {
-            if (G.Rules.CurrentTree==null) return null;
+            if (G.Rules == null) return null;
+            if (G.Rules.TreeRule == null) return null;
             String filename = null;
-            foreach (var ss in G.Rules.CurrentTree) {
+            foreach (var ss in G.Rules.TreeRule) {
                 foreach (var s in ss) {
                     if (s != null && s.Trim() != "") filename = s.Trim();
                     break;
@@ -110,7 +106,7 @@ namespace TXTReader.Utility {
             filename = G.PATH_TREERULE + filename + G.EXT_TREERULE;
             if (File.Exists(filename)) throw new IOException("doublicate filename");
             var w = new Writer(S_ROOT);
-            foreach (var ss in G.Rules.CurrentTree) {
+            foreach (var ss in G.Rules.TreeRule) {
                 w = w.Start(S_LEVEL);
                 foreach (var s in ss)
                 {
@@ -121,6 +117,5 @@ namespace TXTReader.Utility {
             w.WriteTo(filename);
             return filename;
         }
-
     }
 }

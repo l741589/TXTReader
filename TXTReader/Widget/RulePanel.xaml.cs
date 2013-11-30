@@ -28,29 +28,23 @@ namespace TXTReader.Widget {
         private readonly GridLength hiddenRow = new GridLength(0);
         private GridLength listRow;
         private GridLength treeRow;
-        private bool listlock = false;
-        private bool treelock = false;
-        private const String S_DBLNAME = "重复的文件名，请使在第一行插入‘##’注释或者修改第一行来重新指定名称";
         public RulePanel() {
-            InitializeComponent();
+            InitializeComponent();           
             listRow = panel.RowDefinitions[1].Height;
             treeRow = panel.RowDefinitions[4].Height;
-            cbb_list.ItemsSource = G.Rules.List;
-            cbb_tree.ItemsSource = G.Rules.Tree;
-            
-            Loaded += RulePanel_Loaded;
-            lb_list.TextChanged += lb_list_TextChanged;
-            foreach (var tb in gp_tree.Children)
-                if (tb is TextBox)
-                    (tb as TextBox).TextChanged += lb_tree_TextChanged;
+            UpdateBinding();           
         }
 
-        
-
-        void RulePanel_Loaded(object sender, RoutedEventArgs e) {
-            cbb_list.SelectedIndex = 0;
-            cbb_tree.SelectedIndex = 0;
-            RuleParser.Load();
+        public void UpdateBinding() {
+            DataContext = G.Rules;
+            if (cbb_list.ItemsSource != G.Rules.List) cbb_list.ItemsSource = G.Rules.List;
+            if (cbb_tree.ItemsSource != G.Rules.Tree) cbb_tree.ItemsSource = G.Rules.Tree;
+            lb_list.SetBinding(TextBox.TextProperty, new Binding("ListText") { Mode = BindingMode.TwoWay });
+            if (ic_tree.ItemsSource != G.Rules.TreeText) ic_tree.ItemsSource = G.Rules.TreeText;
+            cb_list.SetBinding(CheckBox.IsCheckedProperty, new Binding("IsListEnable") { Mode = BindingMode.TwoWay });
+            cb_tree.SetBinding(CheckBox.IsCheckedProperty, new Binding("IsTreeEnable") { Mode = BindingMode.TwoWay });
+            cbb_list.SetBinding(ComboBox.SelectedIndexProperty, new Binding("ListSelectedIndex") { Mode = BindingMode.TwoWay });
+            cbb_tree.SetBinding(ComboBox.SelectedIndexProperty, new Binding("TreeSelectedIndex") { Mode = BindingMode.TwoWay });            
         }
 
         private void bn_list_Click(object sender, RoutedEventArgs e) {
@@ -90,150 +84,22 @@ namespace TXTReader.Widget {
         }
 
 
-        public int LevelCount {
-            get { return gp_tree.Children.Count; }
-            set {
-                int v=value;
-                if (v<1) v=1;
-                if (v>10) v=10;
-                while (gp_tree.Children.Count < value) {
-                    var tb = new TextBox();
-                    tb.TextChanged+=lb_tree_TextChanged;
-                    gp_tree.Children.Add(tb);
-                }
-                while (gp_tree.Children.Count > value) gp_tree.Children.RemoveAt(gp_tree.Children.Count - 1);
-            }
+        public int LevelCount { 
+            get { return G.Rules.LevelCount; }
+            set { G.Rules.LevelCount = value;}
         }
 
-        public List<String> ListRule {
-            get {
-                String[] ret = lb_list.Text.Split('\n', '\r');
-                //Debug.Assert(ret.Count() == lb_list.LineCount);
-                return ret.ToList();
-            }
-            set {
-                lb_list.Clear();
-                if (value == null) return;
-                foreach (var s in value)
-                    lb_list.AppendText(s + "\n");
-            }
-        }
 
-        public List<List<String>> TreeRule {
-            get {
-                List<List<String>> formats = new List<List<String>>();
-                foreach (var e in gp_tree.Children) {
-                    if (e is TextBox) {
-                        TextBox tb = e as TextBox;
-                        String[] ss = tb.Text.Split('\n', '\r');
-                        //Debug.Assert(ss.Count() == tb.LineCount);
-                        formats.Add(ss.ToList());
-                    }
-                }
-                return formats;
-            }
-            set {
-                if (value != null) {
-                    LevelCount = value.Count;
-                    int i = 0;
-                    foreach (var e in gp_tree.Children) {
-                        if (e is TextBox) {
-                            TextBox tb = e as TextBox;
-                            tb.Text = String.Join("\n", value[i++]);
-                        }
-                    }
-                } else {
-                    foreach (var e in gp_tree.Children) {
-                        if (e is TextBox) {
-                            TextBox tb = e as TextBox;
-                            tb.Clear();
-                        }
-                    }
-                }
-            }
-        }
-        public bool IsListFormatEnabled { get { return cb_list.IsChecked == true; } }
-        public bool IsTreeFormatEnabled { get { return cb_tree.IsChecked == true; } }
-
-        private void cbb_list_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            if (listlock) return;
-            if (e.RemovedItems.Contains(S_DBLNAME)) {
-                MessageBox.Show(S_DBLNAME);
-                G.Rules.ListSelection = S_DBLNAME;
-                return;
-            }
-            listlock = true;
-            if (e.AddedItems.Count > 0)
-                if (!RuleParser.Load(e.AddedItems[0].ToString()))
-                    ListRule = null;
-            listlock = false;
-        }
-
-        private void cbb_tree_SelectionChanged(object sender, SelectionChangedEventArgs e) {            
-            if (treelock) return;
-            if (e.RemovedItems.Contains(S_DBLNAME)) {
-                MessageBox.Show(S_DBLNAME);
-                G.Rules.TreeSelection = S_DBLNAME;
-                return;
-            }
-            treelock = true;
-            try {
-                if (e.AddedItems.Count > 0)
-                    if (!RuleParser.Load(e.AddedItems[0].ToString()))
-                        TreeRule = null;
-            } finally {
-                treelock = false;
-            }
-        }
+        public bool IsListFormatEnabled { get { return G.Rules.IsListEnable; } }
+        public bool IsTreeFormatEnabled { get { return G.Rules.IsTreeEnable; } }
 
         void lb_list_TextChanged(object sender, TextChangedEventArgs e) {
-            if (listlock) return;
-            listlock = true;
-            try {
-                G.ListTrmex = null;
-                int i = 0;
-                if (G.Rules.ListSelection != null && G.Rules.ListSelection != Rules.S_ADD) {
-                    if (G.Rules.ListSelection != S_DBLNAME) File.Delete(G.Rules.ListSelection);
-                    i = G.Rules.List.IndexOf(G.Rules.ListSelection);
-                    G.Rules.List.Remove(G.Rules.ListSelection);
-                }
-                String name = RuleParser.SaveList();
-                if (name != null) {
-                    if (i == 0) G.Rules.List.Add(name);
-                    else G.Rules.List.Insert(i, name);
-                    G.Rules.ListSelection = name;
-                }
-            } catch (IOException) {
-                G.Rules.List.Add(S_DBLNAME);
-                G.Rules.ListSelection = S_DBLNAME;
-            } finally {
-                listlock = false;
-            }
+            G.Rules.ListTextChanged(sender, e, lb_list.Text);
         }
 
         void lb_tree_TextChanged(object sender, TextChangedEventArgs e) {
-            if (treelock) return;
-            treelock = true;
-            try {
-                G.TreeTrmex = null;
-                int i = 0;
-                if (G.Rules.TreeSelection != null && G.Rules.TreeSelection != Rules.S_ADD) {
-                    if (G.Rules.TreeSelection!=S_DBLNAME) File.Delete(G.Rules.TreeSelection);
-                    i = G.Rules.Tree.IndexOf(G.Rules.TreeSelection);
-                    G.Rules.Tree.Remove(G.Rules.TreeSelection);
-                }
-                String name = RuleParser.SaveTree();
-                if (name != null) {
-                    if (i == 0) G.Rules.Tree.Add(name);
-                    else G.Rules.Tree.Insert(i, name);
-                    G.Rules.TreeSelection = name;
-                }
-            } catch (IOException) {
-                G.Rules.Tree.Add(S_DBLNAME);
-                G.Rules.TreeSelection = S_DBLNAME;
-            } finally {
-                treelock = false;
-            }
+            var tb=sender as TextBox;
+            G.Rules.TreeTextChanged(sender, e, tb.DataContext.ToString(), tb.Text);
         }
 
         private void bn_dellist_Click(object sender, RoutedEventArgs e) {

@@ -43,9 +43,7 @@ namespace TXTReader.Display {
         
         public String[] Text { get { return text; } set { text = value; } }
         public double CanvasHeight { get { return canvas.ActualHeight; } }
-        public double CanvasWidth { get { return canvas.ActualWidth; } }
-        
-        
+        public double CanvasWidth { get { return canvas.ActualWidth; } } 
 
         private Point? lastPoint = null;
         private Binding widthBinding;
@@ -56,14 +54,20 @@ namespace TXTReader.Display {
         public Displayer4() {
             InitializeComponent();
             InitComponent();
-        }        
+        }
+
+        private void userControl_Loaded(object sender, RoutedEventArgs e) {
+            if (G.Book != null) {
+                A.CopyText(out text, G.Book.TotalText);
+                Update();
+            }
+        }       
 
         public static void OnSkinChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             Skin val = (Skin)e.NewValue;
             if ((Thickness)d.GetValue(PaddingProperty) != val.Padding) d.SetValue(PaddingProperty, val.Padding);
             if ((Brush)d.GetValue(BackgroundProperty) != val.Background) d.SetValue(PaddingProperty, val.Background);
-            if ((Brush)d.GetValue(ForegroundProperty) != val.Background) d.SetValue(ForegroundProperty, val.Foreground);
-            
+            if ((Brush)d.GetValue(ForegroundProperty) != val.Background) d.SetValue(ForegroundProperty, val.Foreground);            
         }
 
         public void UpdateSkin() {
@@ -72,9 +76,7 @@ namespace TXTReader.Display {
         }
 
         private void InitComponent() {
-            SetBinding(SpeedProperty, new Binding("Speed") { Source = Options.Instance, Mode = BindingMode.TwoWay });
-            //SetBinding(IsScrollingProperty, new Binding("IsChecked") { Source = mi_scroll, Mode = BindingMode.TwoWay });
-            
+            SetBinding(SpeedProperty, new Binding("Speed") { Source = Options.Instance, Mode = BindingMode.TwoWay });            
             widthBinding = new Binding("ActualWidth") { Source = canvas };
             UpdateSkin();
             G.Timer.Timer += timer_Timer;
@@ -137,7 +139,6 @@ namespace TXTReader.Display {
             Text = null;
             OpenBook(tmp);
         }
-
 
         protected override void OnMouseDown(MouseButtonEventArgs e) {
             if (G.MainWindow.IsHolding) return;
@@ -266,6 +267,7 @@ namespace TXTReader.Display {
    //     private void mi_reopen_Click(object sender, RoutedEventArgs e) { ReopenFile(); }
   //      private void mi_exit_Click(object sender, RoutedEventArgs e) { App.Current.MainWindow.Close(); }
         public void LineModify(double n = 1) { Offset += lineHeight * n; Update(); }
-        public void PageModify(double n = 1) { Offset += (CanvasHeight - lineHeight) * n; Update(); }         
+        public void PageModify(double n = 1) { Offset += (CanvasHeight - lineHeight) * n; Update(); }
+  
     }
 }

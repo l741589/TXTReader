@@ -15,14 +15,13 @@ using TXTReader.Widget;
 namespace TXTReader.Utility {
     static class G {
         static private Book book = null;
-        static private Trmex treeTrmex = null;
-        static private Trmex listTrmex = null;
         static G() {
             //Trmex = new String[] { " \"第#卷\" \"第#章*\"", " \"第#卷\" \"[第]#章*\"", " \"外传*\"" };
             NoCover = App.Current.Resources["src_nocover"] as ImageSource;
             Timer = new TRTimer2();
             Books = new BookCollection();
             Rules = new Rules();
+            Rules.Load();
             KeyHook = new KeyHook();
         }
         public static bool IsRunning = true;
@@ -60,8 +59,8 @@ namespace TXTReader.Utility {
         public static ObservableCollection<Bookmark> Bookmark { get { return Book == null ? null : Book.Bookmark; } }
         public static BookCollection Books { get; private set; }
 
-        public static Trmex ListTrmex { get { if (listTrmex != null) return listTrmex; else  return listTrmex = new Trmex(Rules.CurrentList); } set { listTrmex = value; } }
-        public static Trmex TreeTrmex { get { if (treeTrmex != null) return treeTrmex; else  return treeTrmex = new Trmex(Rules.CurrentTree); } set { treeTrmex = value; } }
+        public static Trmex ListTrmex { get { return Rules.ListTrmex; } set { Rules.ListTrmex = value; } }
+        public static Trmex TreeTrmex { get { return Rules.TreeTrmex; } set { Rules.TreeTrmex = value; } }
         public static Rules Rules { get; private set; }
         public static FloatMessagePanel FloatMessagePanel { get { return MainWindow.floatMessagePanel; } }
     }

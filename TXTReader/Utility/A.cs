@@ -113,10 +113,13 @@ namespace TXTReader.Utility {
             book = value;
             if (book != null) {
                 book.Load();
-                G.FloatMessagePanel.UpdateBinding();
             }
-            G.MainWindow.toolPanel.pn_bookmark.lb_bookmark.ItemsSource = G.Bookmark;
-            G.MainWindow.progressBar.UpdateBinding();
+            if (G.MainWindow != null) {
+                G.FloatMessagePanel.UpdateBinding();
+                if (G.MainWindow.toolPanel.pn_bookmark.lb_bookmark.ItemsSource != G.Bookmark)
+                    G.MainWindow.toolPanel.pn_bookmark.lb_bookmark.ItemsSource = G.Bookmark;
+                G.MainWindow.progressBar.UpdateBinding();
+            }
         }
     }
 }

@@ -24,6 +24,7 @@ using TXTReader.Data;
 using System.Threading;
 using System.IO;
 using TXTReader.Commands;
+using System.Windows.Resources;
 
 namespace TXTReader {
     /// <summary>
@@ -42,9 +43,7 @@ namespace TXTReader {
 
         public int HoldCode { get; set; }
         public bool IsHolding { get { return HoldCode > 0; } set { if (value && !IsHolding) Hold(HC_NORNAL); } }
-        private System.Windows.Point? lastPoint = null;
-
-        
+        private System.Windows.Point? lastPoint = null;        
 
         public MainWindow() {
             InitializeComponent();
@@ -121,7 +120,9 @@ namespace TXTReader {
         private void window_Loaded(object sender, RoutedEventArgs e) {
             XmlDocument dom = new XmlDocument();
             try {
-                dom.Load("res/defaultskin.xml");
+                Uri uri = new Uri("/TXTReader;component/res/defaultskin.xml", UriKind.Relative);
+                StreamResourceInfo info = Application.GetResourceStream(uri);                
+                dom.Load(info.Stream);
                 SkinParser.SetDefaultSkin();
                 SkinParser.ParseSkin(dom);
             } catch (Exception ex) {

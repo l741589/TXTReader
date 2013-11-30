@@ -29,7 +29,7 @@ namespace TXTReader.Widget {
         public FloatMessagePanel() {
             InitializeComponent();
             Time = new FloatMessage(this);
-            Position = new FloatMessage(this) { Format = "{0:#.00%}" };
+            Position = new FloatMessage(this) { Format = "{0:#0.00%}" };
             Fps = new FloatMessage(this) { Format = "{0}Fps" };
             Title = new FloatMessage(this);
             pn_lefttop.Children.Add(Time);
@@ -37,6 +37,7 @@ namespace TXTReader.Widget {
             pn_lefttop.Children.Add(Fps);
             pn_lefttop.Children.Add(Title);
             timer();
+            UpdateBinding();
         }
         
         async void timer() {
