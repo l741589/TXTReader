@@ -78,5 +78,7 @@ namespace TXTReader.Widget {
             if (ActualHeight == 2) return;
             ActionUtil.Run(this, hide);
         }
+
+        
     }
 }

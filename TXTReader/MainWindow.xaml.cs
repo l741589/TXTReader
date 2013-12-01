@@ -202,7 +202,6 @@ namespace TXTReader {
 
         protected override void OnRenderSizeChanged(SizeChangedInfo sizeInfo) {
             base.OnRenderSizeChanged(sizeInfo);
-            ActionUtil.Clear();
         }
 
         static bool toggled = false;

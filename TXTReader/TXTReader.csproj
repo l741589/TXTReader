@@ -118,6 +118,7 @@
     <Compile Include="Utility\Parser.cs" />
     <Compile Include="Utility\Rules.cs" />
     <Compile Include="Utility\SkinParser.cs" />
+    <Compile Include="Utility\UACManager.cs" />
     <Compile Include="WebApi\Douban.cs" />
     <Compile Include="Widget\BookcasePanel.xaml.cs">
       <DependentUpon>BookcasePanel.xaml</DependentUpon>

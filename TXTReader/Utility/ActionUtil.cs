@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media.Animation;
 using System.Windows.Controls;
+using System.Threading;
 
 namespace TXTReader.Utility {
     static class ActionUtil {
+
         //private static Dictionary<Storyboard, HashSet<FrameworkElement>> ownerRelation = new Dictionary<Storyboard, HashSet<FrameworkElement>>();
         //
         //public static void Run(FrameworkElement e, Storyboard storyboard, bool mutex = true) {
@@ -25,17 +27,8 @@ namespace TXTReader.Utility {
         //    
         //}
 
-        private static HashSet<Storyboard> RunningStoryBoard = new HashSet<Storyboard>();
-
         public static void Run(FrameworkElement e,Storyboard storyboard, bool mutex = true) {
-            if (RunningStoryBoard.Contains(storyboard) && mutex) return;
-            RunningStoryBoard.Add(storyboard);
-            storyboard.Completed += (s, ev) => { RunningStoryBoard.Remove(storyboard); };
-            storyboard.Begin(e);            
-        }
-
-        public static void Clear() {
-            RunningStoryBoard.Clear();
+            storyboard.Begin(e, mutex ? HandoffBehavior.Compose : HandoffBehavior.SnapshotAndReplace);
         }
     }
 }

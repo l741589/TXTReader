@@ -142,10 +142,14 @@ namespace TXTReader.Widget {
         }
 
         private void next_Click(object sender, RoutedEventArgs e) {
+            previous.IsDefault = false;
+            next.IsDefault = true;
             Search();
         }
 
         private void previous_Click(object sender, RoutedEventArgs e) {
+            next.IsDefault = false;
+            previous.IsDefault = true;
             Search(false);
         }
     }
