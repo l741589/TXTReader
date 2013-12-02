@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 
 namespace TXTReader.Data {
-    class Options : DependencyObject{
+    public class Options : DependencyObject{
         public const int DEFAULT_SPEED = 5;
 
         static private Options instance;

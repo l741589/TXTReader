@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TXTReader.Data {
-    class FloatMessage {
+    public class FloatMessage {
         public bool Time { get; set; }
         public bool Fps { get; set; }
         public bool Speed { get; set; }

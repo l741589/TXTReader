@@ -35,6 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
+    <Reference Include="Microsoft.Expression.Effects, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="ReachFramework" />
     <Reference Include="System" />
@@ -71,8 +72,10 @@
     <Compile Include="Converter\ParaSpacingCvt.cs" />
     <Compile Include="Converter\RuleDelButtonVisibilityConverter.cs" />
     <Compile Include="Converter\SizeableConverter.cs" />
+    <Compile Include="Converter\SolidColorCvt.cs" />
     <Compile Include="Converter\ToolPanelTargetLeftCvt.cs" />
     <Compile Include="Converter\ToolPanelWidthCvt.cs" />
+    <Compile Include="Converter\TypefaceToFontFamilyCvt.cs" />
     <Compile Include="Converter\VisiblilityConverter.cs" />
     <Compile Include="Converter\WindowStyleConverter.cs" />
     <Compile Include="Data\Book.cs" />
@@ -113,6 +116,8 @@
     <Compile Include="Utility\KeyHook.cs" />
     <Compile Include="Utility\MessageConst.cs" />
     <Compile Include="Utility\RuleParser.cs" />
+    <Compile Include="Utility\BookmarkParser.cs" />
+    <Compile Include="Utility\EnumTypesBinder.cs" />
     <Compile Include="Utility\G.cs" />
     <Compile Include="Utility\Http.cs" />
     <Compile Include="Utility\Parser.cs" />
@@ -142,17 +147,31 @@
     <Compile Include="Widget\DesignTool.xaml.cs">
       <DependentUpon>DesignTool.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Widget\FontPickerCombobox.xaml.cs">
+      <DependentUpon>FontPickerCombobox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Widget\OptionPanel.xaml.cs">
       <DependentUpon>OptionPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Widget\SearchBar.xaml.cs">
       <DependentUpon>SearchBar.xaml</DependentUpon>
+    <Compile Include="Widget\OptionPanel2.xaml.cs">
+      <DependentUpon>OptionPanel2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widget\OptionPanel3.xaml.cs">
+      <DependentUpon>OptionPanel3.xaml</DependentUpon>
     </Compile>
     <Compile Include="Widget\SimpleMenuButton.xaml.cs">
       <DependentUpon>SimpleMenuButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Widget\SolidColorPickerCombobox.xaml.cs">
+      <DependentUpon>SolidColorPickerCombobox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Widget\SpinEdit.xaml.cs">
       <DependentUpon>SpinEdit.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widget\StandardColorPicker.xaml.cs">
+      <DependentUpon>StandardColorPicker.xaml</DependentUpon>
     </Compile>
     <Compile Include="Widget\ToolPanels.xaml.cs">
       <DependentUpon>ToolPanels.xaml</DependentUpon>
@@ -226,11 +245,20 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Widget\FontPickerCombobox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Widget\OptionPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Widget\SearchBar.xaml">
+    <Page Include="Widget\OptionPanel2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\OptionPanel3.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -238,9 +266,17 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Widget\SolidColorPickerCombobox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Widget\SpinEdit.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Widget\StandardColorPicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Widget\ToolPanels.xaml">
       <SubType>Designer</SubType>
