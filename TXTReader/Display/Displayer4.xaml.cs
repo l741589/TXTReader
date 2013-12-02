@@ -63,16 +63,18 @@ namespace TXTReader.Display {
             }
         }       
 
-        public static void OnSkinChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+       /* public static void OnSkinChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             Skin val = (Skin)e.NewValue;
             if ((Thickness)d.GetValue(PaddingProperty) != val.Padding) d.SetValue(PaddingProperty, val.Padding);
             if ((Brush)d.GetValue(BackgroundProperty) != val.Background) d.SetValue(PaddingProperty, val.Background);
             if ((Brush)d.GetValue(ForegroundProperty) != val.Background) d.SetValue(ForegroundProperty, val.Foreground);            
-        }
+        }*/
 
         public void UpdateSkin() {
             Padding = Options.Instance.Skin.Padding;
             Background = Options.Instance.Skin.Background;
+            Clear();
+            Update();
         }
 
         private void InitComponent() {

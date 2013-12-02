@@ -5,24 +5,18 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" 
 			 x:Class="TXTReader.Widget.StandardColorPicker" 
-			 mc:Ignorable="d" x:Name="usrCtrl">
+			 mc:Ignorable="d" x:Name="usrCtrl" d:DesignWidth="100" d:DesignHeight="32" >
     <UniformGrid>
         <Button Margin="2" x:Name="btnChooseColor" Click="btnChooseColor_Click">
             <Button.Template>
                 <ControlTemplate>
-                    <Border BorderThickness="1" BorderBrush="Black">
-                        <Grid>
-                            <Grid.Background>
-                                <SolidColorBrush Color="{Binding SelectedColor, ElementName=usrCtrl}"/>
-                            </Grid.Background>
-                            <Rectangle Fill="White" Opacity="0.25" 
-								Width="{Binding ActualWidth, ElementName=txbColorString}"
-								Height="{Binding ActualHeight, ElementName=txbColorString}"/>
-                            <TextBlock x:Name="txbColorString" Margin="2" 
+                    <Grid DataContext="{Binding ElementName=usrCtrl}">
+                        <Rectangle Fill="{Binding SelectedColorString}" Stroke="Black" Panel.ZIndex="0"></Rectangle>
+                        <TextBlock x:Name="txbColorString" Margin="2" 
 								VerticalAlignment="Center" HorizontalAlignment="Center"
-								Text="{Binding SelectedColor, ElementName=usrCtrl}"/>
-                        </Grid>
-                    </Border>
+								Text="{Binding SelectedColorString}" Foreground="{Binding Foreground}"
+                                Panel.ZIndex="1"/>
+                    </Grid>
                 </ControlTemplate>
             </Button.Template>
         </Button>

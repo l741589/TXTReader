@@ -54,9 +54,6 @@
         <TabItem Header="书签">
             <Widget:BookmarkPanel x:Name="pn_bookmark"/>
         </TabItem>
-        <TabItem Header="设置">
-            <Widget:OptionPanel3/>
-        </TabItem>
         <TabItem Header="TEST">
             <StackPanel>
                 <Widget:TrmexTextBox></Widget:TrmexTextBox>

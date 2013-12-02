@@ -75,7 +75,7 @@ namespace TXTReader.Display {
             Skin.BackGroundType = BackGroundType.SolidColor;
             Skin.Padding = new Thickness(16);
             Skin.EffetSize = 1;
-            Skin.Effect = Brushes.Black;
+            Skin.Effect = Colors.Black;
             Skin.EffectType = EffectType.Shadow;
 
             FirstLine = 0;

@@ -121,7 +121,7 @@ namespace TXTReader {
             XmlDocument dom = new XmlDocument();
             try {
                 Uri uri = new Uri("/TXTReader;component/res/defaultskin.xml", UriKind.Relative);
-                StreamResourceInfo info = Application.GetResourceStream(uri);                
+                StreamResourceInfo info = Application.GetResourceStream(uri);
                 dom.Load(info.Stream);
                 SkinParser.SetDefaultSkin();
                 SkinParser.ParseSkin(dom);
@@ -129,15 +129,15 @@ namespace TXTReader {
                 Debug.Print(ex.StackTrace);
             }
             displayer.UpdateSkin();
-            displayer.SetBinding(Displayer4.SpeedProperty, new Binding("Value") { Source = toolPanel.pn_option.se_speed });
+            //displayer.SetBinding(Displayer4.SpeedProperty, new Binding("Value") { Source = toolPanel.pn_option.se_speed });
             BookParser.Load();
             G.NotifyIcon = new TRNotifyIcon();
         }
 
         protected override void OnKeyDown(KeyEventArgs e) {
             switch (e.Key) {
-                case Key.OemComma: --toolPanel.pn_option.se_speed.Value; break;
-                case Key.OemPeriod: ++toolPanel.pn_option.se_speed.Value; break;
+                case Key.OemComma: --toolPanel.pn_option.seSpeed.Value; break;
+                case Key.OemPeriod: ++toolPanel.pn_option.seSpeed.Value; break;
                 case Key.Up: displayer.LineModify(+1); break;
                 case Key.Down: displayer.LineModify(-1); break;
                 case Key.PageUp: displayer.PageModify(+1); break;

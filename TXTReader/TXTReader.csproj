@@ -155,9 +155,6 @@
     <Compile Include="Widget\SearchBar.xaml.cs">
       <DependentUpon>SearchBar.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Widget\OptionPanel2.xaml.cs">
-      <DependentUpon>OptionPanel2.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Widget\OptionPanel3.xaml.cs">
       <DependentUpon>OptionPanel3.xaml</DependentUpon>
     </Compile>
@@ -172,6 +169,9 @@
     </Compile>
     <Compile Include="Widget\StandardColorPicker.xaml.cs">
       <DependentUpon>StandardColorPicker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widget\ThicknessSEGroup.xaml.cs">
+      <DependentUpon>ThicknessSEGroup.xaml</DependentUpon>
     </Compile>
     <Compile Include="Widget\ToolPanels.xaml.cs">
       <DependentUpon>ToolPanels.xaml</DependentUpon>
@@ -257,10 +257,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Widget\OptionPanel2.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Widget\OptionPanel3.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -278,6 +274,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Widget\StandardColorPicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\ThicknessSEGroup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

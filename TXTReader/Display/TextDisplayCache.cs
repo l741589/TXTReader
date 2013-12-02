@@ -70,7 +70,7 @@ namespace TXTReader.Display {
                             return Add(new TextDisplayCacheElem(index, ft) {
                                 Brush = Options.Instance.Skin.Foreground,
                                 Geometry = geo,
-                                Pen = new Pen(Options.Instance.Skin.Effect, Options.Instance.Skin.EffetSize)
+                                Pen = new Pen(new SolidColorBrush(Options.Instance.Skin.Effect), Options.Instance.Skin.EffetSize)
                             });
                         case EffectType.Shadow:
                             var geotemp = geo.Clone().Clone();
@@ -84,7 +84,7 @@ namespace TXTReader.Display {
                             return Add(new TextDisplayCacheElem(index, ft) {
                                 Brush = Options.Instance.Skin.Foreground,
                                 Geometry = geo,
-                                SecondaryBrush = Options.Instance.Skin.Effect,
+                                SecondaryBrush = new SolidColorBrush(Options.Instance.Skin.Effect),
                                 SecondaryGeometry = geo2
                             });
                         default: return null;

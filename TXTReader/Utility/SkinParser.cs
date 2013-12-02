@@ -20,8 +20,8 @@ namespace TXTReader.Utility {
             Options.Instance.Skin.BackColor = Colors.DarkBlue;
             Options.Instance.Skin.BackGroundType = BackGroundType.SolidColor;
             Options.Instance.Skin.Padding = new Thickness(16);
-            Options.Instance.Skin.EffetSize = 1;
-            Options.Instance.Skin.Effect = Brushes.Black;
+            Options.Instance.Skin.EffetSize = 5;
+            Options.Instance.Skin.Effect = Colors.Black;
             Options.Instance.Skin.EffectType = EffectType.Shadow;
         }
 

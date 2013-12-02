@@ -30,7 +30,7 @@ namespace TXTReader.Data
         public Typeface Font { get; set; }
         public double FontSize { get; set; }
         public EffectType EffectType { get; set; }//字体特效
-        public Brush Effect { get; set; }//特效所用的颜色
+        public Color Effect { get; set; }//特效所用的颜色
 
         ///////////////////////////////////////////////////////////////////
         //recommended to fix.

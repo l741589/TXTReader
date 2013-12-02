@@ -54,6 +54,19 @@ namespace TXTReader.Widget
             }
         }
 
+        public static readonly DependencyProperty SelectedColorStringProperty =
+           DependencyProperty.Register("SelectedColorString", typeof(String), typeof(StandardColorPicker));
+
+        public String SelectedColorString {
+            get {
+                return (String)GetValue(SelectedColorStringProperty);
+            }
+
+            set {
+                SetValue(SelectedColorStringProperty, value);
+            }
+        }
+
         private static void SelectedColorPropertyChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs arg)
         {
             if (sender != null && sender is StandardColorPicker)
@@ -82,8 +95,10 @@ namespace TXTReader.Widget
 
         protected virtual void OnSelectedColorChanged(Color oldValue, Color newValue)
         {
+            if ((newValue.R + newValue.G + newValue.B) / 3 > 128) Foreground = Brushes.Black;
+            else Foreground = Brushes.White;
+            SelectedColorString= "#" + SelectedColor.ToString().Substring(3);
             //update displayed color if necessary
-
             RoutedPropertyChangedEventArgs<Color> arg =
                 new RoutedPropertyChangedEventArgs<Color>(oldValue, newValue, SelectedColorChangedEvent);
             this.RaiseEvent(arg);

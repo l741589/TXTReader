@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TXTReader.Data;
+using System.Windows.Media.Effects;
 
 namespace TXTReader.Display {
     /// <summary>
@@ -43,7 +44,7 @@ namespace TXTReader.Display {
             if (text == "") text += " ";
             Text = text;
             Index = i;
-            init();            
+            init();
         }       
 
         public void init() {
@@ -59,6 +60,14 @@ namespace TXTReader.Display {
             singleLineHeight = FormattedText.Height;
             TextTrimming = FormattedText.Trimming = TextTrimming.None;
             TextAlignment = FormattedText.TextAlignment = TextAlignment.Left;
+            if (Options.Instance.Skin.EffectType == EffectType.Shadow) {
+                var eff = new DropShadowEffect();
+                eff.BlurRadius = Options.Instance.Skin.EffetSize;
+                eff.Color = Options.Instance.Skin.Effect;
+                Effect = eff;
+            } else {
+                Effect = null;
+            }
             Updated = false;
         }
 
