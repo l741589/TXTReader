@@ -116,7 +116,6 @@
     <Compile Include="Utility\KeyHook.cs" />
     <Compile Include="Utility\MessageConst.cs" />
     <Compile Include="Utility\RuleParser.cs" />
-    <Compile Include="Utility\BookmarkParser.cs" />
     <Compile Include="Utility\EnumTypesBinder.cs" />
     <Compile Include="Utility\G.cs" />
     <Compile Include="Utility\Http.cs" />
@@ -155,6 +154,7 @@
     </Compile>
     <Compile Include="Widget\SearchBar.xaml.cs">
       <DependentUpon>SearchBar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Widget\OptionPanel2.xaml.cs">
       <DependentUpon>OptionPanel2.xaml</DependentUpon>
     </Compile>
@@ -254,6 +254,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Widget\SearchBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Widget\OptionPanel2.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -109,7 +109,7 @@ namespace TXTReader.Widget
             //set new imagesource via OpenFileDialog.
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.DefaultExt = ".jpg";
-            dlg.Filter = "JPEG file|*.jpg";
+            dlg.Filter = "All Supported|*.jpg;*.jpeg;*.bmp;*.dib;*.png;*.gif|JPEG file|*.jpg|BITMAP file|*.bmp;*.dib|PNG file|*.png";
             dlg.Multiselect = false;
             if (dlg.ShowDialog() == true)
             {

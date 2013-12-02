@@ -12,9 +12,8 @@
     <UserControl.Resources>
         <cvt:SolidColorCvt x:Key="brushCvt"></cvt:SolidColorCvt>
         <cvt:TypefaceToFontFamilyCvt x:Key="fontCvt"></cvt:TypefaceToFontFamilyCvt>
-        <ObjectDataProvider ObjectType="{x:Type util:EnumTypesBinder}" x:Key="enumTypesBinder">
-        </ObjectDataProvider>
-        <ObjectDataProvider ObjectType="{x:Type local:Options}" x:Key="localOptions"></ObjectDataProvider>
+        <ObjectDataProvider ObjectType="{x:Type util:EnumTypesBinder}" x:Key="enumTypesBinder"/>
+        <ObjectDataProvider ObjectType="{x:Type local:Options}" x:Key="localOptions"/>
         <Style TargetType="{x:Type CheckBox}">
             <Setter Property="Margin" Value="2"/>
         </Style>
