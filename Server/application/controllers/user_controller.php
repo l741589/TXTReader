@@ -22,11 +22,13 @@ class User_Controller extends Session_Controller {
         $username = $this->input->post('username');
         $password = $this->input->post('password');
         if ($username != false && $password != false) {
-            if ($this->user_model->add_user($username, $password)) {
+            if ($this->_user_model->add_user($username, $password)) {
                 $this->add_session($username);
+                echo "welcome";
                 return true;
             }
         }
+        echo "cannot signup";
         return false;
     }
 
@@ -41,13 +43,14 @@ class User_Controller extends Session_Controller {
             $this->form_validation->set_rules("password", "password", "require");
 
             if ($this->form_validation->run() == false) {
-                show_error("Require complete login data", 666);
+//                show_error("Require complete login data", 500);
                 return false;
             } else {
                 $username = $this->input->post('username');
                 $password = $this->input->post('password');
                 if ($this->_user_model->password_check($username, $password)) {
                     $this->add_session($username);
+                    echo "login success";
                     return true;
                 } else
                     return false;
