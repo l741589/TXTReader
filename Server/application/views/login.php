@@ -5,7 +5,12 @@
     <title>Login</title>
 </head>
 <body>
-    <input type="text"/>
-    <input type="email"/>
+<?php echo form_open_multipart('/login');?>
+<input type="text" name="username" size="20" />
+<input type="text" name="password" size="20">
+<br /><br />
+
+<input type="submit" value="login" />
+</form>
 </body>
 </html>

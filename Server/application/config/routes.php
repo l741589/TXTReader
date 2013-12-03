@@ -40,8 +40,11 @@
 
 $route['default_controller'] = "welcome";
 $route['404_override'] = 'errors/error_404';
-$route['login'] = "user_controller";
+$route['login'] = "user_controller/login";
 $route['signup'] = "user_controller/signup";
+$route['upload'] = "upload_controller/do_upload";
+$route['download'] = "download_controller/do_download";
+$route['search'] = "Search_Controller/do_search";
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

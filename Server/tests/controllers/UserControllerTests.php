@@ -6,7 +6,7 @@
  * Time: 下午7:43
  */
 
-class UserControllerTests extends CIUnit_TestCase{
+class UserControllerTest extends CIUnit_TestCase {
 
     protected  $data = array(
         'username' => 'test_user_2',

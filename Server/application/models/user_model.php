@@ -34,7 +34,7 @@ class User_Model extends CI_Model {
         $this->password = $password;
         if (!$this->_is_valid_username())
             return false;
-        $this->db->insert("users", $this);
+        $this->db->insert("user", $this);
         if ($this->db->affected_rows() > 0) {
             return true;
         } else {
@@ -49,7 +49,7 @@ class User_Model extends CI_Model {
     function update_user($username, $password) {
         $this->username = $username;
         $this->password = $password;
-        $this->db->update('users', $this);
+        $this->db->update('user', $this);
     }
 
     /**
@@ -65,7 +65,7 @@ class User_Model extends CI_Model {
      */
     function get_by_username($username) {
         $this->db->where('username', $username);
-        $query = $this->db->get('users');
+        $query = $this->db->get('user');
         if ($query->num_rows() == 1) {
             return $query->row();
         } else {
