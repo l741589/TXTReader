@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Created by PhpStorm.
  * User: Limbo
@@ -6,67 +6,75 @@
  * Time: 下午1:52
  */
 
-require_once APPPATH."/core/session_controller.php";
+require_once "session_controller.php";
+require_once APPPATH . "/core/Common.php";
 
-class User_Controller extends Session_Controller {
+class User_Controller extends Session_Controller
+{
 
     private $_user_model;
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('user_model');
         $this->_user_model = $this->user_model;
     }
 
-    function index() {
+    function index()
+    {
         $this->load->helper('form');
         $this->load->view('login');
     }
 
-    function signup() {
+    function signup()
+    {
         $username = $this->input->post('username');
         $password = $this->input->post('password');
         if ($username != false && $password != false) {
-            if ($this->_user_model->add_user($username, $password)) {
+            $result_code = $this->_user_model->add_user($username, $password);
+            if ($result_code == RESULT_SUCCESS) {
                 $this->add_session($username);
-                echo "welcome";
-                return true;
+                show_result($result_code);
             }
+            show_result($result_code);
+        } else {
+            show_result(RESULT_MISSING_ARGS);
         }
-        echo "cannot signup";
-        return false;
     }
 
-    function login() {
+    function login()
+    {
         $this->load->library('form_validation');
         $this->load->helper('form');
         $this->load->helper('url');
 
+        $_result_code = 0;
+
         if ($this->is_logged_in()) {
-            redirect("/Upload_Controller");
-            return true;
+            $_result_code = RESULT_SUCCESS;
         } else {
             $this->form_validation->set_rules('username', "username", "require");
             $this->form_validation->set_rules("password", "password", "require");
 
             if ($this->form_validation->run() == false) {
-//                show_error("Require complete login data", 500);
-                return false;
+                $_result_code = RESULT_MISSING_ARGS;
             } else {
                 $username = $this->input->post('username');
                 $password = $this->input->post('password');
-                if ($this->_user_model->password_check($username, $password)) {
+                $_result_code = $this->_user_model
+                    ->password_check($username, $password);
+                if ($_result_code == RESULT_SUCCESS) {
                     $this->add_session($username);
-                    echo "login success";
-                    redirect("/Upload_Controller");
-                    return true;
-                } else
-                    return false;
+                }
             }
         }
+        show_result($_result_code);
+        return $_result_code == RESULT_SUCCESS;
     }
 
-    function logged_out() {
+    function logout()
+    {
         return $this->del_session();
     }
 }

@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Created by PhpStorm.
  * User: Limbo
@@ -6,25 +6,28 @@
  * Time: 下午7:43
  */
 
-class UserControllerTest extends CIUnit_TestCase {
+class UserControllerTest extends CIUnit_TestCase
+{
 
-    protected  $data = array(
+    protected $data = array(
         'username' => 'test_user_2',
         'password' => 'test_password'
     );
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->CI = set_controller("User_Controller");
         $this->CI->load->library('session');
     }
 
-    public function testSignUp() {
+    public function testSignUp()
+    {
         // clear db before all test
         $this->clearDb();
         $_POST = $this->data;
         $this->CI->signup();
         $this->CI->db->where('username', $this->data['username']);
-        $query = $this->CI->db->get('users');
+        $query = $this->CI->db->get('user');
         $this->assertEquals(1, $query->num_rows());
 //        var_dump($this->CI->session->all_userdata());
 //        // resignup
@@ -33,7 +36,8 @@ class UserControllerTest extends CIUnit_TestCase {
         $this->CI->del_session();
     }
 
-    public function testLogin() {
+    public function testLogin()
+    {
         $_POST['username'] = $this->data['username'];
         $res = $this->CI->login();
         $this->assertEquals(false, $res);
@@ -45,8 +49,9 @@ class UserControllerTest extends CIUnit_TestCase {
 //        $this->assertEquals(true, isset($sess_data['session_id']));
     }
 
-    function clearDb() {
+    function clearDb()
+    {
         $this->CI->db->where('username', $this->data['username']);
-        $this->CI->db->delete('users');
+        $this->CI->db->delete('user');
     }
 }

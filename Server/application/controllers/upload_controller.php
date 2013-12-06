@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Created by PhpStorm.
  * User: Limbo
@@ -6,48 +6,53 @@
  * Time: 下午8:30
  */
 
-require_once APPPATH."/core/session_controller.php";
+require_once "session_controller.php";
 
-class Upload_Controller extends Session_Controller {
+class Upload_Controller extends Session_Controller
+{
 
     private $_book_model;
 
-    function __construct() {
+    function __construct()
+    {
         parent::__construct();
         $this->load->model("book_model");
         $this->_book_model = $this->book_model;
 //        $this->add_session("test_user_1");
     }
 
-    function index() {
+    function index()
+    {
         $this->load->helper('form');
-        $this->load->view("upload_form", array('error' => ' ' ));
+        $this->load->view("upload_form", array('error' => ' '));
     }
 
-    function do_upload() {
-        if ( ! $this->_session_check()) {
-            echo "not login";
-            return false;
+    function do_upload()
+    {
+        $result_code = 0;
+        if (!$this->is_logged_in()) {
+            show_result(RESULT_NOT_LOGIN);
         }
 //        $file_md5 = $this->input->post("filemd5");
 //        if ($this->_book_model->is_existed($file_md5)) {
 //            return true;
 //        }
         $this->_upload_config();
-        if ( ! $this->upload->do_upload()) {
+        if (!$this->upload->do_upload()) {
+            $this->upload->error_msg;
             $error = array(
                 'error' => $this->upload->display_errors()
             );
-            var_dump($error);
-            return false;
+            show_result(RESULT_UPLOAD_ERROR, $error);
         } else {
             $data = $this->upload->data();
-            $ret = $this->_save_book($data);
-            return $ret;
+            $result_code = $this->_save_book($data);
+            show_result($result_code);
         }
     }
 
-    function _upload_config() {
+    function _upload_config()
+    {
         $this->load->helper("string");
         $this->load->helper('url');
         $config['file_name'] = random_string("alnum", 32);
@@ -57,27 +62,23 @@ class Upload_Controller extends Session_Controller {
         $this->load->library("upload", $config);
     }
 
-    function _session_check() {
-            $res = $this->is_logged_in();
-        return $res;
-    }
-
-    function _save_book($book_data) {
+    function _save_book($book_data)
+    {
         $this->load->model("user_model");
         $user = $this->user_model->get_by_username($this->get_current_username());
         $file_info = array(
-            'user_id' => $user->id,
-            'file_md5' => md5_file($book_data['full_path']),
+            'user_id'   => $user->id,
+            'file_md5'  => md5_file($book_data['full_path']),
             'book_name' => $book_data['client_name'],
             'file_data' => file_get_contents($book_data['full_path'])
         );
         $ret = $this->_book_model->save_book($file_info);
-        var_dump($file_info);
         $this->_delete_upload_file($book_data['full_path']);
         return $ret;
     }
 
-    function _delete_upload_file($file_path) {
+    function _delete_upload_file($file_path)
+    {
         $this->load->helper('file');
         if (file_exists($file_path) && is_readable($file_path)) {
             unlink($file_path);

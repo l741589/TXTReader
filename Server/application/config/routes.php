@@ -1,4 +1,4 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php  if (!defined('BASEPATH')) exit('No direct script access allowed');
 /*
 | -------------------------------------------------------------------------
 | URI ROUTING
@@ -41,6 +41,7 @@
 $route['default_controller'] = "welcome";
 $route['404_override'] = 'errors/error_404';
 $route['login'] = "user_controller/login";
+$route['logout'] = "user_controller/logout";
 $route['signup'] = "user_controller/signup";
 $route['upload'] = "upload_controller/do_upload";
 $route['download'] = "download_controller/do_download";

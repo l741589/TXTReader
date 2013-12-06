@@ -36,6 +36,19 @@ define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
+/*
+ * Result code for returned information
+ * */
+define('RESULT_SUCCESS', 1000);
+define('RESULT_MISSING_ARGS', 1001);
+define('RESULT_DB_ERROR', 1002);
+define('RESULT_INVALID_USERNAME', 1003);
+define('RESULT_SAME_USERNAME', 1004);
+define('RESULT_USER_NOT_EXIST', 1005);
+define('RESULT_PASSWD_ERROR', 1006);
+define('RESULT_NOT_LOGIN', 1007);
+define('RESULT_UPLOAD_ERROR', 1008);
+define('RESULT_NO_BOOK', 1009);
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

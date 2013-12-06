@@ -5,12 +5,13 @@
     <title>Login</title>
 </head>
 <body>
-<?php echo form_open_multipart('/login');?>
-<input type="text" name="username" size="20" />
+<?php echo form_open_multipart('/login'); ?>
+<input type="text" name="username" size="20"/>
 <input type="text" name="password" size="20">
-<br /><br />
+<br/><br/>
 
-<input type="submit" value="login" />
+<input type="submit" value="login"/>
 </form>
+<a type="button" href="/logout">loggout</a>
 </body>
 </html>
