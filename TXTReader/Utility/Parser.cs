@@ -39,6 +39,11 @@ namespace TXTReader.Utility {
             return elem;
         }
 
+        public static void WriteHead(XmlDocument xml) {
+            XmlDeclaration d = xml.CreateXmlDeclaration("1.0","utf-8",null);            
+            xml.AppendChild(d);
+        }
+
         public static void WriteTo(XmlDocument xml, String FileName) {
             XmlWriterSettings xws=new XmlWriterSettings();
             xws.Indent=true;
@@ -55,11 +60,19 @@ namespace TXTReader.Utility {
             private XmlNode bak;
             private XmlNode node;
             private uint nulldepth = 0;
+            private XmlNamespaceManager nsm;
             public Writer(String rootname) {
                 xml = new XmlDocument();
+                nsm = new XmlNamespaceManager(xml.NameTable);                
+                WriteHead(xml);
                 bak = node = xml.CreateElement(rootname);
                 xml.AppendChild(node);
                 nulldepth = 0;
+            }
+
+            public Writer AddNamespace(String prefix,String uri) {
+                nsm.AddNamespace(prefix, uri);
+                return this;
             }
 
             public Writer Write<T>(String name, T value, params T[] ignoreWhenEqual) {

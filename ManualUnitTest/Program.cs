@@ -50,8 +50,7 @@ namespace ManualUnitTest
         {
             foreach (Group e in m.Groups)
             {
-                Console.WriteLine("[{0}]{1}", e.Index, e.Value);
-                
+                Console.WriteLine("[{0}]{1}", e.Index, e.Value);                
             }
         }
     }

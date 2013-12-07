@@ -115,6 +115,7 @@
     <Compile Include="Utility\BufferObject.cs" />
     <Compile Include="Utility\KeyHook.cs" />
     <Compile Include="Utility\MessageConst.cs" />
+    <Compile Include="Utility\OptionsParser.cs" />
     <Compile Include="Utility\RuleParser.cs" />
     <Compile Include="Utility\EnumTypesBinder.cs" />
     <Compile Include="Utility\G.cs" />

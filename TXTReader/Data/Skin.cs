@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Media;
 using System;
 using System.Xml;
+using TXTReader.Utility;
 
 namespace TXTReader.Data
 {
@@ -18,8 +19,9 @@ namespace TXTReader.Data
         //the problem of binding in optionpanel.
         public Skin()
         {
-            //no need to initialize after OptionPanel3.
         }
+
+        public String Path { get; set; }
 
         private BackGroundType backGroundType;
         private Brush background = null;
@@ -31,19 +33,15 @@ namespace TXTReader.Data
         public double FontSize { get; set; }
         public EffectType EffectType { get; set; }//字体特效
         public Color Effect { get; set; }//特效所用的颜色
-
-        ///////////////////////////////////////////////////////////////////
-        //recommended to fix.
-        public double EffetSize { get; set; }//特效的大小
-        //spelling mistake...?
-        //Though I turned out to use the name "EffetSize" in my implementation of OptionPanel.
-        ///////////////////////////////////////////////////////////////////
+        public double EffectSize { get; set; }//特效的大小
 
         public double LineSpacing { get; set; }//行间距
         public double ParaSpacing { get; set; }//段间距
 
-        public Color BackColor { get; set; }//背景颜色
-        public ImageSource BackImage { get; set; }//背景图片
+        private Color backColor;
+        public Color BackColor { get { return backColor; } set { backColor = value; background = null; } }//背景颜色
+        private ImageSource backImage;
+        public ImageSource BackImage { get { return backImage; } set { backImage = value; background = null; } }//背景图片
         public BackGroundType BackGroundType
         {
             get { return backGroundType; }
@@ -60,8 +58,7 @@ namespace TXTReader.Data
         {
             get
             {
-                //what if the BackColor is changed?
-                //if (background != null) return background;
+                if (background != null) return background;
                 switch (BackGroundType)
                 {
                     case BackGroundType.SolidColor: return background = new SolidColorBrush(BackColor);

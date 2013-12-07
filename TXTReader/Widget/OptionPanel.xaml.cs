@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using TXTReader.Data;
 using TXTReader.Utility;
 using TXTReader.Converter;
+using Microsoft.Win32;
 
 namespace TXTReader.Widget
 {
@@ -82,6 +83,8 @@ namespace TXTReader.Widget
             seParaSpacing.GetBindingExpression(SpinEdit.ValueProperty).UpdateTarget();
             cbxFont.GetBindingExpression(FontPickerCombobox.SelectedFontProperty).UpdateTarget();
             btnBackgroundImage.ToolTip = new Image() { Source = Options.Skin.BackImage, MaxHeight = MAX_TOOLTIP_SIZE, MaxWidth = MAX_TOOLTIP_SIZE };
+            ckbBold.IsChecked = G.Options.Skin.Font.Style == FontStyles.Italic;
+            ckbItalic.IsChecked = G.Options.Skin.Font.Weight == FontWeights.Bold;
         }
 
         private void cbxBackgroundType_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -187,6 +190,30 @@ namespace TXTReader.Widget
             G.Displayer.UpdateSkin();
             btnBackgroundImage.ToolTip = new Image() { Source = Options.Skin.BackImage, MaxHeight = MAX_TOOLTIP_SIZE, MaxWidth = MAX_TOOLTIP_SIZE };
             e.Handled = true;
+        }
+
+        private void bn_saveskin_Click(object sender, RoutedEventArgs e) {
+            SaveFileDialog dlg=new SaveFileDialog(){
+                Filter="TXTReader皮肤|*.trs",
+                AddExtension=true,
+                DefaultExt="*.trs"
+            };
+            if (dlg.ShowDialog()==true){
+                SkinParser.Save(dlg.FileName);
+            }
+        }
+
+        private void bn_loadskin_Click(object sender, RoutedEventArgs e) {
+            OpenFileDialog dlg = new OpenFileDialog() {
+                Filter = "TXTReader皮肤|*.trs",
+                AddExtension = true,
+                DefaultExt = "*.trs"
+            };
+            if (dlg.ShowDialog() == true) {
+                SkinParser.Load(dlg.FileName);
+                G.Displayer.UpdateSkin();
+                UpdateOptionsUI();
+            }
         }
     }
 }

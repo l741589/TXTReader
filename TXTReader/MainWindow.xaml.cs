@@ -119,18 +119,10 @@ namespace TXTReader {
 
         private void window_Loaded(object sender, RoutedEventArgs e) {
             XmlDocument dom = new XmlDocument();
-            try {
-                Uri uri = new Uri("/TXTReader;component/res/defaultskin.xml", UriKind.Relative);
-                StreamResourceInfo info = Application.GetResourceStream(uri);
-                dom.Load(info.Stream);
-                SkinParser.SetDefaultSkin();
-                SkinParser.ParseSkin(dom);
-            } catch (Exception ex) {
-                Debug.Print(ex.StackTrace);
-            }
+            
             displayer.UpdateSkin();
             //displayer.SetBinding(Displayer4.SpeedProperty, new Binding("Value") { Source = toolPanel.pn_option.se_speed });
-            BookParser.Load();
+           
             G.NotifyIcon = new TRNotifyIcon();
         }
 
@@ -155,12 +147,12 @@ namespace TXTReader {
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e) {
-            BookParser.Save();
-            RuleParser.Save();
+            (App.Current as App).FileName = G.FileName;
             displayer.CloseFile();
             G.Timer.Stop();
             G.IsRunning = false;
             G.NotifyIcon.Close();
+            
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e) {

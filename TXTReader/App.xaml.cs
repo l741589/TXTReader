@@ -15,18 +15,37 @@ namespace TXTReader {
     /// App.xaml 的交互逻辑
     /// </summary>
     public partial class App : Application {
-        private void Application_Startup(object sender, StartupEventArgs e) {
-            if (e.Args.Length > 0) {
-                G.Book = new Book(e.Args[0]);
-            }
 
-            if (!checkSuffixName(".trb", "TXTReaderBook", "TXTReader小说", null, AppDomain.CurrentDomain.BaseDirectory + "TXTReader.exe")) {
-                if (System.Windows.Forms.MessageBox.Show("你还没有将.trb文件关联到TXTReader，是否设置？", "关联文件", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
-                    if (!UACManager.Execute(UACManager.ACTION_REGISTER)) {
-                        System.Windows.Forms.MessageBox.Show("设置失败！");
-                    }
-                }                
-            }                
+        public String FileName = null;
+
+        protected override void OnStartup(StartupEventArgs e) {
+            base.OnStartup(e);
+            //if (!checkSuffixName(".trb", "TXTReaderBook", "TXTReader小说", null, AppDomain.CurrentDomain.BaseDirectory + "TXTReader.exe")) {
+            //    if (System.Windows.Forms.MessageBox.Show("你还没有将.trb文件关联到TXTReader，是否设置？", "关联文件", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
+            //        if (!UACManager.Execute(UACManager.ACTION_REGISTER)) {
+            //            System.Windows.Forms.MessageBox.Show("设置失败！");
+            //        }
+            //    }                
+            //}
+
+            
+            SkinParser.Load();
+            BookParser.Load();
+            OptionsParser.Load();
+            if (e.Args.Length > 0) FileName = e.Args[0];
+
+            if (FileName != null) {
+                G.Book = new Book(FileName);                
+            }
+            FileName = null;
+        }
+
+        protected override void OnExit(ExitEventArgs e) {
+            BookParser.Save();
+            RuleParser.Save();
+            SkinParser.Save();
+            OptionsParser.Save();
+            base.OnExit(e);
         }
 
         private static bool checkSuffixName(string ext, string name, string description, string icon, string path) {

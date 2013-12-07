@@ -2,7 +2,7 @@
 <skin version="1.0" xmlns="http://txtreader.org/skin.xsd">
   <part padding="32">
     <background>
-      <color>#000080</color>
+      <!-- <color>#000080</color> -->
       <img>E:/test/bg0.bmp</img>
     </background>
     <font>

@@ -62,7 +62,7 @@ namespace TXTReader.Display {
             TextAlignment = FormattedText.TextAlignment = TextAlignment.Left;
             if (Options.Instance.Skin.EffectType == EffectType.Shadow) {
                 var eff = new DropShadowEffect();
-                eff.BlurRadius = Options.Instance.Skin.EffetSize;
+                eff.BlurRadius = Options.Instance.Skin.EffectSize;
                 eff.Color = Options.Instance.Skin.Effect;
                 Effect = eff;
             } else {

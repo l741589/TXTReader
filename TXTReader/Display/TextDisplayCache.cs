@@ -70,11 +70,11 @@ namespace TXTReader.Display {
                             return Add(new TextDisplayCacheElem(index, ft) {
                                 Brush = Options.Instance.Skin.Foreground,
                                 Geometry = geo,
-                                Pen = new Pen(new SolidColorBrush(Options.Instance.Skin.Effect), Options.Instance.Skin.EffetSize)
+                                Pen = new Pen(new SolidColorBrush(Options.Instance.Skin.Effect), Options.Instance.Skin.EffectSize)
                             });
                         case EffectType.Shadow:
                             var geotemp = geo.Clone().Clone();
-                            int l = (int)Options.Instance.Skin.EffetSize;
+                            int l = (int)Options.Instance.Skin.EffectSize;
                             var geo2 = new PathGeometry();
                             for (int i = 0; i <= l; ++i) {
                                 geotemp.Transform = new TranslateTransform(i, i);

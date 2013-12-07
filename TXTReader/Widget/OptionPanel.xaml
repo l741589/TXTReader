@@ -40,24 +40,15 @@
         <Grid DataContext="{DynamicResource localOptions}">
             <Border Margin="8">
                 <StackPanel Orientation="Vertical">
-                    <GroupBox Header="布局设置" x:Name="group_layout">
-                        <StackPanel>
-                            <TextBlock Text="文本区边距"/>
-                            <Widget:ThicknessSEGroup x:Name="segPadding"
-                                Thickness="{Binding Instance.Skin.Padding, Mode=TwoWay}"/>
-                            <UniformGrid Columns="4">
-                                <TextBlock Text="行间距"/>
-                                <Widget:SpinEdit x:Name="seLineSpacing" 
-                                     Value="{Binding Path=Instance.Skin.LineSpacing, Mode=TwoWay}"/>
-                                <TextBlock Text="段间距"/>
-                                <Widget:SpinEdit x:Name="seParaSpacing" 
-                                     Value="{Binding Path=Instance.Skin.ParaSpacing, Mode=TwoWay}"/>
-                            </UniformGrid>
-                        </StackPanel>
-                    </GroupBox>
-                    <Separator/>
-                    <GroupBox Header="外观设置" x:Name="group_skin">
-                        <StackPanel>
+                    <GroupBox x:Name="group_skin">
+                        <GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>外观设置</TextBlock>
+                                <Button Click="bn_saveskin_Click">保存</Button>
+                                <Button Click="bn_loadskin_Click">打开</Button>
+                            </StackPanel>                            
+                        </GroupBox.Header>
+                        <StackPanel>                            
                             <DockPanel>
                                 <TextBlock Text="字体"/>
                                 <Widget:FontPickerCombobox x:Name="cbxFont" FontSize="14" SelectedFontChanged="cbxFont_SelectedFontChanged"
@@ -91,7 +82,7 @@
                                 </ComboBox>
                                 <TextBlock Grid.Row="1" Grid.Column="2" Text="特效大小"/>
                                 <Widget:SpinEdit Grid.Row="1" Grid.Column="3" x:Name="seEffectSize" 
-                                    Value="{Binding Path=Instance.Skin.EffetSize, Mode=TwoWay}"/>
+                                    Value="{Binding Path=Instance.Skin.EffectSize, Mode=TwoWay}"/>
                             </Grid>
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -127,6 +118,18 @@
                                         SelectedColor="{Binding Path=Instance.Skin.BackColor, Mode=TwoWay}"/>
                                 </UniformGrid>
                             </DockPanel>
+                            <Separator></Separator>
+                            <TextBlock Text="文本区边距"/>
+                            <Widget:ThicknessSEGroup x:Name="segPadding"
+                                Thickness="{Binding Instance.Skin.Padding, Mode=TwoWay}"/>
+                            <UniformGrid Columns="4">
+                                <TextBlock Text="行间距"/>
+                                <Widget:SpinEdit x:Name="seLineSpacing" 
+                                     Value="{Binding Path=Instance.Skin.LineSpacing, Mode=TwoWay}"/>
+                                <TextBlock Text="段间距"/>
+                                <Widget:SpinEdit x:Name="seParaSpacing" 
+                                     Value="{Binding Path=Instance.Skin.ParaSpacing, Mode=TwoWay}"/>
+                            </UniformGrid>
                         </StackPanel>
                     </GroupBox>
                     <Separator/>

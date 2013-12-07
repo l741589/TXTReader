@@ -141,7 +141,7 @@
                     </ComboBox>
                     <Widget:SpinEdit x:Name="seEffectSize" 
                                      Grid.Row="0" Grid.Column="1"
-                                     Value="{Binding Path=Instance.Skin.EffetSize, Mode=TwoWay}"/>
+                                     Value="{Binding Path=Instance.Skin.EffectSize, Mode=TwoWay}"/>
                     <Label Grid.Row="0" Grid.Column="2" Content="特效色"/>
                     <Widget:StandardColorPicker x:Name="cbxEffectColor" 
                                                 Grid.Row="0" Grid.Column="3"
