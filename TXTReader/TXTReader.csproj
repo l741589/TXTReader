@@ -124,6 +124,9 @@
     <Compile Include="Widget\BookmarkPanel.xaml.cs">
       <DependentUpon>BookmarkPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Widget\ContentTreePanel.xaml.cs">
+      <DependentUpon>ContentTreePanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Widget\RulePanel.xaml.cs">
       <DependentUpon>RulePanel.xaml</DependentUpon>
     </Compile>
@@ -200,6 +203,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Widget\BookmarkPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\ContentTreePanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
