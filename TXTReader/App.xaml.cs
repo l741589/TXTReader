@@ -20,15 +20,16 @@ namespace TXTReader {
 
         protected override void OnStartup(StartupEventArgs e) {
             base.OnStartup(e);
-            //if (!checkSuffixName(".trb", "TXTReaderBook", "TXTReader小说", null, AppDomain.CurrentDomain.BaseDirectory + "TXTReader.exe")) {
-            //    if (System.Windows.Forms.MessageBox.Show("你还没有将.trb文件关联到TXTReader，是否设置？", "关联文件", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
-            //        if (!UACManager.Execute(UACManager.ACTION_REGISTER)) {
-            //            System.Windows.Forms.MessageBox.Show("设置失败！");
-            //        }
-            //    }                
-            //}
-
-            
+            //*
+            if (!checkSuffixName(".trb", "TXTReaderBook", "TXTReader小说", null, AppDomain.CurrentDomain.BaseDirectory + "TXTReader.exe")) {
+                if (System.Windows.Forms.MessageBox.Show("你还没有将.trb文件关联到TXTReader，是否设置？", "关联文件", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
+                    if (!UACManager.Execute(UACManager.ACTION_REGISTER)) {
+                        System.Windows.Forms.MessageBox.Show("设置失败！");
+                    }
+                }                
+            }
+            //*/
+            RuleParser.Load();
             SkinParser.Load();
             BookParser.Load();
             OptionsParser.Load();

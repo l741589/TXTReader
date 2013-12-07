@@ -47,10 +47,6 @@ namespace TXTReader.Utility {
             TreeText.Add(S_NEW);
         }
 
-        public void Load() {
-            RuleParser.Load();
-        }
-
         public ObservableCollection<String> PrependAddItem(ObservableCollection<String> target) {
             if (target.Count > 0 && target[0] == S_ADD) return target;
             int i = target.IndexOf(S_ADD);

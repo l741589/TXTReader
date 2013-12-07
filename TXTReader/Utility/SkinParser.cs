@@ -200,8 +200,8 @@ namespace TXTReader.Utility {
                 Options.Instance.Skin.Path = filename;
             } else {
                 Options.Instance.Skin.Path = null;
-                if (File.Exists("./~skin.trs")) {
-                    Load("./~skin.trs");
+                if (File.Exists(G.NAME_SKIN)) {
+                    Load(G.NAME_SKIN);
                 } else {
                     Uri uri = new Uri("/TXTReader;component/res/defaultskin.xml", UriKind.Relative);                    
                     StreamResourceInfo info = Application.GetResourceStream(uri);
@@ -213,7 +213,7 @@ namespace TXTReader.Utility {
         }
 
         public static void Save(String filename = null) {
-            if (filename == null) filename = "./~skin.trs";
+            if (filename == null) filename = G.NAME_SKIN;
             var Skin=G.Options.Skin;
             if (Skin==null) return;
             var w = new Writer("skin").AddNamespace(String.Empty, URI_SCHEME_SKIN);

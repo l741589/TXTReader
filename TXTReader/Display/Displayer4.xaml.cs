@@ -150,8 +150,8 @@ namespace TXTReader.Display {
         }
         
         protected override void OnMouseMove(MouseEventArgs e) {
-            if (G.MainWindow.IsHolding) return;
             base.OnMouseMove(e);
+            if (G.MainWindow.IsHolding) return;            
             if (e.LeftButton.Equals(MouseButtonState.Pressed)) {
                 Point curPoint = e.GetPosition(this);
                 if (lastPoint != null) {

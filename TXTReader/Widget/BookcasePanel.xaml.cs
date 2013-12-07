@@ -92,6 +92,7 @@ namespace TXTReader.Widget {
                     if (IsBookExists(f)) continue;
                     Book b = new Book(f);
                     G.Books.Add(b);
+                    BookParser.Save(b);
                 }
             }
         }

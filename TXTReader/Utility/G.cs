@@ -21,7 +21,6 @@ namespace TXTReader.Utility {
             Timer = new TRTimer2();
             Books = new BookCollection();
             Rules = new Rules();
-            Rules.Load();
             KeyHook = new KeyHook();
         }
         public static bool IsRunning = true;
@@ -45,6 +44,9 @@ namespace TXTReader.Utility {
         public static String EXT_LISTRULE { get { return ".trml"; } }
         public static String EXT_TREERULE { get { return ".trmt"; } }
         public static String EXT_RULEOPTION { get { return ".trmo"; } }
+
+        public static String NAME_SKIN { get { return PATH + "skin" + EXT_SKIN; } }
+        public static String NAME_OPTION { get { return PATH + "option" + EXT_OPTION; } }
       
         public static ImageSource NoCover { get; private set; }
         public static Book Book { get { return book; } set { A.ReplaceBook(ref book, value); } }

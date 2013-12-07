@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace TXTReader.Utility {
     class OptionsParser : Parser{
-        public const String S_TRUE = "true";
-        public const String S_FALSE = "false";
         public const String S_ROOT = "option";
         public const String S_MINCHAPTERLENGTH = "minchapterlength";
         public const String S_MAXCHAPTERLENGTH = "maxchapterlength";
@@ -19,27 +17,30 @@ namespace TXTReader.Utility {
         public const String S_TIME = "time";
         public const String S_PROGRESS = "progress";
         public const String S_BOOK = "book";
-        public const String S_FILENAME = "./options.tro";
+        public const String S_ISBORDERED = "isbordered";
+        public const String S_FULLSCREEN = "isfullscreen";
 
 
-        public static void Save(){
+        public static void Save() {
             new Writer(S_ROOT)
                 .Write(S_MINCHAPTERLENGTH, G.Options.MinChapterLength)
                 .Write(S_MAXCHAPTERLENGTH, G.Options.MaxChapterLength)
                 .Write(S_SPEED, G.Options.Speed)
                 .Start(S_FLOATMESSAGE).Attr(S_OPEN, G.Options.IsFloatMessageOpen)
-                    .Write(S_CHAPTERTITLE, G.Options.FloatMessage.ChapterTitle,new bool[0])
+                    .Write(S_CHAPTERTITLE, G.Options.FloatMessage.ChapterTitle, new bool[0])
                     .Write(S_FPS, G.Options.FloatMessage.Fps, new bool[0])
                     .Write(S_TIME, G.Options.FloatMessage.Time, new bool[0])
                     .Write(S_SPEED, G.Options.FloatMessage.Speed, new bool[0])
                     .Write(S_PROGRESS, G.Options.FloatMessage.Progress, new bool[0])
                 .End
                 .Write(S_BOOK, (App.Current as App).FileName)
-                .WriteTo(S_FILENAME);
+                .Write(S_ISBORDERED, G.Options.IsBordered, new bool[0])
+                .Write(S_FULLSCREEN, G.Options.IsFullScreen, new bool[0])
+                .WriteTo(G.NAME_OPTION);
         }
 
         public static void Load() {
-            new Reader(S_FILENAME)
+            new Reader(G.NAME_OPTION)
                 .Read(S_MINCHAPTERLENGTH, (n) => { G.Options.MinChapterLength = int.Parse(n.InnerText); })
                 .Read(S_MAXCHAPTERLENGTH, (n) => { G.Options.MaxChapterLength = int.Parse(n.InnerText); })
                 .Read(S_SPEED, (n) => { G.Options.Speed = int.Parse(n.InnerText); })
@@ -50,7 +51,9 @@ namespace TXTReader.Utility {
                     .Read(S_SPEED, (n) => { G.Options.FloatMessage.Speed = bool.Parse(n.InnerText); })
                     .Read(S_PROGRESS, (n) => { G.Options.FloatMessage.Progress = bool.Parse(n.InnerText); })
                 .Parent
-                .Read(S_BOOK, (n) => { (App.Current as App).FileName = n.InnerText; });
+                .Read(S_BOOK, (n) => { (App.Current as App).FileName = n.InnerText; })
+                .Read(S_ISBORDERED, (n) => { G.Options.IsBordered = bool.Parse(n.InnerText); })
+                .Read(S_FULLSCREEN, (n) => { G.Options.IsFullScreen = bool.Parse(n.InnerText); });
         }
     }
 }

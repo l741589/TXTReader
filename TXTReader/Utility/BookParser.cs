@@ -77,8 +77,8 @@ namespace TXTReader.Utility {
         }
 
         public static void Save() {
-            Debug.WriteLine("Save Books");
-            foreach (var b in G.Books) Save(b);
+            //Debug.WriteLine("Save Books");
+            //foreach (var b in G.Books) Save(b);
         }
 
         public static void Save(Book book) {

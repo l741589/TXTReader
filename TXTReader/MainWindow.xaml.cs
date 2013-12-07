@@ -47,12 +47,6 @@ namespace TXTReader {
 
         public MainWindow() {
             InitializeComponent();
-
-            /*全屏
-            WindowStyle = WindowStyle.None;
-            ResizeMode = ResizeMode.NoResize;
-            WindowState = WindowState.Maximized;
-            //*/
             Focus();
         }
 
@@ -117,13 +111,11 @@ namespace TXTReader {
             }
         }
 
-        private void window_Loaded(object sender, RoutedEventArgs e) {
-            XmlDocument dom = new XmlDocument();
-            
-            displayer.UpdateSkin();
-            //displayer.SetBinding(Displayer4.SpeedProperty, new Binding("Value") { Source = toolPanel.pn_option.se_speed });
-           
+        private void window_Loaded(object sender, RoutedEventArgs e) {            
+            displayer.UpdateSkin();           
             G.NotifyIcon = new TRNotifyIcon();
+            SetBinding(IsBorderedProperty, new Binding("IsBordered") { Source = G.Options, Mode = BindingMode.TwoWay });
+            SetBinding(IsFullScreenProperty, new Binding("IsFullScreen") { Source = G.Options, Mode = BindingMode.TwoWay });
         }
 
         protected override void OnKeyDown(KeyEventArgs e) {
@@ -142,8 +134,6 @@ namespace TXTReader {
             switch (e.Key) {
                 case Key.LeftShift: ReleaseHold(HC_MOVE); break;
             }
-            ContextMenu c;
-
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e) {
@@ -239,12 +229,12 @@ namespace TXTReader {
             (sender as MenuItem).SetBinding(MenuItem.IsCheckedProperty, new Binding("IsScrolling") { Source = G.Displayer });
         }
 
-        private void mi_border_Loaded(object sender, RoutedEventArgs e) {
-            (sender as MenuItem).SetBinding(MenuItem.IsCheckedProperty, new Binding("IsBordered") { Source = this });
+        private void mi_border_Loaded(object sender, RoutedEventArgs e) {            
+            (sender as MenuItem).SetBinding(MenuItem.IsCheckedProperty, new Binding("IsBordered") { Source = this });            
         }
 
-        private void mi_fullscreen_Loaded(object sender, RoutedEventArgs e) {
-            (sender as MenuItem).SetBinding(MenuItem.IsCheckedProperty, new Binding("IsFullScreen") { Source = this });
+        private void mi_fullscreen_Loaded(object sender, RoutedEventArgs e) {            
+            (sender as MenuItem).SetBinding(MenuItem.IsCheckedProperty, new Binding("IsFullScreen") { Source = this });            
         }
     }
 }
