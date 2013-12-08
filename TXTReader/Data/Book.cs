@@ -33,6 +33,7 @@ namespace TXTReader.Data {
             : base() {
             Position = 0; Offset = 0;
             Bookmark = new ObservableCollection<Bookmark>();
+            Node = new LinkedListNode<ContentItemAdapter>(this);
         }
         public Book(String src) : this() { Init(src); }
 
@@ -71,13 +72,14 @@ namespace TXTReader.Data {
             }
         }
 
-        private Chapter Insert(List<String> subtitles, int level, Chapter node) {
+        private Chapter Insert(List<String> subtitles,List<int?> numbers, int level, Chapter node) {
             Chapter ret = null;
+            if (level > 0) node.Number = numbers[level - 1];
             if (level < subtitles.Count) {
-                ret = Insert(subtitles, level + 1, (Chapter)node[subtitles[level]]);
+                ret = Insert(subtitles,numbers, level + 1, (Chapter)node[subtitles[level]]);                
             } else {
                 ret = node;
-            }
+            }            
             return ret;
         }
 
@@ -90,14 +92,16 @@ namespace TXTReader.Data {
                 if (r == null && G.Rules.IsTreeEnable) r = G.TreeTrmex.Match(s);
                 if (r != null) {
                     if (trmex.LCs == null) {
-                        node = Insert(r.SubTitle, 0, this);
+                        node = Insert(r.SubTitle,r.Numbers, 0, this);
                     } else {
                         var n = node;
                         while (n.Children != null) n = n.Children.Last.Value as Chapter;
                         while (n.Level < r.Level - 1) n = n["未命名章节"];
                         while (n.Level > r.Level - 1 && n != null) n = n.Parent as Chapter;
                         node = n[r.Title];
+                        node.Number = r.Numbers[node.Level - 1];
                     }
+                   
                 } else {
                     node.AppendText(s);
                 }

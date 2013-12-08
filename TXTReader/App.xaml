@@ -5,6 +5,10 @@
     <Application.Resources>
         <ResourceDictionary>
             <BitmapImage x:Key="src_nocover" UriSource="pack://application:,,,/res/no_cover.png"/>
+            <BitmapImage x:Key="cs_toolong" UriSource="pack://application:,,,/res/cs_toolong.png"/>
+            <BitmapImage x:Key="cs_tooshort" UriSource="pack://application:,,,/res/cs_tooshort.png"/>
+            <BitmapImage x:Key="cs_index" UriSource="pack://application:,,,/res/cs_index.png"/>
+            <BitmapImage x:Key="cs_index_green" UriSource="pack://application:,,,/res/cs_index_green.png"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

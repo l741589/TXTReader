@@ -37,12 +37,13 @@ namespace ManualUnitTest
             //String[] ss = new String[] { "\"第#卷\" \"第#章*\"" };
             //Trmex t = Trmex.Compile(ss);
             //t.Match()
-            String s = @"""%"", ""\\"", ""/"", ""*"", ""?"", ""\"""", ""<"", "">"", ""|"", "":"",""胡思公司收""";
-            Console.WriteLine(s);
-            s=A.EncodeFilename(s);
-            Console.WriteLine(s);
-            s=A.DecodeFilename(s);
-            Console.WriteLine(s);
+            //String s = @"""%"", ""\\"", ""/"", ""*"", ""?"", ""\"""", ""<"", "">"", ""|"", "":"",""胡思公司收""";
+            //Console.WriteLine(s);
+            //s=A.EncodeFilename(s);
+            //Console.WriteLine(s);
+            //s=A.DecodeFilename(s);
+            //Console.WriteLine(s);
+            Console.WriteLine(Trmex.ToNumber("四亿五"));
             Console.ReadKey();
         }
 

@@ -6,13 +6,13 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using TXTReader.Utility;
+using System.Diagnostics;
 
 namespace TXTReader.Data
 {
     enum MatchType { NoMatch, List, Tree, Both };
     enum MatchLang { Trmex, Regex };
-    public class Chapter : DependencyObject,ContentItemAdapter {
-        
+    public class Chapter : DependencyObject,ContentItemAdapter {       
 
         public string Title { get; set; }
         public List<String> Text { get;  set; }
@@ -20,6 +20,7 @@ namespace TXTReader.Data
         public ContentItemAdapter Parent { get; private set; }
         private List<String> totalText = null;
         private int len = 0;
+        public int? Number { get; set; }
 
         public List<String> TotalText {
             get {
@@ -67,7 +68,39 @@ namespace TXTReader.Data
         }
 
         public ContentStatus ContentStatus {
-            get { return ContentStatus.None; }
+            get {
+                if (Children != null && Children.Count > 0) return ContentStatus.None;
+                if (Length >= G.Options.MaxChapterLength) return ContentStatus.TooLong;
+                if (Length < G.Options.MinChapterLength) return ContentStatus.TooShort;
+                try {
+                    if (Number == null) return ContentStatus.None;
+                    if (Node == null || Node.Previous == null) {
+                        if (Number == null || Number.Value == 0 || Number.Value == 1) return ContentStatus.None;
+                        if (Parent != null && Parent.Node != null) {
+                            LinkedListNode<ContentItemAdapter> anyPrev = Parent.Node.Previous;
+                            do {
+                                if (anyPrev == null) return ContentStatus.ConfusingIndex;
+                                while (anyPrev.Value.Number != null) {
+                                    if (anyPrev.Value.Number + 1 == Number) return ContentStatus.None;
+                                    if (anyPrev.Value.Children == null || anyPrev.Value.Children.Count == 0) break;
+                                    anyPrev = anyPrev.Value.Children.Last;
+                                }
+                                if (anyPrev.Value.Number + 1 == Number) return ContentStatus.None;
+                                anyPrev = anyPrev.Value.Parent != null && anyPrev.Value.Parent.Node != null ?
+                                    anyPrev.Value.Parent.Node.Previous : null;
+                            } while (anyPrev != null && Parent != null);
+                            if (anyPrev == null) return ContentStatus.ConfusingIndex;
+                            if (anyPrev.Value.Number + 1 != Number) return ContentStatus.ConfusingIndex;
+                        }
+                    } else {
+                        if (Node.Previous.Value.Number == Number) return ContentStatus.LowLevelConfusingIndex;
+                        if (Node.Previous.Value.Number + 1 != Number) return ContentStatus.ConfusingIndex;
+                    }
+                } catch (Exception e) {
+                    Debug.WriteLine(e.StackTrace);
+                }
+                return ContentStatus.None;
+            }
         }
 
         

@@ -4,10 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using TXTReader.Data;
+using System.Windows.Media;
 
 namespace TXTReader.Converter {
     class ContentStatusImageConverter:IValueConverter {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
+            var cs = (ContentStatus)value;
+            switch (cs) {
+                case ContentStatus.TooLong: return App.Current.Resources["cs_toolong"];
+                case ContentStatus.TooShort: return App.Current.Resources["cs_tooshort"];
+                case ContentStatus.ConfusingIndex: return App.Current.Resources["cs_index"];
+                case ContentStatus.LowLevelConfusingIndex: return App.Current.Resources["cs_index_green"];
+            }
             return null;
         }
 

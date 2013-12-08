@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TXTReader.Data {
-    public enum ContentStatus { None, TooLong, TooShort, ConfusingIndex }
+    public enum ContentStatus { None, TooLong, TooShort, ConfusingIndex, LowLevelConfusingIndex }
 
     public interface ContentItemAdapter {
 
@@ -22,6 +22,7 @@ namespace TXTReader.Data {
         int AbsolutePosition { get; }
         int LineCount { get; }
         int TotalLineCount { get; }
+        int? Number { get; }
     }
 
     public interface ContentAdapter : ContentItemAdapter { }

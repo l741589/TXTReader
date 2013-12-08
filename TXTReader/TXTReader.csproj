@@ -351,6 +351,16 @@
     <Resource Include="res\543.ico" />
     <Resource Include="res\547.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\cs_toolong.png" />
+    <Resource Include="res\cs_tooshort.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\cs_index.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\cs_index_green.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

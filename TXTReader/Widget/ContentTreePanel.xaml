@@ -7,12 +7,12 @@
              xmlns:util="clr-namespace:TXTReader.Utility"
              xmlns:cvt="clr-namespace:TXTReader.Converter"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="300">
+             d:DesignHeight="600" d:DesignWidth="300" Padding="8">
     <UserControl.Resources>
         <cvt:ContentStatusImageConverter x:Key="ContentStatusImageConverter"/>
         <!--<ObjectDataProvider x:Key="odpG" ObjectType="{x:Type util:G}"/>-->
         <HierarchicalDataTemplate x:Key="hdtChapter" DataType="data:Chapter" ItemsSource="{Binding Children}">
-            <DockPanel>
+            <DockPanel ToolTip="{Binding Number}">
                 <Image Source="{Binding ContentStatus, Converter={StaticResource ContentStatusImageConverter}}" 
                        DockPanel.Dock="Left" Height="12" Width="12" Margin="2"/>
                 <TextBlock Text=")" DockPanel.Dock="Right"/>

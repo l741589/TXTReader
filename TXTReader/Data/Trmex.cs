@@ -43,7 +43,9 @@ namespace TXTReader.Data {
             "⒘⒄",
             "⒙⒅",
             "⒚⒆",
-            "⒛⒇",
+            "⒛⒇廿",
+            "卅",
+            "卌"
         };
         public static readonly String[] NumUnit = 
         {
@@ -52,7 +54,6 @@ namespace TXTReader.Data {
             "千仟阡",
             "万萬",
             "亿億",
-            "兆",
         };
 
         public static String AllNums { get { return String.Join("", Num) + String.Join("", NumUnit) + String.Join("", NumEx); } }
@@ -89,7 +90,7 @@ namespace TXTReader.Data {
                     //对于以^开头,以$结尾的字符串,直接当做正则表达式处理,其中\#被视为包括汉字的数字
                     //TODO 视为添加的语法，视为添加
                     regex = regex.Substring(1, regex.Length - 2);
-                    regex = regex.Replace("\\#", "[" + AllNums + "]+");
+                    regex = regex.Replace("\\#", "(?<NUM>[" + AllNums + "]+)");
                     regexs.Add(regex);
                 } else {
                     regex = R_DOT.Replace(regex, "\\\\.");
@@ -119,7 +120,7 @@ namespace TXTReader.Data {
                     regex = R_EQ.Replace(regex, @"\\b[^\\s]+?\\b");
                     regex = R_GT.Replace(regex, @"[^\\s]+?\\b");
                     regex = R_LT.Replace(regex, @"\\b.*");
-                    regex = R_SHARP.Replace(regex, "[" + AllNums + "]+");
+                    regex = R_SHARP.Replace(regex, "(?<NUM>[" + AllNums + "]+)");
                     regex = "(?:" + regex + ")";
                     regex = Regex.Unescape(regex);
                     regexs.Add(regex);
@@ -216,12 +217,23 @@ namespace TXTReader.Data {
                         if (c == null || c.Value == null || c.Value == "") continue;
                         String s = c.Value;
                         foreach (Capture e in captureToBeRemove)
-                            if (e.Index >= c.Index && e.Index < c.Index + c.Length)
+                            if (e.Index >= c.Index && e.Index <= c.Index + c.Length)
                                 s = s.Remove(e.Index - c.Index, e.Length);
                         foreach (KeyValuePair<Capture, String> e in captureToBeInserted)
-                            if (e.Key.Index >= c.Index && e.Key.Index < c.Index + c.Length)
+                            if (e.Key.Index >= c.Index && e.Key.Index <= c.Index + c.Length)
                                 s = s.Insert(e.Key.Index - c.Index, e.Value);
                         cd.SubTitle.Add(s);
+                        g = m.Groups["NUM"];
+                        int? n = null;
+                        if (g != null) {
+                            foreach (Capture cc in g.Captures) {
+                                if (cc.Index >= c.Index && cc.Index <= c.Index + c.Length) {
+                                    if (cc.Value == null || cc.Value == "") continue;
+                                    n = ToNumber(cc.Value);
+                                }
+                            }
+                        }
+                        cd.Numbers.Add(n);
                     }
                 }
             } else {
@@ -232,12 +244,24 @@ namespace TXTReader.Data {
                             if (c == null || c.Value == null || c.Value == "") continue;
                             String s = c.Value;
                             foreach (Capture e in captureToBeRemove)
-                                if (e.Index >= c.Index && e.Index < c.Index + c.Length)
+                                if (e.Index >= c.Index && e.Index <= c.Index + c.Length)
                                     s = s.Remove(e.Index - c.Index, e.Length);
                             foreach (KeyValuePair<Capture, String> e in captureToBeInserted)
-                                if (e.Key.Index >= c.Index && e.Key.Index < c.Index + c.Length)
+                                if (e.Key.Index >= c.Index && e.Key.Index <= c.Index + c.Length)
                                     s = s.Insert(e.Key.Index - c.Index, e.Value);
                             cd.SubTitle.Add(s);
+
+                            g = m.Groups["NUM"];
+                            int? n = null;
+                            if (g != null) {
+                                foreach (Capture cc in g.Captures) {
+                                    if (cc.Index >= c.Index && cc.Index <= c.Index + c.Length) {
+                                        if (cc.Value == null || cc.Value == "") continue;
+                                        n = ToNumber(cc.Value);
+                                    }
+                                }
+                            }
+                            cd.Numbers.Add(n);
                         }
                     }
                     if (cd.SubTitle.Count > 0) {
@@ -246,7 +270,85 @@ namespace TXTReader.Data {
                     }
                 }
             }
+           
             return cd;
+        }
+
+        private static readonly String[] cNumUnit = { "+", "%", "K", "W", "E" };
+        public static int? ToNumber(String input) {
+            if (input == null || input == "") return null;
+            String s = input;
+            for (int i = 0; i < 10; ++i)
+                foreach (var c in Num[i])
+                    s = s.Replace(c.ToString(), i.ToString());
+            for (int i = 0; i < 5; ++i)
+                foreach (var c in NumUnit[i])
+                    s = s.Replace(c.ToString(), cNumUnit[i]);
+            for (int i = 1; i < 10; ++i)
+                foreach (var c in NumEx[i - 1])
+                    s = s.Replace(c.ToString(), cNumUnit[0] + i);
+            for (int i = 2; i <= 4; ++i)
+                foreach (var c in NumEx[i + 7])
+                    s = s.Replace(c.ToString(), i + cNumUnit[0]);
+
+            if (String.Join("", cNumUnit).Contains(s[0])) {
+                s = 1 + s;
+            }
+            if (!String.Join("",cNumUnit).Contains(s[s.Length - 1])) {
+                int i = s.LastIndexOfAny(new char[] { 'W', 'E' });
+                if (i != -1) {
+                    if (s.Length > i + 1 && s[i + 1] != '0') {
+                        switch (s[i]) {
+                            case 'W': s += 'K'; break;
+                            case 'E': s += "KW"; break;
+                        }
+                    }
+                }
+            }
+
+            int N=0;
+            int W=0;
+            int E=0;
+            String[] ss = s.Split('E');
+            if (ss.Length > 1) { E = NumberLevel(ss[0]); s = ss[1]; }
+            ss = s.Split(cNumUnit[3][0]);
+            if (ss.Length > 1) { W = NumberLevel(ss[0]); s = ss[1];  }
+            N = NumberLevel(s);
+            return E*100000000+W*10000+N;
+        }
+
+        private static int NumberLevel(String input){
+            int sum=0;
+            int x = 0;
+            bool zeroed = false;
+            foreach (char c in input) {
+                switch (c) {
+                    case '+': sum += x * 10; x = 0; break;
+                    case '%': sum += x * 100; x = 0; break;
+                    case 'K': sum += x * 1000; x = 0; break;
+                    case '0': x *= 10; x += 0; zeroed = true; break;
+                    case '1': x *= 10; x += 1; break;
+                    case '2': x *= 10; x += 2; break;
+                    case '3': x *= 10; x += 3; break;
+                    case '4': x *= 10; x += 4; break;
+                    case '5': x *= 10; x += 5; break;
+                    case '6': x *= 10; x += 6; break;
+                    case '7': x *= 10; x += 7; break;
+                    case '8': x *= 10; x += 8; break;
+                    case '9': x *= 10; x += 9; break;
+                }
+            }
+            if (x != 0) {
+                if (zeroed) sum += x;
+                else {
+                    if (sum == 0) sum += x;
+                    else if (sum % 10000 == 0) { while (x * 10 < 10000) x *= 10; sum += x; } else
+                        if (sum % 1000 == 0) { while (x * 10 < 1000) x *= 10; sum += x; } else
+                            if (sum % 100 == 0) { while (x * 10 < 100) x *= 10; sum += x; } else
+                                if (sum % 10 == 0) { while (x * 10 < 10) x *= 10; sum += x; }
+                }
+            }
+            return sum;
         }
 
         public override string ToString() {
