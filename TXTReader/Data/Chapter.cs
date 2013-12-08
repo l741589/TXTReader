@@ -11,11 +11,12 @@ namespace TXTReader.Data
 {
     enum MatchType { NoMatch, List, Tree, Both };
     enum MatchLang { Trmex, Regex };
-    public class Chapter : DependencyObject,ContentItemAdapter
-    {
+    public class Chapter : DependencyObject,ContentItemAdapter {
+        
+
         public string Title { get; set; }
         public List<String> Text { get;  set; }
-        public LinkedList<ContentItemAdapter> Children { get; private set; }
+        public ChapterCollection Children { get; private set; }
         public ContentItemAdapter Parent { get; private set; }
         private List<String> totalText = null;
         private int len = 0;
@@ -34,8 +35,39 @@ namespace TXTReader.Data
             }
         }
 
+        public int LineCount {
+            get {
+                if (Text == null) return 0;
+                return Text.Count;
+            }
+        }
+
+        public int TotalLineCount {
+            get {
+                if (TotalText == null) return 0;
+                return TotalText.Count;
+            }
+        }
+
+        public LinkedListNode<ContentItemAdapter> Node { get; set; }
+        private int absolutePosition = -1;
+        public int AbsolutePosition {
+            get {
+                if (absolutePosition == -1) {
+                    if (Node == null||Node.Previous==null) {
+                        if (Parent == null) absolutePosition = 0;
+                        else absolutePosition = Parent.AbsolutePosition + Parent.LineCount;
+                    } else {
+                        var p = Node.Previous.Value;
+                        absolutePosition = p.AbsolutePosition + p.TotalLineCount;
+                    }
+                }
+                return absolutePosition;
+            }
+        }
+
         public ContentStatus ContentStatus {
-            get { throw new NotImplementedException(); }
+            get { return ContentStatus.None; }
         }
 
         
@@ -77,7 +109,7 @@ namespace TXTReader.Data
                 var r = FindChildByTitle(subtitle);
                 if (r != null) return r as Chapter;
                 Chapter c = new Chapter() { Title = subtitle };
-                if (Children == null) Children = new LinkedList<ContentItemAdapter>();
+                if (Children == null) Children = new ChapterCollection();
                 Children.AddLast(c);
                 c.Parent = this;
                 return c;

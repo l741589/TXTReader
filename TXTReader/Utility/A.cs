@@ -79,24 +79,22 @@ namespace TXTReader.Utility {
             foreach (SortDescription sd in sds) lb.Items.SortDescriptions.Add(sd);
         }
 
-        private static readonly String[] filenameReservedWord = new String[]{ "%", "\\", "/", "*", "?", "\"", "<", ">", "|", ":" };
-        private static readonly char[] filenameReservedChar = new char[] { '\\', '/', '*', '?', '"', '<', '>', '|', ':' };
-        private static readonly char[] fullFilenameReservedChar = new char[] { '*', '?', '"', '<', '>', '|' };
         private static readonly Regex R_FILENAME_DECODER = new Regex(@"%[0-9a-fA-F]{2}");
 
         public static bool IsFilename(String filename) {
-            return filename.IndexOfAny(filenameReservedChar) == -1;
+            return filename.IndexOfAny(Path.GetInvalidFileNameChars()) == -1;
         }
 
         public static bool IsFullFilename(String filename) {
-            return filename.IndexOfAny(fullFilenameReservedChar) == -1;
+            return filename.IndexOfAny(Path.GetInvalidPathChars()) == -1;
         }
 
         public static String EncodeFilename(String filename) {
             String s = filename;
-            foreach (var c in filenameReservedWord) {
-                s = s.Replace(c, String.Format("%{0:x2}", (short)c[0]));
-            }
+            s = s.Replace("%", String.Format("%{0:x2}", (short)'%'));
+            foreach (var c in Path.GetInvalidFileNameChars()) {
+                s = s.Replace(c.ToString(), String.Format("%{0:x2}", (short)c));
+            }            
             return s;
         }
 
@@ -119,6 +117,7 @@ namespace TXTReader.Utility {
                 if (G.MainWindow.toolPanel.pn_bookmark.lb_bookmark.ItemsSource != G.Bookmark)
                     G.MainWindow.toolPanel.pn_bookmark.lb_bookmark.ItemsSource = G.Bookmark;
                 G.MainWindow.progressBar.UpdateBinding();
+                G.MainWindow.toolPanel.pn_contenttree.UpdateContentUI();
             }
         }
     }

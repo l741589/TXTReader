@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 using TXTReader.Utility;
+using System.Diagnostics;
 
 namespace TXTReader.Widget
 {
@@ -34,9 +35,24 @@ namespace TXTReader.Widget
             (tab.Items[0] as Control).Focus();
         }
 
-        protected override void OnMouseDown(MouseButtonEventArgs e) {
+        protected override void OnMouseDown(MouseButtonEventArgs e) {            
             base.OnMouseDown(e);
             e.Handled = true;
+        }
+
+        protected override void OnMouseUp(MouseButtonEventArgs e) {            
+            base.OnMouseUp(e);
+            e.Handled = true;
+        }
+
+        protected override void OnKeyUp(KeyEventArgs e) {
+            if (e.Key == Key.LeftShift) e.Handled = true;
+            base.OnKeyUp(e);
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e) {
+            if (e.Key == Key.LeftShift) e.Handled = true;
+            base.OnKeyDown(e);
         }
 
         public void Show() {

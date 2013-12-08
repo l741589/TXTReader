@@ -54,21 +54,10 @@ namespace TXTReader.Utility {
         public static bool Load(String filename) {
             if (!A.IsFullFilename(filename)) return false;
             if (Path.GetExtension(filename) == G.EXT_LISTRULE) {
-                List<String> ss = new List<String>();
-                new Reader(filename).ForChildren(S_LINE, (n) => {
-                    ss.Add(n.InnerText);
-                });
-                G.Rules.ListRule = ss;
+                new Reader(filename).Read(S_LEVEL, (n) => { G.Rules.ListText = n.InnerText; });
             } else if (Path.GetExtension(filename) == G.EXT_TREERULE) {
-                List<List<String>> sss = new List<List<String>>();
-                new Reader(filename).ForChildren(S_LEVEL, (n) => {
-                    List<String> ss = new List<String>();
-                    new Reader(n).ForChildren(S_LINE, (m) => {
-                        if (m.InnerText!="") ss.Add(m.InnerText);
-                    });
-                    if (ss.Count != 0) sss.Add(ss);
-                });
-                G.Rules.TreeRule = sss;                
+                G.Rules.TreeText.Clear();
+                new Reader(filename).ForChildren(S_LEVEL, (n) => { G.Rules.TreeText.Add(n.InnerText); });
             }
             return true;
         }
@@ -85,9 +74,7 @@ namespace TXTReader.Utility {
             if (filename == null || filename == "") return null;            
             filename = G.PATH_LISTRULE + A.EncodeFilename(filename) + G.EXT_LISTRULE;
             if (File.Exists(filename)) throw new IOException("doublicate filename");
-            var w=new Writer(S_ROOT);
-            foreach (var s in G.Rules.ListRule) w = w.Write(S_LINE, s);
-            w.WriteTo(filename);
+            new Writer(S_ROOT).Write(S_LEVEL, G.Rules.ListText).WriteTo(filename);
             return filename;
         }
 
@@ -102,18 +89,11 @@ namespace TXTReader.Utility {
                 }
                 if (filename != null && filename != "") break;
             }
-            if (filename==null||filename=="") return null;            
-            filename = G.PATH_TREERULE + filename + G.EXT_TREERULE;
+            if (filename==null||filename=="") return null;
+            filename = G.PATH_TREERULE + A.EncodeFilename(filename) + G.EXT_TREERULE;
             if (File.Exists(filename)) throw new IOException("doublicate filename");
             var w = new Writer(S_ROOT);
-            foreach (var ss in G.Rules.TreeRule) {
-                w = w.Start(S_LEVEL);
-                foreach (var s in ss)
-                {
-                    w.Write(S_LINE, s);
-                }
-                w = w.End;
-            }
+            foreach (var s in G.Rules.TreeText) w = w.Write(S_LEVEL, s);
             w.WriteTo(filename);
             return filename;
         }

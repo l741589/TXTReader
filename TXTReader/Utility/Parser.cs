@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Diagnostics;
+using System.IO;
 
 namespace TXTReader.Utility {
     delegate void ParserNodeCallback(XmlNode n);
@@ -147,7 +148,7 @@ namespace TXTReader.Utility {
             public Reader(String FileName) {
                 try {
                     xml = new XmlDocument();
-                    xml.Load(FileName);
+                    xml.LoadXml(File.ReadAllText(FileName));
                     for (node = xml.FirstChild; node != null && node.NodeType != XmlNodeType.Element; node = node.NextSibling) ;
                     nulldepth = 0;
                 } catch (Exception e) {

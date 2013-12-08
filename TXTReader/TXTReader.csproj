@@ -70,6 +70,7 @@
     <Compile Include="Converter\BookLengthConverter.cs" />
     <Compile Include="Converter\BookmarkConverter.cs" />
     <Compile Include="Converter\ChapterRuleNameConverter.cs" />
+    <Compile Include="Converter\ContentStatusImageConverter.cs" />
     <Compile Include="Converter\MyDateTimeConverter.cs" />
     <Compile Include="Converter\NotConverter.cs" />
     <Compile Include="Converter\ParaSpacingCvt.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Data\Book.cs" />
     <Compile Include="Data\Bookmark.cs" />
     <Compile Include="Data\Chapter.cs" />
+    <Compile Include="Data\ChapterCollection.cs" />
     <Compile Include="Data\ChapterDesc.cs" />
     <Compile Include="Data\ContentAdapter.cs" />
     <Compile Include="Data\FloatMessage.cs" />
@@ -139,6 +141,7 @@
     </Compile>
     <Compile Include="Widget\FloatMessagePanel.xaml.cs">
       <DependentUpon>FloatMessagePanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Widget\ContentTreePanel.xaml.cs">
       <DependentUpon>ContentTreePanel.xaml</DependentUpon>
     </Compile>
@@ -236,6 +239,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Widget\FloatMessagePanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Widget\ContentTreePanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

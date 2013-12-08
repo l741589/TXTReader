@@ -67,6 +67,7 @@ namespace TXTReader.Utility {
                 return ret.ToList();
             }
             set {
+                ListTrmex = null;
                 if (value == null) {
                     ListText = "";
                 } else {
@@ -85,6 +86,7 @@ namespace TXTReader.Utility {
                 return formats;
             }
             set {
+                TreeTrmex = null;
                 if (TreeText == null) TreeText = new ObservableCollection<string>();
                 int c = TreeText.Count;
                 if (c <= 0) c = 1;
@@ -117,7 +119,7 @@ namespace TXTReader.Utility {
             if (o.listlock) return;
             o.listlock = true;
             try {
-                if (!RuleParser.Load(o.ListSelection))
+                if (!RuleParser.Load(o.ListSelection)) 
                     o.ListRule = null;
             } finally {
                 o.listlock = false;
@@ -152,11 +154,12 @@ namespace TXTReader.Utility {
         }));
 
         public void ListTextChanged(object sender, TextChangedEventArgs e, String newValue) {
+            ListTrmex = null;
             ListText = newValue;
             if (listlock) return;
             listlock = true;
             try {
-                ListTrmex = null;
+               
                 int i = 0;
                 if (ListSelection != null && ListSelection != Rules.S_ADD) {
                     if (ListSelection != S_DBLNAME) File.Delete(ListSelection);
@@ -178,12 +181,12 @@ namespace TXTReader.Utility {
         }
 
         public void TreeTextChanged(object sender, TextChangedEventArgs e,String oldValue, String newValue) {
+            TreeTrmex = null;
             int level = TreeText.IndexOf(oldValue);
             if (level != -1) TreeText[level] = newValue;
             if (treelock) return;
             treelock = true;
-            try {
-                TreeTrmex = null;
+            try {                
                 int i = 0;
                 if (TreeSelection != null && TreeSelection != Rules.S_ADD) {
                     if (TreeSelection != S_DBLNAME) File.Delete(TreeSelection);

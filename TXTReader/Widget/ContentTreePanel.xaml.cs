@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TXTReader.Utility;
 
 namespace TXTReader.Widget
 {
@@ -23,14 +24,17 @@ namespace TXTReader.Widget
         public ContentTreePanel()
         {
             InitializeComponent();
+            Loaded += (d, e) => { UpdateContentUI(); };
         }
 
         private void trvContent_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            Data.ContentAdapter selectedContent = sender as Data.ContentAdapter;
+            Data.ContentItemAdapter selectedContent = e.NewValue as Data.ContentItemAdapter;
             if (selectedContent != null)
             {
-
+                G.Displayer.FirstLine = selectedContent.AbsolutePosition;
+                G.Displayer.Offset = 0;
+                G.Displayer.Update();
             }
         }
 

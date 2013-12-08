@@ -9,10 +9,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="300">
     <UserControl.Resources>
+        <cvt:ContentStatusImageConverter x:Key="ContentStatusImageConverter"/>
         <!--<ObjectDataProvider x:Key="odpG" ObjectType="{x:Type util:G}"/>-->
         <HierarchicalDataTemplate x:Key="hdtChapter" DataType="data:Chapter" ItemsSource="{Binding Children}">
             <DockPanel>
-                <Image Source="{Binding ContentStatus}" 
+                <Image Source="{Binding ContentStatus, Converter={StaticResource ContentStatusImageConverter}}" 
                        DockPanel.Dock="Left" Height="12" Width="12" Margin="2"/>
                 <TextBlock Text=")" DockPanel.Dock="Right"/>
                 <TextBlock Text="{Binding Length}" DockPanel.Dock="Right"/>
@@ -36,7 +37,7 @@
             <TextBlock Grid.Row="1" Grid.Column="0" Text="总长度："/>
             <TextBlock Name="txbLength" Grid.Row="1" Grid.Column="1"/>
         </Grid>
-        <Button DockPanel.Dock="Top" Content="[TEST]UPDATE" Click="Button_Click"/>
+        <Button DockPanel.Dock="Top" Content="[TEST]UPDATE" Click="Button_Click" Visibility="Collapsed"/>
         <TreeView Name="trvContent" SelectedItemChanged="trvContent_SelectedItemChanged"
                   ItemTemplate="{StaticResource hdtChapter}">
         </TreeView>
