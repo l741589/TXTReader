@@ -139,6 +139,8 @@
     </Compile>
     <Compile Include="Widget\FloatMessagePanel.xaml.cs">
       <DependentUpon>FloatMessagePanel.xaml</DependentUpon>
+    <Compile Include="Widget\ContentTreePanel.xaml.cs">
+      <DependentUpon>ContentTreePanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Widget\RulePanel.xaml.cs">
       <DependentUpon>RulePanel.xaml</DependentUpon>
@@ -234,6 +236,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Widget\FloatMessagePanel.xaml">
+    <Page Include="Widget\ContentTreePanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
