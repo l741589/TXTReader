@@ -14,6 +14,8 @@ using System.Collections.ObjectModel;
 
 namespace TXTReader.Data {
     public class Book : Chapter, ContentAdapter, Positionable {
+        public event Action LoadFinished;
+
         public const String NO_PREVIEW = "暂无预览";
         public static readonly DependencyProperty PositionProperty = DependencyProperty.Register("Position", typeof(int), typeof(Book));
         public static readonly DependencyProperty OffsetProperty = DependencyProperty.Register("Offset", typeof(double), typeof(Book));
@@ -37,7 +39,7 @@ namespace TXTReader.Data {
         }
         public Book(String src) : this() { Init(src); }
 
-        public void Init(String src) {            
+        public void Init(String src) {
             if (Path.GetExtension(src) == G.EXT_BOOK) {
                 BookParser.Load(src, this);
             } else {
@@ -83,45 +85,50 @@ namespace TXTReader.Data {
             return ret;
         }
 
-        public Chapter Match(ICollection<String> texts) {
+        public void Match(ICollection<String> texts) {
             Chapter node = this;
             foreach (var s in texts) {
-                var trmex = G.ListTrmex;
-                ChapterDesc r = null;
-                if (r == null && G.Rules.IsListEnable) r = G.ListTrmex.Match(s);
-                if (r == null && G.Rules.IsTreeEnable) r = G.TreeTrmex.Match(s);
+                Trmex trmex = null;
+                if (Dispatcher.Invoke(() => { return G.Rules.IsListEnable; })) trmex = Dispatcher.Invoke(() => { return G.ListTrmex; });
+                ChapterDesc r = trmex.Match(s);
+                if ((r == null || trmex == null) && Dispatcher.Invoke(() => { return G.Rules.IsTreeEnable; })) trmex = Dispatcher.Invoke(() => { return G.TreeTrmex; });                
                 if (r != null) {
                     if (trmex.LCs == null) {
-                        node = Insert(r.SubTitle,r.Numbers, 0, this);
+                        if (node != null) Dispatcher.Invoke(() => { node.Length = 0; var l = node.Length; });
+                        node = Dispatcher.Invoke(() => { return Insert(r.SubTitle, r.Numbers, 0, this); });                       
                     } else {
                         var n = node;
                         while (n.Children != null) n = n.Children.Last.Value as Chapter;
                         while (n.Level < r.Level - 1) n = n["未命名章节"];
                         while (n.Level > r.Level - 1 && n != null) n = n.Parent as Chapter;
+                        if (node != null) Dispatcher.Invoke(() => { node.Length = 0; var l = node.Length; });
                         node = n[r.Title];
                         node.Number = r.Numbers[node.Level - 1];
-                    }
-                   
+                    }                   
                 } else {
                     node.AppendText(s);
                 }
             }
-            return this;
         }
+        
 
-        public void Load(String file = null) {
-            if (file == null) file = Source; else Source = file;
+        public async void Load(String file = null) {
+            if (file == null) file = Source; else Source = file;            
             if (IsLocal) {
                 Clear();
                 var ss = File.ReadAllLines(file, Encoding.Default);
                 Title = Path.GetFileNameWithoutExtension(file);
                 if (Text != null) Text.Clear();
-                Match(ss);
-                BookParser.Load(this);                
+                BookParser.Load(this);
+                LastLoadTime = DateTime.Now;
+                TotalText = new List<string>(ss);
+                await Task.Run(() => { Match(ss); });
+                TotalText = null;
             } else {
                 //TODO 添加Download逻辑
-            }
-            LastLoadTime = DateTime.Now;
+            }            
+            Update();
+            Dispatcher.Invoke(() => { if (LoadFinished != null) LoadFinished(); });            
         }
 
         public String ToolTip {
@@ -142,6 +149,7 @@ namespace TXTReader.Data {
         public override void Close() {
             GetPreview();
             BookParser.Save(this);
+            LoadFinished = null;
             base.Close();
         }
     }

@@ -39,11 +39,11 @@ namespace TXTReader.Display {
         public bool IsScrolling { get { return (bool)GetValue(IsScrollingProperty); } set { SetValue(IsScrollingProperty, value); } }
         public int Fps { get { return (int)GetValue(FpsProperty); } set { SetValue(FpsProperty, value); } }
         public int FirstLine { get { return G.Book != null ? G.Book.Position : 0; } set { if (G.Book != null) G.Book.Position = value; } }
-        public double Offset { get { return G.Book != null ? G.Book.Offset : 0; } set { if (G.Book != null) G.Book.Offset = value; } }
-        
-        public String[] Text { get { return text; } set { text = value; } }
+        public double Offset { get { return G.Book != null ? G.Book.Offset : 0; } set { if (G.Book != null) G.Book.Offset = value; } }        
         public double CanvasHeight { get { return canvas.ActualHeight; } }
-        public double CanvasWidth { get { return canvas.ActualWidth; } } 
+        public double CanvasWidth { get { return canvas.ActualWidth; } }
+
+        public String[] Text { get { if (text == null && G.Book != null) text = G.Book.TotalText.ToArray(); return text; } set { text = value; } }
 
         private Point? lastPoint = null;
         private Binding widthBinding;
@@ -54,11 +54,12 @@ namespace TXTReader.Display {
         public Displayer4() {
             InitializeComponent();
             InitComponent();
+            if (G.Book != null) G.Book.LoadFinished += () => { Text = null; };
         }
 
         private void userControl_Loaded(object sender, RoutedEventArgs e) {
             if (G.Book != null) {
-                A.CopyText(out text, G.Book.TotalText);
+                //A.CopyText(out text, G.Book.TotalText);
                 Update();
             }
         }       
@@ -117,7 +118,7 @@ namespace TXTReader.Display {
             if (G.Book != book) {
                 Clear();
                 G.Book = book;
-                A.CopyText(out text, G.Book.TotalText);
+                Text = null;
                 Update();
             }
         }

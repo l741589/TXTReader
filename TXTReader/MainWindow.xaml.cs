@@ -141,8 +141,7 @@ namespace TXTReader {
             displayer.CloseFile();
             G.Timer.Stop();
             G.IsRunning = false;
-            G.NotifyIcon.Close();
-            
+            G.NotifyIcon.Close();            
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e) {

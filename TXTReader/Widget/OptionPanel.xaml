@@ -40,6 +40,8 @@
         <Grid DataContext="{DynamicResource localOptions}">
             <Border Margin="8">
                 <StackPanel Orientation="Vertical">
+                    <Widget:UserPanel/>
+                    <Separator/>
                     <GroupBox x:Name="group_skin">
                         <GroupBox.Header>
                             <StackPanel Orientation="Horizontal">

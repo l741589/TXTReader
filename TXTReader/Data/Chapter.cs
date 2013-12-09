@@ -7,19 +7,24 @@ using System.Threading.Tasks;
 using System.Windows;
 using TXTReader.Utility;
 using System.Diagnostics;
+using System.Windows.Threading;
 
 namespace TXTReader.Data
 {
     enum MatchType { NoMatch, List, Tree, Both };
     enum MatchLang { Trmex, Regex };
-    public class Chapter : DependencyObject,ContentItemAdapter {       
+    public class Chapter : DependencyObject, ContentItemAdapter {
 
-        public string Title { get; set; }
+        public static readonly DependencyProperty LengthProperty = DependencyProperty.Register("Length", typeof(int), typeof(Chapter), new PropertyMetadata(0));
+        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(String), typeof(Chapter), new PropertyMetadata((d, e) => { var s = (d as Chapter).TotalTitle; }));
+        public static readonly DependencyPropertyKey ContentStatusProperty = DependencyProperty.RegisterReadOnly("ContentStatus", typeof(ContentStatus), typeof(Chapter), new PropertyMetadata(ContentStatus.None));
+        public static readonly DependencyPropertyKey TotalTitleProperty = DependencyProperty.RegisterReadOnly("TotalTitle", typeof(String), typeof(Chapter), new PropertyMetadata(null));       
+
+        public string Title { get { return (String)GetValue(TitleProperty); } set { SetValue(TitleProperty, value); } }
         public List<String> Text { get;  set; }
         public ChapterCollection Children { get; private set; }
         public ContentItemAdapter Parent { get; private set; }
         private List<String> totalText = null;
-        private int len = 0;
         public int? Number { get; set; }
 
         public List<String> TotalText {
@@ -33,6 +38,9 @@ namespace TXTReader.Data
                         if (e.TotalText != null)
                             totalText.AddRange(e.TotalText);
                 return totalText;
+            }
+            protected set {
+                totalText = value;
             }
         }
 
@@ -67,66 +75,78 @@ namespace TXTReader.Data
             }
         }
 
+        private ContentStatus GetContentStatus() {
+            if (Children != null && Children.Count > 0) return ContentStatus.None;
+            if (Length >= G.Options.MaxChapterLength) return ContentStatus.TooLong;
+            if (Length < G.Options.MinChapterLength) return ContentStatus.TooShort;
+            try {
+                if (Number == null) return ContentStatus.None;
+                if (Node == null || Node.Previous == null) {
+                    if (Number == null || Number.Value == 0 || Number.Value == 1) return ContentStatus.None;
+                    if (Parent != null && Parent.Node != null) {
+                        LinkedListNode<ContentItemAdapter> anyPrev = Parent.Node.Previous;
+                        do {
+                            if (anyPrev == null) return ContentStatus.ConfusingIndex;
+                            while (anyPrev.Value.Number != null) {
+                                if (anyPrev.Value.Number + 1 == Number) return ContentStatus.None;
+                                if (anyPrev.Value.Children == null || anyPrev.Value.Children.Count == 0) break;
+                                anyPrev = anyPrev.Value.Children.Last;
+                            }
+                            if (anyPrev.Value.Number + 1 == Number) return ContentStatus.None;
+                            anyPrev = anyPrev.Value.Parent != null && anyPrev.Value.Parent.Node != null ?
+                                anyPrev.Value.Parent.Node.Previous : null;
+                        } while (anyPrev != null && Parent != null);
+                        if (anyPrev == null) return ContentStatus.ConfusingIndex;
+                        if (anyPrev.Value.Number + 1 != Number) return ContentStatus.ConfusingIndex;
+                    }
+                } else {
+                    if (Node.Previous.Value.Number == Number) return ContentStatus.LowLevelConfusingIndex;
+                    if (Node.Previous.Value.Number + 1 != Number) return ContentStatus.ConfusingIndex;
+                }
+            } catch (Exception e) {
+                Debug.WriteLine(e.StackTrace);
+            }
+            return ContentStatus.None;
+        }
+
         public ContentStatus ContentStatus {
             get {
-                if (Children != null && Children.Count > 0) return ContentStatus.None;
-                if (Length >= G.Options.MaxChapterLength) return ContentStatus.TooLong;
-                if (Length < G.Options.MinChapterLength) return ContentStatus.TooShort;
-                try {
-                    if (Number == null) return ContentStatus.None;
-                    if (Node == null || Node.Previous == null) {
-                        if (Number == null || Number.Value == 0 || Number.Value == 1) return ContentStatus.None;
-                        if (Parent != null && Parent.Node != null) {
-                            LinkedListNode<ContentItemAdapter> anyPrev = Parent.Node.Previous;
-                            do {
-                                if (anyPrev == null) return ContentStatus.ConfusingIndex;
-                                while (anyPrev.Value.Number != null) {
-                                    if (anyPrev.Value.Number + 1 == Number) return ContentStatus.None;
-                                    if (anyPrev.Value.Children == null || anyPrev.Value.Children.Count == 0) break;
-                                    anyPrev = anyPrev.Value.Children.Last;
-                                }
-                                if (anyPrev.Value.Number + 1 == Number) return ContentStatus.None;
-                                anyPrev = anyPrev.Value.Parent != null && anyPrev.Value.Parent.Node != null ?
-                                    anyPrev.Value.Parent.Node.Previous : null;
-                            } while (anyPrev != null && Parent != null);
-                            if (anyPrev == null) return ContentStatus.ConfusingIndex;
-                            if (anyPrev.Value.Number + 1 != Number) return ContentStatus.ConfusingIndex;
-                        }
-                    } else {
-                        if (Node.Previous.Value.Number == Number) return ContentStatus.LowLevelConfusingIndex;
-                        if (Node.Previous.Value.Number + 1 != Number) return ContentStatus.ConfusingIndex;
-                    }
-                } catch (Exception e) {
-                    Debug.WriteLine(e.StackTrace);
-                }
-                return ContentStatus.None;
+                var cs = GetContentStatus();
+                SetValue(ContentStatusProperty, cs);
+                return cs;
             }
         }
 
-        
+
         public string TotalTitle {
             get {
-                if (Level == 0) return null;
-                if (Parent != null) {
-                    if (Level == 1) return Title;
-                    else return Parent.TotalTitle + " " + Title;
+                String ret = null;
+                if (Level == 0) ret = null;
+                else {
+                    if (Parent != null) {
+                        if (Level == 1) ret = Title;
+                        else ret = Parent.TotalTitle + " " + Title;
+                    }
                 }
-                return null;
+                SetValue(TotalTitleProperty, ret);
+                return ret;
             }
         }
         public int Level { get { if (Parent == null) return 0; else return Parent.Level + 1; } }
 
         public int Length {
             get {
+                int len=(int)GetValue(LengthProperty);
                 if (len != 0) return len;
                 len = 0;
                 if(Text!=null)
                     foreach (var e in Text) len += e.Length;
                 if (Children != null)
                     foreach (var e in Children) len += e.Length;
+                SetValue(LengthProperty, len);
                 return len;
             }
-            set { len = value; }
+            set { SetValue(LengthProperty, value); }
         }
 
         public ContentItemAdapter FindChildByTitle(String title) {
@@ -159,7 +179,7 @@ namespace TXTReader.Data
             Title = null;
             Text = null;
             totalText = null;
-            len = 0;
+            Length = 0;
             if (Children != null) {
                 foreach (var e in Children) (e as Chapter).Clear();
                 Children.Clear();
@@ -183,6 +203,25 @@ namespace TXTReader.Data
 
         public override string ToString() {
             return TotalTitle;
+        }
+
+        public virtual void Notify() {
+            if (Children != null) {
+                Children.Notify();
+                foreach (ContentItemAdapter c in Children)
+                    c.Notify();
+            }
+        }
+
+        public void Update(){
+            if (Children != null) {
+                foreach (Chapter c in Children)
+                    c.Update();
+            }
+            var cs = ContentStatus;
+            SetValue(TotalTitleProperty, TotalTitle);
+            Length = 0;
+            var l = Length;
         }
     }
 }

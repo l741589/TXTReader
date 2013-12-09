@@ -23,6 +23,7 @@ namespace TXTReader.Data {
         int LineCount { get; }
         int TotalLineCount { get; }
         int? Number { get; }
+        void Notify();
     }
 
     public interface ContentAdapter : ContentItemAdapter { }

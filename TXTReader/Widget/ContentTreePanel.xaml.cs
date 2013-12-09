@@ -25,6 +25,7 @@ namespace TXTReader.Widget
         {
             InitializeComponent();
             Loaded += (d, e) => { UpdateContentUI(); };
+            if (G.Book != null) G.Book.LoadFinished += () => { UpdateContentUI(); };
         }
 
         private void trvContent_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -41,11 +42,20 @@ namespace TXTReader.Widget
         //There are some problems of setting binding to a static class in XAML.
         //(mainly because a binding breaks() when the binding source is set to null.)
         //So, [CALL THIS METHOD] when Utility.G.Book is changed.
-        public void UpdateContentUI()
-        {
-            txbTitle.SetBinding(TextBlock.TextProperty, new Binding("Title") { Source = Utility.G.Book });
-            txbLength.SetBinding(TextBlock.TextProperty, new Binding("Length") { Source = Utility.G.Book });
-            trvContent.SetBinding(TreeView.ItemsSourceProperty, new Binding("Children") { Source = Utility.G.Book });
+        public void UpdateContentUI() {
+            if (G.Book != null) {
+                txbTitle.Text = G.Book.Title;
+                txbLength.Text = G.Book.Length.ToString();
+                trvContent.ItemsSource = null;
+                trvContent.Items.Clear();
+                trvContent.ItemsSource = G.Book.Children;
+            } else {
+                trvContent.ItemsSource = null;
+                trvContent.Items.Clear();
+                txbTitle.Text = "-";
+                txbLength.Text = "-";
+
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

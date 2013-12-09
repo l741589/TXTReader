@@ -190,6 +190,9 @@
     <Compile Include="Widget\TRProgressBar.xaml.cs">
       <DependentUpon>TRProgressBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Widget\UserPanel.xaml.cs">
+      <DependentUpon>UserPanel.xaml</DependentUpon>
+    </Compile>
     <Page Include="Display\TRText.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -299,6 +302,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Widget\TRProgressBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\UserPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

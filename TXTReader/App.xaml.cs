@@ -30,6 +30,7 @@ namespace TXTReader {
             }
             //*/
             RuleParser.Load();
+            SkinParser.SetDefaultSkin();
             SkinParser.Load();
             BookParser.Load();
             OptionsParser.Load();

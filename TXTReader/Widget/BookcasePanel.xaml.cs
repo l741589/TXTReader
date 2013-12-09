@@ -108,8 +108,7 @@ namespace TXTReader.Widget {
 
         private void lb_book_DoubleClick(object sender, MouseButtonEventArgs e) {
             var li = sender as ListBoxItem;
-            var b = li.DataContext as Book;
-            
+            var b = li.DataContext as Book;            
             G.Displayer.OpenBook(b);
             var i=G.Books.IndexOf(b);
             G.Books.Remove(b);

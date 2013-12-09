@@ -105,14 +105,17 @@ namespace TXTReader.Utility {
             });
         }
 
-        public static void ReplaceBook(ref Book book,Book value) {
+
+        public static void ReplaceBook(ref Book book, Book value) {
             if (book == value) return;
             if (book != null) book.Close();
             book = value;
-            if (book != null) {
+            if (book != null) {                
                 book.Load();
             }
             if (G.MainWindow != null) {
+                if (book != null) book.LoadFinished += () => { G.MainWindow.toolPanel.pn_contenttree.UpdateContentUI(); };
+                if (book != null) book.LoadFinished += () => { G.Displayer.Text = null; };
                 G.FloatMessagePanel.UpdateBinding();
                 if (G.MainWindow.toolPanel.pn_bookmark.lb_bookmark.ItemsSource != G.Bookmark)
                     G.MainWindow.toolPanel.pn_bookmark.lb_bookmark.ItemsSource = G.Bookmark;

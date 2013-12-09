@@ -85,6 +85,18 @@ namespace TXTReader.Widget
             btnBackgroundImage.ToolTip = new Image() { Source = Options.Skin.BackImage, MaxHeight = MAX_TOOLTIP_SIZE, MaxWidth = MAX_TOOLTIP_SIZE };
             ckbBold.IsChecked = G.Options.Skin.Font.Style == FontStyles.Italic;
             ckbItalic.IsChecked = G.Options.Skin.Font.Weight == FontWeights.Bold;
+            if (cbxBackgroundType.SelectedItem != null) {
+                switch ((Data.BackGroundType)((KeyValuePair<BackGroundType, String>)cbxBackgroundType.SelectedItem).Key) {
+                    case Data.BackGroundType.SolidColor:
+                        cbxBackgroundColor.Visibility = Visibility.Visible;
+                        btnBackgroundImage.Visibility = Visibility.Collapsed;
+                        break;
+                    case Data.BackGroundType.Image:
+                        cbxBackgroundColor.Visibility = Visibility.Collapsed;
+                        btnBackgroundImage.Visibility = Visibility.Visible;
+                        break;
+                }
+            }
         }
 
         private void cbxBackgroundType_SelectionChanged(object sender, SelectionChangedEventArgs e)
