@@ -126,7 +126,9 @@ namespace TXTReader {
                 case Key.Down: displayer.LineModify(-1); break;
                 case Key.PageUp: displayer.PageModify(+1); break;
                 case Key.PageDown: displayer.PageModify(-1); break;
-                case Key.LeftShift: Hold(HC_MOVE); break;                
+                case Key.Enter:
+                case Key.Space: G.Displayer.IsScrolling = !G.Displayer.IsScrolling; break;
+                case Key.LeftShift: Hold(HC_MOVE); break;
             }            
         }
 

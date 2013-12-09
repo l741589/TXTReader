@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             MouseDown="ProgressBar_MouseDown" Height="8" Focusable="False">
+             MouseDown="ProgressBar_MouseDown" Height="8" Focusable="False" Opacity="0.7">
     <ProgressBar.Resources>
         <Storyboard x:Key="show">
             <DoubleAnimation

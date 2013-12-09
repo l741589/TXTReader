@@ -17,8 +17,9 @@ namespace TXTReader.Data {
         public event Action LoadFinished;
 
         public const String NO_PREVIEW = "暂无预览";
-        public static readonly DependencyProperty PositionProperty = DependencyProperty.Register("Position", typeof(int), typeof(Book));
+        public static readonly DependencyProperty PositionProperty = DependencyProperty.Register("Position", typeof(int), typeof(Book), new PropertyMetadata(OnPositionChanged));
         public static readonly DependencyProperty OffsetProperty = DependencyProperty.Register("Offset", typeof(double), typeof(Book));
+        public static readonly DependencyPropertyKey CurrentTitleProperty = DependencyProperty.RegisterReadOnly("CurrentTitle", typeof(String), typeof(Book),new PropertyMetadata(null));
         private ImageSource cover = null;
         public bool IsLocal { get { return Source == null ? false : !Source.ToLower().StartsWith(G.HTTP_HEAD); } }
         public ImageSource Cover { get { if (cover == null) return G.NoCover; else return cover; } set { cover = value; } }
@@ -128,6 +129,7 @@ namespace TXTReader.Data {
                 //TODO 添加Download逻辑
             }            
             Update();
+            GenerateIndex();
             Dispatcher.Invoke(() => { if (LoadFinished != null) LoadFinished(); });            
         }
 
@@ -151,6 +153,47 @@ namespace TXTReader.Data {
             BookParser.Save(this);
             LoadFinished = null;
             base.Close();
+        }
+
+        private List<ContentItemAdapter> positions;
+        public ContentItemAdapter[] Positions;
+        private void GenerateIndex() {
+            positions = new List<ContentItemAdapter>();
+            GenerateIndex(this);
+            Positions = positions.ToArray();
+        }
+
+        private void GenerateIndex(ContentItemAdapter node) {
+            if (node.Children != null && node.Children.Count > 0) {
+                foreach (var e in node.Children) GenerateIndex(e);
+            } else {
+                positions.Add(node);
+            }
+        }
+
+        private static void OnPositionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            if (d == null) return;
+            var o = d as Book;
+            if (o.Positions == null) return;
+            int i = (int)e.NewValue;
+            int l = 0, r = o.Positions.Length;
+            int m = (l + r) >> 1;
+            while (true) {                
+                var p = o.Positions[m];
+                if (i < p.AbsolutePosition) {
+                    r = m;
+                } else if (i >= p.AbsolutePosition) {
+                    if (m == r - 1) break;
+                    var q = o.Positions[m + 1];
+                    if (i < q.AbsolutePosition) {
+                        break;
+                    } else {
+                        l = m;
+                    }
+                }
+                m = (l + r) >> 1;
+            }
+            o.SetValue(Book.CurrentTitleProperty, o.Positions[m].TotalTitle);
         }
     }
 }

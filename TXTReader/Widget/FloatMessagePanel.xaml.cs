@@ -54,12 +54,14 @@ namespace TXTReader.Widget {
             BindingOperations.ClearAllBindings(Position.tb);
             BindingOperations.ClearAllBindings(Fps.tb);
             BindingOperations.ClearAllBindings(Speed.tb);
+            BindingOperations.ClearAllBindings(Title.tb);
             if (G.Book != null) {
                 Position.SetBinding(FloatMessage.ValueProperty, new Binding("Percent") { Source = G.MainWindow.progressBar });
-                Title.Value = G.Book.Title;
+                Title.SetBinding(FloatMessage.ValueProperty, new Binding("CurrentTitle") { Source = G.Book });
             }
             Fps.SetBinding(FloatMessage.ValueProperty, new Binding("Fps") { Source = G.Displayer });
             Speed.SetBinding(FloatMessage.ValueProperty, new Binding("Speed") { Source = G.Displayer });
+            
         }
     }
 }
