@@ -75,6 +75,15 @@ class User_Controller extends Session_Controller
 
     function logout()
     {
-        return $this->del_session();
+        if ($this->is_logged_in()) {
+            $is_logged_out = $this->del_session();
+            if ($is_logged_out) {
+                show_result(RESULT_SUCCESS);
+            } else {
+                show_result(RESULT_CANNOT_LOGOUT);
+            }
+        } else {
+            show_result(RESULT_NOT_LOGIN);
+        }
     }
 }

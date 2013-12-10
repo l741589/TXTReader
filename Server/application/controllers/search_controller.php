@@ -37,7 +37,10 @@ class Search_Controller extends Session_Controller
                 } else {
                     $ret = array();
                     foreach ($user_book_ids as $id) {
-                        $ret[] = $this->_book_model->get_book($id);
+                        $book = $this->_book_model->get_book($id);
+                        if ($book) {
+                            $ret[] = $book;
+                        }
                     }
                     show_result(RESULT_SUCCESS, $ret);
                 }

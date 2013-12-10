@@ -93,7 +93,7 @@ class User_Model extends CI_Model
     {
         $this->db->where('username', $username);
         $this->db->get('user');
-        if ($this->db->affected_row() > 0) {
+        if ($this->db->affected_rows() > 0) {
             return false;
         }
         return true;

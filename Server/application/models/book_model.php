@@ -37,11 +37,11 @@ class Book_Model extends CI_Model
                 return RESULT_DB_ERROR;
             }
         }
-        $book_id = $book_info;
+        $book_id = $book_info->id;
         $user_id = $options['user_id'];
         if (!$this->_is_user_has_book($user_id, $book_id)) {
             $this->db->set('book_id', $book_id);
-            $this->db->set('user_id', $options['user_id']);
+            $this->db->set('user_id', $user_id);
             $this->db->insert('user_book_relation');
             if ($this->db->affected_rows() <= 0) {
                 return RESULT_DB_ERROR;
@@ -70,6 +70,7 @@ class Book_Model extends CI_Model
 
     function get_book($book_id)
     {
+        echo $book_id;
         $this->db->where("id", $book_id);
         $query = $this->db->get("book");
         if ($this->db->affected_rows() <= 0) {

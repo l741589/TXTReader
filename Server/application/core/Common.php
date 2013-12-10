@@ -20,6 +20,7 @@ if (!function_exists("show_result")) {
             1007 => "no login",
             1008 => "upload error",
             1009 => "user has no books",
+            1010 => "cannot log out",
         );
         $_output = & load_class("Output", "core");
         $_result_data = array(
