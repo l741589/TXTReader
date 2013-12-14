@@ -22,7 +22,9 @@ class Book_Model extends CI_Model
             return RESULT_MISSING_ARGS;
         }
         $book_info = $this->_get_by_file_md5($options['file_md5']);
-        if (!$book_info) {
+        if ($book_info != false) {
+            $book_id = $book_info->id;
+        } else {
             $this->db->set('book_name', $options['book_name']);
             $this->db->set('file_md5', $options['file_md5']);
             $this->db->insert('book');
@@ -37,7 +39,7 @@ class Book_Model extends CI_Model
                 return RESULT_DB_ERROR;
             }
         }
-        $book_id = $book_info->id;
+//        $book_id = $book_info->id;
         $user_id = $options['user_id'];
         if (!$this->_is_user_has_book($user_id, $book_id)) {
             $this->db->set('book_id', $book_id);
