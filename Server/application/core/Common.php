@@ -28,13 +28,22 @@ if (!function_exists("show_result")) {
             "msg"    => $status_msg[$status_code]
         );
         if ($data != null) {
-            $data = is_array($data) ? $data : $data;
-            $_result_data['data'] = $data;
+            $_result_data['data'] = is_array($data) ? var_urlencode($data) : urlencode($data);
         }
-        echo $_output
-            ->set_content_type('application/json')
-            ->set_output(json_encode($_result_data))
-            ->get_output();
-        exit;
+        $_output->set_content_type('application/json');
+        $_output->set_output(urldecode(json_encode($_result_data)));
+    }
+
+    function var_urlencode($data)
+    {
+        $ret_data = array();
+        foreach ($data as $item) {
+            if (is_array($item)) {
+                $ret_data[] = var_urlencode($item);
+            } else {
+                $ret_data[] = urlencode($item);
+            }
+        }
+        return $ret_data;
     }
 }

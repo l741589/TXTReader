@@ -72,7 +72,6 @@ class Book_Model extends CI_Model
 
     function get_book($book_id)
     {
-        echo $book_id;
         $this->db->where("id", $book_id);
         $query = $this->db->get("book");
         if ($this->db->affected_rows() <= 0) {
