@@ -42,25 +42,93 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <TabControl x:Name="tab">
+        <TabControl.Template>
+            <ControlTemplate TargetType="{x:Type TabControl}">
+                <Grid ClipToBounds="true" KeyboardNavigation.TabNavigation="Local" SnapsToDevicePixels="true">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition x:Name="ColumnDefinition0"/>
+                        <ColumnDefinition x:Name="ColumnDefinition1" Width="0"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition x:Name="RowDefinition0" Height="Auto"/>
+                        <RowDefinition x:Name="RowDefinition1" Height="*"/>
+                    </Grid.RowDefinitions>
+                    <UniformGrid
+                      Rows="1"
+                      x:Name="HeaderPanel"
+                      Grid.Column="0"
+                      Grid.Row="0"
+                      Margin="0,0,0,0"
+                      Panel.ZIndex="1"
+                      IsItemsHost="true"
+                      KeyboardNavigation.TabIndex="1"/>
+                    <Border
+                      x:Name="ContentPanel"
+                      Grid.Column="0"
+                      Grid.Row="1"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      KeyboardNavigation.DirectionalNavigation="Contained"
+                      KeyboardNavigation.TabIndex="2"
+                      KeyboardNavigation.TabNavigation="Local">
+                        <ContentPresenter
+                        x:Name="PART_SelectedContentHost"
+                        Margin="{TemplateBinding Padding}"
+                        ContentSource="SelectedContent"
+                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    </Border>
+                </Grid>
+                <ControlTemplate.Triggers>
+                    <Trigger Property="TabStripPlacement" Value="Bottom">
+                        <Setter TargetName="HeaderPanel" Property="Grid.Row" Value="1"/>
+                        <Setter TargetName="ContentPanel" Property="Grid.Row" Value="0"/>
+                        <Setter TargetName="RowDefinition0" Property="Height" Value="*"/>
+                        <Setter TargetName="RowDefinition1" Property="Height" Value="Auto"/>
+                        <Setter TargetName="HeaderPanel" Property="Margin" Value="2,0,2,2"/>
+                    </Trigger>
+                    <Trigger Property="TabStripPlacement" Value="Left">
+                        <Setter TargetName="HeaderPanel" Property="Grid.Row" Value="0"/>
+                        <Setter TargetName="ContentPanel" Property="Grid.Row" Value="0"/>
+                        <Setter TargetName="HeaderPanel" Property="Grid.Column" Value="0"/>
+                        <Setter TargetName="ContentPanel" Property="Grid.Column" Value="1"/>
+                        <Setter TargetName="ColumnDefinition0" Property="Width" Value="Auto"/>
+                        <Setter TargetName="ColumnDefinition1" Property="Width" Value="*"/>
+                        <Setter TargetName="RowDefinition0" Property="Height" Value="*"/>
+                        <Setter TargetName="RowDefinition1" Property="Height" Value="0"/>
+                        <Setter TargetName="HeaderPanel" Property="Margin" Value="2,2,0,2"/>
+                    </Trigger>
+                    <Trigger Property="TabStripPlacement" Value="Right">
+                        <Setter TargetName="HeaderPanel" Property="Grid.Row" Value="0"/>
+                        <Setter TargetName="ContentPanel" Property="Grid.Row" Value="0"/>
+                        <Setter TargetName="HeaderPanel" Property="Grid.Column" Value="1"/>
+                        <Setter TargetName="ContentPanel" Property="Grid.Column" Value="0"/>
+                        <Setter TargetName="ColumnDefinition0" Property="Width" Value="*"/>
+                        <Setter TargetName="ColumnDefinition1" Property="Width" Value="Auto"/>
+                        <Setter TargetName="RowDefinition0" Property="Height" Value="*"/>
+                        <Setter TargetName="RowDefinition1" Property="Height" Value="0"/>
+                        <Setter TargetName="HeaderPanel" Property="Margin" Value="0,2,2,2"/>
+                    </Trigger>
+                    <Trigger Property="IsEnabled" Value="false">
+                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+        </TabControl.Template>
+        <TabItem Header="目录" >
+            <Widget:ContentTreePanel x:Name="pn_contenttree"/>
+        </TabItem>
         <TabItem Header="划分">
             <Widget:RulePanel x:Name="pn_rule"/>
         </TabItem>
         <TabItem Header="设置">
             <Widget:OptionPanel x:Name="pn_option"/>
-        </TabItem>
-        <TabItem Header="书架">
-            <Widget:BookcasePanel x:Name="pn_bookcase"/>
-        </TabItem>
+        </TabItem>        
         <TabItem Header="书签">
             <Widget:BookmarkPanel x:Name="pn_bookmark"/>
         </TabItem>
-        <TabItem Header="目录">
-            <Widget:ContentTreePanel x:Name="pn_contenttree"/>
-        </TabItem>
-        <TabItem Header="TEST">
-            <StackPanel>
-                <Widget:TrmexTextBox></Widget:TrmexTextBox>
-            </StackPanel>
+        <TabItem Header="书架">
+            <Widget:BookcasePanel x:Name="pn_bookcase"/>
         </TabItem>
     </TabControl>
 </UserControl>

@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TXTReader.Data;
 using TXTReader.Utility;
 
 namespace TXTReader.Widget {
@@ -60,8 +61,23 @@ namespace TXTReader.Widget {
                 Title.SetBinding(FloatMessage.ValueProperty, new Binding("CurrentTitle") { Source = G.Book });
             }
             Fps.SetBinding(FloatMessage.ValueProperty, new Binding("Fps") { Source = G.Displayer });
-            Speed.SetBinding(FloatMessage.ValueProperty, new Binding("Speed") { Source = G.Displayer });
-            
+            Speed.SetBinding(FloatMessage.ValueProperty, new Binding("Speed") { Source = G.Displayer });            
+        }
+
+        public void UpdateColor(){
+            Brush bg = null;
+            Brush fg = Brushes.Black;
+            if (G.Options.Skin.BackGroundType == BackGroundType.Image) {
+                bg = new SolidColorBrush(Color.FromArgb(128, 255, 255, 255));
+                fg = Brushes.Black;
+            } else {
+                bg = null;
+                Color c = G.Options.Skin.BackColor;
+                if ((c.R + c.G + c.B) > 128 * 3) fg = Brushes.Black;
+                else fg = Brushes.White;                
+            }
+            Time.Background = Speed.Background = Fps.Background = Title.Background = Position.Background = bg;
+            Time.Foreground = Speed.Foreground = Fps.Foreground = Title.Foreground = Position.Foreground = fg;
         }
     }
 }

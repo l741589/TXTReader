@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>章节划分规则面板</title>
+    <link href="trcss.css" rel="stylesheet" />
+</head>
+<body>
+    <h1>章节划分规则面板</h1>
+    <hr />
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;章节划分规则面板允许我们对<a href="Temex.html">TXTReader匹配表达式</a>进行编辑，系统将会根据选中的表达式对章节标题进行匹配，从而划分章节。</p>
+    <img src="res/rulepanel0.png" />
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;该面板分上下两部分，均可通过点击各自上方的标题收起。</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;在每个部分上方的标题右边有一个复选框，选中时才会启用该规则，当同时启用的时候，列表目录规则优先于树状目录规则进行匹配。</p>
+    <h3>列表目录规则</h3>
+    <p>列表目录即类似下面这种目录排布</p>
+    <div class="sample">
+        <p>第一卷 卷名 第一章 章名</p>
+        <p>第一卷 卷名 第二章 章名</p>
+        <p>第一卷 卷名 第三章 章名</p>
+        <p>…………</p>
+        <p>第二卷 卷名 第一章 章名</p>
+        <p>第二卷 卷名 第二章 章名</p>
+        <p>第二卷 卷名 第三章 章名</p>
+        <p>…………</p>
+        <p>第三卷 卷名 第一章 章名</p>
+        <p>第三卷 卷名 第二章 章名</p>
+        <p>第三卷 卷名 第三章 章名</p>
+        <p>…………</p>
+    </div>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;这种模式下，可以在文本框中每行输入一条<a href="Temex.html">TXTReader匹配表达式</a>每行之间是或关系，写在前面的优先级高于写在后面的表达式，用于描述每个章节的标题。</p>
+    <h3>树状目录规则</h3>
+    <p>树状目录即类似下面这种目录排布</p>
+    <div class="sample">
+        <p>第一卷 卷名</p>
+        <p>第一章 章名</p>
+        <p>第二章 章名</p>
+        <p>第三章 章名</p>
+        <p>…………</p>
+        <p>第二卷 卷名</p>
+        <p>第一章 章名</p>
+        <p>第二章 章名</p>
+        <p>第三章 章名</p>
+        <p>…………</p>
+        <p>第三卷 卷名</p>
+        <p>第一章 章名</p>
+        <p>第二章 章名</p>
+        <p>第三章 章名</p>
+        <p>…………</p>
+    </div>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;这种模式下，我们可以通过标题上的“+”“-”两个按钮增加，减少章节的级别数，例如例子那种即为两个级别的。</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;第一个文本框为第1级别，相当于例子中“卷”的级别。然后从上到下依次为2,3,4等级别。</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;可以在每个文本框中每行输入一条<a href="Temex.html">TXTReader匹配表达式</a>每行之间是或关系，写在前面的优先级高于写在后面的表达式，用于描述每个章节的标题。</p>
+</body>
+</html>
+

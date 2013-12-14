@@ -30,7 +30,7 @@ namespace TXTReader.Utility {
         }
 
 
-        public static XmlNode AddAttribute<T>(XmlNode parent, String name, T value) 
+        public static XmlNode AppendAttribute<T>(XmlNode parent, String name, T value) 
         { return AddAttribute(parent, name, value, default(T)); }
         public static XmlNode AddAttribute<T>(XmlNode elem, String name, T value, params T[] ignoreWhenEqual) {
             if (ignoreWhenEqual != null && ignoreWhenEqual.Contains(value)) return null;
@@ -124,7 +124,7 @@ namespace TXTReader.Utility {
             }
 
             public Writer Attr<T>(String name,T value) {
-                AddAttribute(node, name, value);
+                AppendAttribute(node, name, value);
                 return this;
             }
            

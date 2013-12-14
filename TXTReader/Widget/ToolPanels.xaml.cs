@@ -33,6 +33,11 @@ namespace TXTReader.Widget
             toolPanelShow = Resources["toolPanelShow"] as Storyboard;
             toolPanelHide = Resources["toolPanelHide"] as Storyboard;
             (tab.Items[0] as Control).Focus();
+            Loaded += ToolPanels_Loaded;
+        }
+
+        void ToolPanels_Loaded(object sender, RoutedEventArgs e) {
+
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e) {            

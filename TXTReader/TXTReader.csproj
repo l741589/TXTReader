@@ -118,6 +118,7 @@
     <Compile Include="Utility\BookParser.cs" />
     <Compile Include="Utility\BookCollection.cs" />
     <Compile Include="Utility\BufferObject.cs" />
+    <Compile Include="Utility\HelpProvider.cs" />
     <Compile Include="Utility\KeyHook.cs" />
     <Compile Include="Utility\MessageConst.cs" />
     <Compile Include="Utility\OptionsParser.cs" />
@@ -328,6 +329,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

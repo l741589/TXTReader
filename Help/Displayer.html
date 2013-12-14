@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>主窗口</title>
+    <link href="trcss.css" rel="stylesheet" />
+</head>
+<body>
+    <h1>主窗口</h1>
+    <hr />
+    <h3>内容显示</h3>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;文本显示部分是为我们显示小说内容的地方，我们可以在这阅读小说。</p>
+    <img alt="主界面" src="res/displayer0.png" />
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;在这个界面上，我们可以执行以下操作：</p>
+    <table>
+        <tr>
+            <td>双击鼠标</td>
+            <td>开启/关闭滚屏</td>
+        </tr>
+        <tr>
+            <td>鼠标拖动</td>
+            <td>上下滑动内容</td>
+        </tr>
+        <tr>
+            <td>shift+鼠标拖动</td>
+            <td>拖动窗口</td>
+        </tr>
+        <tr>
+            <td>鼠标右键</td>
+            <td>弹出<a href="#hMenu">右键菜单</a></td>
+        </tr>
+        <tr>
+            <td>鼠标靠近右边界</td>
+            <td>弹出<a href="ToolPanels.html">工具面板</a></td>
+        </tr>
+        <tr>
+            <td>鼠标靠近下边界</td>
+            <td>弹出<a href="ProgressBar.html">进度条</a></td>
+        </tr>
+        <tr>
+            <td>Esc</td>
+            <td>最小化界面到托盘</td>
+        </tr>
+        <tr>
+            <td>Ctrl+T</td>
+            <td>最小化界面到托盘/从托盘状态恢复</td>
+        </tr>
+        <tr>
+            <td>Ctrl+F</td>
+            <td>弹出<a href="Searchbar.html">搜索框</a></td>
+        </tr>
+		 <tr>
+            <td>, &lt;</td>
+            <td>加快滚屏<sup><a href="#c1">[1]</a></sup></td>
+        </tr>
+		 <tr>
+            <td>. &gt;</td>
+            <td>减慢滚屏<sup><a href="#c1">[1]</a></sup></td>
+        </tr>
+        <tr>
+            <td>Ctrl+O</td>
+            <td>打开文件</td>
+        </tr>
+        <tr>
+            <td>Alt+X</td>
+            <td>退出程序</td>
+        </tr>
+    </table>
+    <h3 id="hMenu">右键菜单</h3>
+    <img src="res/displayer1.png" />
+    <p>各项功能说明</p>
+    <table>
+        <tr>
+            <td>打开</td>
+            <td>打开一本新小说</td>
+        </tr>
+        <tr>
+            <td>关闭</td>
+            <td>关闭当前小说</td>
+        </tr>
+        <tr>
+            <td>重开</td>
+            <td>重新打开当前小说，部分数据的更新需要此功能</td>
+        </tr>
+        <tr>
+            <td>搜索</td>
+            <td>弹出<a href="Searchbar.html">搜索框</a></td>
+        </tr>
+        <tr>
+            <td>滚屏</td>
+            <td>开启/关闭滚屏功能</td>
+        </tr>
+        <tr>
+            <td>边框</td>
+            <td>显示/隐藏程序的边框</td>
+        </tr>
+        <tr>
+            <td>全屏</td>
+            <td>切换全屏/窗口状态</td>
+        </tr>
+        <tr>
+            <td>隐藏到托盘</td>
+            <td>隐藏程序到托盘</td>
+        </tr>
+        <tr>
+            <td>退出</td>
+            <td>退出程序</td>
+        </tr>
+    </table>
+    <hr />
+    <div id="comment">
+        <p id="c1">[1] 本程序的滚屏是由不断的更新窗口来实现的，所以会有帧率。</p>
+    </div>
+</body>
+</html>

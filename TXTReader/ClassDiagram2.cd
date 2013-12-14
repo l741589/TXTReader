@@ -1,0 +1,729 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="TXTReader.App" Collapsed="true">
+    <Position X="13.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAACAAAAAAAAAAAAAAAQAAAAAAAAAABAAAA=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.MainWindow" Collapsed="true">
+    <Position X="13.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAQQQKBASACIAIMAQAABgABAABooCBoUoQCiCQAKAQQ=</HashCode>
+      <FileName>MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Commands.MyCommands" Collapsed="true">
+    <Position X="17" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAABAAAAAAAIAAAACAIAAAACIAAAIKQAAACEAAAA=</HashCode>
+      <FileName>Commands\MyCommands.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Converter.BookLengthConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converter\BookLengthConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Converter.BookmarkConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converter\BookmarkConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Converter.ChapterRuleNameConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converter\ChapterRuleNameConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Converter.ContentStatusImageConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converter\ContentStatusImageConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Converter.MyDateTimeConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converter\MyDateTimeConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Converter.NotConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converter\NotConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Converter.ParaSpacingCvt" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converter\ParaSpacingCvt.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Converter.RuleDelButtonVisibilityConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converter\RuleDelButtonVisibilityConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Converter.SizeableConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converter\SizeableConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Converter.SolidColorCvt" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>Converter\SolidColorCvt.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Converter.ToolPanelTargetLeftCvt" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converter\ToolPanelTargetLeftCvt.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Converter.ToolPanelWidthCvt" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converter\ToolPanelWidthCvt.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Converter.TypefaceToFontFamilyCvt" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converter\TypefaceToFontFamilyCvt.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Converter.VisiblilityConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converter\VisiblilityConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Converter.WindowStyleConverter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Converter\WindowStyleConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Data.Book" Collapsed="true">
+    <Position X="3.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABgkAAAgBAgQAggAAAJBgAAABABCBAoCQCACCIgAA=</HashCode>
+      <FileName>Data\Book.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TXTReader.Data.Bookmark" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="7.75" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAAAAAAAgAAgAAAAAAAAgQA=</HashCode>
+      <FileName>Data\Bookmark.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Data.Chapter" Collapsed="true">
+    <Position X="3.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAABAAiAAAAEAECFCEQAZAIAAAAEBBAEAgGEHAIAA=</HashCode>
+      <FileName>Data\Chapter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="TXTReader.Data.ChapterCollection" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACIABAAAAAAAQAAAAAApAQgAAAYAgBEAAFSAABQIAA=</HashCode>
+      <FileName>Data\ChapterCollection.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Data.ChapterDesc" Collapsed="true">
+    <Position X="11.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAkCAAAAEAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>Data\ChapterDesc.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Data.FloatMessage" Collapsed="true">
+    <Position X="15.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAACAAAAAAAAACQAQA=</HashCode>
+      <FileName>Data\FloatMessage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Data.Options" Collapsed="true">
+    <Position X="10" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAgAAAAAAQKEAgABIAAABAABACAAASAAACASIAAA=</HashCode>
+      <FileName>Data\Options.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Data.Skin" Collapsed="true">
+    <Position X="11.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAACIAAAhAAAIAQAAAAgGAAAAAAAAAQAcgAAADIAA=</HashCode>
+      <FileName>Data\Skin.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Data.Trmex" Collapsed="true">
+    <Position X="15.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IBACQgAAAAAABcMGQAQAAAAAkCAhAAAAABAACQAAQEA=</HashCode>
+      <FileName>Data\Trmex.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Display.Displayer" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gYQQQgAAAAAAAACAgAAAASAJABIAAUACIwAAOIVCgBA=</HashCode>
+      <FileName>Display\Displayer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Display.Displayer2" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AYQQQgAAAAAAAACAgAAAQSAJABIAAcACIgBACIVCgBA=</HashCode>
+      <FileName>Display\Displayer2.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Display.Displayer3" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AYQAQgEAAAAAgACAgAAAQSAJABIAAcACIgAACIVCgBA=</HashCode>
+      <FileName>Display\Displayer3.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Display.Displayer4" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AYQAUwQAACAAAAiAgAQAQSABgFCAAcAOIhAQCIFSgBA=</HashCode>
+      <FileName>Display\Displayer4.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Display.TextDisplayCacheElem" Collapsed="true">
+    <Position X="22.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAIAAIAAAIAAAAAAAAAAAAEAAgAAgAg=</HashCode>
+      <FileName>Display\TextDisplayCache.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Display.TextDisplayCache" Collapsed="true">
+    <Position X="20.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAggAAACAAAAQAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Display\TextDisplayCache.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Display.TRText" Collapsed="true">
+    <Position X="22.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAgAgAAAABABAAAACAAAQAAAAEAgAAAQAA=</HashCode>
+      <FileName>Display\TRText.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Display.TRText2" Collapsed="true">
+    <Position X="24" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgCAAAAAAAAAAAQAIAAAAAAAAAAAAIIQAUAAAAAAAA=</HashCode>
+      <FileName>Display\TRText2.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Display.TRText3" Collapsed="true">
+    <Position X="10" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQCIAAAAAAAAAAAAIAQAEAAAIAACA=</HashCode>
+      <FileName>Display\TRText3.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Display.TRTimer" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAogAAAEAGAAAAAAAIAEAACAAAAgAAAAIAAAACgEAAI=</HashCode>
+      <FileName>Display\TRTimer.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Display.TRTimer2" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAogAAAEACAAAABAAIAEAAAAAAAAAAAAIAAAACgEAAA=</HashCode>
+      <FileName>Display\TRTimer2.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Properties.Resources" Collapsed="true">
+    <Position X="13.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAACAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Properties.Settings" Collapsed="true">
+    <Position X="22.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAIAAAAAAAAAAAAAAAAIAAAAAABBAAAAAEAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Utility.A" Collapsed="true">
+    <Position X="10" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAwAAAIBAAAAAABAACAAAAAAIAAAAAAAAABAAABQI=</HashCode>
+      <FileName>Utility\A.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Utility.ActionUtil" Collapsed="true">
+    <Position X="11.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Utility\ActionUtil.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Utility.BookCollection" Collapsed="true">
+    <Position X="17" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAA=</HashCode>
+      <FileName>Utility\BookCollection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Utility.BookParser" Collapsed="true">
+    <Position X="5.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgEAgIAACCAAEgAAAAAIAAAAAiAAAAAAAAAAQIAABCA=</HashCode>
+      <FileName>Utility\BookParser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Utility.EnumTypesBinder" Collapsed="true">
+    <Position X="13.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Utility\EnumTypesBinder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Utility.G" Collapsed="true">
+    <Position X="22.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAQACCQBIBAAAHAAAYEQAAAgCBIAFAQhIBAoQBEAAg=</HashCode>
+      <FileName>Utility\G.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Utility.HelpProvider" Collapsed="true">
+    <Position X="24" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAABAAAFAAAAQAAAAAAAACAAAAQAEAQAA=</HashCode>
+      <FileName>Utility\HelpProvider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Utility.Http" Collapsed="true">
+    <Position X="10" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABaAQJAIAgEAAABQCAACEACAGAAAAMAAAAQAIAAAUAA=</HashCode>
+      <FileName>Utility\Http.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Utility.KeyHook" Collapsed="true">
+    <Position X="11.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAICAAAAAAAAAEAAADBAAAQAAAAABAQQBAAAgAAA=</HashCode>
+      <FileName>Utility\KeyHook.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Utility.MessageConst" Collapsed="true">
+    <Position X="15.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>///////v3/////////+//////////////v/v//////8=</HashCode>
+      <FileName>Utility\MessageConst.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Utility.OptionsParser" Collapsed="true">
+    <Position X="7.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAiIAAAAAAABgAACAAAAEAAAAAAAAAAAgAQAAgBCA=</HashCode>
+      <FileName>Utility\OptionsParser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Utility.Parser" Collapsed="true">
+    <Position X="4.75" Y="0.5" Width="2.25" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="TXTReader.Utility.Parser.Writer">
+        <TypeIdentifier>
+          <NewMemberFileName>Utility\Parser.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="TXTReader.Utility.Parser.Reader" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Utility\Parser.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAEAAAAAAIAAAAAAAAAAAAQAgAABAAAAAAAA=</HashCode>
+      <FileName>Utility\Parser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Utility.RuleParser" Collapsed="true">
+    <Position X="0.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgIEQAAAAAAAAABAAgCAAAAAAgAAICAAAQAAAQIA=</HashCode>
+      <FileName>Utility\RuleParser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Utility.Rules">
+    <Position X="7.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gBgAAggAAIGQMACBgApAAAACRAEAAABCQwAEACAAAIM=</HashCode>
+      <FileName>Utility\Rules.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Utility.SkinParser" Collapsed="true">
+    <Position X="3" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAgIQAAAAAABAgEAgAAAAQAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Utility\SkinParser.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Utility.UACManager" Collapsed="true">
+    <Position X="17" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABQAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Utility\UACManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.WebApi.Douban" Collapsed="true">
+    <Position X="11.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEAAAQAAAAIAIAAAQAAAAgAAAAAAAAAA=</HashCode>
+      <FileName>WebApi\Douban.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Widget.BookcasePanel" Collapsed="true">
+    <Position X="15.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAACAAIAAABACkBAgAEYAAAABIgIAAAgAAA=</HashCode>
+      <FileName>Widget\BookcasePanel.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Widget.BookmarkPanel" Collapsed="true">
+    <Position X="24" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAAAABAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Widget\BookmarkPanel.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Widget.ContentTreePanel" Collapsed="true">
+    <Position X="17" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAAAAAEAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Widget\ContentTreePanel.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Widget.DesignTool" Collapsed="true">
+    <Position X="18.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Widget\DesignTool.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Widget.FloatMessage" Collapsed="true">
+    <Position X="17" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACQAAABAAAAAAAABAAAQAAAAAEgAAAABAAAgAgAAAAA=</HashCode>
+      <FileName>Widget\FloatMessage.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Widget.FloatMessagePanel" Collapsed="true">
+    <Position X="18.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAEAgAAAAAAAJAAAAAAAAAAAAAAAQAQA=</HashCode>
+      <FileName>Widget\FloatMessagePanel.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Widget.FontPickerCombobox" Collapsed="true">
+    <Position X="20.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAEAEAAAAAAAEAAAAAAABAAABAACAABAAAAAAAAAg=</HashCode>
+      <FileName>Widget\FontPickerCombobox.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Widget.OptionPanel" Collapsed="true">
+    <Position X="22.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIQAAAAAEAAAAAIAAIEIAABAAAgAQAAAEQABAIBAAAA=</HashCode>
+      <FileName>Widget\OptionPanel.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Widget.OptionPanel3" Collapsed="true">
+    <Position X="24" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAAAAAAAIAAAAAAgAQAAAAAAAAABAAAA=</HashCode>
+      <FileName>Widget\OptionPanel3.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Widget.RulePanel" Collapsed="true">
+    <Position X="17" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAACAAAAQEAAAAAAABKCIAACAAQAQMAAAAAEAAAA=</HashCode>
+      <FileName>Widget\RulePanel.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Widget.SearchBar" Collapsed="true">
+    <Position X="20.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAgABAACAAAAEBQABMAAAAAEAAAAAghAAQAgABA=</HashCode>
+      <FileName>Widget\SearchBar.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Widget.SimpleMenuButton" Collapsed="true">
+    <Position X="24" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAQAAAAAAAgAAEAAABIAoAAAAAAAA=</HashCode>
+      <FileName>Widget\SimpleMenuButton.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Widget.SolidColorPickerCombobox" Collapsed="true">
+    <Position X="15.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAICAAAAAAQAADAAAAABAABEAAAAAAAABAAQAAAA=</HashCode>
+      <FileName>Widget\SolidColorPickerCombobox.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Widget.SpinEdit" Collapsed="true">
+    <Position X="17" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgCoEAAAAAAgAAAAQAABAAEAAQAEAAAAgAQAACAA=</HashCode>
+      <FileName>Widget\SpinEdit.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Widget.StandardColorPicker" Collapsed="true">
+    <Position X="18.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAICAABAAAAAADAAAAAAAAAAAAQAABAIhAAQgAAA=</HashCode>
+      <FileName>Widget\StandardColorPicker.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Widget.ThicknessSEGroup" Collapsed="true">
+    <Position X="24" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAQBCAAAAQAAAAAAAAAAAEEQAAAAAAAAAAA=</HashCode>
+      <FileName>Widget\ThicknessSEGroup.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Widget.ToolPanels" Collapsed="true">
+    <Position X="10" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAEAAAAAAAAAIEAAAAIAQAAAACEAA=</HashCode>
+      <FileName>Widget\ToolPanels.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Widget.TrmexTextBox" Collapsed="true">
+    <Position X="17" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAACAAAAAA=</HashCode>
+      <FileName>Widget\TrmexTextBox.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Widget.TRNotifyIcon" Collapsed="true">
+    <Position X="18.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAACAAAAAAABAQAAAAAAAAAAAAAgAAACAAAA=</HashCode>
+      <FileName>Widget\TRNotifyIcon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TXTReader.Widget.TRProgressBar" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAAAEIAAABAIhAgEAAAABAAACAAAAAA=</HashCode>
+      <FileName>Widget\TRProgressBar.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="TXTReader.Widget.UserPanel" Collapsed="true">
+    <Position X="18.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAEAAAAAAAQAIAAAAgAAAIAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>Widget\UserPanel.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="TXTReader.Utility.BufferObject&lt;T&gt;" Collapsed="true">
+    <Position X="10" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABABAAAAAAAAABAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Utility\BufferObject.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Interface Name="TXTReader.Data.ContentItemAdapter" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAEAAAEAEQARAAAAAAEBBAEAgGAEAAAA=</HashCode>
+      <FileName>Data\ContentAdapter.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TXTReader.Data.ContentAdapter" Collapsed="true">
+    <Position X="0.5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\ContentAdapter.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TXTReader.Data.Positionable">
+    <Position X="13.75" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Data\Positionable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TXTReader.Display.IDisplayer" Collapsed="true">
+    <Position X="10" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAgAAAAAAAAAAAAAAASAAAAAAAUACAAAACIEAgBA=</HashCode>
+      <FileName>Display\IDisplayer.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="TXTReader.Display.ITRTimer" Collapsed="true">
+    <Position X="11.75" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAEACAAAAAAAIAAAAAAAAAAAAAAIAAAAAgEAAA=</HashCode>
+      <FileName>Display\ITRTimer.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="TXTReader.Data.MatchType" Collapsed="true">
+    <Position X="17" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAQAAAgAAAAAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>Data\Chapter.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TXTReader.Data.MatchLang" Collapsed="true">
+    <Position X="15.25" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>Data\Chapter.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TXTReader.Data.ContentStatus" Collapsed="true">
+    <Position X="11.75" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAABAAAAAAQAgAAAAAAgAAAAAAAEAAAA=</HashCode>
+      <FileName>Data\ContentAdapter.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TXTReader.Data.BackGroundType" Collapsed="true">
+    <Position X="10" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\Skin.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TXTReader.Data.EffectType" Collapsed="true">
+    <Position X="13.5" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAgAAAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Data\Skin.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="TXTReader.Display.TRTimerStatus" Collapsed="true">
+    <Position X="18.75" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAQAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Display\ITRTimer.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Delegate Name="TXTReader.Display.ShutdownHandler" Collapsed="true">
+    <Position X="20.5" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Display\Displayer.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="TXTReader.Display.TRTimerHandler" Collapsed="true">
+    <Position X="22.25" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Display\ITRTimer.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="TXTReader.Utility.GetFunc&lt;T&gt;" Collapsed="true">
+    <Position X="10" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Utility\BufferObject.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="TXTReader.Utility.SetFunc&lt;T&gt;" Collapsed="true">
+    <Position X="18.75" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAA=</HashCode>
+      <FileName>Utility\BufferObject.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="TXTReader.Utility.KeyHookEventHandler" Collapsed="true">
+    <Position X="11.75" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Utility\KeyHook.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="TXTReader.Utility.ParserNodeCallback" Collapsed="true">
+    <Position X="13.5" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Utility\Parser.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="TXTReader.Utility.ParserWriterCallback" Collapsed="true">
+    <Position X="17" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Utility\Parser.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="TXTReader.Utility.ParserReaderCallback" Collapsed="true">
+    <Position X="15.25" Y="12" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Utility\Parser.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Font Name="Microsoft YaHei UI" Size="9" />
+</ClassDiagram>

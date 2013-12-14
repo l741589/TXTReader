@@ -1,0 +1,37 @@
+﻿body {
+    padding:32px;
+}
+
+img {
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:32px;
+    margin-bottom:32px;
+}
+
+table {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:32px;
+    margin-bottom:32px;
+    width:500px;
+}
+
+div#comment p{
+    font-size:small;
+    margin:0px;
+}
+
+div.sample {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:32px;
+    margin-bottom:32px;
+    background-color:lightgray;
+    width:500px;
+}
+
+div.sample p{
+    margin:0px;
+}

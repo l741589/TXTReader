@@ -200,6 +200,7 @@ namespace TXTReader.Widget
 
         private void Update(RoutedEventArgs e) {
             G.Displayer.UpdateSkin();
+            G.MainWindow.floatMessagePanel.UpdateColor();
             btnBackgroundImage.ToolTip = new Image() { Source = Options.Skin.BackImage, MaxHeight = MAX_TOOLTIP_SIZE, MaxWidth = MAX_TOOLTIP_SIZE };
             e.Handled = true;
         }
