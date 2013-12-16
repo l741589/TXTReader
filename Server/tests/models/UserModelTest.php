@@ -19,17 +19,30 @@ class UserModelTest extends CIUnit_TestCase
     );
     private $_model;
 
-    public function setUp()
+    public function __construct()
     {
-        parent::setUp();
+        parent::__construct();
         $this->CI->load->model('user_model');
         $this->_model = $this->CI->user_model;
     }
 
+    public static function setUpBeforeClass()
+    {
+
+        $conn = new mysqli("localhost:3306", "root", "123456", "txtreader");
+        $conn->autocommit(false);
+        $conn->query("delete from user");
+        if (!$conn->errno) {
+            $conn->commit();
+            echo("Database is ready");
+        } else {
+            $conn->rollback();
+            echo("Database is not ready");
+        }
+    }
+
     public function testNewUser()
     {
-        // clear db before test
-        $this->clearDb();
         $this->_model->add_user($this->data['username'], $this->data['password']);
         $this->CI->db->where('username', $this->data['username']);
         $query = $this->CI->db->get('user');
@@ -38,9 +51,9 @@ class UserModelTest extends CIUnit_TestCase
 
     public function testGetByUsername()
     {
-        $row = $this->_model->get_by_username($this->data['username']);
+        $row = $this->_model->_get_by_username($this->data['username']);
         $this->assertNotEquals(false, $row);
-        $row = $this->_model->get_by_username('test_user_2');
+        $row = $this->_model->_get_by_username('test_user_2');
         $this->assertEquals(false, $row);
     }
 
@@ -65,11 +78,5 @@ class UserModelTest extends CIUnit_TestCase
     function testValidUsername()
     {
 
-    }
-
-    private function clearDb()
-    {
-        $this->CI->db->where('username', $this->data['username']);
-        $this->CI->db->delete('user');
     }
 } 
