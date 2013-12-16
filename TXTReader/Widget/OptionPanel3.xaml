@@ -1,0 +1,170 @@
+﻿<UserControl x:Class="TXTReader.Widget.OptionPanel3"
+             xmlns:Widget="clr-namespace:TXTReader.Widget"
+             xmlns:local="clr-namespace:TXTReader.Data"
+             xmlns:util="clr-namespace:TXTReader.Utility"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:cvt="clr-namespace:TXTReader.Converter"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="300">
+    <UserControl.Resources>
+        <cvt:SolidColorCvt x:Key="brushCvt"></cvt:SolidColorCvt>
+        <cvt:TypefaceToFontFamilyCvt x:Key="fontCvt"></cvt:TypefaceToFontFamilyCvt>
+        <ObjectDataProvider ObjectType="{x:Type util:EnumTypesBinder}" x:Key="enumTypesBinder"/>
+        <ObjectDataProvider ObjectType="{x:Type local:Options}" x:Key="localOptions"/>
+        <Style TargetType="{x:Type CheckBox}">
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+        <Style TargetType="{x:Type ComboBox}">
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+        <Style TargetType="{x:Type Separator}">
+            <Setter Property="Margin" Value="0 2"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid DataContext="{DynamicResource localOptions}">
+        <Border Margin="8">
+            <StackPanel Orientation="Vertical">
+                <Expander>
+                    <Expander.Header>
+                        <CheckBox Name="ckbFloatMessage" Content="显示浮动信息"
+                              IsChecked="{Binding Path=Instance.IsFloatMessageOpen, Mode=TwoWay}"/>
+                    </Expander.Header>
+                    <WrapPanel>
+                        <CheckBox x:Name="ckbTime" Content="时间"
+                			IsEnabled="{Binding IsChecked, ElementName=ckbFloatMessage}"
+                			IsChecked="{Binding Instance.FloatMessage.Time, Mode=TwoWay}"/>
+                        <CheckBox x:Name="ckbFps" Content="帧率"
+                			IsEnabled="{Binding IsChecked, ElementName=ckbFloatMessage}"
+                			IsChecked="{Binding Instance.FloatMessage.Fps, Mode=TwoWay}"/>
+                        <CheckBox x:Name="ckbSpeed" Content="速度"
+                			IsEnabled="{Binding IsChecked, ElementName=ckbFloatMessage}"
+                			IsChecked="{Binding Instance.FloatMessage.Speed, Mode=TwoWay}"/>
+                        <CheckBox x:Name="ckbChapterTitle" Content="章节"
+                			IsEnabled="{Binding IsChecked, ElementName=ckbFloatMessage}"
+                			IsChecked="{Binding Instance.FloatMessage.ChapterTitle, Mode=TwoWay}"/>
+                        <CheckBox x:Name="ckbProgress" Content="进度"
+                			IsEnabled="{Binding IsChecked, ElementName=ckbFloatMessage}"
+                			IsChecked="{Binding Instance.FloatMessage.Progress, Mode=TwoWay}"/>
+                    </WrapPanel>
+                </Expander>
+                <Separator/>
+                <WrapPanel>
+                    <Label Content="章节长度范围"/>
+                    <Widget:SpinEdit MaxValue="{Binding Value, ElementName=seMaxLen}" 
+                		Value="{Binding Instance.MinChapterLength, Mode=TwoWay}"  
+                		MinValue="1"
+                		x:Name="seMinLen"/>
+                    <Label Content="~"/>
+                    <Widget:SpinEdit Value="{Binding Instance.MaxChapterLength, Mode=TwoWay}"  
+                		MinValue="{Binding Value, ElementName=seMinLen}" 
+                		x:Name="seMaxLen"/>
+                </WrapPanel>
+                <Separator/>
+                <WrapPanel>
+                    <Label Content="Padding"/>
+                    <Widget:SpinEdit MaxValue="128" MinValue="0"
+                                     Value="{Binding Instance.Skin.Padding, Mode=TwoWay}"
+                                     x:Name="sePadding"/>
+                    <!--<Widget:SpinEdit MaxValue="128"
+                		Value="{Binding Instance.Skin.Padding.Left, Mode=TwoWay}"
+                		MinValue="0"
+                		x:Name="sePaddingL"/>
+                    <Widget:SpinEdit MaxValue="128"
+                        Value="{Binding Instance.Skin.Padding.Top, Mode=TwoWay}"
+                		MinValue="0"
+                		x:Name="sePaddingT"/>
+                    <Widget:SpinEdit MaxValue="128"
+                        Value="{Binding Instance.Skin.Padding.Right, Mode=TwoWay}"
+                		MinValue="0"
+                		x:Name="sePaddingR"/>
+                    <Widget:SpinEdit MaxValue="128"
+                        Value="{Binding Instance.Skin.Padding.Bottom, Mode=TwoWay}"
+                		MinValue="0"
+                		x:Name="sePaddingB"/>-->
+                </WrapPanel>
+                <Separator/>
+                <WrapPanel>
+                    <Label Content="滚速"/>
+                    <Widget:SpinEdit MaxValue="100" 
+                                     Value="{Binding Path=Instance.Speed, Mode=TwoWay}"  
+                                     MinValue="1" x:Name="seSpeed">
+                    </Widget:SpinEdit>
+                    <Label Content="行间距"/>
+                    <Widget:SpinEdit x:Name="seLineSpacing" 
+                                     Value="{Binding Path=Instance.Skin.LineSpacing, Mode=TwoWay}"/>
+                    <Label Content="段间距"/>
+                    <Widget:SpinEdit x:Name="seParaSpacing" 
+                                     Value="{Binding Path=Instance.Skin.ParaSpacing, Mode=TwoWay}"/>
+
+                </WrapPanel>
+                <Separator/>
+                <DockPanel>
+                    <Label Content="字号"/>
+                    <Widget:SpinEdit x:Name="seFontSize" MinValue="1" MaxValue="100"
+                		Value="{Binding Instance.Skin.FontSize, Mode=TwoWay}"/>
+                    <Label Content="字体"/>
+                    <Widget:FontPickerCombobox x:Name="cbxFont" 
+                		SelectedFont="{Binding Instance.Skin.Font,Converter={StaticResource fontCvt},Mode=TwoWay}" />
+                </DockPanel>
+                <DockPanel>
+                    <!--<ComboBox Name="cbxFontStyle" SelectedIndex="0">
+                        <ComboBoxItem Content="普通"/>
+                        <ComboBoxItem Content="粗体"/>
+                        <ComboBoxItem Content="斜体"/>
+                        <ComboBoxItem Content="粗斜体"/>
+                    </ComboBox>-->
+                    <Label Content="字色"/>
+                    <Widget:StandardColorPicker x:Name="cbxFontColor" 
+                                 SelectedColor="{Binding Path=Instance.Skin.Foreground,Converter={StaticResource brushCvt},Mode=TwoWay}"/>
+                </DockPanel>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <ComboBox Name="cbxEffectType" 
+                              Grid.Row="0" Grid.Column="0"
+                              ItemsSource="{Binding Source={StaticResource enumTypesBinder}, Path=EffectsDict}"
+                              SelectedValue="{Binding Path=Instance.Skin.EffectType}"
+                              DisplayMemberPath="Value"
+                              SelectedValuePath="Key" >
+                    </ComboBox>
+                    <Widget:SpinEdit x:Name="seEffectSize" 
+                                     Grid.Row="0" Grid.Column="1"
+                                     Value="{Binding Path=Instance.Skin.EffectSize, Mode=TwoWay}"/>
+                    <Label Grid.Row="0" Grid.Column="2" Content="特效色"/>
+                    <Widget:StandardColorPicker x:Name="cbxEffectColor" 
+                                                Grid.Row="0" Grid.Column="3"
+                                                SelectedColor="{Binding Path=Instance.Skin.Effect,Converter={StaticResource brushCvt},Mode=TwoWay}"/>
+                    <Label Grid.Row="1" Grid.Column="0" Content="背景"/>
+                    <ComboBox Name="cbxBackgroundType" 
+                              Grid.Row="1" Grid.Column="1"
+                              ItemsSource="{Binding Source={StaticResource enumTypesBinder}, Path=BackGroundDict}"
+                              SelectedValue="{Binding Path=Instance.Skin.BackGroundType}"
+                              DisplayMemberPath="Value"
+                              SelectedValuePath="Key" 
+                              SelectionChanged="cbxBackgroundType_SelectionChanged">
+                    </ComboBox>
+                    <Widget:StandardColorPicker x:Name="cbxBackgroundColor" Visibility="Visible" 
+                                                Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
+                                                     SelectedColor="{Binding Path=Instance.Skin.BackColor, Mode=TwoWay}"/>
+                    <Button Content="..." 
+                            Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"
+                            Name="btnBackgroundImage" Visibility="Collapsed" 
+                            Click="btnBackgroundImage_Click"/>
+                </Grid>
+                <Separator/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

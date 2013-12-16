@@ -5,13 +5,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Xml;
+using TXTReader.Utility;
 
-namespace TXTReader.Data {
+namespace TXTReader.Data
+{
 
-    enum BackGroundType { SolidColor, Image }
-    enum TextEffect { None, Shadow, Stroke }//无，阴影，描边
+    public enum BackGroundType { SolidColor, Image }
+    public enum EffectType { None, Shadow, Stroke }//无，阴影，描边
 
-    class Skin {
+    public class Skin
+    {
+        //the problem of binding in optionpanel.
+        public Skin()
+        {
+        }
+
+        public String Path { get; set; }
         private BackGroundType backGroundType;
         private Brush background = null;
 
@@ -19,34 +29,41 @@ namespace TXTReader.Data {
 
         public Brush Foreground { get; set; }//FontColor
         public Typeface Font { get; set; }
-        public bool IsBold { get; set; }
-        public bool IsItalic { get; set; }
-        public bool IsUnderLine { get; set; }
-        public TextEffect TextEffect { get; set; }//字体特效
-        public Color EffetColor { get; set; }//特效所用的颜色
+        public double FontSize { get; set; }
+        public EffectType EffectType { get; set; }//字体特效
+        public Color Effect { get; set; }//特效所用的颜色
+        public double EffectSize { get; set; }//特效的大小
 
-        public int LineSpacing { get; set; }//行间距
-        public int paraspacing { get; set; }//段间距
+        public double LineSpacing { get; set; }//行间距
+        public double ParaSpacing { get; set; }//段间距
 
-        public Color BackColor { get; set; }//背景颜色
-        public ImageSource BackImage { get; set; }//背景图片
-        public BackGroundType BackGroundType {
+        private Color backColor;
+        public Color BackColor { get { return backColor; } set { backColor = value; background = null; } }//背景颜色
+        private ImageSource backImage;
+        public ImageSource BackImage { get { return backImage; } set { backImage = value; background = null; } }//背景图片
+        public BackGroundType BackGroundType
+        {
             get { return backGroundType; }
-            set {
-                if (backGroundType != value) {
-                    backGroundType = value; 
+            set
+            {
+                if (backGroundType != value)
+                {
+                    backGroundType = value;
                     background = null;
                 }
             }
         }
-        public Brush Background {
-            get {
-                if (background==null) return background;
+        
+        public Brush Background
+        {
+            get
+            {
+                if (background != null) return background;
                 switch (BackGroundType)
                 {
-                case BackGroundType.SolidColor:return new SolidColorBrush(BackColor);
-                case BackGroundType.Image: return new ImageBrush(BackImage);
-                default: return null;
+                    case BackGroundType.SolidColor: return background = new SolidColorBrush(BackColor);
+                    case BackGroundType.Image: return background = new ImageBrush(BackImage);
+                    default: return null;
                 }
             }
         }

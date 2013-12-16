@@ -5,6 +5,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TXTReader", "TXTReader\TXTR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManualUnitTest", "ManualUnitTest\ManualUnitTest.csproj", "{5A33D1A5-8383-4714-A921-7B901C4DF143}"
 EndProject
+Project("{F088123C-0E9E-452A-89E6-6BA2F21D5CAC}") = "TXTReaderUsercase", "TXTReaderUsercase\TXTReaderUsercase.modelproj", "{FCDF03F2-BF60-420E-AE42-36C1DB2A4F62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TXTReaderUAC", "TXTReaderUAC\TXTReaderUAC.csproj", "{C6DEC844-BD30-4C19-9A33-6FF52876C79D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +23,14 @@ Global
 		{5A33D1A5-8383-4714-A921-7B901C4DF143}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A33D1A5-8383-4714-A921-7B901C4DF143}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A33D1A5-8383-4714-A921-7B901C4DF143}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCDF03F2-BF60-420E-AE42-36C1DB2A4F62}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCDF03F2-BF60-420E-AE42-36C1DB2A4F62}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCDF03F2-BF60-420E-AE42-36C1DB2A4F62}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCDF03F2-BF60-420E-AE42-36C1DB2A4F62}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6DEC844-BD30-4C19-9A33-6FF52876C79D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6DEC844-BD30-4C19-9A33-6FF52876C79D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6DEC844-BD30-4C19-9A33-6FF52876C79D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6DEC844-BD30-4C19-9A33-6FF52876C79D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

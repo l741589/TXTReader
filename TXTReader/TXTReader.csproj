@@ -33,8 +33,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>res\543.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
+    <Reference Include="Microsoft.Expression.Effects, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="ReachFramework" />
     <Reference Include="System" />
@@ -62,29 +66,150 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\MyCommands.cs" />
+    <Compile Include="Converter\BookLengthConverter.cs" />
+    <Compile Include="Converter\BookmarkConverter.cs" />
+    <Compile Include="Converter\ChapterRuleNameConverter.cs" />
+    <Compile Include="Converter\ContentStatusImageConverter.cs" />
+    <Compile Include="Converter\MyDateTimeConverter.cs" />
+    <Compile Include="Converter\NotConverter.cs" />
+    <Compile Include="Converter\ParaSpacingCvt.cs" />
+    <Compile Include="Converter\RuleDelButtonVisibilityConverter.cs" />
+    <Compile Include="Converter\SizeableConverter.cs" />
+    <Compile Include="Converter\SolidColorCvt.cs" />
     <Compile Include="Converter\ToolPanelTargetLeftCvt.cs" />
     <Compile Include="Converter\ToolPanelWidthCvt.cs" />
+    <Compile Include="Converter\TypefaceToFontFamilyCvt.cs" />
+    <Compile Include="Converter\VisiblilityConverter.cs" />
+    <Compile Include="Converter\WindowStyleConverter.cs" />
+    <Compile Include="Data\Book.cs" />
+    <Compile Include="Data\Bookmark.cs" />
     <Compile Include="Data\Chapter.cs" />
+    <Compile Include="Data\ChapterCollection.cs" />
     <Compile Include="Data\ChapterDesc.cs" />
     <Compile Include="Data\ContentAdapter.cs" />
     <Compile Include="Data\FloatMessage.cs" />
+    <Compile Include="Data\Positionable.cs" />
     <Compile Include="Data\Skin.cs" />
     <Compile Include="Data\Trmex.cs" />
     <Compile Include="Data\Options.cs" />
-    <Compile Include="Util\TRTimer.cs" />
-    <Compile Include="Widget\ChapterRulePanel.xaml.cs">
-      <DependentUpon>ChapterRulePanel.xaml</DependentUpon>
+    <Compile Include="Display\IDisplayer.cs" />
+    <Compile Include="Display\TextDisplayCache.cs" />
+    <Compile Include="Display\TRText.xaml.cs">
+      <DependentUpon>TRText.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Widget\Displayer.cs" />
+    <Compile Include="Display\Displayer3.xaml.cs">
+      <DependentUpon>Displayer3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\TRText2.xaml.cs">
+      <DependentUpon>TRText2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\Displayer4.xaml.cs">
+      <DependentUpon>Displayer4.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\TRText3.xaml.cs">
+      <DependentUpon>TRText3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\ITRTimer.cs" />
+    <Compile Include="Display\TRTimer.cs" />
+    <Compile Include="Display\TRTimer2.cs" />
+    <Compile Include="Utility\A.cs" />
+    <Compile Include="Utility\ActionUtil.cs" />
+    <Compile Include="Utility\BookParser.cs" />
+    <Compile Include="Utility\BookCollection.cs" />
+    <Compile Include="Utility\BufferObject.cs" />
+    <Compile Include="Utility\KeyHook.cs" />
+    <Compile Include="Utility\MessageConst.cs" />
+    <Compile Include="Utility\OptionsParser.cs" />
+    <Compile Include="Utility\RuleParser.cs" />
+    <Compile Include="Utility\EnumTypesBinder.cs" />
+    <Compile Include="Utility\G.cs" />
+    <Compile Include="Utility\Http.cs" />
+    <Compile Include="Utility\Parser.cs" />
+    <Compile Include="Utility\Rules.cs" />
+    <Compile Include="Utility\SkinParser.cs" />
+    <Compile Include="Utility\UACManager.cs" />
+    <Compile Include="WebApi\Douban.cs" />
+    <Compile Include="Widget\BookcasePanel.xaml.cs">
+      <DependentUpon>BookcasePanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widget\BookmarkPanel.xaml.cs">
+      <DependentUpon>BookmarkPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widget\FloatMessage.xaml.cs">
+      <DependentUpon>FloatMessage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widget\FloatMessagePanel.xaml.cs">
+      <DependentUpon>FloatMessagePanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widget\ContentTreePanel.xaml.cs">
+      <DependentUpon>ContentTreePanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widget\RulePanel.xaml.cs">
+      <DependentUpon>RulePanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display\Displayer.cs" />
+    <Compile Include="Display\Displayer2.xaml.cs">
+      <DependentUpon>Displayer2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widget\DesignTool.xaml.cs">
+      <DependentUpon>DesignTool.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widget\FontPickerCombobox.xaml.cs">
+      <DependentUpon>FontPickerCombobox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Widget\OptionPanel.xaml.cs">
       <DependentUpon>OptionPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widget\SearchBar.xaml.cs">
+      <DependentUpon>SearchBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widget\OptionPanel3.xaml.cs">
+      <DependentUpon>OptionPanel3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widget\SimpleMenuButton.xaml.cs">
+      <DependentUpon>SimpleMenuButton.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widget\SolidColorPickerCombobox.xaml.cs">
+      <DependentUpon>SolidColorPickerCombobox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Widget\SpinEdit.xaml.cs">
       <DependentUpon>SpinEdit.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Widget\StandardColorPicker.xaml.cs">
+      <DependentUpon>StandardColorPicker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Widget\ThicknessSEGroup.xaml.cs">
+      <DependentUpon>ThicknessSEGroup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Widget\ToolPanels.xaml.cs">
       <DependentUpon>ToolPanels.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Widget\TrmexTextBox.cs" />
+    <Compile Include="Widget\TRNotifyIcon.cs" />
+    <Compile Include="Widget\TRProgressBar.xaml.cs">
+      <DependentUpon>TRProgressBar.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Display\TRText.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Display\Displayer3.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Display\TRText2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Display\Displayer4.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Display\TRText3.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -101,7 +226,39 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Widget\ChapterRulePanel.xaml">
+    <Page Include="Widget\BookcasePanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\BookmarkPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\FloatMessage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\FloatMessagePanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\ContentTreePanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\RulePanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Display\Displayer2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\DesignTool.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\FontPickerCombobox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -109,11 +266,39 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Widget\SearchBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\OptionPanel3.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\SimpleMenuButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\SolidColorPickerCombobox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Widget\SpinEdit.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Widget\StandardColorPicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\ThicknessSEGroup.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Widget\ToolPanels.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Widget\TRProgressBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -149,10 +334,32 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="res\defaultskin.xml">
+    <Resource Include="res\defaultskin.xml">
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\no_cover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\setting.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\cross.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\543.ico" />
+    <Resource Include="res\547.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\cs_toolong.png" />
+    <Resource Include="res\cs_tooshort.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\cs_index.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\cs_index_green.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

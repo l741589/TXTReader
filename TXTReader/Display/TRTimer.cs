@@ -8,12 +8,10 @@ using System.Diagnostics;
 using System.Windows;
 using System.Threading;
 
-namespace TXTReader.Util {
+namespace TXTReader.Display {
 
-    delegate void TRTimerHandler(long tick);
-    enum TRTimerStatus {  STOPED, RUNNING, PAUSED   };
-
-    class TRTimer : DependencyObject {
+    
+    class TRTimer : DependencyObject, ITRTimer {
 
         private Thread timerThread;
         long lastTick = 0;
@@ -39,7 +37,7 @@ namespace TXTReader.Util {
                 int _interval = interval;
                 try {
                     Thread.Sleep(_interval);
-                } catch (ThreadInterruptedException e) { }
+                } catch (ThreadInterruptedException) { }
                 long curTick = DateTime.Now.Ticks;
                 if (lastTick != 0 && !entered) {
                     entered = true;

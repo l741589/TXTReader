@@ -21,7 +21,7 @@ namespace TXTReader.Widget {
     public partial class SpinEdit : UserControl {
         [Category("Behavior")]
         public event RoutedPropertyChangedEventHandler<int> ValueChanged { add { this.AddHandler(ValueChangedEvent, value); } remove { this.RemoveHandler(ValueChangedEvent, value); } }
-        public static readonly RoutedEvent ValueChangedEvent = EventManager.RegisterRoutedEvent("ValueChanged", RoutingStrategy.Direct, typeof(RoutedPropertyChangedEventHandler<int>), typeof(SpinEdit));
+        public static readonly RoutedEvent ValueChangedEvent = EventManager.RegisterRoutedEvent("ValueChanged", RoutingStrategy.Bubble, typeof(RoutedPropertyChangedEventHandler<int>), typeof(SpinEdit));
 
         public static readonly DependencyProperty MaxValueProperty = DependencyProperty.Register("MaxValue", typeof(int), typeof(SpinEdit), new PropertyMetadata(0x7fffffff));
         public static readonly DependencyProperty MinValueProperty = DependencyProperty.Register("MinValue", typeof(int), typeof(SpinEdit), new PropertyMetadata(0x0));

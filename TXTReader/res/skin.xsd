@@ -20,7 +20,6 @@
       <xs:element name="background" type="mstns:background" minOccurs="0" maxOccurs="1"/>
       <xs:element name="font" type="mstns:font" minOccurs="0" maxOccurs="1"/>
       <xs:element name="format" type="mstns:format" minOccurs="0" maxOccurs="1"/>
-      <xs:element name="part" type="mstns:skin" minOccurs="0" maxOccurs="unbounded"/>      
     </xs:sequence>
     <xs:attribute name="margin" default="0" type="mstns:thickness"/>
     <xs:attribute name="padding" default="0" type="mstns:thickness"/>
@@ -37,15 +36,17 @@
     <xs:all>
       <xs:element name="name" type="xs:string" minOccurs="0"/>
       <xs:element name="color" type="mstns:color" minOccurs="0"/>
-      <xs:element name="size" type="xs:positiveInteger" minOccurs="0"/>      
+      <xs:element name="size" type="xs:positiveInteger" minOccurs="0"/>
+      <xs:element name="style" type="fontstyle" minOccurs="0"/>
+      <xs:element name="weight" type="fontweight" minOccurs="0"/>
+      <xs:element name="stretch" type="fontstretch" minOccurs="0"/>
     </xs:all>
   </xs:complexType>
   
   <xs:complexType name="format">
     <xs:all>
       <xs:element name="linespacing" minOccurs="0" type="xs:double"/>
-      <xs:element name="paraspacing" minOccurs="0" type="xs:double"/>
-      
+      <xs:element name="paraspacing" minOccurs="0" type="xs:double"/>      
     </xs:all>
   </xs:complexType>
 
@@ -70,4 +71,34 @@
       <xs:pattern value="^((\d+(\.\d*)?,){0,1}|(\d+(\.\d*)?,){3})\d+(\.\d*)?$"/>
     </xs:restriction>
   </xs:simpleType>
+
+  <xs:simpleType name="fontstyle">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="^(normal|italic|oblique)$"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="fontweight">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="^(black|bold|demibold|extrablack|extrabold|extralight|heavy|light|medium|normal|regular|semibold|thin|ultrablack|ultrabold|ultralight)$"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="fontstretch">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:pattern value="^(condensed|expanded|extracondensed|extraexpanded|medium|normal|semicondensed|semiexpanded|ultracondensed|ultraexpanded)$"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction base="xs:int">
+          <xs:maxInclusive value="9"/>
+          <xs:minInclusive value="1"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+
+  
 </xs:schema>

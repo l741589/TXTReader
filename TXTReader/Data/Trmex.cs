@@ -14,8 +14,6 @@ namespace TXTReader.Data {
             public int LC;
         }
 
-
-
         #region 数字
         /*
         public static readonly String[] Num = { "一二三四五六七八九零" };
@@ -23,17 +21,19 @@ namespace TXTReader.Data {
         /*/
         public static readonly String[] Num =
         {
-            "0〇零洞",
-            "1一壹⒈㈠①⑴Ⅰ壱幺么",
-            "2二贰⒉㈡②⑵Ⅱ弍两",
-            "3三叁⒊㈢③⑶Ⅲ弎参",
-            "4四肆⒋㈣④⑷Ⅳ亖",
-            "5五伍⒌㈤⑤⑸Ⅴ",
-            "6六陆⒍㈥⑥⑹Ⅵ",
-            "7七柒⒎㈦⑦⑺Ⅶ漆質",
-            "8八捌⒏㈧⑧⑻Ⅷ",
-            "9九玖⒐㈨⑨⑼Ⅸ",
-            "拾十⒑㈩⑩⑽Ⅹ",
+            "0０〇零洞",
+            "1１一壹⒈㈠①⑴Ⅰ壱幺么",
+            "2２二贰⒉㈡②⑵Ⅱ弍两",
+            "3３三叁⒊㈢③⑶Ⅲ弎叄参參",
+            "4４四肆⒋㈣④⑷Ⅳ亖",
+            "5５五伍⒌㈤⑤⑸Ⅴ",
+            "6６六陆⒍㈥⑥⑹Ⅵ",
+            "7７七柒⒎㈦⑦⑺Ⅶ漆質",
+            "8８八捌⒏㈧⑧⑻Ⅷ",
+            "9９九玖⒐㈨⑨⑼Ⅸ",
+        };
+        public static readonly String[] NumEx =
+        {
             "⒒⑾Ⅺ",
             "⒓⑿Ⅻ",
             "⒔⒀",
@@ -43,21 +43,25 @@ namespace TXTReader.Data {
             "⒘⒄",
             "⒙⒅",
             "⒚⒆",
-            "⒛⒇",
+            "⒛⒇廿",
+            "卅",
+            "卌"
         };
         public static readonly String[] NumUnit = 
         {
-            "十拾",
+            "十拾⒑㈩⑩⑽Ⅹ",
             "百佰陌",
             "千仟阡",
             "万萬",
             "亿億",
-            "兆",
         };
+
+        public static String AllNums { get { return String.Join("", Num) + String.Join("", NumUnit) + String.Join("", NumEx); } }
         //*/
         #endregion
 
-        private static readonly String reservedWord = @"\.+*?[]{}#$% \t\n\r";
+        #region 生成匹配用正则表达式
+        private static readonly String reservedWord = "\\.+*?[]{}#$% \t\n\r";
         private static readonly Regex R_QUOTE = new Regex(@"(?<!\\)""(?<C>(?:[^""]|\\"")*)(?<!\\)""");
         private static readonly Regex R_DOT = new Regex(@"(?<!\\)\.");
         private static readonly Regex R_STAR = new Regex(@"(?<!\\)\*");
@@ -80,10 +84,13 @@ namespace TXTReader.Data {
             int IC = 0;
             foreach (var pattern in patterns) {
                 String regex = pattern;
-                //对于以^开头,以$结尾的字符串,直接当做正则表达式处理,其中\#被视为包括汉字的数字
-                if (regex.First() == '^' && regex.Last() == '$') {
+                if (regex == null || regex == "" || (regex.Length >= 2 && regex[0] == '#' && regex[1] == '#')) {
+                    //对于空字符串，或以##开始的注释，忽略
+                } else if (regex.First() == '^' && regex.Last() == '$') {
+                    //对于以^开头,以$结尾的字符串,直接当做正则表达式处理,其中\#被视为包括汉字的数字
+                    //TODO 视为添加的语法，视为添加
                     regex = regex.Substring(1, regex.Length - 2);
-                    regex = regex.Replace("\\#", "[" + String.Join("", Num) + String.Join("", NumUnit) + "]+");
+                    regex = regex.Replace("\\#", "(?<NUM>[" + AllNums + "]+)");
                     regexs.Add(regex);
                 } else {
                     regex = R_DOT.Replace(regex, "\\\\.");
@@ -113,7 +120,7 @@ namespace TXTReader.Data {
                     regex = R_EQ.Replace(regex, @"\\b[^\\s]+?\\b");
                     regex = R_GT.Replace(regex, @"[^\\s]+?\\b");
                     regex = R_LT.Replace(regex, @"\\b.*");
-                    regex = R_SHARP.Replace(regex, "[" + String.Join("", Num) + String.Join("", NumUnit) + "]+");
+                    regex = R_SHARP.Replace(regex, "(?<NUM>[" + AllNums + "]+)");
                     regex = "(?:" + regex + ")";
                     regex = Regex.Unescape(regex);
                     regexs.Add(regex);
@@ -123,35 +130,67 @@ namespace TXTReader.Data {
             ret.LC = LC;
             return ret;
         }
+        #endregion
 
         public Dictionary<String, String> inserts = new Dictionary<String, String>();
         public Regex regex;
         public List<int> LCs = null;
         public int LC = 0;
+        public String source;
+        //Line模式
+        public Trmex(String pattern) {
+            source = pattern;
+            TrmexDesc td = Precompile(new String[] { pattern });
+            regex = new Regex("^(?<ALL>" + td.regex + ")$");
+            inserts = td.inserts;
+            LC = td.LC;
+            LCs = null;
+        }
+
+        public static Trmex Compile(String pattern) {
+            return new Trmex(pattern);
+        }
 
         //List模式
-        public static Trmex Compile(IEnumerable<String> patterns) {
+        public Trmex(IEnumerable<String> patterns) {
+            source = "[" + String.Join(",",patterns) + "]";
             TrmexDesc td = Precompile(patterns);
-            Trmex r = new Trmex();
-            r.regex = new Regex("^(?<ALL>" + td.regex + ")$");
-            r.inserts = td.inserts;
-            r.LC = td.LC;
-            return r;
+            regex = new Regex("^(?<ALL>" + td.regex + ")$");
+            inserts = td.inserts;
+            LC = td.LC;
+            LCs = null;
+        }
+
+        public static Trmex Compile(IEnumerable<String> patterns) {
+            return new Trmex(patterns);
         }
 
         //Tree模式
-        public static Trmex Compile(params IEnumerable<String>[] patterns) {
-            Trmex r = new Trmex();
-            r.LCs = new List<int>();
+        public Trmex(IEnumerable<IEnumerable<String>> patterns) { compile(patterns.ToArray()); }
+
+        private void compile(IEnumerable<String>[] patterns) {
+            List<String> srcs = new List<String>();
+            foreach (var ss in patterns) srcs.Add("[" + String.Join(",", ss) + "]");
+            source = "[" + String.Join(",", srcs) + "]";
+            LCs = new List<int>();
+            LC = 0;
             List<String> regexs = new List<String>();
             for (int i = 0; i < patterns.Count(); ++i) {
                 TrmexDesc td = Precompile(patterns[i], "T" + i);
-                r.inserts = r.inserts.Union(td.inserts) as Dictionary<String, String>;
-                regexs.Add(td.regex);
-                r.LCs.Add(td.LC);
+                if (inserts == null) inserts = td.inserts;
+                else inserts = inserts.Union(td.inserts) as Dictionary<String, String>;
+                regexs.Add("(?:" + td.regex + ")");
+                LCs.Add(td.LC);
             }
-            r.regex = new Regex("^(?<ALL>" + String.Join("|", regexs) + ")$");
-            return r;
+            regex = new Regex("^(?<ALL>" + String.Join("|", regexs) + ")$");
+        }
+
+        public static Trmex Compile(IEnumerable<IEnumerable<String>> patterns) {
+            return new Trmex(patterns);
+        }
+
+        public bool IsMatch(String src) {
+            return regex.IsMatch(src);
         }
 
         public ChapterDesc Match(String src) {
@@ -171,18 +210,30 @@ namespace TXTReader.Data {
                 }
             }
             cd.Title = ret;
+            cd.Level = -1;
             if (LCs == null) {
                 for (int i = 0; i < LC; ++i) {
                     foreach (Capture c in m.Groups["L" + i].Captures) {
                         if (c == null || c.Value == null || c.Value == "") continue;
                         String s = c.Value;
                         foreach (Capture e in captureToBeRemove)
-                            if (e.Index >= c.Index && e.Index < c.Index + c.Length)
+                            if (e.Index >= c.Index && e.Index <= c.Index + c.Length)
                                 s = s.Remove(e.Index - c.Index, e.Length);
                         foreach (KeyValuePair<Capture, String> e in captureToBeInserted)
-                            if (e.Key.Index >= c.Index && e.Key.Index < c.Index + c.Length)
+                            if (e.Key.Index >= c.Index && e.Key.Index <= c.Index + c.Length)
                                 s = s.Insert(e.Key.Index - c.Index, e.Value);
                         cd.SubTitle.Add(s);
+                        g = m.Groups["NUM"];
+                        int? n = null;
+                        if (g != null) {
+                            foreach (Capture cc in g.Captures) {
+                                if (cc.Index >= c.Index && cc.Index <= c.Index + c.Length) {
+                                    if (cc.Value == null || cc.Value == "") continue;
+                                    n = ToNumber(cc.Value);
+                                }
+                            }
+                        }
+                        cd.Numbers.Add(n);
                     }
                 }
             } else {
@@ -193,17 +244,115 @@ namespace TXTReader.Data {
                             if (c == null || c.Value == null || c.Value == "") continue;
                             String s = c.Value;
                             foreach (Capture e in captureToBeRemove)
-                                if (e.Index >= c.Index && e.Index < c.Index + c.Length)
+                                if (e.Index >= c.Index && e.Index <= c.Index + c.Length)
                                     s = s.Remove(e.Index - c.Index, e.Length);
                             foreach (KeyValuePair<Capture, String> e in captureToBeInserted)
-                                if (e.Key.Index >= c.Index && e.Key.Index < c.Index + c.Length)
+                                if (e.Key.Index >= c.Index && e.Key.Index <= c.Index + c.Length)
                                     s = s.Insert(e.Key.Index - c.Index, e.Value);
                             cd.SubTitle.Add(s);
+
+                            g = m.Groups["NUM"];
+                            int? n = null;
+                            if (g != null) {
+                                foreach (Capture cc in g.Captures) {
+                                    if (cc.Index >= c.Index && cc.Index <= c.Index + c.Length) {
+                                        if (cc.Value == null || cc.Value == "") continue;
+                                        n = ToNumber(cc.Value);
+                                    }
+                                }
+                            }
+                            cd.Numbers.Add(n);
+                        }
+                    }
+                    if (cd.SubTitle.Count > 0) {
+                        cd.Level = j;
+                        break;
+                    }
+                }
+            }
+           
+            return cd;
+        }
+
+        private static readonly String[] cNumUnit = { "+", "%", "K", "W", "E" };
+        public static int? ToNumber(String input) {
+            if (input == null || input == "") return null;
+            String s = input;
+            for (int i = 0; i < 10; ++i)
+                foreach (var c in Num[i])
+                    s = s.Replace(c.ToString(), i.ToString());
+            for (int i = 0; i < 5; ++i)
+                foreach (var c in NumUnit[i])
+                    s = s.Replace(c.ToString(), cNumUnit[i]);
+            for (int i = 1; i < 10; ++i)
+                foreach (var c in NumEx[i - 1])
+                    s = s.Replace(c.ToString(), cNumUnit[0] + i);
+            for (int i = 2; i <= 4; ++i)
+                foreach (var c in NumEx[i + 7])
+                    s = s.Replace(c.ToString(), i + cNumUnit[0]);
+
+            if (String.Join("", cNumUnit).Contains(s[0])) {
+                s = 1 + s;
+            }
+            if (!String.Join("",cNumUnit).Contains(s[s.Length - 1])) {
+                int i = s.LastIndexOfAny(new char[] { 'W', 'E' });
+                if (i != -1) {
+                    if (s.Length > i + 1 && s[i + 1] != '0') {
+                        switch (s[i]) {
+                            case 'W': s += 'K'; break;
+                            case 'E': s += "KW"; break;
                         }
                     }
                 }
             }
-            return cd;
+
+            int N=0;
+            int W=0;
+            int E=0;
+            String[] ss = s.Split('E');
+            if (ss.Length > 1) { E = NumberLevel(ss[0]); s = ss[1]; }
+            ss = s.Split(cNumUnit[3][0]);
+            if (ss.Length > 1) { W = NumberLevel(ss[0]); s = ss[1];  }
+            N = NumberLevel(s);
+            return E*100000000+W*10000+N;
+        }
+
+        private static int NumberLevel(String input){
+            int sum=0;
+            int x = 0;
+            bool zeroed = false;
+            foreach (char c in input) {
+                switch (c) {
+                    case '+': sum += x * 10; x = 0; break;
+                    case '%': sum += x * 100; x = 0; break;
+                    case 'K': sum += x * 1000; x = 0; break;
+                    case '0': x *= 10; x += 0; zeroed = true; break;
+                    case '1': x *= 10; x += 1; break;
+                    case '2': x *= 10; x += 2; break;
+                    case '3': x *= 10; x += 3; break;
+                    case '4': x *= 10; x += 4; break;
+                    case '5': x *= 10; x += 5; break;
+                    case '6': x *= 10; x += 6; break;
+                    case '7': x *= 10; x += 7; break;
+                    case '8': x *= 10; x += 8; break;
+                    case '9': x *= 10; x += 9; break;
+                }
+            }
+            if (x != 0) {
+                if (zeroed) sum += x;
+                else {
+                    if (sum == 0) sum += x;
+                    else if (sum % 10000 == 0) { while (x * 10 < 10000) x *= 10; sum += x; } else
+                        if (sum % 1000 == 0) { while (x * 10 < 1000) x *= 10; sum += x; } else
+                            if (sum % 100 == 0) { while (x * 10 < 100) x *= 10; sum += x; } else
+                                if (sum % 10 == 0) { while (x * 10 < 10) x *= 10; sum += x; }
+                }
+            }
+            return sum;
+        }
+
+        public override string ToString() {
+            return source;
         }
     }
 }
