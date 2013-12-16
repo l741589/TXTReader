@@ -33,4 +33,14 @@ class BookModelTest extends CIUnit_TestCase {
         $ret = $this->_book_model->save_book($this->_file_info);
         $this->assertEquals(true, $ret);
     }
+
+    public function testFindBooksByName()
+    {
+
+    }
+
+    public function testGetBookById()
+    {
+
+    }
 }

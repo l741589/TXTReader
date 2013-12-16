@@ -17,10 +17,6 @@ class Book_Model extends CI_Model
 
     function save_book($options = array())
     {
-        $require_data = array("user_id", "file_md5", "book_name", "file_data");
-        if (!$this->_required($require_data, $options)) {
-            return RESULT_MISSING_ARGS;
-        }
         $book_info = $this->_get_by_file_md5($options['file_md5']);
         if ($book_info != false) {
             $book_id = $book_info->id;
@@ -95,15 +91,6 @@ class Book_Model extends CI_Model
         $row = $query->first_row();
         $file_data = $row->file_data;
         return $file_data;
-    }
-
-    function _required($required, $data)
-    {
-        foreach ($required as $field)
-            if (!isset($data[$field])) {
-                return false;
-            }
-        return true;
     }
 
     function _is_user_has_book($user_id, $book_id)

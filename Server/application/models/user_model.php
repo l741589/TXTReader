@@ -14,18 +14,15 @@ class User_Model extends CI_Model
         $this->load->database();
     }
 
-    function add_user($username, $password)
+    function add_user($data)
     {
-        $data = array(
-            "username" => $username,
-            "password" => sha1($password)
-        );
-        if (!$this->_is_valid_username($username)) {
+        if (!$this->_is_valid_username($data['username'])) {
             return RESULT_INVALID_USERNAME;
         }
-        if (!$this->_is_exist_username($username)) {
+        if (!$this->_is_exist_username($data['username'])) {
             return RESULT_SAME_USERNAME;
         }
+        $data['password'] = sha1($data['password']);
         $this->db->insert("user", $data);
         if ($this->db->affected_rows() <= 0) {
             return RESULT_DB_ERROR;

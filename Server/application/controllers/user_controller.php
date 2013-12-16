@@ -42,9 +42,11 @@ class User_Controller extends Session_Controller
         } elseif ($form_data['password'] != $form_data['password_comfirmation']) {
             $result_code = RESULT_PASSWORDS_DIFFERENT;
         } else {
-            $result_code = $this->_user_model->add_user(
-                $form_data['username'], $form_data['password']
+            $data = array(
+                'username' => $form_data['username'],
+                'password' => $form_data['password']
             );
+            $result_code = $this->_user_model->add_user($data);
             if ($result_code == RESULT_SUCCESS) {
                 $this->add_session($form_data['username']);
             }
