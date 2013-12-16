@@ -1,10 +1,10 @@
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using System;
 using System.Xml;
 using TXTReader.Utility;
 
@@ -22,7 +22,6 @@ namespace TXTReader.Data
         }
 
         public String Path { get; set; }
-
         private BackGroundType backGroundType;
         private Brush background = null;
 
@@ -54,6 +53,7 @@ namespace TXTReader.Data
                 }
             }
         }
+        
         public Brush Background
         {
             get
