@@ -113,12 +113,4 @@ class User_Model extends CI_Model
             return false;
         }
     }
-
-
-    /**
-     * @param $username
-     * @param $password
-     * @return bool
-     */
-
 }

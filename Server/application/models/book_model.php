@@ -56,7 +56,7 @@ class Book_Model extends CI_Model
     {
         $this->db->like("book_name", $book_name);
         $query = $this->db->get("book");
-        if ($this->db->affected_rows() <= 0) {
+        if ($query->num_rows() == 0) {
             return false;
         }
         $result = array();
@@ -89,6 +89,9 @@ class Book_Model extends CI_Model
     {
         $this->db->where("book_id", $book_id);
         $query = $this->db->get("file");
+        if ($this->db->affected_rows() <= 0) {
+            return false;
+        }
         $row = $query->first_row();
         $file_data = $row->file_data;
         return $file_data;
@@ -118,8 +121,7 @@ class Book_Model extends CI_Model
     function _is_existed_book($file_md5)
     {
         $this->db->where("file_md5", $file_md5);
-        $query = $this->db->get("book");
-        $row = $query->first_row();
+        $this->db->get("book");
         if ($this->db->affected_rows() > 0) {
             return true;
         }

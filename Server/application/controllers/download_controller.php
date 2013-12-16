@@ -22,18 +22,21 @@ class Download_Controller extends Session_Controller
 
     function do_download()
     {
-        $book_id = $this->input->get("id");
-        if (!$book_id) {
-            show_result(RESULT_MISSING_ARGS);
-        }
-        $book_info = $this->_book_model->get_book($book_id);
-        $book_file = $this->_book_model->get_file_data($book_id);
-        if (!$book_info) {
-            show_result(RESULT_NO_BOOK);
+        if (!$this->is_logged_in()) {
+            show_result(RESULT_NOT_LOGIN);
         } else {
-            $this->load->helper('download');
-            force_download($book_info['book_name'], $book_file);
-//            show_result(RESULT_SUCCESS, $book_info);
+            $book_id = $this->input->get("id");
+            if (!$book_id) {
+                show_result(RESULT_MISSING_ARGS);
+            }
+            $book_info = $this->_book_model->get_book($book_id);
+            $book_file = $this->_book_model->get_file_data($book_id);
+            if (!$book_info || !$book_file) {
+                show_result(RESULT_NO_BOOK);
+            } else {
+                $this->load->helper('download');
+                force_download($book_info['book_name'], $book_file);
+            }
         }
     }
 } 

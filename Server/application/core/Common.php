@@ -30,7 +30,7 @@ if (!function_exists("show_result")) {
         if ($data != null) {
             $_result_data['data'] = is_array($data) ? var_urlencode($data) : urlencode($data);
         }
-        $_output->set_content_type('application/json');
+        $_output->set_content_type('application/json;charset=utf-8');
         $_output->set_output(urldecode(json_encode($_result_data)));
     }
 

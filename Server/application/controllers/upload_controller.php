@@ -30,25 +30,21 @@ class Upload_Controller extends Session_Controller
 
     function do_upload()
     {
-        $result_code = 0;
         if (!$this->is_logged_in()) {
             show_result(RESULT_NOT_LOGIN);
-        }
-//        $file_md5 = $this->input->post("filemd5");
-//        if ($this->_book_model->is_existed($file_md5)) {
-//            return true;
-//        }
-        $this->_upload_config();
-        if (!$this->upload->do_upload()) {
-            $this->upload->error_msg;
-            $error = array(
-                'error' => $this->upload->display_errors()
-            );
-            show_result(RESULT_UPLOAD_ERROR, $error);
         } else {
-            $data = $this->upload->data();
-            $result_code = $this->_save_book($data);
-            show_result($result_code);
+            $this->_upload_config();
+            if (!$this->upload->do_upload()) {
+                $this->upload->error_msg;
+                $error = array(
+                    'error' => $this->upload->display_errors()
+                );
+                show_result(RESULT_UPLOAD_ERROR, $error);
+            } else {
+                $data = $this->upload->data();
+                $result_code = $this->_save_book($data);
+                show_result($result_code);
+            }
         }
     }
 
