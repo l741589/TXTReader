@@ -17,10 +17,11 @@ if (!function_exists("show_result")) {
             1004 => "username exist",
             1005 => "user not exist",
             1006 => "wrong password",
-            1007 => "no login",
+            1007 => "not login",
             1008 => "upload error",
             1009 => "user has no books",
             1010 => "cannot log out",
+            1011 => "password comfirmation error"
         );
         $_output = & load_class("Output", "core");
         $_result_data = array(

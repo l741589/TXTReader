@@ -50,6 +50,7 @@ define('RESULT_NOT_LOGIN', 1007);
 define('RESULT_UPLOAD_ERROR', 1008);
 define('RESULT_NO_BOOK', 1009);
 define('RESULT_CANNOT_LOGOUT', 1010);
+define('RESULT_PASSWORDS_DIFFERENT', 1011);
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
