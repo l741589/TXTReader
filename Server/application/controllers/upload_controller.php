@@ -62,7 +62,7 @@ class Upload_Controller extends Session_Controller
     function _save_book($book_data)
     {
         $this->load->model("user_model");
-        $user = $this->user_model->_get_by_username($this->get_current_username());
+        $user = $this->user_model->get_by_username($this->get_current_username());
         $file_info = array(
             'user_id'   => $user->id,
             'file_md5'  => md5_file($book_data['full_path']),

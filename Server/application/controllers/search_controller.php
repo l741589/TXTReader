@@ -23,22 +23,24 @@ class Search_Controller extends Session_Controller
 
     function do_search()
     {
+        $_result_code = 0;
         $book_name = $this->input->get('book_name');
         $is_owned = $this->input->get('own');
-        if (isset($is_owned) && $is_owned == true) {
+        if (isset($is_owned) && $is_owned == 1) {
             if (!$this->is_logged_in()) {
                 show_result(RESULT_NOT_LOGIN);
             } else {
                 $this->load->model('user_model');
                 $username = $this->get_current_username();
-                $user_book_ids = (array)$this->user_model->get_book_ids($username, $book_name);
-                if (count($user_book_ids) == 0) {
+                $user_book_ids = $this->user_model->get_book_ids($username);
+                if ($user_book_ids === false) {
                     show_result(RESULT_NO_BOOK);
                 } else {
                     $ret = array();
                     foreach ($user_book_ids as $id) {
-                        $book = $this->_book_model->get_book($id);
-                        if ($book) {
+                        $book = $this->_book_model->get_book_by_id($id);
+                        $pattern = "/" . $book_name . "/";
+                        if ($book && preg_match($pattern, $book['book_name'])) {
                             $ret[] = $book;
                         }
                     }
@@ -47,7 +49,7 @@ class Search_Controller extends Session_Controller
             }
         } else {
             if (isset($book_name) && !is_null($book_name)) {
-                $books = $this->_book_model->find_books($book_name);
+                $books = $this->_book_model->get_books_by_bookname($book_name);
                 if ($books) {
                     show_result(RESULT_SUCCESS, $books);
                 } else {

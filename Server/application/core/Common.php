@@ -19,7 +19,7 @@ if (!function_exists("show_result")) {
             1006 => "wrong password",
             1007 => "not login",
             1008 => "upload error",
-            1009 => "user has no books",
+            1009 => "no books match",
             1010 => "cannot log out",
             1011 => "password comfirmation error"
         );

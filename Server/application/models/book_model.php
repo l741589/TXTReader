@@ -15,40 +15,49 @@ class Book_Model extends CI_Model
         $this->load->database();
     }
 
-    function save_book($options = array())
+    function save_book($data = array())
     {
-        $book_info = $this->_get_by_file_md5($options['file_md5']);
-        if ($book_info != false) {
-            $book_id = $book_info->id;
+        // save file and get file id
+        $file_id = 0;
+        if ($this->_is_file_existed($data['file_md5'])) {
+            $file = $this->_get_file_by_md5($data['file_md5']);
+            $file_id = $file->id;
         } else {
-            $this->db->set('book_name', $options['book_name']);
-            $this->db->set('file_md5', $options['file_md5']);
-            $this->db->insert('book');
-            $book_id = $this->db->insert_id();
+            $file_data = array(
+                'file_md5'  => $data['file_md5'],
+                'file_data' => $data['file_data']
+            );
+            $this->db->insert('file', $file_data);
             if ($this->db->affected_rows() <= 0) {
                 return RESULT_DB_ERROR;
             }
-            $this->db->set('book_id', $book_id);
-            $this->db->set('file_data', $options['file_data']);
-            $this->db->insert('file');
-            if ($this->db->affected_rows() <= 0) {
-                return RESULT_DB_ERROR;
-            }
+            $file_id = $this->db->insert_id();
         }
-//        $book_id = $book_info->id;
-        $user_id = $options['user_id'];
-        if (!$this->_is_user_has_book($user_id, $book_id)) {
-            $this->db->set('book_id', $book_id);
-            $this->db->set('user_id', $user_id);
-            $this->db->insert('user_book_relation');
-            if ($this->db->affected_rows() <= 0) {
-                return RESULT_DB_ERROR;
-            }
+
+        // add book
+        $book_data = array(
+            'book_name' => $data['book_name'],
+            'file_id'   => $file_id
+        );
+        $this->db->insert('book', $book_data);
+        if ($this->db->affected_rows() <= 0) {
+            return RESULT_DB_ERROR;
+        }
+        $book_id = $this->db->insert_id();
+
+        // add user and book relation
+        $relation_data = array(
+            'user_id' => $data['user_id'],
+            'book_id' => $book_id
+        );
+        $this->db->insert('user_book_relation', $relation_data);
+        if ($this->db->affected_rows() <= 0) {
+            return RESULT_DB_ERROR;
         }
         return RESULT_SUCCESS;
     }
 
-    function find_books($book_name)
+    function get_books_by_bookname($book_name)
     {
         $this->db->like("book_name", $book_name);
         $query = $this->db->get("book");
@@ -66,7 +75,7 @@ class Book_Model extends CI_Model
         return $result;
     }
 
-    function get_book($book_id)
+    function get_book_by_id($book_id)
     {
         $this->db->where("id", $book_id);
         $query = $this->db->get("book");
@@ -74,18 +83,18 @@ class Book_Model extends CI_Model
             return false;
         }
         $row = $query->first_row();
-        $book_name = $row->book_name;
         return array(
             "book_id"   => $book_id,
-            "book_name" => $book_name
+            "file_id"   => $row->file_id,
+            "book_name" => $row->book_name
         );
     }
 
-    function get_file_data($book_id)
+    function get_filedata_by_id($file_id)
     {
-        $this->db->where("book_id", $book_id);
+        $this->db->where("id", $file_id);
         $query = $this->db->get("file");
-        if ($this->db->affected_rows() <= 0) {
+        if ($query->num_rows() <= 0) {
             return false;
         }
         $row = $query->first_row();
@@ -98,27 +107,26 @@ class Book_Model extends CI_Model
         $this->db->where('user_id', $user_id);
         $this->db->where('book_id', $book_id);
         $query = $this->db->get('user_book_relation');
-        $row = $query->first_row();
+        if ($query->num_rows() > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    function _is_file_existed($file_md5)
+    {
+        $this->db->where("file_md5", $file_md5);
+        $this->db->get("file");
         if ($this->db->affected_rows() > 0) {
             return true;
         }
         return false;
     }
 
-    function _is_existed_book($file_md5)
+    function _get_file_by_md5($file_md5)
     {
         $this->db->where("file_md5", $file_md5);
-        $this->db->get("book");
-        if ($this->db->affected_rows() > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    function _get_by_file_md5($file_md5)
-    {
-        $this->db->where("file_md5", $file_md5);
-        $query = $this->db->get("book");
+        $query = $this->db->get("file");
         $row = $query->first_row();
         if ($this->db->affected_rows() > 0) {
             return $row;
