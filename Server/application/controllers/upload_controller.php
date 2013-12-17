@@ -7,7 +7,7 @@
  */
 
 require_once "session_controller.php";
-require_once APPPATH . "/core/Common.php";
+require_once APPPATH . "/core/common.php";
 
 class Upload_Controller extends Session_Controller
 {
@@ -43,7 +43,8 @@ class Upload_Controller extends Session_Controller
             } else {
                 $data = $this->upload->data();
                 $result_code = $this->_save_book($data);
-                show_result($result_code);
+                $book_id = $this->_book_model->inserted_book_id();
+                show_result($result_code, array("book_id" => $book_id));
             }
         }
     }

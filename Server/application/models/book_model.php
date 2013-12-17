@@ -8,6 +8,7 @@
 
 class Book_Model extends CI_Model
 {
+    var $inserted_book_id;
 
     function __construct()
     {
@@ -36,14 +37,14 @@ class Book_Model extends CI_Model
 
         // add book
         $book_data = array(
-            'book_name' => $data['book_name'],
+            'book_name' => $this->_remove_suffix($data['book_name'], "txt"),
             'file_id'   => $file_id
         );
         $this->db->insert('book', $book_data);
         if ($this->db->affected_rows() <= 0) {
             return RESULT_DB_ERROR;
         }
-        $book_id = $this->db->insert_id();
+        $this->inserted_book_id = $book_id = $this->db->insert_id();
 
         // add user and book relation
         $relation_data = array(
@@ -73,6 +74,11 @@ class Book_Model extends CI_Model
             $result[] = $book_info;
         }
         return $result;
+    }
+
+    function inserted_book_id()
+    {
+        return $this->inserted_book_id;
     }
 
     function get_book_by_id($book_id)
@@ -132,5 +138,13 @@ class Book_Model extends CI_Model
             return $row;
         }
         return false;
+    }
+
+    function _remove_suffix($string, $suffix)
+    {
+        if (preg_match('/.+\.' . $suffix . '/', $string)) {
+            $string = substr($string, 0, strlen($string) - strlen($suffix) - 1);
+        }
+        return $string;
     }
 }

@@ -25,12 +25,11 @@ class UploadControllerTest extends CIUnit_TestCase {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, "http://localhost:9999/upload" );
         curl_setopt($curl, CURLOPT_POST, 1);
-        $ret = curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $post_data);
         curl_exec($curl);
         curl_close($curl);
-        var_dump($ret);
-//        $ret = $this->CI->do_upload();
-//        $this->assertEquals($ret, true);
+        $ret = $this->CI->do_upload();
+        $this->assertEquals($ret, true);
     }
 
 }

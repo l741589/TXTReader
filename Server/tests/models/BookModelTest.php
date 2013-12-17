@@ -60,12 +60,12 @@ class BookModelTest extends CIUnit_TestCase
     public function testSaveBook()
     {
         $ret = $this->_book_model->save_book($this->_file_info);
-        $this->assertEquals(true, $ret);
+        $this->assertEquals(RESULT_SUCCESS, $ret);
     }
 
     public function testGetBooksByName()
     {
-        $ret = $this->_book_model->get_books_by_bookname($this->_file_info['book_name']);
+        $ret = $this->_book_model->get_books_by_bookname("file");
         $this->assertNotEquals(false, $ret);
         $this->assertEquals(1, sizeof($ret));
         $ret = $this->_book_model->get_books_by_bookname("wrong_book_name");
@@ -74,11 +74,8 @@ class BookModelTest extends CIUnit_TestCase
 
     public function testGetBookById()
     {
-
-    }
-
-    public function testGetFileById()
-    {
-
+        $book_id = $this->_book_model->inserted_book_id();
+        $book = $this->_book_model->get_book_by_id($book_id);
+        $this->assertEquals("file", $book['book_name']);
     }
 }

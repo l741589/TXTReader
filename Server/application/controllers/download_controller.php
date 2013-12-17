@@ -7,7 +7,7 @@
  */
 
 require_once "session_controller.php";
-require_once APPPATH . "/core/Common.php";
+require_once APPPATH . "/core/common.php";
 class Download_Controller extends Session_Controller
 {
 
