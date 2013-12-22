@@ -119,6 +119,7 @@ namespace TXTReader {
         }
 
         protected override void OnKeyDown(KeyEventArgs e) {
+            if (toolPanel.IsAncestorOf(e.OriginalSource as DependencyObject)) return;
             switch (e.Key) {
                 case Key.OemComma: --toolPanel.pn_option.seSpeed.Value; break;
                 case Key.OemPeriod: ++toolPanel.pn_option.seSpeed.Value; break;
@@ -133,6 +134,7 @@ namespace TXTReader {
         }
 
         protected override void OnKeyUp(KeyEventArgs e) {
+            if (toolPanel.IsAncestorOf(e.OriginalSource as DependencyObject)) return;
             switch (e.Key) {
                 case Key.LeftShift: ReleaseHold(HC_MOVE); break;
             }
@@ -148,6 +150,7 @@ namespace TXTReader {
 
         protected override void OnMouseDown(MouseButtonEventArgs e) {
             base.OnMouseDown(e);
+            if (toolPanel.IsAncestorOf(e.OriginalSource as DependencyObject)) return;
             toolPanel.Hide();
             ReleaseHold(HC_ALL);
             if (e.ChangedButton == MouseButton.Left) {
@@ -157,6 +160,7 @@ namespace TXTReader {
         }
 
         protected override void OnMouseMove(MouseEventArgs e) {
+            if (toolPanel.IsAncestorOf(e.OriginalSource as DependencyObject)) return;
             var p=e.GetPosition(root);
             if (!IsHolding) {
                 if (p.X > canvas.ActualWidth - 32) {
@@ -174,6 +178,7 @@ namespace TXTReader {
         }
 
         protected override void OnMouseUp(MouseButtonEventArgs e) {
+            if (toolPanel.IsAncestorOf(e.OriginalSource as DependencyObject)) return;
             lastPoint = null;
             if (!IsHolding) G.Timer.Resume();
         }

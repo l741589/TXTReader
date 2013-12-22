@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace TXTReader.Data {
-    public enum ContentStatus { None, TooLong, TooShort, ConfusingIndex, LowLevelConfusingIndex }
+    public enum ContentStatus { None, TooLong, TooShort, LowLevelConfusingIndex, ConfusingIndex }
 
     public interface ContentItemAdapter {
 

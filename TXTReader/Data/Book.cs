@@ -11,25 +11,34 @@ using System.Security.Policy;
 using System.Text.RegularExpressions;
 using TXTReader.WebApi;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace TXTReader.Data {
     public class Book : Chapter, ContentAdapter, Positionable {
+        public enum BookState { Local, Remote, Downloading, Missing };
         public event Action LoadFinished;
 
         public const String NO_PREVIEW = "暂无预览";
-        public static readonly DependencyProperty PositionProperty = DependencyProperty.Register("Position", typeof(int), typeof(Book), new PropertyMetadata(OnPositionChanged));
+        public static readonly DependencyProperty PositionProperty = DependencyProperty.Register("Position", typeof(int), typeof(Book), new PropertyMetadata(0, OnPositionChanged, PositionCeorce));
         public static readonly DependencyProperty OffsetProperty = DependencyProperty.Register("Offset", typeof(double), typeof(Book));
-        public static readonly DependencyPropertyKey CurrentTitleProperty = DependencyProperty.RegisterReadOnly("CurrentTitle", typeof(String), typeof(Book),new PropertyMetadata(null));
+        public static readonly DependencyPropertyKey CurrentTitleProperty = DependencyProperty.RegisterReadOnly("CurrentTitle", typeof(String), typeof(Book),new PropertyMetadata(null));        
+        public static readonly DependencyProperty StateProperty = DependencyProperty.Register("State", typeof(BookState), typeof(Book), new PropertyMetadata(BookState.Local));
+
         private ImageSource cover = null;
-        public bool IsLocal { get { return Source == null ? false : !Source.ToLower().StartsWith(G.HTTP_HEAD); } }
+        private String preview = null;
+        private String source = null;
+        private String id = null;
+        private static ZTask uploadTask = new ZTask();
+        private static ZTask downloadTask = new ZTask();
+        
         public ImageSource Cover { get { if (cover == null) return G.NoCover; else return cover; } set { cover = value; } }
         public int Position { get { return (int)GetValue(PositionProperty); } set { SetValue(PositionProperty, value); } }
         public double Offset { get { return (double)GetValue(OffsetProperty); } set { SetValue(OffsetProperty, value); } }
+        public BookState State { get { return (BookState)GetValue(StateProperty); } set { SetValue(StateProperty, value); } }
         public String Author { get; set; }
-        public String Source { get; set; }
         public DateTime LastLoadTime { get; set; }
         public double SortArgument { get; set; }
-        private String preview = null;
+        public String Id { get { return id; } set { id = value; G.Books.Check(this); } }
         public ObservableCollection<Bookmark> Bookmark { get; private set; }
 
         public Book()
@@ -38,16 +47,38 @@ namespace TXTReader.Data {
             Bookmark = new ObservableCollection<Bookmark>();
             Node = new LinkedListNode<ContentItemAdapter>(this);
         }
-        public Book(String src) : this() { Init(src); }
+        public Book(String src) : this() { Init(src); SortArgument = 0; }
 
+
+        private bool init_lock = false;
         public void Init(String src) {
             if (Path.GetExtension(src) == G.EXT_BOOK) {
                 BookParser.Load(src, this);
             } else {
+                if (init_lock) return;
+                init_lock = true;
+                init_lock=true;
                 Source = src;
-                SortArgument = 0;
-                Title = Path.GetFileNameWithoutExtension(src);
+                if (Title == null || Title == "") Title = Path.GetFileNameWithoutExtension(src);
+                if (File.Exists(BookParser.GetBookPath(this))) BookParser.Load(this);                
                 LastLoadTime = default(DateTime);
+                init_lock = false;
+            }
+        }
+
+        
+        public String Source {
+            get { return source; }
+            set {
+                source = value;
+                if (source == null || source == "") State = BookState.Missing;
+                else if (State == BookState.Local){
+                    if (!(source.Contains('\\') || source.Contains('/'))) State = BookState.Remote;
+                    else if (!File.Exists(source)) State = BookState.Missing;
+                } else {
+                    if (File.Exists(source)) State = BookState.Local;
+                }
+                G.Books.Check(this);
             }
         }
 
@@ -115,22 +146,76 @@ namespace TXTReader.Data {
 
         public async void Load(String file = null) {
             if (file == null) file = Source; else Source = file;            
-            if (IsLocal) {
+            if (State==BookState.Local) {
                 Clear();
                 var ss = File.ReadAllLines(file, Encoding.Default);
                 Title = Path.GetFileNameWithoutExtension(file);
                 if (Text != null) Text.Clear();
-                BookParser.Load(this);
-                LastLoadTime = DateTime.Now;
-                TotalText = new List<string>(ss);
-                await Task.Run(() => { Match(ss); });
-                TotalText = null;
+                if (File.Exists(Source)) {
+                    TotalText = new List<string>(ss);
+                    BookParser.Load(this);
+                    LastLoadTime = DateTime.Now;                    
+                    await Task.Run(() => { Match(ss); });
+                    TotalText = null;
+                } else {
+                    State = BookState.Missing;
+                }
+                Update();
+                GenerateIndex();
+                Dispatcher.Invoke(() => { if (LoadFinished != null) LoadFinished(); });            
             } else {
-                //TODO 添加Download逻辑
+                await Download();
+                if (State == BookState.Local) Load(Source);
             }            
-            Update();
-            GenerateIndex();
-            Dispatcher.Invoke(() => { if (LoadFinished != null) LoadFinished(); });            
+        }
+
+        public async Task Download() {
+            BookState state = State;
+            await downloadTask.Run(() => {
+                if (state == BookState.Remote) {
+                    state = BookState.Downloading;
+                    string id = Id;
+                    ResponseEntity s = G.Net.Download(id);
+                    if (s.status != MyHttp.successCode) {
+                        Debug.WriteLine(s.msg);
+                        state = BookState.Remote;
+                        Dispatcher.BeginInvoke(new Action(() => { G.Log = Title + " 下载失败"; }));
+                        return;
+                    }
+                    Debug.WriteLine(s.data[0]);
+                    Debug.WriteLine(Encoding.Default.GetString((byte[])s.data[1]));
+                    String path = G.PATH_SOURCE + Path.GetFileNameWithoutExtension(s.data[0].ToString()) + "_" + id + Path.GetExtension(s.data[0].ToString());
+                    File.WriteAllBytes(path, (byte[])s.data[1]);
+                    Dispatcher.Invoke(() => {
+                        Source = path;
+                        Title = Path.GetFileNameWithoutExtension(s.data[0].ToString());
+                        BookParser.Save(this);
+                        Dispatcher.BeginInvoke(new Action(() => { G.Log = Title + " 下载完成"; }));
+                    });
+                }
+            });            
+        }
+
+        public async Task Upload() {
+            
+            await uploadTask.Run(() => {
+                String title = Dispatcher.Invoke(() => { return Title; });
+                Debug.WriteLine("Start Upload " + title);
+                String src = Dispatcher.Invoke(() => { return Source; });
+                if (BookState.Local == Dispatcher.Invoke(() => { return State; })) {
+                    ResponseEntity res = G.Net.Upload(A.CheckExt(title, ".txt"), src);
+                    if (res.status == MyHttp.successCode) {
+                        Debug.WriteLine(title + " Uploaded");
+                        Dispatcher.Invoke(() => { Id = res.data[0].ToString(); });
+                        BookParser.Save(this);
+                        Dispatcher.BeginInvoke(new Action(() => { G.Log = Title + " 上传完成"; }));
+                    } else {
+                        Debug.WriteLine(title + " Upload Error:" + res.msg);
+                        Dispatcher.BeginInvoke(new Action(() => { G.Log = Title + " 上传失败"; }));
+                    }
+                }
+            });
+            
         }
 
         public String ToolTip {
@@ -139,6 +224,8 @@ namespace TXTReader.Data {
                 if (Title != null) ret += Title + "\n";
                 if (Author != null) ret += "作者：" + Author + "\n";
                 if (Length != 0) ret += "长度：" + Length + "字\n";
+                if (Source != "" && Source != null) ret += Source + "\n";
+                if (Id != null && Id != "") ret += Id + "\n";
                 //if (Preview != null) ret += "内容：\n" + Preview + "\n";
                 return ret.Trim();
             }
@@ -194,6 +281,20 @@ namespace TXTReader.Data {
                 m = (l + r) >> 1;
             }
             o.SetValue(Book.CurrentTitleProperty, o.Positions[m].TotalTitle);
+        }
+
+        private static object PositionCeorce(DependencyObject d,object baseValue){
+            int x = (int)baseValue;
+            Book b=d as Book;
+             if (x >= b.TotalLineCount) {
+                b.Offset = 0;
+                x=b.TotalLineCount-1;
+            }
+            if (x < 0) {
+                b.Offset=0;
+                x=0;
+            }           
+            return x;
         }
     }
 }

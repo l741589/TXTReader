@@ -43,6 +43,11 @@ namespace TXTReader.Utility {
             return path;
         }
 
+        public static String CheckExt(String path,String ext) {
+            if (Path.GetExtension(path) == ext) return path;
+            else return path + ext;
+        }
+
         public static bool FileExists(String uri){
             if (uri.StartsWith(G.HTTP_HEAD)) return false;
             if (uri.StartsWith(G.FILE_HEAD)) return File.Exists(uri.Substring(G.FILE_HEAD.Length));
@@ -114,14 +119,32 @@ namespace TXTReader.Utility {
                 book.Load();
             }
             if (G.MainWindow != null) {
-                if (book != null) book.LoadFinished += () => { G.MainWindow.toolPanel.pn_contenttree.UpdateContentUI(); };
-                if (book != null) book.LoadFinished += () => { G.Displayer.Text = null; };
+                if (book != null) book.LoadFinished += () => {
+                    G.MainWindow.toolPanel.pn_contenttree.UpdateContentUI();
+                    G.FloatMessagePanel.UpdateBinding();
+                    if (G.MainWindow.toolPanel.pn_bookmark.lb_bookmark.ItemsSource != G.Bookmark)
+                        G.MainWindow.toolPanel.pn_bookmark.lb_bookmark.ItemsSource = G.Bookmark;
+                    G.MainWindow.progressBar.UpdateBinding();
+                    G.MainWindow.toolPanel.pn_contenttree.UpdateContentUI();
+                    G.Displayer.Text = null; G.Displayer.Update();
+                };
                 G.FloatMessagePanel.UpdateBinding();
                 if (G.MainWindow.toolPanel.pn_bookmark.lb_bookmark.ItemsSource != G.Bookmark)
                     G.MainWindow.toolPanel.pn_bookmark.lb_bookmark.ItemsSource = G.Bookmark;
                 G.MainWindow.progressBar.UpdateBinding();
                 G.MainWindow.toolPanel.pn_contenttree.UpdateContentUI();
             }
+        }
+
+        public static String MD5(byte[] data) {
+            System.Security.Cryptography.MD5CryptoServiceProvider md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            var md5data = md5.ComputeHash(data);
+            md5.Clear();
+            string str = "";
+            for (int i = 0; i < md5data.Length - 1; i++) {
+                str += md5data[i].ToString("x").PadLeft(2, '0');
+            }
+            return str;
         }
     }
 }

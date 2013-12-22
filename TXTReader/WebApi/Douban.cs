@@ -17,8 +17,39 @@ namespace TXTReader.WebApi {
         public static readonly Regex R_COVER = new Regex(@"<link href=""(?<R>[^""]*)"" rel=""image""/>");
         public static readonly Regex R_AUTHOR = new Regex(@"<db:attribute name=""author"">(?<R>[^<]*)</db:attribute>");
 
+        private static ZTask infoTask = new ZTask();
         public static async void MoreInfo(Book b){
-            await MoreInfoAsync(b);
+            var author =b.Author;
+            var title = b.Title;
+            var cover = b.Cover;
+            var src = b.Source;
+            String uri = null;
+            await infoTask.Run(() => {
+                if (cover != null && cover != G.NoCover && author != null) return;
+                String url = String.Format(URL_SEARCH, title);
+                String xml = Http.Create(url).Get();
+                 if (xml == null) return;
+                try {
+                    if (int.Parse(R_TOTALRESULTS.Match(xml).Groups["R"].ToString()) > 0) {
+                        //G.MainWindow.Dispatcher.BeginInvoke(new Action(() => { G.Log = "拉取 "+title+" 信息成功"; }));
+                        if (author == null) author = R_AUTHOR.Match(xml).Groups["R"].ToString();
+                        if (cover == null || cover == G.NoCover) {
+                            uri = R_COVER.Match(xml).Groups["R"].ToString();
+                            if (uri.StartsWith(G.HTTP_HEAD)) {
+                                String path = G.PATH_COVER + title + src.GetHashCode() + Path.GetExtension(uri);
+                                if (!File.Exists(path)) {
+                                    byte[] bs = Http.Create(uri).GetBytes();
+                                    File.WriteAllBytes(path, bs);
+                                    //G.MainWindow.Dispatcher.BeginInvoke(new Action(() => { G.Log = "拉取 " + title + " 封面成功"; }));
+                                }
+                                uri = path;
+                            }
+                        }
+                    }
+                } catch { }
+            });
+            b.Author = author;
+            if (uri!=null) b.Cover = new ImageSourceConverter().ConvertFrom(uri) as ImageSource;
         }
 
         public static async Task MoreInfoAsync(Book b) {
@@ -45,6 +76,10 @@ namespace TXTReader.WebApi {
                     }
                 }
             } catch { }
+        }
+
+        public static void MoreInfoSync(Book b) {
+           
         }
     }
 }

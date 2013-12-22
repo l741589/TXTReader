@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using TXTReader.Data;
-using TXTReader.Utility;
+using System.Runtime.CompilerServices;
 
 namespace ManualUnitTest
 {
@@ -43,7 +42,11 @@ namespace ManualUnitTest
             //Console.WriteLine(s);
             //s=A.DecodeFilename(s);
             //Console.WriteLine(s);
-            Console.WriteLine(Trmex.ToNumber("四亿五"));
+            //Console.WriteLine(Trmex.ToNumber("四亿五"));
+            //Console.ReadKey();
+
+            Task t;
+            
             Console.ReadKey();
         }
 
@@ -54,5 +57,21 @@ namespace ManualUnitTest
                 Console.WriteLine("[{0}]{1}", e.Index, e.Value);                
             }
         }
+
+        
+    }
+}
+
+class MyWaiter{
+
+}
+
+class Waitable {
+    MyWaiter GetAwaiter() {
+        TaskCompletionSource<int> tcs = new TaskCompletionSource<int>();
+
+        var t=tcs.Task;
+        tcs.set
+        return new MyWaiter();
     }
 }

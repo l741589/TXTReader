@@ -22,11 +22,13 @@ namespace TXTReader.Widget {
     /// </summary>
     public partial class FloatMessage : UserControl {
 
-        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(object), typeof(FloatMessage), new PropertyMetadata(ValueChanged));
-        public static readonly DependencyProperty FormatProperty = DependencyProperty.Register("Format", typeof(String), typeof(FloatMessage), new PropertyMetadata(ValueChanged));
+        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(object), typeof(FloatMessage), new PropertyMetadata(OnValueChanged));
+        public static readonly DependencyProperty FormatProperty = DependencyProperty.Register("Format", typeof(String), typeof(FloatMessage), new PropertyMetadata(OnValueChanged));
+        public static readonly RoutedEvent ValueChangedEvent = EventManager.RegisterRoutedEvent("ValueChanged", RoutingStrategy.Bubble, typeof(RoutedPropertyChangedEventHandler<object>), typeof(FloatMessage));
 
         public object Value { get { return GetValue(ValueProperty); } set { SetValue(ValueProperty, value); } }
         public String Format { get { return (String)GetValue(FormatProperty); } set { SetValue(FormatProperty, value); } }
+        public event RoutedPropertyChangedEventHandler<object> ValueChanged { add { AddHandler(ValueChangedEvent, value); } remove { RemoveHandler(ValueChangedEvent, value); } }
         private System.Windows.Point? lastPoint = null;
 
         public FloatMessagePanel Panel { get; private set; }
@@ -42,9 +44,10 @@ namespace TXTReader.Widget {
             Panel = panel;
         }
 
-        static public void ValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+        static public void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             FloatMessage o = d as FloatMessage;
             o.tb.Text = String.Format(o.Format, o.Value);
+            o.RaiseEvent(new RoutedPropertyChangedEventArgs<object>(e.OldValue, e.NewValue, ValueChangedEvent));
         }
 
         private void UserControl_MouseMove(object sender, MouseEventArgs e) {

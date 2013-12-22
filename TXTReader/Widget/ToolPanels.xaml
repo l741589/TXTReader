@@ -6,15 +6,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:converter="clr-namespace:TXTReader.Converter"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="300">
+             d:DesignHeight="600" d:DesignWidth="300">   
     <UserControl.Resources>
         <ResourceDictionary>
             <converter:ToolPanelWidthCvt x:Key="toolPanelWidthCvt"/>
             <converter:ToolPanelTargetLeftCvt x:Key="toolPanelTargetLeftCvt"/>
             <Storyboard x:Key="toolPanelShow">
                 <DoubleAnimation Duration="0:0:0.2"
-                AccelerationRatio="0.33" DecelerationRatio="0.33"
-                Storyboard.TargetProperty="(Canvas.Left)">
+                    AccelerationRatio="0.33" DecelerationRatio="0.33"
+                    Storyboard.TargetProperty="(Canvas.Left)">
                     <DoubleAnimation.To>
                         <MultiBinding Converter="{StaticResource toolPanelTargetLeftCvt}">
                             <Binding Path="ActualWidth" ElementName="toolPanel"/>
@@ -23,9 +23,9 @@
                     </DoubleAnimation.To>
                 </DoubleAnimation>
                 <DoubleAnimation
-                To="100" Duration="0:0:0.2" 
-                Storyboard.TargetProperty="Opacity">
-                </DoubleAnimation>
+                    To="1.0" Duration="0:0:0.2" 
+                    Storyboard.TargetProperty="Opacity">
+                </DoubleAnimation>               
             </Storyboard>
             <Storyboard x:Key="toolPanelHide">
                 <DoubleAnimation
@@ -34,9 +34,8 @@
                 Storyboard.TargetProperty="(Canvas.Left)">
                 </DoubleAnimation>
                 <DoubleAnimation
-                To="0" Duration="0:0:0.2" 
-                Storyboard.TargetProperty="Opacity"
-                >
+                    To="0" Duration="0:0:0.2" 
+                    Storyboard.TargetProperty="Opacity">
                 </DoubleAnimation>
             </Storyboard>
         </ResourceDictionary>

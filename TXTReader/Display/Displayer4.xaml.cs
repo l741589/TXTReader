@@ -270,7 +270,6 @@ namespace TXTReader.Display {
    //     private void mi_reopen_Click(object sender, RoutedEventArgs e) { ReopenFile(); }
   //      private void mi_exit_Click(object sender, RoutedEventArgs e) { App.Current.MainWindow.Close(); }
         public void LineModify(double n = 1) { Offset += lineHeight * n; Update(); }
-        public void PageModify(double n = 1) { Offset += (CanvasHeight - lineHeight) * n; Update(); }
-  
+        public void PageModify(double n = 1) { Offset += (CanvasHeight - lineHeight) * n; Update(); }  
     }
 }

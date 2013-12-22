@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 using TXTReader.Utility;
 using System.Diagnostics;
+using System.Windows.Controls.Primitives;
 
 namespace TXTReader.Widget
 {
@@ -26,6 +27,8 @@ namespace TXTReader.Widget
     {
         private readonly Storyboard toolPanelShow;
         private readonly Storyboard toolPanelHide;
+
+        public bool IsHide { get { return Visibility != Visibility.Visible; } }
       
         public ToolPanels()
         {
@@ -36,38 +39,37 @@ namespace TXTReader.Widget
             Loaded += ToolPanels_Loaded;
         }
 
+        protected override void OnPreviewKeyDown(KeyEventArgs e) {
+            base.OnPreviewKeyDown(e);
+            if (IsHide) {
+                e.Handled = true;
+                Debug.WriteLine("KD Blocked");
+            }
+        }
+
+        protected override void OnPreviewKeyUp(KeyEventArgs e) {
+            base.OnPreviewKeyUp(e);
+            if (IsHide) {
+                e.Handled = false;
+                Debug.WriteLine("KU Blocked");
+            }
+        }
+
         void ToolPanels_Loaded(object sender, RoutedEventArgs e) {
 
         }
 
-        protected override void OnMouseDown(MouseButtonEventArgs e) {            
-            base.OnMouseDown(e);
-            e.Handled = true;
-        }
-
-        protected override void OnMouseUp(MouseButtonEventArgs e) {            
-            base.OnMouseUp(e);
-            e.Handled = true;
-        }
-
-        protected override void OnKeyUp(KeyEventArgs e) {
-            if (e.Key == Key.LeftShift) e.Handled = true;
-            base.OnKeyUp(e);
-        }
-
-        protected override void OnKeyDown(KeyEventArgs e) {
-            if (e.Key == Key.LeftShift) e.Handled = true;
-            base.OnKeyDown(e);
-        }
-
         public void Show() {
+            Visibility = Visibility.Visible;
             ActionUtil.Run(this, toolPanelShow);
             G.Timer.Pause();
         }
 
         public void Hide() {
+            toolPanelHide.Completed += (d, e) => { Visibility = Visibility.Collapsed; };
             ActionUtil.Run(this, toolPanelHide);
             if (!G.MainWindow.IsHolding) G.Timer.Resume();
+            if (tab.TabIndex == 0) tab.Focus();
             G.Displayer.Focus();
         }
     }

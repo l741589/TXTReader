@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TXTReader.Utility;
 
 namespace TXTReader.Widget {
     /// <summary>
@@ -51,8 +52,19 @@ namespace TXTReader.Widget {
             Status = UserStatus.Login;
         }
 
-        private void bn_login_login_Click(object sender, RoutedEventArgs e) {
-            Status = UserStatus.Online;
+        private async void bn_login_login_Click(object sender, RoutedEventArgs e) {
+            try {
+                String id=tb_login_id.Text;
+                String pw=tb_login_pw.Password;
+                ResponseEntity res = await G.Net.Login(id, pw);
+                if (res.status!=MyHttp.successCode) {
+                    MessageBox.Show(res.msg);
+                    return;
+                }
+                Status = UserStatus.Online;
+            } catch {
+                MessageBox.Show("请检查网络是否连接。");
+            }            
         }
 
         private void bn_login_reg_Click(object sender, RoutedEventArgs e) {
@@ -63,11 +75,38 @@ namespace TXTReader.Widget {
             Status = UserStatus.Login;
         }
 
-        private void bn_reg_reg_Click(object sender, RoutedEventArgs e) {
-            Status = UserStatus.Online;
+        private async void bn_reg_reg_Click(object sender, RoutedEventArgs e) {
+            try {
+                if (tb_reg_pw.Password != tb_reg_conf.Password) {
+                    MessageBox.Show("两次输入的密码不一样。");
+                    return;
+                }
+                String id = tb_reg_id.Text;
+                String pw = tb_reg_pw.Password;
+                ResponseEntity res = await G.Net.SignUp(id, pw);
+                if (res.status != MyHttp.successCode) {
+                    MessageBox.Show(res.msg);
+                    return;
+                }
+                Status = UserStatus.Login;
+                tb_login_id.Text = tb_reg_id.Text;
+                tb_login_pw.Password = tb_reg_pw.Password;
+                bn_login_login_Click(bn_login_login, e);
+            } catch {
+                MessageBox.Show("请检查网络是否连接。");
+            }
         }
 
-        private void bn_logout_Click(object sender, RoutedEventArgs e) {
+        private async void bn_logout_Click(object sender, RoutedEventArgs e) {
+            
+            try {
+                ResponseEntity res = await G.Net.Logout();
+                if (res.status != MyHttp.successCode) {
+                    MessageBox.Show(res.msg);
+                }
+            } catch {
+                MessageBox.Show("请检查网络是否连接。");
+            }
             Status = UserStatus.Login;
         }
     }

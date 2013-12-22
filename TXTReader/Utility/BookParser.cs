@@ -25,9 +25,11 @@ namespace TXTReader.Utility {
         public const String S_OFFSET = "offset";
         public const String S_MARK = "mark";
         public const String S_AUTO = "auto";
+        public const String S_TITLE = "title";
+        public const String S_ID = "id";
 
         public static String GetBookPath(Book book) {
-            return G.PATH_BOOK + book.Title + book.Source.GetHashCode() + G.EXT_BOOK;
+            return G.PATH_BOOK + Path.GetFileNameWithoutExtension(book.Source) + book.Source.GetHashCode() + G.EXT_BOOK;
         }
 
         public static void Load(){
@@ -49,9 +51,7 @@ namespace TXTReader.Utility {
             if (target == null) b = new Book();
             else b = target;
             var r = new Reader(filename)
-                .Read(S_SOURCE, (n) => {
-                    b.Init(n.InnerText);
-                })
+                .Read(S_SOURCE, (n) => { b.Init(n.InnerText); })
                 .Read(S_AUTHOR, (n) => { b.Author = n.InnerText; })
                 .Read(S_COVER, (n) => {
                     String uri = n.InnerText;
@@ -61,7 +61,9 @@ namespace TXTReader.Utility {
                 .Read(S_TIME, (n) => { b.LastLoadTime = DateTime.Parse(n.InnerText); })
                 .Read(S_LENGTH, (n) => { b.Length = int.Parse(n.InnerText); })
                 .Read(S_PREVIEW, (n) => { b.Preview = n.InnerText; })
-                .Child(S_BOOKMARK).ForChildren(S_MARK, (n) => {
+                .Read(S_TITLE, (n) => { b.Title = n.InnerText; })
+                .Read(S_ID, (n) => { b.Id = n.InnerText; })
+                .Child(S_BOOKMARK).Do((n) => { b.Bookmark.Clear(); }).ForChildren(S_MARK, (n) => {
                     Bookmark bmk = new Bookmark();
                     if (n.Attributes[S_AUTO] != null) bmk.IsAuto = true; else bmk.IsAuto = false;
                     new Reader(n)
@@ -90,7 +92,9 @@ namespace TXTReader.Utility {
                 .Write(S_COVER, book.Cover, G.NoCover, null)
                 .Write(S_LENGTH, book.Length)
                 .Write(S_TIME, book.LastLoadTime)
-                .Write(S_PREVIEW, book.Preview, "", Book.NO_PREVIEW, null);
+                .Write(S_PREVIEW, book.Preview, "", Book.NO_PREVIEW, null)
+                .Write(S_TITLE, book.Title)
+                .Write(S_ID, book.Id);
             //w = BookmarkParser.Save(w, book);
             w = w.Start(S_BOOKMARK);
             if (G.Book != null) {

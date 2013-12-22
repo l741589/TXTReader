@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using System.Windows.Media.Imaging;
 using TXTReader.Widget;
+using System.Threading;
 
 namespace TXTReader.Utility {
     static class G {
@@ -22,6 +23,9 @@ namespace TXTReader.Utility {
             Books = new BookCollection();
             Rules = new Rules();
             KeyHook = new KeyHook();
+            Blockers = new List<EventWaitHandle>();
+            Net = new MyHttp("http://222.69.215.150:9999/txt");
+            //Net = new MyHttp("http://10.60.42.203:9999/txt");
         }
         public static bool IsRunning = true;
         public static String HTTP_HEAD { get { return "http://"; } }
@@ -31,6 +35,7 @@ namespace TXTReader.Utility {
 
         public static String PATH { get { return AppDomain.CurrentDomain.BaseDirectory; } }
         public static String PATH_BOOK { get { return A.CheckDir(PATH + @"books\"); } }        
+        public static String PATH_SOURCE { get { return A.CheckDir(PATH + @"source\"); } }    
         public static String PATH_COVER { get { return A.CheckDir(PATH + @"cover\"); } }
         public static String PATH_RULE  { get { return A.CheckDir(PATH + @"rules\"); } }
         public static String PATH_LISTRULE { get { return A.CheckDir(PATH + @"rules\"); } }
@@ -57,13 +62,16 @@ namespace TXTReader.Utility {
         public static Displayer4 Displayer { get { return MainWindow.displayer; } }
         public static TRNotifyIcon NotifyIcon { get; set; }
         public static KeyHook KeyHook { get; private set; }
- 
+
         public static ObservableCollection<Bookmark> Bookmark { get { return Book == null ? null : Book.Bookmark; } }
         public static BookCollection Books { get; private set; }
+        public static List<EventWaitHandle> Blockers { get; private set; }
 
         public static Trmex ListTrmex { get { return Rules.ListTrmex; } set { Rules.ListTrmex = value; } }
         public static Trmex TreeTrmex { get { return Rules.TreeTrmex; } set { Rules.TreeTrmex = value; } }
         public static Rules Rules { get; private set; }
         public static FloatMessagePanel FloatMessagePanel { get { return MainWindow.floatMessagePanel; } }
+        public static MyHttp Net { get; private set; }
+        public static String Log { get { return MainWindow != null ? MainWindow.floatMessagePanel.Log.Value.ToString() : null; } set { if (MainWindow != null) MainWindow.floatMessagePanel.Log.Value = value; } }
     }
 }

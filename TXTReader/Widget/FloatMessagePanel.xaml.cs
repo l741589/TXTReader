@@ -27,6 +27,7 @@ namespace TXTReader.Widget {
         public FloatMessage Fps;
         public FloatMessage Title;
         public FloatMessage Speed;
+        public FloatLog Log;
 
         public FloatMessagePanel() {
             InitializeComponent();
@@ -35,11 +36,13 @@ namespace TXTReader.Widget {
             Fps = new FloatMessage(this) { Format = "{0}Fps" };
             Speed = new FloatMessage(this) { Format = "SpeedLevel:{0}" };
             Title = new FloatMessage(this);
+            Log = new FloatLog(this);
             pn_lefttop.Children.Add(Time);
             pn_lefttop.Children.Add(Position);
             pn_lefttop.Children.Add(Fps);
             pn_lefttop.Children.Add(Title);
             pn_lefttop.Children.Add(Speed);
+            pn_leftbottom.Children.Add(Log);
             timer();
             UpdateBinding();
         }
@@ -76,8 +79,8 @@ namespace TXTReader.Widget {
                 if ((c.R + c.G + c.B) > 128 * 3) fg = Brushes.Black;
                 else fg = Brushes.White;                
             }
-            Time.Background = Speed.Background = Fps.Background = Title.Background = Position.Background = bg;
-            Time.Foreground = Speed.Foreground = Fps.Foreground = Title.Foreground = Position.Foreground = fg;
+            Log.Background = Time.Background = Speed.Background = Fps.Background = Title.Background = Position.Background = bg;
+            Log.Foreground = Time.Foreground = Speed.Foreground = Fps.Foreground = Title.Foreground = Position.Foreground = fg;
         }
     }
 }

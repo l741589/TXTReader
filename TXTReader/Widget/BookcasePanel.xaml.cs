@@ -25,19 +25,13 @@ namespace TXTReader.Widget {
     /// BookCasePanel.xaml 的交互逻辑
     /// </summary>
     public partial class BookcasePanel : UserControl {
-        private static DependencyPropertyKey IsSettingMenuOpen = DependencyProperty.RegisterReadOnly("SettingMenuOpen", typeof(bool), typeof(BookcasePanel),new PropertyMetadata());
+        private static DependencyPropertyKey IsSettingMenuOpen = DependencyProperty.RegisterReadOnly("SettingMenuOpen", typeof(bool), typeof(BookcasePanel), new PropertyMetadata());
 
         public BookcasePanel() {
             InitializeComponent();
             lb_book.ItemsSource = G.Books;
-            lb_book.Items.IsLiveSorting = true;
-            lb_book.Items.SortDescriptions.Add(new SortDescription("SortArgument", ListSortDirection.Descending));  
+            lb_book.Items.SortDescriptions.Add(new SortDescription("SortArgument", ListSortDirection.Descending));
             lb_book.Items.SortDescriptions.Add(new SortDescription("LastLoadTime", ListSortDirection.Descending));
-            //G.Books.CollectionChanged += Books_CollectionChanged;
-            //G.Books.CollectionChanged += (a, e) => {
-            //    foreach (var b in e.NewItems) 
-            //        (b as Book).SortArgument = A.FuzzyMatch((b as Book).Title, tb_search.Text, 10000);
-            //};
         }
 
         private void Books_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
@@ -71,18 +65,21 @@ namespace TXTReader.Widget {
             b.Cover = (ImageSource)new ImageSourceConverter().ConvertFrom("E:/test/IMG3.png");
             b.Position = 6577;
             lb_book.Items.Add(b);
-            lb_book.Items.Add(b);*/            
+            lb_book.Items.Add(b);*/
         }
 
 
-        public Boolean IsBookExists(String src) {
+        public Boolean IsBookExists(String src, String id = null) {
             foreach (var b in lb_book.Items) {
                 if ((b as Book).Source == src) return true;
+                if (!String.IsNullOrEmpty(id) && !String.IsNullOrEmpty((b as Book).Id)) {
+                    if (id == (b as Book).Id) return true;
+                }
             }
             return false;
         }
 
-        private void OpenBook(){
+        private void OpenBook() {
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.Multiselect = true;
             dlg.DefaultExt = "txt";
@@ -91,6 +88,7 @@ namespace TXTReader.Widget {
                 foreach (var f in dlg.FileNames) {
                     if (IsBookExists(f)) continue;
                     Book b = new Book(f);
+                    if (IsBookExists(f, b.Id)) continue;
                     G.Books.Add(b);
                     BookParser.Save(b);
                 }
@@ -108,23 +106,54 @@ namespace TXTReader.Widget {
 
         private void lb_book_DoubleClick(object sender, MouseButtonEventArgs e) {
             var li = sender as ListBoxItem;
-            var b = li.DataContext as Book;            
+            var b = li.DataContext as Book;
             G.Displayer.OpenBook(b);
-            var i=G.Books.IndexOf(b);
+            var i = G.Books.IndexOf(b);
             G.Books.Remove(b);
             G.Books.Add(b);
-            //A.Resort(lb_book);
             lb_book.ScrollIntoView(b);
         }
 
         private void tb_search_KeyUp(object sender, KeyEventArgs e) { Search(); }
         private void tb_search_TextChanged(object sender, TextChangedEventArgs e) { Search(); }
 
-        private void Search(){
+        private async void Search() {
             foreach (var b in G.Books)
                 b.SortArgument = A.FuzzyMatch(b.Title, tb_search.Text, 1000) + A.FuzzyMatch(b.Author, tb_search.Text, 1000);
-            A.Resort(lb_book);
-            lb_book.ScrollIntoView(lb_book.Items[0]);
+            if (tb_search.Text == null || tb_search.Text == "") {
+                lb_book.Items.Filter = null;
+                List<Book> toRemove = new List<Book>();
+                foreach (var b in G.Books) {
+                    if (b.State == Book.BookState.Remote || b.State == Book.BookState.Missing)
+                        toRemove.Add(b);
+                }
+                foreach (var b in toRemove) G.Books.Remove(b);
+            } else {
+                lb_book.Items.Filter = (b) => { return (b as Book).SortArgument > 0; };
+                if (lb_book.Items.Count > 0)
+                    lb_book.ScrollIntoView(lb_book.Items[0]);
+                String text = tb_search.Text;
+                try {
+                    ResponseEntity res = await G.Net.Search(text, "0");
+                    if (text == tb_search.Text) {
+                        if (res.status != MyHttp.successCode) {
+                            G.Log = "Search " + res.msg;
+                            return;
+                        }
+                        foreach (object data in res.data) {
+                            object[] ar = (object[])data;
+                            String s = ar[1].ToString();
+                            String id = ar[0].ToString();
+                            if (!IsBookExists(s, id)) {
+                                var b = new Book(s) { Id = id };
+                                b.SortArgument = A.FuzzyMatch(s, text);
+                                G.Books.Add(b);
+                            }
+                        }
+                    }
+                } catch { }
+            }
+            lb_book.Items.Refresh();
         }
 
         private void lb_book_KeyUp(object sender, KeyEventArgs e) {
@@ -132,6 +161,19 @@ namespace TXTReader.Widget {
                 case Key.Delete: DelBook(); break;
                 case Key.Insert: OpenBook(); break;
             }
+        }
+
+        private async void download_Click(object sender, RoutedEventArgs e) {
+            var li = sender as Button;
+            var b = li.DataContext as Book;
+            await b.Download();
+        }
+
+        private async void MenuItem_Click_2(object sender, RoutedEventArgs e) {
+            var li = sender as Control;
+            var b = li.DataContext as Book;
+            if (b.State == Book.BookState.Local)
+                await b.Upload();
         }
     }
 }

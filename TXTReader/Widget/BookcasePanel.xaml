@@ -8,6 +8,7 @@
              d:DesignHeight="600" d:DesignWidth="300" Padding="8" Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <ResourceDictionary>
+            <converter:BookStateVisibilityConverter x:Key="BookStateVisibilityConverter"/>
             <converter:NotConverter x:Key="not"/>
             <converter:VisiblilityConverter x:Key="visibilityCvt"/>
             <converter:BookLengthConverter x:Key="lenCvt"/>
@@ -23,6 +24,7 @@
             <RowDefinition Height="8"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+        
         <TextBox DockPanel.Dock="Top" x:Name="tb_search" Grid.Column="0" Grid.Row="0" KeyUp="tb_search_KeyUp" TextChanged="tb_search_TextChanged"/>
         <Button x:Name="bn_setting" Grid.Row="0" Grid.Column="1" Padding="0" MouseEnter="bn_setting_MouseEnter" MouseLeave="bn_setting_MouseLeave">
             <Image  Width="20" Height="20" Source="/TXTReader;component/res/setting.png"/>
@@ -60,13 +62,19 @@
                                    TextTrimming="CharacterEllipsis" Text="{Binding Length,Converter={StaticResource ResourceKey=lenCvt}}"/>
                         <TextBlock Grid.Column="1" Grid.Row="2" FontSize="10" Grid.ColumnSpan="2" Foreground="Gray" 
                                    TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Text="{Binding Preview}" 
-                                   Visibility="{Binding IsLocal,IsAsync=False,Converter={StaticResource ResourceKey=visibilityCvt}}"/>
-                        <Button Grid.Column="1" Grid.Row="2" FontSize="18" Grid.ColumnSpan="2" Content="下载"
-                                   Visibility="{Binding Path=IsLocal,Converter={StaticResource ResourceKey=not},ConverterParameter={StaticResource ResourceKey=visibilityCvt}}"/>
+                                   Visibility="{Binding State, ConverterParameter=Local, Converter={StaticResource BookStateVisibilityConverter}}"/>
+                        <Button Grid.Column="1" Grid.Row="2" FontSize="18" Grid.ColumnSpan="2" Content="下载" Click="download_Click"
+                                   Visibility="{Binding State, ConverterParameter=Remote, Converter={StaticResource BookStateVisibilityConverter}}"/>
+                        <ProgressBar Grid.Column="1" Grid.Row="2" FontSize="18" Grid.ColumnSpan="2"  IsIndeterminate="True"
+                                     Visibility="{Binding State, ConverterParameter=Downloading, Converter={StaticResource BookStateVisibilityConverter}}"/>
+                        <TextBlock Grid.Column="1" Grid.Row="2" FontSize="18" Grid.ColumnSpan="2" Foreground="Red" 
+                                   TextWrapping="NoWrap" Text="丢失" 
+                                   Visibility="{Binding State, ConverterParameter=Missing, Converter={StaticResource BookStateVisibilityConverter}}"/>
                         <Grid.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="添加" Click="MenuItem_Click"/>
-                                <MenuItem Header="删除" Visibility="{Binding IsLocal,Converter={StaticResource ResourceKey=visibilityCvt}}" Click="MenuItem_Click_1"/>
+                                <MenuItem Header="删除" Visibility="{Binding State, ConverterParameter=Local, Converter={StaticResource BookStateVisibilityConverter}}" Click="MenuItem_Click_1"/>
+                                <MenuItem Header="上传" Visibility="{Binding State, ConverterParameter=Local, Converter={StaticResource BookStateVisibilityConverter}}" Click="MenuItem_Click_2"/>
                             </ContextMenu>
                         </Grid.ContextMenu>
                     </Grid>

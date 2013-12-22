@@ -9,6 +9,7 @@ using TXTReader.Utility;
 using TXTReader.Data;
 using Microsoft.Win32;
 using System.Security.Permissions;
+using System.Threading;
 
 namespace TXTReader {
     /// <summary>
@@ -47,6 +48,7 @@ namespace TXTReader {
             RuleParser.Save();
             SkinParser.Save();
             OptionsParser.Save();
+            foreach (EventWaitHandle b in G.Blockers) if (b != null) b.Set();
             base.OnExit(e);
         }
 

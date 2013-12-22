@@ -46,6 +46,8 @@
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Printing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -69,6 +71,7 @@
     <Compile Include="Commands\MyCommands.cs" />
     <Compile Include="Converter\BookLengthConverter.cs" />
     <Compile Include="Converter\BookmarkConverter.cs" />
+    <Compile Include="Converter\BookStateVisibilityConverter.cs" />
     <Compile Include="Converter\ChapterRuleNameConverter.cs" />
     <Compile Include="Converter\ContentStatusImageConverter.cs" />
     <Compile Include="Converter\MyDateTimeConverter.cs" />
@@ -115,13 +118,20 @@
     <Compile Include="Display\TRTimer2.cs" />
     <Compile Include="Utility\A.cs" />
     <Compile Include="Utility\ActionUtil.cs" />
+    <Compile Include="Utility\BackgroundTask.cs" />
     <Compile Include="Utility\BookParser.cs" />
     <Compile Include="Utility\BookCollection.cs" />
     <Compile Include="Utility\BufferObject.cs" />
     <Compile Include="Utility\HelpProvider.cs" />
+    <Compile Include="Utility\HttpDelegate.cs" />
+    <Compile Include="Utility\IHttpDelegate.cs" />
+    <Compile Include="Utility\Json.cs" />
     <Compile Include="Utility\KeyHook.cs" />
     <Compile Include="Utility\MessageConst.cs" />
+    <Compile Include="Utility\MyHttp.cs" />
     <Compile Include="Utility\OptionsParser.cs" />
+    <Compile Include="Utility\PlaceHolder.cs" />
+    <Compile Include="Utility\ResponseEntity.cs" />
     <Compile Include="Utility\RuleParser.cs" />
     <Compile Include="Utility\EnumTypesBinder.cs" />
     <Compile Include="Utility\G.cs" />
@@ -129,6 +139,7 @@
     <Compile Include="Utility\Parser.cs" />
     <Compile Include="Utility\Rules.cs" />
     <Compile Include="Utility\SkinParser.cs" />
+    <Compile Include="Utility\TaskCache.cs" />
     <Compile Include="Utility\UACManager.cs" />
     <Compile Include="WebApi\Douban.cs" />
     <Compile Include="Widget\BookcasePanel.xaml.cs">
@@ -137,6 +148,7 @@
     <Compile Include="Widget\BookmarkPanel.xaml.cs">
       <DependentUpon>BookmarkPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Widget\FloatLog.cs" />
     <Compile Include="Widget\FloatMessage.xaml.cs">
       <DependentUpon>FloatMessage.xaml</DependentUpon>
     </Compile>
