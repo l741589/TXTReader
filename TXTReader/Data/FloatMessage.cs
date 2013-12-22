@@ -11,5 +11,6 @@ namespace TXTReader.Data {
         public bool Speed { get; set; }
         public bool ChapterTitle { get; set; }
         public bool Progress { get; set; }
+        public bool Log { get; set; }
     }
 }

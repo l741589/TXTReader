@@ -195,6 +195,7 @@ namespace TXTReader.Widget
             G.MainWindow.floatMessagePanel.Fps.SetBinding(FloatMessage.VisibilityProperty, new Binding("IsChecked") { Source = ckbFps, Converter = new VisiblilityConverter() });
             G.MainWindow.floatMessagePanel.Position.SetBinding(FloatMessage.VisibilityProperty, new Binding("IsChecked") { Source = ckbProgress, Converter = new VisiblilityConverter() });
             G.MainWindow.floatMessagePanel.Speed.SetBinding(FloatMessage.VisibilityProperty, new Binding("IsChecked") { Source = ckbSpeed, Converter = new VisiblilityConverter() });
+            G.MainWindow.floatMessagePanel.Log.SetBinding(FloatMessage.VisibilityProperty, new Binding("IsChecked") { Source = ckbLog, Converter = new VisiblilityConverter() });
             G.MainWindow.floatMessagePanel.SetBinding(FloatMessagePanel.VisibilityProperty, new Binding("IsChecked") { Source = ckbFloatMessage, Converter = new VisiblilityConverter() });
         }
 

@@ -19,6 +19,8 @@ namespace TXTReader.Utility {
         public const String S_BOOK = "book";
         public const String S_ISBORDERED = "isbordered";
         public const String S_FULLSCREEN = "isfullscreen";
+        public const String S_LOG = "log";
+        public const String S_FILTERSPACE = "filterspace";
 
 
         public static void Save() {
@@ -32,10 +34,12 @@ namespace TXTReader.Utility {
                     .Write(S_TIME, G.Options.FloatMessage.Time, new bool[0])
                     .Write(S_SPEED, G.Options.FloatMessage.Speed, new bool[0])
                     .Write(S_PROGRESS, G.Options.FloatMessage.Progress, new bool[0])
+                    .Write(S_LOG, G.Options.FloatMessage.Log, new bool[0])
                 .End
                 .Write(S_BOOK, (App.Current as App).FileName)
                 .Write(S_ISBORDERED, G.Options.IsBordered, new bool[0])
                 .Write(S_FULLSCREEN, G.Options.IsFullScreen, new bool[0])
+                .Write(S_FILTERSPACE, G.Options.IsFilterSpace, new bool[0])
                 .WriteTo(G.NAME_OPTION);
         }
 
@@ -50,10 +54,12 @@ namespace TXTReader.Utility {
                     .Read(S_TIME, (n) => { G.Options.FloatMessage.Time = bool.Parse(n.InnerText); })
                     .Read(S_SPEED, (n) => { G.Options.FloatMessage.Speed = bool.Parse(n.InnerText); })
                     .Read(S_PROGRESS, (n) => { G.Options.FloatMessage.Progress = bool.Parse(n.InnerText); })
+                    .Read(S_LOG, (n) => { G.Options.FloatMessage.Log = bool.Parse(n.InnerText); })
                 .Parent
                 .Read(S_BOOK, (n) => { (App.Current as App).FileName = n.InnerText; })
                 .Read(S_ISBORDERED, (n) => { G.Options.IsBordered = bool.Parse(n.InnerText); })
-                .Read(S_FULLSCREEN, (n) => { G.Options.IsFullScreen = bool.Parse(n.InnerText); });
+                .Read(S_FULLSCREEN, (n) => { G.Options.IsFullScreen = bool.Parse(n.InnerText); })
+                .Read(S_FILTERSPACE, (n) => { G.Options.IsFilterSpace = bool.Parse(n.InnerText); });
         }
     }
 }

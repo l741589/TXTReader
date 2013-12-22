@@ -161,6 +161,7 @@
                                      MinValue="1" x:Name="seSpeed">
                                 </Widget:SpinEdit>
                             </DockPanel>
+                            <CheckBox Margin="8" x:Name="cb_space_filter" IsChecked="{Binding Instance.IsFilterSpace,Mode=TwoWay}">过滤空行</CheckBox>
                             <Expander IsExpanded="{Binding IsChecked, ElementName=ckbFloatMessage, Mode=TwoWay}">
                                 <Expander.Header>
                                     <CheckBox Name="ckbFloatMessage" Content="显示浮动信息"
@@ -183,6 +184,9 @@
                                         <CheckBox x:Name="ckbProgress" Content="进度"
                 			                IsEnabled="{Binding IsChecked, ElementName=ckbFloatMessage}"
                                 			IsChecked="{Binding Instance.FloatMessage.Progress, Mode=TwoWay}"/>
+                                        <CheckBox x:Name="ckbLog" Content="日志"
+                			                IsEnabled="{Binding IsChecked, ElementName=ckbFloatMessage}"
+                                			IsChecked="{Binding Instance.FloatMessage.Log, Mode=TwoWay}"/>
                                     </UniformGrid>
                                 </Border>
                             </Expander>

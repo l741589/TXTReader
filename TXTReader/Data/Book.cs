@@ -40,6 +40,7 @@ namespace TXTReader.Data {
         public double SortArgument { get; set; }
         public String Id { get { return id; } set { id = value; G.Books.Check(this); } }
         public ObservableCollection<Bookmark> Bookmark { get; private set; }
+        public bool IsOpen = false;
 
         public Book()
             : base() {
@@ -120,6 +121,7 @@ namespace TXTReader.Data {
         public void Match(ICollection<String> texts) {
             Chapter node = this;
             foreach (var s in texts) {
+                if (!IsOpen) return;
                 Trmex trmex = null;
                 if (Dispatcher.Invoke(() => { return G.Rules.IsListEnable; })) trmex = Dispatcher.Invoke(() => { return G.ListTrmex; });
                 ChapterDesc r = trmex.Match(s);
@@ -152,10 +154,15 @@ namespace TXTReader.Data {
                 Title = Path.GetFileNameWithoutExtension(file);
                 if (Text != null) Text.Clear();
                 if (File.Exists(Source)) {
-                    TotalText = new List<string>(ss);
+                    if (G.Options.IsFilterSpace) {
+                        TotalText = new List<string>();
+                        foreach (var s in ss) if (!String.IsNullOrWhiteSpace(s)) TotalText.Add(s);
+                    }else 
+                        TotalText = new List<string>(ss);
                     BookParser.Load(this);
-                    LastLoadTime = DateTime.Now;                    
-                    await Task.Run(() => { Match(ss); });
+                    LastLoadTime = DateTime.Now;
+                    IsOpen = true;
+                    await Task.Run(() => { Match(TotalText); });
                     TotalText = null;
                 } else {
                     State = BookState.Missing;
@@ -239,6 +246,7 @@ namespace TXTReader.Data {
             GetPreview();
             BookParser.Save(this);
             LoadFinished = null;
+            IsOpen = false;
             base.Close();
         }
 

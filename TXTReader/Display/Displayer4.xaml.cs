@@ -140,7 +140,7 @@ namespace TXTReader.Display {
             G.Book = null;
             Clear();
             Text = null;
-            OpenBook(tmp);
+            OpenFile(tmp.Source);
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e) {
