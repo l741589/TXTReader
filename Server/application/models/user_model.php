@@ -68,6 +68,9 @@ class User_Model extends CI_Model
     function get_book_ids($username)
     {
         $user = $this->get_by_username($username);
+        if (!$user) {
+            return false;
+        }
         $this->db->where("user_id", $user->id);
         $query = $this->db->get("user_book_relation");
         if ($query->num_rows() == 0) {

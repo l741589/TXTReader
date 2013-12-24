@@ -8,9 +8,9 @@
 
 require_once "session_controller.php";
 require_once APPPATH . "/core/common.php";
+
 class Download_Controller extends Session_Controller
 {
-
     private $_book_model;
 
     function __construct()
@@ -22,21 +22,41 @@ class Download_Controller extends Session_Controller
 
     function do_download()
     {
+        $result_code = 0;
+        $require = array("id");
+        $form_data = array(
+            "id" => $this->input->get("id")
+        );
         if (!$this->is_logged_in()) {
-            show_result(RESULT_NOT_LOGIN);
+            $result_code = RESULT_NOT_LOGIN;
         } else {
-            $book_id = $this->input->get("id");
-            if (!$book_id) {
-                show_result(RESULT_MISSING_ARGS);
-            }
-            $book_info = $this->_book_model->get_book_by_id($book_id);
-            $book_file = $this->_book_model->get_filedata_by_id($book_info['file_id']);
-            if (!$book_info || !$book_file) {
-                show_result(RESULT_NO_BOOK);
+            if (!$this->_is_required_data($require, $form_data)) {
+                $result_code = RESULT_MISSING_ARGS;
             } else {
-                $this->load->helper('download');
-                force_download($book_info['book_name'], $book_file);
+                $book_id = $form_data['id'];
+                $book_info = $this->_book_model->get_book_by_id($book_id);
+                $book_file = $this->_book_model->get_filedata_by_id($book_info['file_id']);
+                if (!$book_info || !$book_file) {
+                    $result_code = RESULT_NO_BOOK;
+                } else {
+                    $this->load->helper('download');
+                    $book_name = rawurldecode($book_info['book_name'] . ".txt");
+                    force_download($book_name, $book_file);
+                    $result_code = RESULT_SUCCESS;
+                }
             }
         }
+        show_result($result_code);
+        return $result_code;
+    }
+
+    function _is_required_data($required_fields, $form_data)
+    {
+        foreach ($required_fields as $field) {
+            if (!isset($form_data[$field]) || empty($form_data[$field])) {
+                return false;
+            }
+        }
+        return true;
     }
 } 

@@ -617,6 +617,8 @@ if (!function_exists('function_usable')) {
     }
 }
 
+/* overwrite default function */
+
 
 /* End of file common.php */
 /* Location: ./system/core/common.php */

@@ -139,6 +139,7 @@ class CI_Upload
 
         // Is $_FILES[$field] set? If not, no reason to continue.
         if (!isset($_FILES[$field])) {
+            $this->error_code = RESULT_UPLOAD_FILE_NOT_SELECT;
             $this->set_error('upload_no_file_selected');
             return FALSE;
         }
@@ -155,27 +156,35 @@ class CI_Upload
 
             switch ($error) {
                 case 1: // UPLOAD_ERR_INI_SIZE
+                    $this->error_code = RESULT_UPLOAD_FILE_EXCEEDS_LIMIT;
                     $this->set_error('upload_file_exceeds_limit');
                     break;
                 case 2: // UPLOAD_ERR_FORM_SIZE
+                    $this->error_code = RESULT_UPLOAD_FILE_EXCEEDS_FORM_LIMIT;
                     $this->set_error('upload_file_exceeds_form_limit');
                     break;
                 case 3: // UPLOAD_ERR_PARTIAL
+                    $this->error_code = RESULT_UPLOAD_FILE_PARTIAL;
                     $this->set_error('upload_file_partial');
                     break;
                 case 4: // UPLOAD_ERR_NO_FILE
+                    $this->error_code = RESULT_UPLOAD_FILE_NOT_SELECT;
                     $this->set_error('upload_no_file_selected');
                     break;
                 case 6: // UPLOAD_ERR_NO_TMP_DIR
+                    $this->error_code = RESULT_UPLOAD_NO_TEMP_DIR;
                     $this->set_error('upload_no_temp_directory');
                     break;
                 case 7: // UPLOAD_ERR_CANT_WRITE
+                    $this->error_code = RESULT_UPLOAD_UNABLE_TO_WRITE_FILE;
                     $this->set_error('upload_unable_to_write_file');
                     break;
                 case 8: // UPLOAD_ERR_EXTENSION
+                    $this->error_code = RESULT_UPLOAD_STOPPED_BY_EXTENSION;
                     $this->set_error('upload_stopped_by_extension');
                     break;
                 default :
+                    $this->error_code = RESULT_UPLOAD_FILE_NOT_SELECT;
                     $this->set_error('upload_no_file_selected');
                     break;
             }
@@ -196,6 +205,7 @@ class CI_Upload
 
         // Is the file type allowed to be uploaded?
         if (!$this->is_allowed_filetype()) {
+            $this->error_code = RESULT_UPLOAD_INVALID_FILETYPE;
             $this->set_error('upload_invalid_filetype');
             return FALSE;
         }
@@ -213,6 +223,7 @@ class CI_Upload
             }
 
             if (!$this->is_allowed_filetype(TRUE)) {
+                $this->error_code = RESULT_UPLOAD_INVALID_FILETYPE;
                 $this->set_error('upload_invalid_filetype');
                 return FALSE;
             }
@@ -225,6 +236,7 @@ class CI_Upload
 
         // Is the file size within the allowed maximum?
         if (!$this->is_allowed_filesize()) {
+            $this->error_code = RESULT_UPLOAD_INVALID_FILESIZE;
             $this->set_error('upload_invalid_filesize');
             return FALSE;
         }
@@ -273,6 +285,7 @@ class CI_Upload
          */
         if ($this->xss_clean) {
             if ($this->do_xss_clean() === FALSE) {
+                $this->error_code = RESULT_UPLOAD_UNABLE_TO_WRITE_FILE;
                 $this->set_error('upload_unable_to_write_file');
                 return FALSE;
             }
@@ -287,6 +300,7 @@ class CI_Upload
          */
         if (!@copy($this->file_temp, $this->upload_path . $this->file_name)) {
             if (!@move_uploaded_file($this->file_temp, $this->upload_path . $this->file_name)) {
+                $this->error_code = RESULT_UPLOAD_DESTINATON_ERROR;
                 $this->set_error('upload_destination_error');
                 return FALSE;
             }
@@ -382,6 +396,7 @@ class CI_Upload
         }
 
         if ($new_filename == '') {
+            $this->error_code = RESULT_UPLOAD_BAD_FILENAME;
             $this->set_error('upload_bad_filename');
             return FALSE;
         } else {
@@ -548,6 +563,7 @@ class CI_Upload
         }
 
         if (count($this->allowed_types) == 0 OR !is_array($this->allowed_types)) {
+            $this->error_code = RESULT_UPLOAD_INVALID_FILETYPE;
             $this->set_error('upload_no_file_types');
             return FALSE;
         }
@@ -643,6 +659,7 @@ class CI_Upload
     public function validate_upload_path()
     {
         if ($this->upload_path == '') {
+            $this->error_code = RESULT_UPLOAD_NO_FILEPATH;
             $this->set_error('upload_no_filepath');
             return FALSE;
         }
@@ -652,11 +669,13 @@ class CI_Upload
         }
 
         if (!@is_dir($this->upload_path)) {
+            $this->error_code = RESULT_UPLOAD_NO_FILEPATH;
             $this->set_error('upload_no_filepath');
             return FALSE;
         }
 
         if (!is_really_writable($this->upload_path)) {
+            $this->error_code = RESULT_UPLOAD_UNABLE_TO_WRITE_FILE;
             $this->set_error('upload_not_writable');
             return FALSE;
         }

@@ -20,7 +20,7 @@ class Book_Model extends CI_Model
     {
         // save file and get file id
         $file_id = 0;
-        if ($this->_is_file_existed($data['file_md5'])) {
+        if ($this->is_file_existed($data['file_md5'])) {
             $file = $this->_get_file_by_md5($data['file_md5']);
             $file_id = $file->id;
         } else {
@@ -119,7 +119,7 @@ class Book_Model extends CI_Model
         return false;
     }
 
-    function _is_file_existed($file_md5)
+    function is_file_existed($file_md5)
     {
         $this->db->where("file_md5", $file_md5);
         $this->db->get("file");

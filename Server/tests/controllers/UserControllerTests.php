@@ -9,7 +9,7 @@
 class UserControllerTest extends CIUnit_TestCase
 {
     protected $data_signup = array(
-        'username' => 'test_user_2',
+        'username'              => 'test_user_2',
         'password'              => 'test_password',
         'password_comfirmation' => 'test_password'
     );
@@ -24,7 +24,7 @@ class UserControllerTest extends CIUnit_TestCase
     {
         $conn = new mysqli("localhost:3306", "root", "123456", "txtreader");
         $conn->autocommit(false);
-        $conn->query("delete from user");
+        $conn->query("DELETE FROM user");
         if (!$conn->errno) {
             $conn->commit();
             echo("Database is ready");

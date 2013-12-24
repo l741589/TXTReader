@@ -23,39 +23,52 @@ class Search_Controller extends Session_Controller
 
     function do_search()
     {
-        $_result_code = 0;
+        $result_code = 0;
+        $ret = [];
         $book_name = $this->input->get('book_name');
         $is_owned = $this->input->get('own');
         if (isset($is_owned) && $is_owned == 1) {
             if (!$this->is_logged_in()) {
-                show_result(RESULT_NOT_LOGIN);
+                $result_code = RESULT_NOT_LOGIN;
+//                show_result(RESULT_NOT_LOGIN);
             } else {
                 $this->load->model('user_model');
                 $username = $this->get_current_username();
                 $user_book_ids = $this->user_model->get_book_ids($username);
-                if ($user_book_ids === false) {
-                    show_result(RESULT_NO_BOOK);
-                } else {
-                    $ret = array();
+                if ($user_book_ids != false) {
                     foreach ($user_book_ids as $id) {
                         $book = $this->_book_model->get_book_by_id($id);
                         $pattern = "/" . $book_name . "/";
                         if ($book && preg_match($pattern, $book['book_name'])) {
-                            $ret[] = $book;
+                            $ret[] = array(
+                                "book_id"   => $book["book_id"],
+                                "book_name" => $book["book_name"]
+                            );
                         }
                     }
-                    show_result(RESULT_SUCCESS, $ret);
+                    if (sizeof($ret) == 0) {
+                        $result_code = RESULT_NO_BOOK;
+                    } else {
+                        $result_code = RESULT_SUCCESS;
+                    }
+//                    show_result(RESULT_SUCCESS, $ret);
                 }
             }
         } else {
-            if (isset($book_name) && !is_null($book_name)) {
-                $books = $this->_book_model->get_books_by_bookname($book_name);
-                if ($books) {
-                    show_result(RESULT_SUCCESS, $books);
+            if (isset($book_name) && !empty($book_name)) {
+                $ret = $this->_book_model->get_books_by_bookname($book_name);
+                if ($ret) {
+                    $result_code = RESULT_SUCCESS;
+//                    show_result(RESULT_SUCCESS, $ret);
                 } else {
-                    show_result(RESULT_NO_BOOK);
+                    $result_code = RESULT_NO_BOOK;
+//                    show_result(RESULT_NO_BOOK);
                 }
+            } else {
+                $result_code = RESULT_MISSING_ARGS;
             }
         }
+        show_result($result_code, $ret);
+        return $result_code;
     }
 } 

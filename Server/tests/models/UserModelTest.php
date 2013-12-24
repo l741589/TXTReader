@@ -29,8 +29,8 @@ class UserModelTest extends CIUnit_TestCase
     {
         $conn = new mysqli("localhost:3306", "root", "123456", "txtreader");
         $conn->autocommit(false);
-        $conn->query("delete from user");
-        $conn->query("delete from user_book_relation");
+        $conn->query("DELETE FROM user");
+        $conn->query("DELETE FROM user_book_relation");
         if (!$conn->errno) {
             $conn->commit();
             echo("Database is ready");
@@ -103,7 +103,7 @@ class UserModelTest extends CIUnit_TestCase
     {
         $user = $this->_model->get_by_username($this->username);
         $ret = $this->_model->get_book_ids($this->username);
-        $this->assertEquals(RESULT_NO_BOOK, $ret);
+        $this->assertEquals(false, $ret);
         $book_id = 1;
         $this->CI->db->insert("user_book_relation", array(
             "user_id" => $user->id,

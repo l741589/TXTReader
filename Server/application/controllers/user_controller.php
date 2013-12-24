@@ -99,7 +99,6 @@ class User_Controller extends Session_Controller
     {
         foreach ($required_fields as $field) {
             if (!isset($form_data[$field]) || empty($form_data[$field])) {
-                echo $form_data[$field];
                 return false;
             }
         }
