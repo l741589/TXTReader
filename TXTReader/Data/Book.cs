@@ -213,12 +213,14 @@ namespace TXTReader.Data {
                     ResponseEntity res = G.Net.Upload(A.CheckExt(title, ".txt"), src);
                     if (res.status == MyHttp.successCode) {
                         Debug.WriteLine(title + " Uploaded");
-                        Dispatcher.Invoke(() => { Id = res.data[0].ToString(); });
-                        BookParser.Save(this);
+                        Dispatcher.Invoke(() => { 
+                            Id = res.data[0].ToString();
+                            BookParser.Save(this);
+                        });
                         Dispatcher.BeginInvoke(new Action(() => { G.Log = Title + " 上传完成"; }));
                     } else {
                         Debug.WriteLine(title + " Upload Error:" + res.msg);
-                        Dispatcher.BeginInvoke(new Action(() => { G.Log = Title + " 上传失败"; }));
+                        Dispatcher.BeginInvoke(new Action(() => { G.Log = Title + " 上传失败:" + G.Net[res.status][1]; }));
                     }
                 }
             });

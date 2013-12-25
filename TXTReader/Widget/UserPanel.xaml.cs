@@ -31,7 +31,7 @@ namespace TXTReader.Widget {
                     case UserStatus.Login: 
                         g_login.Visibility = Visibility.Visible;
                         g_register.Visibility = Visibility.Collapsed;
-                        g_online.Visibility = Visibility.Collapsed;
+                        g_online.Visibility = Visibility.Collapsed;                        
                         break;
                     case UserStatus.Register:
                         g_login.Visibility = Visibility.Collapsed;
@@ -42,6 +42,7 @@ namespace TXTReader.Widget {
                         g_login.Visibility = Visibility.Collapsed;
                         g_register.Visibility = Visibility.Collapsed;
                         g_online.Visibility = Visibility.Visible;
+                        if (G.Books != null) G.Books.UploadAll();
                         break;
                 }
             }

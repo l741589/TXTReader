@@ -141,7 +141,7 @@ namespace TXTReader.Utility {
             var md5data = md5.ComputeHash(data);
             md5.Clear();
             string str = "";
-            for (int i = 0; i < md5data.Length - 1; i++) {
+            for (int i = 0; i < md5data.Length ; i++) {
                 str += md5data[i].ToString("x").PadLeft(2, '0');
             }
             return str;

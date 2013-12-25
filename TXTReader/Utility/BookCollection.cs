@@ -15,7 +15,7 @@ namespace TXTReader.Utility {
             base.InsertItem(index, item);
             if (Check(item)) return;
             item.MoreInfo();
-            item.Upload();
+            //item.Upload();
         }
 
         protected override void RemoveItem(int index) {
@@ -39,6 +39,14 @@ namespace TXTReader.Utility {
                 }
             }
             return false;
+        }
+
+        public async void UploadAll() {
+            var copy = this.ToList();
+            foreach (Book b in copy) {
+                if (b!=null)
+                    await b.Upload();
+            }
         }
     }
 }

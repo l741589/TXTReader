@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 
 namespace TXTReader.Utility {
     class MyHttp : IHttpDelegate {
+        public Dictionary<int,String[]> errorCodes = new Dictionary<int,String[]>();
         public const int successCode = 1000;
         public const int missArgumentsCode = 1001;
         public const int databaseErrorCode = 1002;
@@ -28,7 +29,45 @@ namespace TXTReader.Utility {
         public const int notLoginCode = 1007;
         public const int uploadErrorCode = 1008;
         public const int notExistBookCode = 1009;
+        public const int fileExceedsLimitCode = 1012;
+        public const int fileExceedsFormLimitCode = 1013;
+        public const int resultNoFile = 1023;
         public const int unknownError = 9999;
+
+        private void initErrorCodes() {
+            errorCodes.Add(1000, new String[] { "success", "操作成功" });
+            errorCodes.Add(1001, new String[] { "missing arguments", "参数不全" });
+            errorCodes.Add(1002, new String[] { "database error", "数据库错误" });
+            errorCodes.Add(1003, new String[] { "invalid username", "用户名不合法" });
+            errorCodes.Add(1004, new String[] { "same username", "相同用户名" });
+            errorCodes.Add(1005, new String[] { "passwords diffirent", "密码不一致" });
+            errorCodes.Add(1006, new String[] { "user not exist", "用户不存在" });
+            errorCodes.Add(1007, new String[] { "wrong password", "密码错误" });
+            errorCodes.Add(1008, new String[] { "not login", "未登录" });
+            errorCodes.Add(1009, new String[] { "cannot loggout", "无法登出" });
+            errorCodes.Add(1010, new String[] { "no book matches", "书不存在" });
+            errorCodes.Add(1011, new String[] { "file is not selected", "未选择文件" });
+            errorCodes.Add(1012, new String[] { "file exceeds limit", "文件超过限制" });
+            errorCodes.Add(1013, new String[] { "file exceeds form limit", "文件大小超过限制" });
+            errorCodes.Add(1014, new String[] { "file is partial", "部分文件上传" });
+            errorCodes.Add(1015, new String[] { "no temporary directory", "服务器没有临时文件夹" });
+            errorCodes.Add(1016, new String[] { "unable to write file", "无法写文件" });
+            errorCodes.Add(1017, new String[] { "upload stopped by extension", "上传被中断" });
+            errorCodes.Add(1018, new String[] { "invalid filetype", "无效文件类型" });
+            errorCodes.Add(1019, new String[] { "invalid filesize", "无效文件大小" });
+            errorCodes.Add(1020, new String[] { "destination error", "目的地错误" });
+            errorCodes.Add(1021, new String[] { "bad filename", "上传文件名有误" });
+            errorCodes.Add(1022, new String[] { "no filepath", "找不到上传文件路径" });
+            errorCodes.Add(1023, new String[] { "result no file", "该文件不存在" });
+            errorCodes.Add(9999, new String[] { "unknown error", "未知错误" });
+        }
+
+        public String[] this[int i]{
+            get{
+                if (errorCodes.ContainsKey(i)) return errorCodes[i];
+                else return errorCodes[unknownError];
+            }
+        }
 
         public static readonly ResponseEntity UnknownErrorEntity = new ResponseEntity { status = unknownError, msg = "Unknown Error" };
 
@@ -40,6 +79,7 @@ namespace TXTReader.Utility {
         private ResponseEntity R(ResponseEntity r) { return r != null ? r : UnknownErrorEntity; }
 
         public MyHttp(string url) {
+            initErrorCodes();
             this.url = url;
             currentCookie = new CookieContainer();
         }
@@ -136,21 +176,39 @@ namespace TXTReader.Utility {
         }
 
         public ResponseEntity Upload(string poststr, string filepath) {
+            byte[] body = File.ReadAllBytes(filepath);
+            if (body.Length > MAX_FILE_LENGTH) return new ResponseEntity { status = fileExceedsFormLimitCode, msg = errorCodes[fileExceedsFormLimitCode][1] };
+            /*
+            sb.Clear();
+            sb.Append("--" + boundary + "\r\n");
+            sb.Append("Content-Disposition: form-data; name=\"file_md5\";\r\n");
+            sb.Append("\r\n");
+            byte[] md5Header = Encoding.UTF8.GetBytes(sb.ToString());
+            byte[] md5 = Encoding.UTF8.GetBytes(A.MD5(body) + "\r\n");
+
+            sb.Clear();
+            sb.Append("--" + boundary + "\r\n");
+            sb.Append("Content-Disposition: form-data; name=\"book_name\";\r\n");
+            sb.Append("\r\n");
+            byte[] nameHeader = Encoding.UTF8.GetBytes(sb.ToString());
+            byte[] name = Encoding.UTF8.GetBytes(poststr + "\r\n");
+            */
+            String res = Http.Create(url + "/upload").SetHttpDelegate(this).Add("file_md5", A.MD5(body)).Add("book_name", poststr).Post();
+            var r = R(Json.Decode<ResponseEntity>(res));
+            if (r.status != resultNoFile) return r;
+
             string boundary = "---------------------ad7d9fdf30d1a8";
             StringBuilder sb = new StringBuilder();
             sb.Append("--" + boundary + "\r\n");
             sb.Append("Content-Disposition: form-data; name=\"" + "userfile\";" + "filename=\"" + poststr + "\"\r\n");//"username=\""+username+ 
             sb.Append("Content-Type:text/plain" + "\r\n");
-            sb.Append("\r\n");
-            
+            sb.Append("\r\n");            
             byte[] bsHeader = Encoding.UTF8.GetBytes(sb.ToString());
-            byte[] bsTail = Encoding.UTF8.GetBytes("\r\n--" + boundary + "--\r\n");
-            byte[] body = File.ReadAllBytes(filepath);
-            if (body.Length > MAX_FILE_LENGTH) return UnknownErrorEntity;
-            byte[] md5 = Encoding.UTF8.GetBytes("MD5=" + A.MD5(body)+"\r\n");
+            byte[] bsTail = Encoding.UTF8.GetBytes("\r\n--" + boundary + "--\r\n");                        
 
-            String res=Http.Create(url + "/upload").SetHttpDelegate(this)
+            res=Http.Create(url + "/upload").SetHttpDelegate(this)
                 .SetContentType("multipart/form-data;boundary=" + boundary)
+                //.Add(md5Header).Add(md5).Add(nameHeader).Add(name)
                 .Add(bsHeader).Add(body).Add(bsTail)
                 .Post();
             return R(Json.Decode<ResponseEntity>(res));

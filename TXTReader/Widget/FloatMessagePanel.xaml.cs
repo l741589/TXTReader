@@ -44,7 +44,7 @@ namespace TXTReader.Widget {
             pn_lefttop.Children.Add(Speed);
             pn_leftbottom.Children.Add(Log);
             timer();
-            UpdateBinding();
+            Loaded += (d, e) => { UpdateBinding(); };
         }
         
         async void timer() {

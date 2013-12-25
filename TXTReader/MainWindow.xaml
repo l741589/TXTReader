@@ -38,21 +38,19 @@
         <CommandBinding Command="cmd:MyCommands.Reopen" x:Name="reopen" CanExecute="reopen_CanExecute" Executed="reopen_Executed"/>
         <CommandBinding Command="cmd:MyCommands.Exit" x:Name="exit" CanExecute="exit_CanExecute" Executed="exit_Executed"/>
     </Window.CommandBindings>
-    <Canvas x:Name="root">
-        <DockPanel Panel.ZIndex="10" Width="{Binding ActualWidth, ElementName=root}" Height="{Binding ActualHeight, ElementName=root}" LastChildFill="False">
-            <widget:TRProgressBar x:Name="progressBar" DockPanel.Dock="Bottom" Height="8"/>
-        </DockPanel>
+    <Canvas x:Name="root">        
         <Canvas x:Name="canvas" SizeChanged="canvas_SizeChanged" Width="{Binding ActualWidth, ElementName=root}" Height="{Binding ActualHeight, ElementName=root}">
             <display:Displayer4 x:Name="displayer" Canvas.Left="0" Canvas.Top="0"  Panel.ZIndex="0" 
 				Height="{Binding ActualHeight, ElementName=canvas}" Width="{Binding ActualWidth, ElementName=canvas}"
 				ContextMenu="{StaticResource mainContextMenu}"/>
-            <widget:FloatMessagePanel x:Name="floatMessagePanel" Canvas.Left="0" Canvas.Top="0" Panel.ZIndex="1"
-				Height="{Binding ActualHeight, ElementName=canvas}" Width="{Binding ActualWidth, ElementName=canvas}"/>
+            <DockPanel Panel.ZIndex="1" Width="{Binding ActualWidth, ElementName=canvas}" Height="{Binding ActualHeight, ElementName=canvas}" LastChildFill="True">
+                <widget:TRProgressBar x:Name="progressBar" DockPanel.Dock="Bottom" Height="8"/>
+                <widget:FloatMessagePanel x:Name="floatMessagePanel" Panel.ZIndex="1"/>
+            </DockPanel>
             <widget:ToolPanels  x:Name="toolPanel" Panel.ZIndex="5"
 				Height="{Binding ActualHeight, ElementName=canvas}" 
 				Width="{Binding ActualWidth, Converter={StaticResource toolPanelWidthCvt}, ElementName=canvas}"/>
             <widget:SearchBar x:Name="sb_search" Canvas.Left="0" Canvas.Top="0" Visibility="Hidden" Panel.ZIndex="2"/>
         </Canvas>
-
     </Canvas>
 </Window>

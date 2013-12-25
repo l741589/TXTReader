@@ -12,7 +12,7 @@
             <Storyboard x:Key="anim_in_delay_fadeout">
                 <DoubleAnimation To="1.0" Storyboard.TargetProperty="Opacity" Duration="0"/>
                 <DoubleAnimation To="0.0" 
-                BeginTime="0:0:0:1.0" Duration="0:0:0:1.0"
+                BeginTime="0:0:0:5.0" Duration="0:0:0:1.0"
                 Storyboard.TargetProperty="Opacity"
             />
             </Storyboard>

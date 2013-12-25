@@ -37,10 +37,17 @@ namespace TXTReader.Utility {
         public void DoRun() {
             while (G.IsRunning) {
                 var work = Pop();
-                while (work!=null && G.IsRunning) {
-                    var tmp = work.Call.DynamicInvoke();
-                    work.GetAwaiter().DoComplete(tmp);
-                    work = Pop();
+                while (work != null && G.IsRunning) {
+                    try {
+                        var tmp = work.Call.DynamicInvoke();
+                        work.GetAwaiter().DoComplete(tmp);
+                        work = Pop();
+                    } catch (Exception e) {
+                        #if DEBUG
+                        Debug.WriteLine(e.StackTrace);                       
+                        throw;
+                        #endif
+                    }
                 }
                 are.WaitOne();
             }
