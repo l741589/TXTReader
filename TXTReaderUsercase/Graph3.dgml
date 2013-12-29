@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DirectedGraph Layout="Sugiyama" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+  <Nodes>
+    <Node Id="上传逻辑" Bounds="706.752957595442,371.957270507813,68,25.24" Label="上传逻辑" UseManualLocation="True" />
+    <Node Id="下载逻辑" Bounds="606.746732009505,427.280314331055,68,25.24" Label="下载逻辑" UseManualLocation="True" />
+    <Node Id="业务逻辑层" Bounds="584.925870193098,331.957170507813,211.076782226563,195.803620351565" Group="Expanded" Label="业务逻辑层" UseManualLocation="True" />
+    <Node Id="书签模块" Bounds="61.6760253906251,306.134614872022,68,25.24" Label="书籍模块" UseManualLocation="True" />
+    <Node Id="书签面板" Bounds="407.119624185393,432.582911376953,68,25.24" Label="书签面板" UseManualLocation="True" />
+    <Node Id="书表" Bounds="687.617764724349,255.722315673828,50,25.24" UseManualLocation="True" />
+    <Node Id="内容显示控件" Bounds="320.372436523438,491.621450878327,92,25.24" Label="内容显示控件" UseManualLocation="True" />
+    <Node Id="客户端" Bounds="-80.3236961364745,107.503871341748,599.320218086243,450.498967724609" Group="Expanded" />
+    <Node Id="工具及算法层" Bounds="-60.0034780502314,147.503971341748,559,87.5530204345703" Group="Expanded" Label="工具及算法层" UseManualLocation="True" />
+    <Node Id="悬浮信息" Bounds="309.119624185393,436.102717285156,68,25.24" Label="悬浮信息" UseManualLocation="True" />
+    <Node Id="搜索框" Bounds="104.055191040039,437.522539066358,56,25.24" UseManualLocation="True" />
+    <Node Id="数据层" Bounds="-60.3236961364745,265.057091776319,555.240413665771,86.3176230957031" Group="Expanded" Label="数据层" UseManualLocation="True" />
+    <Node Id="数据层1" Bounds="580.352811111067,158.97095869385,231.253234863281,141.991456979978" Group="Expanded" Label="数据层" UseManualLocation="True" />
+    <Node Id="文件表" Bounds="601.605923904036,254.211192016602,56,25.24" UseManualLocation="True" />
+    <Node Id="显示层" Bounds="-42.937060486328,392.582780859375,538.056689392578,145.419948535156" Group="Expanded" Label="显示层" UseManualLocation="True" />
+    <Node Id="暑假面板" Bounds="185.119621276855,492.762639066358,68,25.24" Label="书架面板" UseManualLocation="True" />
+    <Node Id="服务端" Bounds="560.352811111067,118.97085869385,271.253234863281,428.790001647949" Group="Expanded" UseManualLocation="True" />
+    <Node Id="查询逻辑" Bounds="706.87930036888,482.437479858399,68,25.24" Label="查询逻辑" UseManualLocation="True" />
+    <Node Id="注册逻辑" Bounds="708.002652419661,427.197367553711,68,25.24" Label="注册逻辑" UseManualLocation="True" />
+    <Node Id="用户书籍关系表" Bounds="687.606045974349,200.482172851563,104,25.24" UseManualLocation="True" />
+    <Node Id="用户表" Bounds="600.352811111067,198.97107208252,56,25.24" UseManualLocation="True" />
+    <Node Id="登出逻辑" Bounds="604.925870193099,372.040247802734,68,25.24" Label="登出逻辑" UseManualLocation="True" />
+    <Node Id="目录模块" Bounds="-40.3236961364745,305.218370365186,68,25.24" Label="目录模块" UseManualLocation="True" />
+    <Node Id="目录模块1" Bounds="-22.9370652071853,435.522379758962,67.992224,25.2400000035595" Label="目录模块" />
+    <Node Id="章节划分分析算法模块" Bounds="45.9965219497686,189.816891776319,140,25.24" Label="章节划分分析算法模块" UseManualLocation="True" />
+    <Node Id="章节划分规则模块" Bounds="260.916717529297,305.522783206983,116,25.24" Label="章节划分规则模块" UseManualLocation="True" />
+    <Node Id="等逻辑" Bounds="608.87930036888,482.520670776367,68,25.24" Label="登录逻辑" UseManualLocation="True" />
+    <Node Id="网络模块" Bounds="406.916717529297,305.057191776319,68,25.24" UseManualLocation="True" />
+    <Node Id="网络辅助工具" Bounds="386.996521949769,187.504071341748,92,25.24" UseManualLocation="True" />
+    <Node Id="计时器" Bounds="-40.0034780502314,188.005337821241,56,25.24" Label="计时器" UseManualLocation="True" />
+    <Node Id="设置模块" Bounds="162.971991566895,305.282533578116,67.944704,25.2399999901563" Label="设置模块" UseManualLocation="True" />
+    <Node Id="设置面板" Bounds="35.119613647461,492.671723155336,68,25.24" Label="设置面板" UseManualLocation="True" />
+    <Node Id="进度条" Bounds="210.11962890625,436.381350878327,56.0000000000001,25.24" UseManualLocation="True" />
+    <Node Id="配置文件分析算法模块" Bounds="216.996521949769,188.057034598584,140,25.24" Label="配置文件分析算法模块" UseManualLocation="True" />
+  </Nodes>
+  <Links>
+    <Link Source="业务逻辑层" Target="上传逻辑" Category="Contains" />
+    <Link Source="业务逻辑层" Target="下载逻辑" Category="Contains" />
+    <Link Source="业务逻辑层" Target="查询逻辑" Category="Contains" />
+    <Link Source="业务逻辑层" Target="注册逻辑" Category="Contains" />
+    <Link Source="业务逻辑层" Target="登出逻辑" Category="Contains" />
+    <Link Source="业务逻辑层" Target="等逻辑" Category="Contains" />
+    <Link Source="客户端" Target="工具及算法层" Category="Contains" />
+    <Link Source="客户端" Target="数据层" Category="Contains" />
+    <Link Source="客户端" Target="显示层" Category="Contains" />
+    <Link Source="工具及算法层" Target="章节划分分析算法模块" Category="Contains" />
+    <Link Source="工具及算法层" Target="网络辅助工具" Category="Contains" />
+    <Link Source="工具及算法层" Target="计时器" Category="Contains" />
+    <Link Source="工具及算法层" Target="配置文件分析算法模块" Category="Contains" />
+    <Link Source="数据层" Target="书签模块" Category="Contains" />
+    <Link Source="数据层" Target="目录模块" Category="Contains" />
+    <Link Source="数据层" Target="章节划分规则模块" Category="Contains" />
+    <Link Source="数据层" Target="网络模块" Category="Contains" />
+    <Link Source="数据层" Target="设置模块" Category="Contains" />
+    <Link Source="数据层1" Target="书表" Category="Contains" />
+    <Link Source="数据层1" Target="文件表" Category="Contains" />
+    <Link Source="数据层1" Target="用户书籍关系表" Category="Contains" />
+    <Link Source="数据层1" Target="用户表" Category="Contains" />
+    <Link Source="显示层" Target="书签面板" Category="Contains" />
+    <Link Source="显示层" Target="内容显示控件" Category="Contains" />
+    <Link Source="显示层" Target="悬浮信息" Category="Contains" />
+    <Link Source="显示层" Target="搜索框" Category="Contains" />
+    <Link Source="显示层" Target="暑假面板" Category="Contains" />
+    <Link Source="显示层" Target="目录模块1" Category="Contains" />
+    <Link Source="显示层" Target="设置面板" Category="Contains" />
+    <Link Source="显示层" Target="进度条" Category="Contains" />
+    <Link Source="服务端" Target="业务逻辑层" Category="Contains" />
+    <Link Source="服务端" Target="数据层1" Category="Contains" />
+  </Links>
+  <Categories>
+    <Category Id="Contains" Label="包含" Description="链接的源是否包含目标对象" CanBeDataDriven="False" CanLinkedNodesBeDataDriven="True" IncomingActionLabel="包含者" IsContainment="True" OutgoingActionLabel="包含" />
+  </Categories>
+  <Properties>
+    <Property Id="Bounds" DataType="System.Windows.Rect" />
+    <Property Id="CanBeDataDriven" Label="CanBeDataDriven" Description="CanBeDataDriven" DataType="System.Boolean" />
+    <Property Id="CanLinkedNodesBeDataDriven" Label="CanLinkedNodesBeDataDriven" Description="CanLinkedNodesBeDataDriven" DataType="System.Boolean" />
+    <Property Id="Group" Label="组" Description="将节点显示为组" DataType="Microsoft.VisualStudio.GraphModel.GraphGroupStyle" />
+    <Property Id="IncomingActionLabel" Label="IncomingActionLabel" Description="IncomingActionLabel" DataType="System.String" />
+    <Property Id="IsContainment" DataType="System.Boolean" />
+    <Property Id="Label" Label="标签" Description="可批注对象的可显示标签" DataType="System.String" />
+    <Property Id="Layout" DataType="System.String" />
+    <Property Id="OutgoingActionLabel" Label="OutgoingActionLabel" Description="OutgoingActionLabel" DataType="System.String" />
+    <Property Id="UseManualLocation" DataType="System.Boolean" />
+  </Properties>
+</DirectedGraph>

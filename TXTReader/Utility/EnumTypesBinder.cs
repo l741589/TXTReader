@@ -15,7 +15,7 @@ namespace TXTReader.Utility
             EffectsDict = new Dictionary<EffectType, string>() { 
             { EffectType.None, "无特效" }, 
             { EffectType.Shadow, "阴影" }, 
-            { EffectType.Stroke, "描边" } 
+            //{ EffectType.Stroke, "描边" } 
             };
 
             BackGroundDict = new Dictionary<BackGroundType, string>() { 

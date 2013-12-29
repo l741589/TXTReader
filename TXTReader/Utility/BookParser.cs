@@ -29,7 +29,7 @@ namespace TXTReader.Utility {
         public const String S_ID = "id";
 
         public static String GetBookPath(Book book) {
-            return G.PATH_BOOK + Path.GetFileNameWithoutExtension(book.Source) + book.Source.GetHashCode() + G.EXT_BOOK;
+            return G.PATH_BOOK + Path.GetFileNameWithoutExtension(book.Source) + A.MD5(Encoding.UTF8.GetBytes(book.Source)) + G.EXT_BOOK;
         }
 
         public static void Load(){
@@ -46,6 +46,9 @@ namespace TXTReader.Utility {
         }
 
         public static Book Load(String filename, Book target = null) {
+            if (filename.Contains("魔王奶爸")) {
+                Debug.WriteLine("dsfs");
+            }
             if (!File.Exists(filename)) return target;
             Book b = null;
             if (target == null) b = new Book();

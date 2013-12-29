@@ -77,7 +77,7 @@ namespace TXTReader.Utility {
             }
         }
 
-        public class ZTaskAwaiter : INotifyCompletion {
+        public class ZTaskAwaiter  : INotifyCompletion{
             private SynchronizationContext context;
             public bool IsCompleted { get; private set; }
             private Action continuation;
@@ -87,6 +87,16 @@ namespace TXTReader.Utility {
             public ZTaskAwaiter(Task task) {
                 this.context = SynchronizationContext.Current;
                 this.task = task;
+            }
+
+            public bool BeginAwait(Action continuation) {
+                OnCompleted(continuation);
+                return true;
+            }
+
+            public object EndAwait()
+            {
+                return GetResult();
             }
 
             public void OnCompleted(Action continuation) {
