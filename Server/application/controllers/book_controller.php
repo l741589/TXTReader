@@ -18,6 +18,12 @@ class Book_Controller extends Session_Controller {
         $this->_book_model = $this->book_model;
     }
 
+    function index() {
+//        $this->load->helper('form');
+//        $this->load->view("upload_form", array('error' => ' '));
+        $this->load->view('index');
+    }
+
     function do_search() {
         $result_code = 0;
         $ret = [];
@@ -91,11 +97,6 @@ class Book_Controller extends Session_Controller {
         }
         show_result($result_code);
         return $result_code;
-    }
-
-    function index() {
-        $this->load->helper('form');
-        $this->load->view("upload_form", array('error' => ' '));
     }
 
     function do_upload() {

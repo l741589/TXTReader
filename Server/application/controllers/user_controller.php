@@ -9,31 +9,27 @@
 require_once "session_controller.php";
 require_once APPPATH . "/core/common.php";
 
-class User_Controller extends Session_Controller
-{
+class User_Controller extends Session_Controller {
 
     private $_user_model;
 
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
         $this->load->model('user_model');
         $this->_user_model = $this->user_model;
         $this->load->library('form_validation');
     }
 
-    function index()
-    {
-        $this->load->helper('form');
-        $this->load->view('login');
+    function index() {
+//        $this->load->helper('form');
+        $this->load->view('index');
     }
 
-    function signup()
-    {
+    function signup() {
         $required = array('username', 'password');
         $form_data = array(
-            'username'              => $this->input->post('username'),
-            'password'              => $this->input->post('password'),
+            'username' => $this->input->post('username'),
+            'password' => $this->input->post('password'),
             'password_comfirmation' => $this->input->post('password_comfirmation')
         );
         $result_code = 0;
@@ -55,8 +51,7 @@ class User_Controller extends Session_Controller
         return $result_code;
     }
 
-    function login()
-    {
+    function login() {
         $required = array('username', 'password');
         $form_data = array(
             'username' => $this->input->post('username'),
@@ -78,8 +73,7 @@ class User_Controller extends Session_Controller
         return $_result_code;;
     }
 
-    function logout()
-    {
+    function logout() {
         $_result_code = 0;
         if ($this->is_logged_in()) {
             $is_logged_out = $this->del_session();
@@ -95,8 +89,7 @@ class User_Controller extends Session_Controller
         return $_result_code;
     }
 
-    function _is_required_data($required_fields, $form_data)
-    {
+    function _is_required_data($required_fields, $form_data) {
         foreach ($required_fields as $field) {
             if (!isset($form_data[$field]) || empty($form_data[$field])) {
                 return false;
