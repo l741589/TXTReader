@@ -8,50 +8,79 @@
 
 class UserControllerTest extends CIUnit_TestCase
 {
-
-    protected $data = array(
-        'username' => 'test_user_2',
-        'password' => 'test_password'
+    protected $data_signup = array(
+        'username'              => 'test_user_2',
+        'password'              => 'test_password',
+        'password_comfirmation' => 'test_password'
     );
+
+    protected $data_login = array(
+        'username'              => 'test_user_2',
+        'password'              => 'test_password',
+        'password_comfirmation' => 'test_password'
+    );
+
+    public static function setUpBeforeClass()
+    {
+        $conn = new mysqli("localhost:3306", "root", "123456", "txtreader");
+        $conn->autocommit(false);
+        $conn->query("DELETE FROM user");
+        if (!$conn->errno) {
+            $conn->commit();
+            echo("Database is ready");
+        } else {
+            $conn->rollback();
+            echo("Database is not ready");
+        }
+    }
 
     public function setUp()
     {
         $this->CI = set_controller("User_Controller");
-        $this->CI->load->library('session');
     }
 
     public function testSignUp()
     {
-        // clear db before all test
-        $this->clearDb();
-        $_POST = $this->data;
-        $this->CI->signup();
-        $this->CI->db->where('username', $this->data['username']);
-        $query = $this->CI->db->get('user');
-        $this->assertEquals(1, $query->num_rows());
-//        var_dump($this->CI->session->all_userdata());
-//        // resignup
-//        $res = $this->CI->signup();
-//        $this->assertEquals(false, $res);
-        $this->CI->del_session();
+        $_POST = array("username" => "test_user_2");
+        $ret = $this->CI->signup();
+        $this->assertEquals(RESULT_MISSING_ARGS, $ret);
+        $_POST = array(
+            "username"              => "test",
+            "password"              => "test_password",
+            "password_comfirmation" => "test_password"
+        );
+        $ret = $this->CI->signup();
+        $this->assertEquals(RESULT_INVALID_USERNAME, $ret);
+        $_POST = array(
+            "username"              => "test_user_1",
+            "password"              => "test_password",
+            "password_comfirmation" => "test_password1"
+        );
+        $ret = $this->CI->signup();
+        $this->assertEquals(RESULT_PASSWORDS_DIFFERENT, $ret);
+        $_POST = $this->data_signup;
+        $ret = $this->CI->signup();
+        $this->assertEquals(RESULT_SUCCESS, $ret);
+        // delete session
+        $this->CI->logout();
     }
 
-    public function testLogin()
+    public function testLoginAndLogout()
     {
-        $_POST['username'] = $this->data['username'];
+        $_POST = array("username" => "test_user_2");
+        $ret = $this->CI->login();
+        $this->assertEquals(RESULT_MISSING_ARGS, $ret);
+        $_POST = $this->data_login;
         $res = $this->CI->login();
-        $this->assertEquals(false, $res);
-        $_POST['password'] = $this->data['password'];
+        $this->assertEquals(RESULT_SUCCESS, $res);
+        // test re-login
+        $_POST = $this->data_login;
         $res = $this->CI->login();
-        $this->assertEquals(true, $res);
-        $sess_data = $this->CI->session->all_userdata();
-        $this->assertEquals(true, $this->CI->is_logged_in());
-//        $this->assertEquals(true, isset($sess_data['session_id']));
-    }
-
-    function clearDb()
-    {
-        $this->CI->db->where('username', $this->data['username']);
-        $this->CI->db->delete('user');
+        $this->assertEquals(RESULT_SUCCESS, $res);
+        // test logout
+        $ret = $this->CI->logout();
+        $this->assertEquals(RESULT_SUCCESS, $ret);
+        $ret = $this->CI->logout();
+        $this->assertEquals(RESULT_NOT_LOGIN, $ret);
     }
 }

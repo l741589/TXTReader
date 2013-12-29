@@ -8,72 +8,74 @@
 
 class User_Model extends CI_Model
 {
-    /**
-     * @var string
-     */
-    var $username = "";
-    /**
-     * @var string
-     */
-    var $password = "";
-
-    /**
-     *
-     */
     function __construct()
     {
         parent::__construct();
         $this->load->database();
     }
 
-    /**
-     * @param $username
-     * @param $password
-     * @return bool
-     */
-    function add_user($username, $password)
+    function add_user($data)
     {
-        $this->username = $username;
-        $this->password = $password;
-        if (!$this->_is_valid_username()) {
+        if (!$this->_is_valid_username($data['username'])) {
             return RESULT_INVALID_USERNAME;
         }
-        if (!$this->_is_exist_username($username)) {
+        if (!$this->_is_exist_username($data['username'])) {
             return RESULT_SAME_USERNAME;
         }
-        $this->db->insert("user", $this);
+        $data['password'] = sha1($data['password']);
+        $this->db->insert("user", $data);
         if ($this->db->affected_rows() <= 0) {
             return RESULT_DB_ERROR;
         }
         return RESULT_SUCCESS;
     }
 
-    /**
-     * @param $username
-     * @param $password
-     */
-    function update_user($username, $password)
+    function update_user($updated_datas, $id)
     {
-        $this->username = $username;
-        $this->password = $password;
-        $this->db->update('user', $this);
+        if (isset($updated_datas['password'])) {
+            $updated_datas['password'] = sha1($updated_datas['password']);
+        }
+        $this->db->where("id", $id);
+        $this->db->update('user', $updated_datas);
+        if ($this->db->affected_rows() > 0) {
+            return RESULT_SUCCESS;
+        } else {
+            return RESULT_DB_ERROR;
+        }
     }
 
     function password_check($username, $password)
     {
-        if ($user = $this->_get_by_username($username)) {
-            return $user->password == $password ?
+        if ($user = $this->get_by_username($username)) {
+            return $user->password == sha1($password) ?
                 RESULT_SUCCESS : RESULT_PASSWD_ERROR;
         } else {
             return RESULT_USER_NOT_EXIST;
         }
     }
 
+    function get_by_username($username)
+    {
+        $this->db->where('username', $username);
+        $query = $this->db->get('user');
+        if ($query->num_rows() == 1) {
+            return $query->first_row();
+        } else {
+            return false;
+        }
+    }
+
     function get_book_ids($username)
     {
-        $user = $this->_get_by_username($username);
+        $user = $this->get_by_username($username);
+        if (!$user) {
+            return false;
+        }
         $this->db->where("user_id", $user->id);
         $query = $this->db->get("user_book_relation");
+        if ($query->num_rows() == 0) {
+            return false;
+        }
         $ret = array();
         foreach ($query->result() as $row) {
             $ret[] = $row->book_id;
@@ -81,12 +83,10 @@ class User_Model extends CI_Model
         return $ret;
     }
 
-    /**
-     * @return bool
-     */
-    function _is_valid_username()
+    function _is_valid_username($username)
     {
-        return true;
+        $pattern = '/^\w{6,32}$/';
+        return preg_match($pattern, $username);
     }
 
     function _is_exist_username($username)
@@ -97,20 +97,5 @@ class User_Model extends CI_Model
             return false;
         }
         return true;
-    }
-
-    /**
-     * @param $username
-     * @return bool
-     */
-    function _get_by_username($username)
-    {
-        $this->db->where('username', $username);
-        $query = $this->db->get('user');
-        if ($query->num_rows() == 1) {
-            return $query->first_row();
-        } else {
-            return false;
-        }
     }
 }

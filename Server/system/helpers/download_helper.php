@@ -71,7 +71,7 @@ if (!function_exists('force_download')) {
         // Generate the server headers
         if (strpos($_SERVER['HTTP_USER_AGENT'], "MSIE") !== FALSE) {
             header('Content-Type: "' . $mime . '"');
-            header('Content-Disposition: attachment; filename="' . iconv("UTF-8", "GBK", $filename) . '"');
+            header('Content-Disposition: attachment; filename="' . $filename . '"');
             header('Expires: 0');
             header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
             header("Content-Transfer-Encoding: binary");
@@ -79,7 +79,7 @@ if (!function_exists('force_download')) {
             header("Content-Length: " . strlen($data));
         } else {
             header('Content-Type: "' . $mime . '"');
-            header('Content-Disposition: attachment; filename="' . iconv("UTF-8", "GBK", $filename) . '"');
+            header('Content-Disposition: attachment; filename="' . $filename . '"');
             header("Content-Transfer-Encoding: binary");
             header('Expires: 0');
             header('Pragma: no-cache');
