@@ -25,7 +25,7 @@ namespace TXTReader.Utility {
             KeyHook = new KeyHook();
             Blockers = new List<EventWaitHandle>();
 
-            Net = new MyHttp("http://180.160.36.133:9999/txt");
+            Net = new MyHttp(Properties.Settings.Default.SERVER_URL);
             //Net = new MyHttp("http://222.69.215.150:9999/txt");
             //Net = new MyHttp("http://10.60.42.203:9999/txt");
         }

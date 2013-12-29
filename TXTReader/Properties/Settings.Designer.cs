@@ -23,51 +23,12 @@ namespace TXTReader.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("127.0.0.1")]
-        public string DEBUG_ADDR {
+        [global::System.Configuration.DefaultSettingValueAttribute("http://180.160.36.133:9999/txt")]
+        public string SERVER_URL {
             get {
-                return ((string)(this["DEBUG_ADDR"]));
-            }
-            set {
-                this["DEBUG_ADDR"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("www.baidu.com")]
-        public string ADDR {
-            get {
-                return ((string)(this["ADDR"]));
-            }
-            set {
-                this["ADDR"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("12345")]
-        public string DEBUG_PORT {
-            get {
-                return ((string)(this["DEBUG_PORT"]));
-            }
-            set {
-                this["DEBUG_PORT"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("80")]
-        public string PORT {
-            get {
-                return ((string)(this["PORT"]));
-            }
-            set {
-                this["PORT"] = value;
+                return ((string)(this["SERVER_URL"]));
             }
         }
     }
