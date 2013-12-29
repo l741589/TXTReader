@@ -6,13 +6,11 @@
  * Time: 下午6:38
  */
 
-class DownloadControllerTest extends CIUnit_TestCase
-{
+class DownloadTest extends CIUnit_TestCase {
 
     private $_book_model;
 
-    public static function setUpBeforeClass()
-    {
+    public static function setUpBeforeClass() {
         $conn = new mysqli("localhost:3306", "root", "123456", "txtreader");
         $conn->autocommit(false);
         $conn->query("DELETE FROM book");
@@ -26,26 +24,23 @@ class DownloadControllerTest extends CIUnit_TestCase
         }
     }
 
-    public function setUp()
-    {
-        $this->CI = set_controller("download_controller");
+    public function setUp() {
+        $this->CI = set_controller("book_controller");
         $this->_book_model = $this->CI->load->model('Book_Model');
         $this->CI->add_session('testUserForDownload');
     }
 
-    public function tearDown()
-    {
+    public function tearDown() {
         $this->CI->del_session();
     }
 
-    public function testDownload()
-    {
+    public function testDownload() {
         $dir = dirname(__DIR__);
         $realFileDir = $dir . "/testfiles/test1.txt";
         $this->_file_info = array(
-            "user_id"   => 1,
+            "user_id" => 1,
             "book_name" => "file.txt",
-            "file_md5"  => md5_file($realFileDir),
+            "file_md5" => md5_file($realFileDir),
             "file_data" => mysql_real_escape_string(file_get_contents($realFileDir))
         );
         $this->CI->Book_Model->save_book($this->_file_info);

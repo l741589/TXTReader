@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Created by PhpStorm.
  * User: Limbo
@@ -6,10 +6,9 @@
  * Time: 下午6:38
  */
 
-class UploadControllerTest extends CIUnit_TestCase {
+class UploadTest extends CIUnit_TestCase {
 
-    public static function setUpBeforeClass()
-    {
+    public static function setUpBeforeClass() {
         $_test_user = array(
             'username' => 'testUserForUpload',
             'password' => 'testPassword'
@@ -33,9 +32,10 @@ class UploadControllerTest extends CIUnit_TestCase {
     }
 
     public function setUp() {
-        $this->CI = set_controller("upload_controller");
+        $this->CI = set_controller("book_controller");
         $this->CI->add_session('testUserForUpload');
     }
+
     public function tearDown() {
         $this->CI->del_session();
     }

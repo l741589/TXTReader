@@ -6,8 +6,7 @@
  * Time: 下午6:38
  */
 
-class SearchControllerTest extends CIUnit_TestCase
-{
+class SearchTest extends CIUnit_TestCase {
 
     private $_book_model;
     public static $user_id;
@@ -38,7 +37,7 @@ class SearchControllerTest extends CIUnit_TestCase
 
     public function setUp()
     {
-        $this->CI = set_controller("search_controller");
+        $this->CI = set_controller("book_controller");
         $this->_book_model = $this->CI->load->model('Book_Model');
         $this->CI->add_session('testUserForSearch');
     }

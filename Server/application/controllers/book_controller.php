@@ -138,6 +138,7 @@ class Book_Controller extends Session_Controller {
                     $file_data = $this->upload->data();
                     $result_code = $this->_save_book($file_data, false);
                     $book_id = $this->_book_model->inserted_book_id();
+                    $this->_delete_upload_file($file_data['full_path']);
                     if ($result_code != RESULT_SUCCESS) {
                         show_result($result_code);
                     } else {
