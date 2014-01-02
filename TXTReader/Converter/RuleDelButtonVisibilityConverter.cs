@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using TXTReader.Utility;
+using TXTReader.Rules;
 
 namespace TXTReader.Converter {
     class RuleDelButtonVisibilityConverter : IValueConverter {
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
-            if (value.ToString() == Rules.S_ADD) return Visibility.Hidden;
+            if (value.ToString() == Rule.S_ADD) return Visibility.Hidden;
             else return Visibility.Visible;
         }
 

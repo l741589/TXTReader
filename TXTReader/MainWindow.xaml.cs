@@ -20,11 +20,11 @@ using System.Diagnostics;
 using System.Windows.Threading;
 using TXTReader.Properties;
 using TXTReader.Utility;
-using TXTReader.Data;
 using System.Threading;
 using System.IO;
 using TXTReader.Commands;
 using System.Windows.Resources;
+using Zlib.Async;
 
 namespace TXTReader {
     /// <summary>
@@ -120,17 +120,30 @@ namespace TXTReader {
 
         protected override void OnKeyDown(KeyEventArgs e) {
             if (toolPanel.IsAncestorOf(e.OriginalSource as DependencyObject)) return;
-            switch (e.Key) {
-                case Key.OemComma: --toolPanel.pn_option.seSpeed.Value; break;
-                case Key.OemPeriod: ++toolPanel.pn_option.seSpeed.Value; break;
-                case Key.Up: displayer.LineModify(+1); break;
-                case Key.Down: displayer.LineModify(-1); break;
-                case Key.PageUp: displayer.PageModify(+1); break;
-                case Key.PageDown: displayer.PageModify(-1); break;
-                case Key.Enter:
-                case Key.Space: G.Displayer.IsScrolling = !G.Displayer.IsScrolling; break;
-                case Key.LeftShift: Hold(HC_MOVE); break;
-            }            
+            //Debug.WriteLine(e.Key);
+            if (e.Key==Key.System) {
+                switch (e.SystemKey) {
+                    case Key.Left: if (e.KeyboardDevice.Modifiers == ModifierKeys.Alt)
+                            if (G.Book != null) G.Book.Undo();
+                        break;
+                    case Key.Right: if (e.KeyboardDevice.Modifiers == ModifierKeys.Alt)
+                            if (G.Book != null) G.Book.Redo();
+                        break;
+                }
+            } else {
+                switch (e.Key) {
+                    case Key.OemComma: --toolPanel.pn_option.seSpeed.Value; break;
+                    case Key.OemPeriod: ++toolPanel.pn_option.seSpeed.Value; break;
+                    case Key.Up: displayer.LineModify(+1); break;
+                    case Key.Down: displayer.LineModify(-1); break;
+                    case Key.PageUp: displayer.PageModify(+1); break;
+                    case Key.PageDown: displayer.PageModify(-1); break;
+                    case Key.Enter:
+                    case Key.Space: G.Displayer.IsScrolling = !G.Displayer.IsScrolling; break;
+                    case Key.LeftShift: Hold(HC_MOVE); break;
+                }
+            }
+        
         }
 
         protected override void OnKeyUp(KeyEventArgs e) {
@@ -145,7 +158,8 @@ namespace TXTReader {
             displayer.CloseFile();
             G.Timer.Stop();
             G.IsRunning = false;
-            G.NotifyIcon.Close();            
+            G.NotifyIcon.Close();
+            ZTask.StopAll();
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e) {

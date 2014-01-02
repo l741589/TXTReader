@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using TXTReader.Utility;
 
 namespace TXTReader.Widget {
-    class TRNotifyIcon {
+    class TRNotifyIcon : IDisposable{
         private NotifyIcon ni;
         public TRNotifyIcon() {
             ni = new NotifyIcon();
@@ -47,6 +47,10 @@ namespace TXTReader.Widget {
         public void Close() {
             G.KeyHook.Hook_Clear();
             ni.Dispose();            
+        }
+
+        public void Dispose() {
+            ni.Dispose();
         }
     }
 }

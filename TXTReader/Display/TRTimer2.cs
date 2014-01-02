@@ -13,9 +13,9 @@ namespace TXTReader.Display {
         public event TRTimerHandler Timer;
 
         public static readonly DependencyProperty IntervalProperty =
-            DependencyProperty.Register("Interval", typeof(int), typeof(TRTimer),
+            DependencyProperty.Register("Interval", typeof(int), typeof(TRTimer2),
             new PropertyMetadata(5, (d, e) => {
-                TRTimer t = ((TRTimer)d);
+                TRTimer2 t = ((TRTimer2)d);
                 t.Stop();
                 t.Start();
             }));

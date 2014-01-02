@@ -31,6 +31,8 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Help", "http://localhost:37
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zlib", "Zlib\Zlib.csproj", "{5E69DD93-A32E-41B5-BB82-003237969EDF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{7AF2228F-5044-4F1D-B021-3C0144502FE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7AF2228F-5044-4F1D-B021-3C0144502FE5}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{7AF2228F-5044-4F1D-B021-3C0144502FE5}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{5E69DD93-A32E-41B5-BB82-003237969EDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E69DD93-A32E-41B5-BB82-003237969EDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E69DD93-A32E-41B5-BB82-003237969EDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E69DD93-A32E-41B5-BB82-003237969EDF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -9,7 +9,7 @@ namespace TXTReader.Display {
         double Offset { get; set; }
         void OpenFile(string filename);
         void ReopenFile();
-        event ShutdownHandler Shutdown;
+        event RoutedEventHandler Shutdown;
         double CanvasHeight { get; }
         double CanvasWidth { get; }
         String[] Text { get; }

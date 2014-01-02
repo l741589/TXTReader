@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="TXTReader.ToolPanel.UserPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:u="clr-namespace:TXTReader.Utility"
+             xmlns:zw="clr-namespace:Zlib.Widget;assembly=Zlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <GroupBox Header="用户">
+            <StackPanel>
+                <Grid Height="64" x:Name="g_login">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="64"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBox x:Name="tb_login_id" Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Center" zw:PlaceHolder.PlaceHolder="账号"/>
+                    <Button Grid.Column="1" Grid.Row="0" Content="登录" x:Name="bn_login_login" Click="bn_login_login_Click"/>
+                    <PasswordBox x:Name="tb_login_pw" Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Center"  zw:PlaceHolder.PlaceHolder="密码"/>
+                    <Button Grid.Column="1" Grid.Row="1" Content="注册" x:Name="bn_login_reg" Click="bn_login_reg_Click"/>
+                </Grid>
+
+                <Grid Height="64" x:Name="g_register">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="64"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBox x:Name="tb_reg_id" Text="{Binding Text,ElementName=tb_login_id}" Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Center" zw:PlaceHolder.PlaceHolder="账号"/>
+                    <Button Grid.Column="1" Grid.Row="0" Content="注册" Grid.RowSpan="2" x:Name="bn_reg_reg" Click="bn_reg_reg_Click"/>
+                    <PasswordBox x:Name="tb_reg_pw" Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Center" zw:PlaceHolder.PlaceHolder="密码"/>
+                    <Button Grid.Column="1" Grid.Row="2" Content="登录" x:Name="bn_reg_login" Click="bn_reg_login_Click"/>
+                    <PasswordBox x:Name="tb_reg_conf" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Center" zw:PlaceHolder.PlaceHolder="确认密码"/>                       
+                </Grid>
+
+                <Grid Height="64" x:Name="g_online">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="64"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" BorderThickness="1" BorderBrush="Black">
+                        <Label x:Name="lb_online_id" Content="{Binding Text,ElementName=tb_login_id}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="20"/>
+                    </Border>
+                    <Button Grid.Column="1" Content="登出" x:Name="bn_logout" Click="bn_logout_Click"/>
+                </Grid>
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+</UserControl>

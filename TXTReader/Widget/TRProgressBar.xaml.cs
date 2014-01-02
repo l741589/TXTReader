@@ -13,7 +13,6 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TXTReader.Data;
 using TXTReader.Display;
 using TXTReader.Utility;
 
@@ -71,12 +70,12 @@ namespace TXTReader.Widget {
 
         public void Show() {
             if (ActualHeight == 8) return;
-            ActionUtil.Run(this, show);
+            BeginStoryboard(show, HandoffBehavior.Compose);
         }
 
         public void Hide() {
             if (ActualHeight == 2) return;
-            ActionUtil.Run(this, hide);
+            BeginStoryboard(hide, HandoffBehavior.Compose);
         }
 
         

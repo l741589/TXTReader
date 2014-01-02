@@ -9,6 +9,8 @@
         xmlns:util="clr-namespace:TXTReader.Utility"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
         x:Class="TXTReader.MainWindow" x:Name="window"
+        xmlns:fm="clr-namespace:TXTReader.FloatMessages"
+        xmlns:tool="clr-namespace:TXTReader.ToolPanel"
         Title="TXTReader" Loaded="window_Loaded"  Height="350" Width="525">
     <Window.Resources>
         <converter:WindowStyleConverter x:Key="WindowStyleConverter"/>
@@ -45,9 +47,9 @@
 				ContextMenu="{StaticResource mainContextMenu}"/>
             <DockPanel Panel.ZIndex="1" Width="{Binding ActualWidth, ElementName=canvas}" Height="{Binding ActualHeight, ElementName=canvas}" LastChildFill="True">
                 <widget:TRProgressBar x:Name="progressBar" DockPanel.Dock="Bottom" Height="8"/>
-                <widget:FloatMessagePanel x:Name="floatMessagePanel" Panel.ZIndex="1"/>
+                <fm:FloatMessagePanel x:Name="floatMessagePanel" Panel.ZIndex="1"/>
             </DockPanel>
-            <widget:ToolPanels  x:Name="toolPanel" Panel.ZIndex="5"
+            <tool:ToolPanels  x:Name="toolPanel" Panel.ZIndex="5"
 				Height="{Binding ActualHeight, ElementName=canvas}" 
 				Width="{Binding ActualWidth, Converter={StaticResource toolPanelWidthCvt}, ElementName=canvas}"/>
             <widget:SearchBar x:Name="sb_search" Canvas.Left="0" Canvas.Top="0" Visibility="Hidden" Panel.ZIndex="2"/>

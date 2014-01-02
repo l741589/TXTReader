@@ -13,7 +13,7 @@ namespace TXTReader.Converter
     //
     public class SolidColorCvt : IValueConverter
     {
-        object IValueConverter.Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value != null)
             {
@@ -25,7 +25,7 @@ namespace TXTReader.Converter
             }
         }
 
-        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value != null)
             {

@@ -14,16 +14,18 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml;
-using TXTReader.Data;
 using System.Diagnostics;
 using TXTReader.Utility;
 using System.Collections;
 using System.Threading;
+using TXTReader.Books;
+using TXTReader.ToolPanel;
 
 namespace TXTReader.Display {
     /// <summary>
     /// Displayer2.xaml 的交互逻辑
     /// </summary>
+    /// 
     public partial class Displayer4 : UserControl, IDisplayer {
 
         private int fps;
@@ -31,10 +33,10 @@ namespace TXTReader.Display {
 
         public static readonly DependencyProperty SpeedProperty = DependencyProperty.Register("Speed", typeof(double), typeof(Displayer4));
         public static readonly DependencyProperty FpsProperty = DependencyProperty.Register("Fps", typeof(int), typeof(Displayer4));
-        public static readonly DependencyProperty IsScrollingProperty = DependencyProperty.Register("IsScrolling", typeof(bool), typeof(Displayer4), new PropertyMetadata(false, OnIsScrollingChanged));        
-        public static readonly RoutedEvent ShutdownEvent = EventManager.RegisterRoutedEvent("Shutdown", RoutingStrategy.Direct, typeof(ShutdownHandler), typeof(Displayer4));
+        public static readonly DependencyProperty IsScrollingProperty = DependencyProperty.Register("IsScrolling", typeof(bool), typeof(Displayer4), new PropertyMetadata(false, OnIsScrollingChanged));
+        public static readonly RoutedEvent ShutdownEvent = EventManager.RegisterRoutedEvent("Shutdown", RoutingStrategy.Direct, typeof(RoutedEventHandler), typeof(Displayer4));
 
-        public event ShutdownHandler Shutdown { add { AddHandler(ShutdownEvent, value); } remove { RemoveHandler(ShutdownEvent, value); } }
+        public event RoutedEventHandler Shutdown { add { AddHandler(ShutdownEvent, value); } remove { RemoveHandler(ShutdownEvent, value); } }
         public double Speed { get { return (double)GetValue(SpeedProperty); } set { SetValue(SpeedProperty, value); } }
         public bool IsScrolling { get { return (bool)GetValue(IsScrollingProperty); } set { SetValue(IsScrollingProperty, value); } }
         public int Fps { get { return (int)GetValue(FpsProperty); } set { SetValue(FpsProperty, value); } }
@@ -54,7 +56,7 @@ namespace TXTReader.Display {
         public Displayer4() {
             InitializeComponent();
             InitComponent();
-            if (G.Book != null) G.Book.LoadFinished += () => { Text = null; };
+            if (G.Book != null) G.Book.LoadFinished += (o,e) => { Text = null; };
         }
 
         private void userControl_Loaded(object sender, RoutedEventArgs e) {

@@ -25,7 +25,7 @@ namespace TXTReader.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://180.160.36.133:9999/txt")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://221.239.196.147:9999/txt")]
         public string SERVER_URL {
             get {
                 return ((string)(this["SERVER_URL"]));

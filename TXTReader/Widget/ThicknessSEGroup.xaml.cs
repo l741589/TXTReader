@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TXTReader.ToolPanel;
 
 namespace TXTReader.Widget
 {
@@ -70,7 +71,7 @@ namespace TXTReader.Widget
 
         public void UpdateValues()
         {
-            Thickness thk = Data.Options.Instance.Skin.Padding;
+            Thickness thk = Options.Instance.Skin.Padding;
             seL.Value = (int)thk.Left;
             seT.Value = (int)thk.Top;
             seR.Value = (int)thk.Right;

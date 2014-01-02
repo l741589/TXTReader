@@ -6,10 +6,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using TXTReader.Utility;
-using TXTReader.Data;
 using Microsoft.Win32;
 using System.Security.Permissions;
 using System.Threading;
+using TXTReader.Rules;
+using TXTReader.Display;
+using TXTReader.Books;
+using TXTReader.ToolPanel;
 
 namespace TXTReader {
     /// <summary>

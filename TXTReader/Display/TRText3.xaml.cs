@@ -13,8 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TXTReader.Data;
 using System.Windows.Media.Effects;
+using TXTReader.ToolPanel;
 
 namespace TXTReader.Display {
     /// <summary>

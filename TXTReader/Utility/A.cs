@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using TXTReader.Data;
+using TXTReader.Books;
 
 namespace TXTReader.Utility {
 
@@ -119,7 +119,7 @@ namespace TXTReader.Utility {
                 book.Load();
             }
             if (G.MainWindow != null) {
-                if (book != null) book.LoadFinished += () => {
+                if (book != null) book.LoadFinished += (o,e) => {
                     G.MainWindow.toolPanel.pn_contenttree.UpdateContentUI();
                     G.FloatMessagePanel.UpdateBinding();
                     if (G.MainWindow.toolPanel.pn_bookmark.lb_bookmark.ItemsSource != G.Bookmark)

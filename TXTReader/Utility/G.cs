@@ -5,13 +5,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
-using TXTReader.Data;
 using TXTReader.Display;
 using System.Windows.Controls;
 using System.Collections.ObjectModel;
 using System.Windows.Media.Imaging;
 using TXTReader.Widget;
 using System.Threading;
+using TXTReader.Books;
+using TXTReader.ToolPanel;
+using TXTReader.Rules;
+using Zlib.Win32;
+using TXTReader.FloatMessages;
+using TXTReader.Net;
+using Zlib.Async;
 
 namespace TXTReader.Utility {
     static class G {
@@ -21,9 +27,8 @@ namespace TXTReader.Utility {
             NoCover = App.Current.Resources["src_nocover"] as ImageSource;
             Timer = new TRTimer2();
             Books = new BookCollection();
-            Rules = new Rules();
+            Rule = new Rule();
             KeyHook = new KeyHook();
-            Blockers = new List<EventWaitHandle>();
 
             Net = new MyHttp(Properties.Settings.Default.SERVER_URL);
             //Net = new MyHttp("http://222.69.215.150:9999/txt");
@@ -67,11 +72,11 @@ namespace TXTReader.Utility {
 
         public static ObservableCollection<Bookmark> Bookmark { get { return Book == null ? null : Book.Bookmark; } }
         public static BookCollection Books { get; private set; }
-        public static List<EventWaitHandle> Blockers { get; private set; }
+        public static List<EventWaitHandle> Blockers { get { return ZTask.Blockers; } }
 
-        public static Trmex ListTrmex { get { return Rules.ListTrmex; } set { Rules.ListTrmex = value; } }
-        public static Trmex TreeTrmex { get { return Rules.TreeTrmex; } set { Rules.TreeTrmex = value; } }
-        public static Rules Rules { get; private set; }
+        public static Trmex ListTrmex { get { return Rule.ListTrmex; } set { Rule.ListTrmex = value; } }
+        public static Trmex TreeTrmex { get { return Rule.TreeTrmex; } set { Rule.TreeTrmex = value; } }
+        public static Rule Rule { get; private set; }
         public static FloatMessagePanel FloatMessagePanel { get { return MainWindow.floatMessagePanel; } }
         public static MyHttp Net { get; private set; }
         public static String Log { get { return MainWindow != null ? MainWindow.floatMessagePanel.Log.Value.ToString() : null; } set { if (MainWindow != null) MainWindow.floatMessagePanel.Log.Value = value; } }

@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="TXTReader.Books.ContentTreePanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:util="clr-namespace:TXTReader.Utility"
+             xmlns:cvt="clr-namespace:TXTReader.Converter"
+             xmlns:bookcvt="clr-namespace:TXTReader.Books.Converter"
+             xmlns:book="clr-namespace:TXTReader.Books"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="300" Padding="8">
+    <UserControl.Resources>
+        <bookcvt:ContentStatusImageConverter x:Key="ContentStatusImageConverter"/>
+        <!--<ObjectDataProvider x:Key="odpG" ObjectType="{x:Type util:G}"/>-->
+        <HierarchicalDataTemplate x:Key="hdtChapter" DataType="book:Chapter" ItemsSource="{Binding Children}">
+            <DockPanel ToolTip="{Binding Number}">
+                <Image Source="{Binding ContentStatus, Converter={StaticResource ContentStatusImageConverter}}" 
+                       DockPanel.Dock="Left" Height="12" Width="12" Margin="2"/>
+                <TextBlock Text=")" DockPanel.Dock="Right"/>
+                <TextBlock Text="{Binding Length}" DockPanel.Dock="Right"/>
+                <TextBlock Text="    (" DockPanel.Dock="Right"/>
+                <TextBlock Text="{Binding Title}"/>
+            </DockPanel>
+        </HierarchicalDataTemplate>
+    </UserControl.Resources>
+    <DockPanel Name="dpn">
+        <Grid DockPanel.Dock="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="书名："/>
+            <TextBlock Name="txbTitle" Grid.Row="0" Grid.Column="1"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="总长度："/>
+            <TextBlock Name="txbLength" Grid.Row="1" Grid.Column="1"/>
+        </Grid>
+        <Button DockPanel.Dock="Top" Content="[TEST]UPDATE" Click="Button_Click" Visibility="Collapsed"/>
+        <TreeView Name="trvContent" SelectedItemChanged="trvContent_SelectedItemChanged"
+                  ItemTemplate="{StaticResource hdtChapter}">
+        </TreeView>
+    </DockPanel>
+</UserControl>

@@ -1,0 +1,137 @@
+﻿<UserControl xmlns:Widget="clr-namespace:TXTReader.Widget"  
+             xmlns:zw="clr-namespace:Zlib.Widget"  
+             x:Class="TXTReader.ToolPanel.ToolPanels"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converter="clr-namespace:TXTReader.Converter"
+             mc:Ignorable="d" 
+             xmlns:book="clr-namespace:TXTReader.Books"
+             xmlns:rule="clr-namespace:TXTReader.Rules"
+             xmlns:tool="clr-namespace:TXTReader.ToolPanel"
+             d:DesignHeight="600" d:DesignWidth="300">   
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <converter:ToolPanelWidthCvt x:Key="toolPanelWidthCvt"/>
+            <converter:ToolPanelTargetLeftCvt x:Key="toolPanelTargetLeftCvt"/>
+            <Storyboard x:Key="toolPanelShow">
+                <DoubleAnimation Duration="0:0:0.2"
+                    AccelerationRatio="0.33" DecelerationRatio="0.33"
+                    Storyboard.TargetProperty="(Canvas.Left)">
+                    <DoubleAnimation.To>
+                        <MultiBinding Converter="{StaticResource toolPanelTargetLeftCvt}">
+                            <Binding Path="ActualWidth" ElementName="toolPanel"/>
+                            <Binding Path="ActualWidth" ElementName="canvas"/>
+                        </MultiBinding>
+                    </DoubleAnimation.To>
+                </DoubleAnimation>
+                <DoubleAnimation
+                    To="1.0" Duration="0:0:0.2" 
+                    Storyboard.TargetProperty="Opacity">
+                </DoubleAnimation>               
+            </Storyboard>
+            <Storyboard x:Key="toolPanelHide">
+                <DoubleAnimation
+                AccelerationRatio="0.33" DecelerationRatio="0.33"
+                To="{Binding ActualWidth,ElementName=canvas}" Duration="0:0:0.2"                
+                Storyboard.TargetProperty="(Canvas.Left)">
+                </DoubleAnimation>
+                <DoubleAnimation
+                    To="0" Duration="0:0:0.2" 
+                    Storyboard.TargetProperty="Opacity">
+                </DoubleAnimation>
+            </Storyboard>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <TabControl x:Name="tab">
+        <TabControl.Template>
+            <ControlTemplate TargetType="{x:Type TabControl}">
+                <Grid ClipToBounds="true" KeyboardNavigation.TabNavigation="Local" SnapsToDevicePixels="true">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition x:Name="ColumnDefinition0"/>
+                        <ColumnDefinition x:Name="ColumnDefinition1" Width="0"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition x:Name="RowDefinition0" Height="Auto"/>
+                        <RowDefinition x:Name="RowDefinition1" Height="*"/>
+                    </Grid.RowDefinitions>
+                    <UniformGrid
+                      Rows="1"
+                      x:Name="HeaderPanel"
+                      Grid.Column="0"
+                      Grid.Row="0"
+                      Margin="0,0,0,0"
+                      Panel.ZIndex="1"
+                      IsItemsHost="true"
+                      KeyboardNavigation.TabIndex="1"/>
+                    <Border
+                      x:Name="ContentPanel"
+                      Grid.Column="0"
+                      Grid.Row="1"
+                      Background="{TemplateBinding Background}"
+                      BorderBrush="{TemplateBinding BorderBrush}"
+                      BorderThickness="{TemplateBinding BorderThickness}"
+                      KeyboardNavigation.DirectionalNavigation="Contained"
+                      KeyboardNavigation.TabIndex="2"
+                      KeyboardNavigation.TabNavigation="Local">
+                        <ContentPresenter
+                        x:Name="PART_SelectedContentHost"
+                        Margin="{TemplateBinding Padding}"
+                        ContentSource="SelectedContent"
+                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    </Border>
+                </Grid>
+                <ControlTemplate.Triggers>
+                    <Trigger Property="TabStripPlacement" Value="Bottom">
+                        <Setter TargetName="HeaderPanel" Property="Grid.Row" Value="1"/>
+                        <Setter TargetName="ContentPanel" Property="Grid.Row" Value="0"/>
+                        <Setter TargetName="RowDefinition0" Property="Height" Value="*"/>
+                        <Setter TargetName="RowDefinition1" Property="Height" Value="Auto"/>
+                        <Setter TargetName="HeaderPanel" Property="Margin" Value="2,0,2,2"/>
+                    </Trigger>
+                    <Trigger Property="TabStripPlacement" Value="Left">
+                        <Setter TargetName="HeaderPanel" Property="Grid.Row" Value="0"/>
+                        <Setter TargetName="ContentPanel" Property="Grid.Row" Value="0"/>
+                        <Setter TargetName="HeaderPanel" Property="Grid.Column" Value="0"/>
+                        <Setter TargetName="ContentPanel" Property="Grid.Column" Value="1"/>
+                        <Setter TargetName="ColumnDefinition0" Property="Width" Value="Auto"/>
+                        <Setter TargetName="ColumnDefinition1" Property="Width" Value="*"/>
+                        <Setter TargetName="RowDefinition0" Property="Height" Value="*"/>
+                        <Setter TargetName="RowDefinition1" Property="Height" Value="0"/>
+                        <Setter TargetName="HeaderPanel" Property="Margin" Value="2,2,0,2"/>
+                    </Trigger>
+                    <Trigger Property="TabStripPlacement" Value="Right">
+                        <Setter TargetName="HeaderPanel" Property="Grid.Row" Value="0"/>
+                        <Setter TargetName="ContentPanel" Property="Grid.Row" Value="0"/>
+                        <Setter TargetName="HeaderPanel" Property="Grid.Column" Value="1"/>
+                        <Setter TargetName="ContentPanel" Property="Grid.Column" Value="0"/>
+                        <Setter TargetName="ColumnDefinition0" Property="Width" Value="*"/>
+                        <Setter TargetName="ColumnDefinition1" Property="Width" Value="Auto"/>
+                        <Setter TargetName="RowDefinition0" Property="Height" Value="*"/>
+                        <Setter TargetName="RowDefinition1" Property="Height" Value="0"/>
+                        <Setter TargetName="HeaderPanel" Property="Margin" Value="0,2,2,2"/>
+                    </Trigger>
+                    <Trigger Property="IsEnabled" Value="false">
+                        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+        </TabControl.Template>
+        <TabItem Header="目录" >
+            <book:ContentTreePanel x:Name="pn_contenttree"/>
+        </TabItem>
+        <TabItem Header="划分">
+            <rule:RulePanel x:Name="pn_rule"/>
+        </TabItem>
+        <TabItem Header="设置">
+            <tool:OptionPanel x:Name="pn_option"/>
+        </TabItem>        
+        <TabItem Header="书签">
+            <book:BookmarkPanel x:Name="pn_bookmark"/>
+        </TabItem>
+        <TabItem Header="书架">
+            <book:BookcasePanel x:Name="pn_bookcase"/>
+        </TabItem>
+    </TabControl>
+</UserControl>
