@@ -12,8 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TXTReader.Net;
-using TXTReader.Utility;
+using TXTReader.Net;
 
 namespace TXTReader.ToolPanel {
     /// <summary>
@@ -43,7 +42,7 @@ namespace TXTReader.ToolPanel {
                         g_login.Visibility = Visibility.Collapsed;
                         g_register.Visibility = Visibility.Collapsed;
                         g_online.Visibility = Visibility.Visible;
-                        if (G.Books != null) G.Books.UploadAll();
+                        //if (Book.Books != null) Book.Books.UploadAll();
                         break;
                 }
             }

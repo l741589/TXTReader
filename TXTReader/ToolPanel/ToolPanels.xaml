@@ -7,8 +7,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:converter="clr-namespace:TXTReader.Converter"
              mc:Ignorable="d" 
-             xmlns:book="clr-namespace:TXTReader.Books"
-             xmlns:rule="clr-namespace:TXTReader.Rules"
              xmlns:tool="clr-namespace:TXTReader.ToolPanel"
              d:DesignHeight="600" d:DesignWidth="300">   
     <UserControl.Resources>
@@ -42,11 +40,7 @@
                     Storyboard.TargetProperty="Opacity">
                 </DoubleAnimation>
             </Storyboard>
-        </ResourceDictionary>
-    </UserControl.Resources>
-    <TabControl x:Name="tab">
-        <TabControl.Template>
-            <ControlTemplate TargetType="{x:Type TabControl}">
+            <ControlTemplate TargetType="{x:Type TabControl}" x:Key="tabtemplate">
                 <Grid ClipToBounds="true" KeyboardNavigation.TabNavigation="Local" SnapsToDevicePixels="true">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition x:Name="ColumnDefinition0"/>
@@ -117,21 +111,11 @@
                     </Trigger>
                 </ControlTemplate.Triggers>
             </ControlTemplate>
-        </TabControl.Template>
-        <TabItem Header="目录" >
-            <book:ContentTreePanel x:Name="pn_contenttree"/>
-        </TabItem>
-        <TabItem Header="划分">
-            <rule:RulePanel x:Name="pn_rule"/>
-        </TabItem>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <TabControl x:Name="tab" Template="{StaticResource ResourceKey=tabtemplate}">
         <TabItem Header="设置">
             <tool:OptionPanel x:Name="pn_option"/>
-        </TabItem>        
-        <TabItem Header="书签">
-            <book:BookmarkPanel x:Name="pn_bookmark"/>
-        </TabItem>
-        <TabItem Header="书架">
-            <book:BookcasePanel x:Name="pn_bookcase"/>
         </TabItem>
     </TabControl>
 </UserControl>

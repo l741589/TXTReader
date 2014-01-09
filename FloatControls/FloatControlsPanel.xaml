@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="FloatControls.FloatControlsPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" Panel.ZIndex="1">
+    <Canvas x:Name="pn_moving">
+        <DockPanel x:Name="pn_root" LastChildFill="False" Height="{Binding ActualHeight,ElementName=pn_moving}" Width="{Binding ActualWidth,ElementName=pn_moving}">
+            <StackPanel x:Name="pn_top" DockPanel.Dock="Top"/>
+            <StackPanel x:Name="pn_bottom" DockPanel.Dock="Bottom"/>
+            <StackPanel x:Name="pn_left" DockPanel.Dock="Left"/>
+            <StackPanel x:Name="pn_right" DockPanel.Dock="Right"/>
+            <DockPanel LastChildFill="False" DockPanel.Dock="Top">
+                <StackPanel x:Name="pn_lefttop" DockPanel.Dock="Left" FlowDirection="LeftToRight" Orientation="Horizontal"/>
+                <StackPanel x:Name="pn_righttop" DockPanel.Dock="Right" FlowDirection="LeftToRight" Orientation="Horizontal"/>
+            </DockPanel>
+            <DockPanel LastChildFill="False" DockPanel.Dock="Bottom">
+                <StackPanel x:Name="pn_leftbottom" DockPanel.Dock="Left" FlowDirection="LeftToRight" Orientation="Horizontal"/>
+                <StackPanel x:Name="pn_rightbottom" DockPanel.Dock="Right" FlowDirection="LeftToRight" Orientation="Horizontal"/>
+            </DockPanel>
+        </DockPanel>
+    </Canvas>
+</UserControl>

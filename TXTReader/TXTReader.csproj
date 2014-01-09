@@ -36,7 +36,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -46,7 +46,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -56,7 +56,6 @@
     <ApplicationIcon>res\543.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Accessibility" />
     <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="ReachFramework" />
     <Reference Include="System" />
@@ -87,32 +86,21 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\MyCommands.cs" />
-    <Compile Include="Books\Converter\BookLengthConverter.cs" />
-    <Compile Include="Books\Converter\BookmarkConverter.cs" />
-    <Compile Include="Books\Converter\BookStateVisibilityConverter.cs" />
-    <Compile Include="Books\Converter\ChapterRuleNameConverter.cs" />
-    <Compile Include="Books\Converter\ContentStatusImageConverter.cs" />
-    <Compile Include="Converter\MyDateTimeConverter.cs" />
     <Compile Include="Converter\NotConverter.cs" />
     <Compile Include="Converter\ParaSpacingCvt.cs" />
-    <Compile Include="Converter\RuleDelButtonVisibilityConverter.cs" />
     <Compile Include="Converter\SizeableConverter.cs" />
     <Compile Include="Converter\SolidColorCvt.cs" />
     <Compile Include="Converter\ToolPanelTargetLeftCvt.cs" />
     <Compile Include="Converter\ToolPanelWidthCvt.cs" />
     <Compile Include="Converter\TypefaceToFontFamilyCvt.cs" />
-    <Compile Include="Converter\VisiblilityConverter.cs" />
     <Compile Include="Converter\WindowStyleConverter.cs" />
-    <Compile Include="Books\Book.cs" />
-    <Compile Include="Books\Bookmark.cs" />
-    <Compile Include="Books\Chapter.cs" />
-    <Compile Include="Books\ChapterCollection.cs" />
-    <Compile Include="Books\ChapterDesc.cs" />
-    <Compile Include="Books\ContentAdapter.cs" />
-    <Compile Include="FloatMessages\FloatMessage.cs" />
-    <Compile Include="Books\Positionable.cs" />
     <Compile Include="Display\Skin.cs" />
-    <Compile Include="Rules\Trmex.cs" />
+    <Compile Include="Interfaces\IBook.cs" />
+    <Compile Include="Plugins\PluginEntry.cs" />
+    <Compile Include="Plugins\PluginManager.cs" />
+    <Compile Include="Res.xaml.cs">
+      <DependentUpon>Res.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ToolPanel\Options.cs" />
     <Compile Include="Display\IDisplayer.cs" />
     <Compile Include="Display\Displayer4.xaml.cs">
@@ -123,54 +111,22 @@
     </Compile>
     <Compile Include="Display\ITRTimer.cs" />
     <Compile Include="Display\TRTimer2.cs" />
-    <Compile Include="Utility\A.cs" />
     <Compile Include="Widget\ThicknessSEGroup.xaml.cs">
       <DependentUpon>ThicknessSEGroup.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Books\BookParser.cs" />
-    <Compile Include="Books\BookCollection.cs" />
     <Compile Include="Net\MyHttp.cs" />
     <Compile Include="ToolPanel\OptionsParser.cs" />
     <Compile Include="Net\ResponseEntity.cs" />
-    <Compile Include="Rules\RuleParser.cs" />
     <Compile Include="Display\EnumTypesBinder.cs" />
-    <Compile Include="Utility\G.cs" />
-    <Compile Include="Rules\Rule.cs" />
+    <Compile Include="G.cs" />
     <Compile Include="Display\SkinParser.cs" />
-    <Compile Include="Utility\UACManager.cs" />
-    <Compile Include="Net\Douban.cs" />
-    <Compile Include="Books\BookcasePanel.xaml.cs">
-      <DependentUpon>BookcasePanel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Books\BookmarkPanel.xaml.cs">
-      <DependentUpon>BookmarkPanel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="FloatMessages\FloatLog.cs" />
-    <Compile Include="FloatMessages\FloatMessage.xaml.cs">
-      <DependentUpon>FloatMessage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="FloatMessages\FloatMessagePanel.xaml.cs">
-      <DependentUpon>FloatMessagePanel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Books\ContentTreePanel.xaml.cs">
-      <DependentUpon>ContentTreePanel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Rules\RulePanel.xaml.cs">
-      <DependentUpon>RulePanel.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ToolPanel\OptionPanel.xaml.cs">
       <DependentUpon>OptionPanel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Widget\SearchBar.xaml.cs">
-      <DependentUpon>SearchBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="ToolPanel\ToolPanels.xaml.cs">
       <DependentUpon>ToolPanels.xaml</DependentUpon>
     </Compile>
     <Compile Include="Widget\TRNotifyIcon.cs" />
-    <Compile Include="Widget\TRProgressBar.xaml.cs">
-      <DependentUpon>TRProgressBar.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ToolPanel\UserPanel.xaml.cs">
       <DependentUpon>UserPanel.xaml</DependentUpon>
     </Compile>
@@ -194,35 +150,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Books\BookcasePanel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Books\BookmarkPanel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="FloatMessages\FloatMessage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="FloatMessages\FloatMessagePanel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Books\ContentTreePanel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Rules\RulePanel.xaml">
+    <Page Include="Res.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ToolPanel\OptionPanel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Widget\SearchBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -231,10 +163,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="ToolPanel\ToolPanels.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Widget\TRProgressBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -279,27 +207,8 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="res\no_cover.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="res\setting.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="res\cross.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="res\543.ico" />
     <Resource Include="res\547.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="res\cs_toolong.png" />
-    <Resource Include="res\cs_tooshort.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="res\cs_index.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="res\cs_index_green.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zlib\Zlib.csproj">
@@ -324,6 +233,10 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\setting.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

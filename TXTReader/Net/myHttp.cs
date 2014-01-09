@@ -8,7 +8,6 @@ using System.Collections;
 using System.IO;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
-
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Diagnostics;
@@ -17,7 +16,8 @@ using System.Web;
 using System.Threading.Tasks;
 using Zlib.Net;
 using Zlib.Text;
-using TXTReader.Utility;
+using Zlib.Utility;
+using Zlib.Algorithm;
 
 namespace TXTReader.Net {
     public class MyHttp : IHttpDelegate {

@@ -8,12 +8,11 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Resources;
 using System.Xml;
-using TXTReader.ToolPanel;
-using TXTReader.Utility;
+using TXTReader.ToolPanel;
 using Zlib.Text;
 
 namespace TXTReader.Display {
-    class SkinParser : Parser{
+    class SkinParser : XmlParser{
 
         public const String URI_SCHEME_SKIN = "http://txtreader.org/skin.xsd";
 

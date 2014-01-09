@@ -1,0 +1,17 @@
+E:\GitHub\TXTReader\TRBook\Fakes\FloatControls.fakes : warning : 无法为 FloatControls.Controls.FloatTimer 生成存根: 类型对 exported or assembly(FloatControls.Fakes) 不可见。
+E:\GitHub\TXTReader\TRBook\Fakes\FloatControls.fakes : warning : 无法为 FloatControls.Entry 生成存根: 类型对 exported or assembly(FloatControls.Fakes) 不可见。
+E:\GitHub\TXTReader\TRBook\Fakes\FloatControls.fakes : warning : 无法为 FloatControls.FloatControlContainer 生成存根: 类型对 exported or assembly(FloatControls.Fakes) 不可见。
+E:\GitHub\TXTReader\TRBook\Fakes\FloatControls.fakes : warning : 无法为 FloatControls.G 生成存根: 类型对 exported or assembly(FloatControls.Fakes) 不可见。
+E:\GitHub\TXTReader\TRBook\Fakes\FloatControls.fakes : warning : 无法为 FloatControls.FloatPosition 生成存根: 类型是一个值类型。
+E:\GitHub\TXTReader\TRBook\Fakes\FloatControls.fakes : warning : 无法为 FloatControls.Properties.Resources 生成存根: 类型对 exported or assembly(FloatControls.Fakes) 不可见。
+E:\GitHub\TXTReader\TRBook\Fakes\FloatControls.fakes : warning : 无法为 FloatControls.Properties.Settings 生成存根: 类型已密封。
+E:\GitHub\TXTReader\TRBook\Fakes\FloatControls.fakes : warning : 无法为 XamlGeneratedNamespace.GeneratedInternalTypeHelper 生成存根: 类型已密封。
+E:\GitHub\TXTReader\TRBook\Fakes\FloatControls.fakes : warning : 无法为 FloatControls.IFloatControl 生成填充码: 类型是一个接口。
+E:\GitHub\TXTReader\TRBook\Fakes\FloatControls.fakes : warning : 无法为 FloatControls.Controls.FloatTimer 生成填充码: 类型对 exported or assembly(FloatControls.Fakes) 不可见。
+E:\GitHub\TXTReader\TRBook\Fakes\FloatControls.fakes : warning : 无法为 FloatControls.Entry 生成填充码: 类型对 exported or assembly(FloatControls.Fakes) 不可见。
+E:\GitHub\TXTReader\TRBook\Fakes\FloatControls.fakes : warning : 无法为 FloatControls.FloatControlContainer 生成填充码: 类型对 exported or assembly(FloatControls.Fakes) 不可见。
+E:\GitHub\TXTReader\TRBook\Fakes\FloatControls.fakes : warning : 无法为 FloatControls.G 生成填充码: 类型对 exported or assembly(FloatControls.Fakes) 不可见。
+E:\GitHub\TXTReader\TRBook\Fakes\FloatControls.fakes : warning : 无法为 FloatControls.FloatPosition 生成填充码: 类型是一个枚举。
+E:\GitHub\TXTReader\TRBook\Fakes\FloatControls.fakes : warning : 无法为 FloatControls.Properties.Resources 生成填充码: 类型对 exported or assembly(FloatControls.Fakes) 不可见。
+E:\GitHub\TXTReader\TRBook\Fakes\FloatControls.fakes : warning : 无法为 FloatControls.Properties.Settings 生成填充码: 类型对 exported or assembly(FloatControls.Fakes) 不可见。
+E:\GitHub\TXTReader\TRBook\Fakes\FloatControls.fakes : warning : 无法为 XamlGeneratedNamespace.GeneratedInternalTypeHelper 生成填充码: 类型不受支持，因为存在于内部限制。

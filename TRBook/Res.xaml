@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:local="clr-namespace:TRBook"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="TRBook.Res">
+    <BitmapImage x:Key="src_nocover" UriSource="/TRBook;component/res/no_cover.png"/>
+    <BitmapImage x:Key="cs_toolong" UriSource="/TRBook;component/res/cs_toolong.png"/>
+    <BitmapImage x:Key="cs_tooshort" UriSource="/TRBook;component/res/cs_tooshort.png"/>
+    <BitmapImage x:Key="cs_index" UriSource="/TRBook;component/res/cs_index.png"/>
+    <BitmapImage x:Key="cs_index_green" UriSource="/TRBook;component/res/cs_index_green.png"/>
+    <ContextMenu x:Key="contextMenu">
+        <MenuItem Header="打开(_O)" Command="ApplicationCommands.Open"/>
+        <MenuItem Header="关闭(_C)" Command="ApplicationCommands.Close"/>
+        <MenuItem Header="重开(_R)" Command="local:MyCommands.Reopen"/>
+    </ContextMenu>
+</ResourceDictionary>

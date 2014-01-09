@@ -19,12 +19,13 @@ using TXTReader.Display;
 using System.Diagnostics;
 using System.Windows.Threading;
 using TXTReader.Properties;
-using TXTReader.Utility;
 using System.Threading;
 using System.IO;
 using TXTReader.Commands;
 using System.Windows.Resources;
 using Zlib.Async;
+using TXTReader.Plugins;
+using Zlib.Widget;
 
 namespace TXTReader {
     /// <summary>
@@ -34,11 +35,9 @@ namespace TXTReader {
 
         public const int HCF_NORMAL  = 1;
         public const int HCF_MOVE = 2;
-        public const int HCF_FIND = 4;
 
         public const int HC_NORNAL = HCF_NORMAL;
         public const int HC_MOVE = HCF_NORMAL | HCF_MOVE;
-        public const int HC_FIND = HCF_NORMAL | HCF_FIND;
         public const int HC_ALL = 0x7fffffff;
 
         public int HoldCode { get; set; }
@@ -47,6 +46,8 @@ namespace TXTReader {
 
         public MainWindow() {
             InitializeComponent();
+            PluginManager.Instance.OnWindowCreate(this);
+            displayer.ContextMenu = G.ContextMenu.Add(Resources["mainContextMenu"] as ContextMenu).Build();
             Focus();
         }
 
@@ -91,9 +92,6 @@ namespace TXTReader {
             if (IsHold(HCF_MOVE)) {
                 Cursor = Cursors.SizeAll;
             }
-            if (IsHold(HCF_FIND)) {
-                sb_search.Show();
-            }
         }
 
         public void ReleaseHold(int code) {
@@ -106,9 +104,6 @@ namespace TXTReader {
             if (!IsHold(HCF_MOVE)) {
                 Cursor = Cursors.Arrow;
             }
-            if (!IsHold(HCF_FIND)) {
-                sb_search.Hide();
-            }
         }
 
         private void window_Loaded(object sender, RoutedEventArgs e) {            
@@ -119,34 +114,26 @@ namespace TXTReader {
         }
 
         protected override void OnKeyDown(KeyEventArgs e) {
-            if (toolPanel.IsAncestorOf(e.OriginalSource as DependencyObject)) return;
-            //Debug.WriteLine(e.Key);
-            if (e.Key==Key.System) {
-                switch (e.SystemKey) {
-                    case Key.Left: if (e.KeyboardDevice.Modifiers == ModifierKeys.Alt)
-                            if (G.Book != null) G.Book.Undo();
-                        break;
-                    case Key.Right: if (e.KeyboardDevice.Modifiers == ModifierKeys.Alt)
-                            if (G.Book != null) G.Book.Redo();
-                        break;
-                }
-            } else {
-                switch (e.Key) {
-                    case Key.OemComma: --toolPanel.pn_option.seSpeed.Value; break;
-                    case Key.OemPeriod: ++toolPanel.pn_option.seSpeed.Value; break;
-                    case Key.Up: displayer.LineModify(+1); break;
-                    case Key.Down: displayer.LineModify(-1); break;
-                    case Key.PageUp: displayer.PageModify(+1); break;
-                    case Key.PageDown: displayer.PageModify(-1); break;
-                    case Key.Enter:
-                    case Key.Space: G.Displayer.IsScrolling = !G.Displayer.IsScrolling; break;
-                    case Key.LeftShift: Hold(HC_MOVE); break;
-                }
+            if (!OnDisplayer(e)) return;
+            base.OnKeyDown(e);
+            if (e.Handled) return;
+            switch (e.Key) {
+                //case Key.OemComma: --toolPanel.pn_option.seSpeed.Value; break;
+                //case Key.OemPeriod: ++toolPanel.pn_option.seSpeed.Value; break;
+                case Key.Up: displayer.LineModify(+1); break;
+                case Key.Down: displayer.LineModify(-1); break;
+                case Key.PageUp: displayer.PageModify(+1); break;
+                case Key.PageDown: displayer.PageModify(-1); break;
+                case Key.Enter:
+                case Key.Space: G.Displayer.IsScrolling = !G.Displayer.IsScrolling; break;
+                case Key.LeftShift: Hold(HC_MOVE); break;
             }
-        
         }
 
         protected override void OnKeyUp(KeyEventArgs e) {
+            if (!OnDisplayer(e)) return;
+            base.OnKeyUp(e);
+            if (e.Handled) return;
             if (toolPanel.IsAncestorOf(e.OriginalSource as DependencyObject)) return;
             switch (e.Key) {
                 case Key.LeftShift: ReleaseHold(HC_MOVE); break;
@@ -154,8 +141,7 @@ namespace TXTReader {
         }
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e) {
-            (App.Current as App).FileName = G.FileName;
-            displayer.CloseFile();
+            base.OnClosing(e);
             G.Timer.Stop();
             G.IsRunning = false;
             G.NotifyIcon.Close();
@@ -163,8 +149,10 @@ namespace TXTReader {
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e) {
+            if (!OnDisplayer(e)) return;
             base.OnMouseDown(e);
-            if (toolPanel.IsAncestorOf(e.OriginalSource as DependencyObject)) return;
+            if (e.Handled) return;
+
             toolPanel.Hide();
             ReleaseHold(HC_ALL);
             if (e.ChangedButton == MouseButton.Left) {
@@ -174,8 +162,11 @@ namespace TXTReader {
         }
 
         protected override void OnMouseMove(MouseEventArgs e) {
-            if (toolPanel.IsAncestorOf(e.OriginalSource as DependencyObject)) return;
-            var p=e.GetPosition(root);
+            if (!OnDisplayer(e)) return;
+            base.OnMouseMove(e);
+            if (e.Handled) return;
+
+            var p=e.GetPosition(canvas);
             if (!IsHolding) {
                 if (p.X > canvas.ActualWidth - 32) {
                     toolPanel.Show();
@@ -187,12 +178,14 @@ namespace TXTReader {
                     Top -= v.Y;
                 }                
             }
-            if (p.Y > canvas.ActualHeight - 32) progressBar.Show();
-            else progressBar.Hide();
         }
 
         protected override void OnMouseUp(MouseButtonEventArgs e) {
-            if (toolPanel.IsAncestorOf(e.OriginalSource as DependencyObject)) return;
+            if (!OnDisplayer(e)) return;
+            //if (toolPanel.IsAncestorOf(e.OriginalSource as DependencyObject)) return;
+            base.OnMouseUp(e);
+            if (e.Handled) return;
+            
             lastPoint = null;
             if (!IsHolding) G.Timer.Resume();
         }
@@ -222,19 +215,12 @@ namespace TXTReader {
             toggled = false;
         }
 
-        private void find_CanExecute(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = G.Book != null; }
-        private void find_Executed(object sender, ExecutedRoutedEventArgs e) { Hold(HC_FIND); }
-
-        private void open_CanExecute(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute= true; }
-        private void open_Executed(object sender, ExecutedRoutedEventArgs e) {
-            var dlg = new System.Windows.Forms.OpenFileDialog();
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                G.Displayer.OpenFile(dlg.FileName);
-            }
+        private bool OnDisplayer(RoutedEventArgs e) {
+            if (e.OriginalSource==null) return true;
+            if (displayer.IsAncestorOf(e.OriginalSource as DependencyObject)) return true;
+            if ((e.OriginalSource is UIElement)&&(e.OriginalSource as UIElement).IsAncestorOf(displayer)) return true;
+            return false;
         }
-
-        private void close_CanExecute(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = G.Book != null; }
-        private void close_Executed(object sender, ExecutedRoutedEventArgs e) { G.Displayer.CloseFile(); }
 
         private void bossKey_CanExecute(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
         private void bossKey_Executed(object sender, ExecutedRoutedEventArgs e) { Toggle(); }
@@ -242,19 +228,16 @@ namespace TXTReader {
         private void exit_CanExecute(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
         private void exit_Executed(object sender, ExecutedRoutedEventArgs e) { Close(); }
 
-        private void reopen_CanExecute(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = G.Book != null; }
-        private void reopen_Executed(object sender, ExecutedRoutedEventArgs e) { G.Displayer.ReopenFile(); }
-
         private void mi_scroll_Loaded(object sender, RoutedEventArgs e) {
             (sender as MenuItem).SetBinding(MenuItem.IsCheckedProperty, new Binding("IsScrolling") { Source = G.Displayer });
         }
 
-        private void mi_border_Loaded(object sender, RoutedEventArgs e) {            
-            (sender as MenuItem).SetBinding(MenuItem.IsCheckedProperty, new Binding("IsBordered") { Source = this });            
+        private void mi_border_Loaded(object sender, RoutedEventArgs e) {
+            (sender as MenuItem).SetBinding(MenuItem.IsCheckedProperty, new Binding("IsBordered") { Source = this });
         }
 
-        private void mi_fullscreen_Loaded(object sender, RoutedEventArgs e) {            
-            (sender as MenuItem).SetBinding(MenuItem.IsCheckedProperty, new Binding("IsFullScreen") { Source = this });            
+        private void mi_fullscreen_Loaded(object sender, RoutedEventArgs e) {
+            (sender as MenuItem).SetBinding(MenuItem.IsCheckedProperty, new Binding("IsFullScreen") { Source = this });
         }
     }
 }

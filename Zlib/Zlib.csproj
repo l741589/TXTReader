@@ -18,7 +18,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -26,15 +26,17 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accessibility" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -50,6 +52,12 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Algorithm\A.cs" />
+    <Compile Include="Async\BaseAwaiter.cs" />
+    <Compile Include="Async\IBaseAwaiter.cs" />
+    <Compile Include="Converter\MyDateTimeConverter.cs" />
+    <Compile Include="Converter\NotConverter.cs" />
+    <Compile Include="Converter\VisiblilityConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -67,8 +75,15 @@
     <Compile Include="Net\Http.cs" />
     <Compile Include="Net\HttpDelegate.cs" />
     <Compile Include="Net\IHttpDelegate.cs" />
+    <Compile Include="Win32\RegUtil.cs" />
     <Compile Include="Text\Json.cs" />
-    <Compile Include="Text\Parser.cs" />
+    <Compile Include="Text\XmlParser.cs" />
+    <Compile Include="Utility\IntExtention.cs" />
+    <Compile Include="Utility\ItemsProxy.cs" />
+    <Compile Include="Utility\NullObject.cs" />
+    <Compile Include="Utility\ObjectExtension.cs" />
+    <Compile Include="Utility\StringExtension.cs" />
+    <Compile Include="Widget\CompoundContextMenu.cs" />
     <Compile Include="Widget\FontPickerCombobox.xaml.cs">
       <DependentUpon>FontPickerCombobox.xaml</DependentUpon>
     </Compile>
@@ -88,6 +103,7 @@
     </Compile>
     <Compile Include="Win32\KeyHook.cs" />
     <Compile Include="Win32\MessageConst.cs" />
+    <Compile Include="Win32\UAC.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -125,6 +141,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ZlibUAC\ZlibUAC.csproj">
+      <Project>{9dc9e935-5f79-413b-aaf8-2ce9d61f8967}</Project>
+      <Name>ZlibUAC</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

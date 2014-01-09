@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="TRBook.ContentOptionPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:zw="clr-namespace:Zlib.Widget;assembly=Zlib"
+             mc:Ignorable="d" 
+             d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0" Text="章节长度范围"/>
+        <zw:SpinEdit MinValue="0" Grid.Column="1" x:Name="seMinLen"
+                     MaxValue="{Binding Value,ElementName=seMaxLen}"/>
+        <TextBlock Grid.Column="2" Text="~" HorizontalAlignment="Center"/>
+        <zw:SpinEdit MinValue="{Binding Value,ElementName=seMinLen}" Grid.Column="3" x:Name="seMaxLen"/>
+    </Grid>
+</UserControl>

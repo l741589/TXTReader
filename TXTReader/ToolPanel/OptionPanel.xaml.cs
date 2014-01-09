@@ -1,24 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using TXTReader.Utility;
 using TXTReader.Converter;
 using Microsoft.Win32;
 using TXTReader.Display;
 using Zlib.Widget;
 using TXTReader.Widget;
-using TXTReader.FloatMessages;
 
 namespace TXTReader.ToolPanel
 {
@@ -129,7 +120,7 @@ namespace TXTReader.ToolPanel
         {
             Button button = sender as Button;
 
-            //set new imagesource via OpenFileDialog.
+            //set new imagesource via OpenFileDiaLog.
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.DefaultExt = ".jpg";
             dlg.Filter = "All Supported|*.jpg;*.jpeg;*.bmp;*.dib;*.png;*.gif|JPEG file|*.jpg|BITMAP file|*.bmp;*.dib|PNG file|*.png";
@@ -193,18 +184,10 @@ namespace TXTReader.ToolPanel
             AddHandler(CheckBox.CheckedEvent, new RoutedEventHandler((d, e) => { Update(e); }));
             AddHandler(CheckBox.UncheckedEvent, new RoutedEventHandler((d, e) => { Update(e); }));
             AddHandler(StandardColorPicker.SelectedColorChangedEvent, new RoutedPropertyChangedEventHandler<Color>((d, e) => { Update(e); }));
-            G.MainWindow.floatMessagePanel.Time.SetBinding(FloatMessage.VisibilityProperty, new Binding("IsChecked") { Source = ckbTime,Converter=new VisiblilityConverter() });
-            G.MainWindow.floatMessagePanel.Title.SetBinding(FloatMessage.VisibilityProperty, new Binding("IsChecked") { Source = ckbChapterTitle, Converter = new VisiblilityConverter() });
-            G.MainWindow.floatMessagePanel.Fps.SetBinding(FloatMessage.VisibilityProperty, new Binding("IsChecked") { Source = ckbFps, Converter = new VisiblilityConverter() });
-            G.MainWindow.floatMessagePanel.Position.SetBinding(FloatMessage.VisibilityProperty, new Binding("IsChecked") { Source = ckbProgress, Converter = new VisiblilityConverter() });
-            G.MainWindow.floatMessagePanel.Speed.SetBinding(FloatMessage.VisibilityProperty, new Binding("IsChecked") { Source = ckbSpeed, Converter = new VisiblilityConverter() });
-            G.MainWindow.floatMessagePanel.Log.SetBinding(FloatMessage.VisibilityProperty, new Binding("IsChecked") { Source = ckbLog, Converter = new VisiblilityConverter() });
-            G.MainWindow.floatMessagePanel.SetBinding(FloatMessagePanel.VisibilityProperty, new Binding("IsChecked") { Source = ckbFloatMessage, Converter = new VisiblilityConverter() });
         }
 
         private void Update(RoutedEventArgs e) {
             G.Displayer.UpdateSkin();
-            G.MainWindow.floatMessagePanel.UpdateColor();
             btnBackgroundImage.ToolTip = new Image() { Source = Options.Skin.BackImage, MaxHeight = MAX_TOOLTIP_SIZE, MaxWidth = MAX_TOOLTIP_SIZE };
             e.Handled = true;
         }

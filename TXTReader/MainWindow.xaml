@@ -6,53 +6,38 @@
         xmlns:widget="clr-namespace:TXTReader.Widget"
         xmlns:display="clr-namespace:TXTReader.Display"
         xmlns:cmd="clr-namespace:TXTReader.Commands"
-        xmlns:util="clr-namespace:TXTReader.Utility"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
         x:Class="TXTReader.MainWindow" x:Name="window"
-        xmlns:fm="clr-namespace:TXTReader.FloatMessages"
         xmlns:tool="clr-namespace:TXTReader.ToolPanel"
         Title="TXTReader" Loaded="window_Loaded"  Height="350" Width="525">
-    <Window.Resources>
-        <converter:WindowStyleConverter x:Key="WindowStyleConverter"/>
-        <converter:SizeableConverter x:Key="SizeableConverter"/>
-        <converter:ToolPanelWidthCvt x:Key="toolPanelWidthCvt"/>
-        <ContextMenu x:Key="mainContextMenu">
-            <MenuItem Header="打开(_O)" Command="ApplicationCommands.Open"/>
-            <MenuItem Header="关闭(_C)" Command="ApplicationCommands.Close"/>
-            <MenuItem Header="重开(_R)" Command="cmd:MyCommands.Reopen"/>
-            <Separator/>
-            <MenuItem Header="搜索(_F)" Command="ApplicationCommands.Find"/>
-            <Separator/>
-            <MenuItem Header="滚屏(_S)" IsCheckable="True" Loaded="mi_scroll_Loaded"/>
-            <Separator/>
-            <MenuItem Header="边框" IsCheckable="True" Loaded="mi_border_Loaded"/>
-            <MenuItem Header="全屏" IsCheckable="True" Loaded="mi_fullscreen_Loaded"/>
-            <Separator/>
-            <MenuItem Command="cmd:MyCommands.BossKey"/>
-            <MenuItem Command="cmd:MyCommands.Exit"/>
-        </ContextMenu>
+    <Window.Resources>        
+        <ResourceDictionary>
+            <converter:WindowStyleConverter x:Key="WindowStyleConverter"/>
+            <converter:SizeableConverter x:Key="SizeableConverter"/>
+            <converter:ToolPanelWidthCvt x:Key="toolPanelWidthCvt"/>
+            <ContextMenu x:Key="mainContextMenu">
+                
+                <MenuItem Header="滚屏(_S)" IsCheckable="True" Loaded="mi_scroll_Loaded"/>
+                <Separator/>
+                <MenuItem Header="边框" IsCheckable="True" Loaded="mi_border_Loaded"/>
+                <MenuItem Header="全屏" IsCheckable="True" Loaded="mi_fullscreen_Loaded"/>
+                <Separator/>
+                <MenuItem Command="cmd:MyCommands.BossKey"/>
+                <MenuItem Command="cmd:MyCommands.Exit"/>
+            </ContextMenu>
+        </ResourceDictionary>
     </Window.Resources>
     <Window.CommandBindings>
-        <CommandBinding Command="ApplicationCommands.Find" x:Name="find"  CanExecute="find_CanExecute" Executed="find_Executed"/>
-        <CommandBinding Command="ApplicationCommands.Open" x:Name="open"  CanExecute="open_CanExecute"  Executed="open_Executed"/>
-        <CommandBinding Command="ApplicationCommands.Close" x:Name="close"  CanExecute="close_CanExecute" Executed="close_Executed"/>
         <CommandBinding Command="cmd:MyCommands.BossKey" x:Name="bossKey"  CanExecute="bossKey_CanExecute" Executed="bossKey_Executed"/>
-        <CommandBinding Command="cmd:MyCommands.Reopen" x:Name="reopen" CanExecute="reopen_CanExecute" Executed="reopen_Executed"/>
         <CommandBinding Command="cmd:MyCommands.Exit" x:Name="exit" CanExecute="exit_CanExecute" Executed="exit_Executed"/>
     </Window.CommandBindings>
-    <Canvas x:Name="root">        
-        <Canvas x:Name="canvas" SizeChanged="canvas_SizeChanged" Width="{Binding ActualWidth, ElementName=root}" Height="{Binding ActualHeight, ElementName=root}">
-            <display:Displayer4 x:Name="displayer" Canvas.Left="0" Canvas.Top="0"  Panel.ZIndex="0" 
-				Height="{Binding ActualHeight, ElementName=canvas}" Width="{Binding ActualWidth, ElementName=canvas}"
-				ContextMenu="{StaticResource mainContextMenu}"/>
-            <DockPanel Panel.ZIndex="1" Width="{Binding ActualWidth, ElementName=canvas}" Height="{Binding ActualHeight, ElementName=canvas}" LastChildFill="True">
-                <widget:TRProgressBar x:Name="progressBar" DockPanel.Dock="Bottom" Height="8"/>
-                <fm:FloatMessagePanel x:Name="floatMessagePanel" Panel.ZIndex="1"/>
-            </DockPanel>
-            <tool:ToolPanels  x:Name="toolPanel" Panel.ZIndex="5"
-				Height="{Binding ActualHeight, ElementName=canvas}" 
-				Width="{Binding ActualWidth, Converter={StaticResource toolPanelWidthCvt}, ElementName=canvas}"/>
-            <widget:SearchBar x:Name="sb_search" Canvas.Left="0" Canvas.Top="0" Visibility="Hidden" Panel.ZIndex="2"/>
-        </Canvas>
+    <Canvas x:Name="canvas" SizeChanged="canvas_SizeChanged">
+        <display:Displayer4 x:Name="displayer" Canvas.Left="0" Canvas.Top="0"  Panel.ZIndex="0" 
+			Height="{Binding ActualHeight, ElementName=canvas}" Width="{Binding ActualWidth, ElementName=canvas}"/>
+        
+        <tool:ToolPanels  x:Name="toolPanel" Panel.ZIndex="5"
+			Height="{Binding ActualHeight, ElementName=canvas}" 
+			Width="{Binding ActualWidth, Converter={StaticResource toolPanelWidthCvt}, ElementName=canvas}"/>
+        <!-- <widget:SearchBar x:Name="sb_search" Canvas.Left="0" Canvas.Top="0" Visibility="Hidden" Panel.ZIndex="2"/> -->
     </Canvas>
 </Window>

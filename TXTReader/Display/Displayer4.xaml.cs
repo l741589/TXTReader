@@ -15,11 +15,11 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml;
 using System.Diagnostics;
-using TXTReader.Utility;
 using System.Collections;
 using System.Threading;
-using TXTReader.Books;
 using TXTReader.ToolPanel;
+using TXTReader.Interfaces;
+using Zlib.Utility;
 
 namespace TXTReader.Display {
     /// <summary>
@@ -35,17 +35,21 @@ namespace TXTReader.Display {
         public static readonly DependencyProperty FpsProperty = DependencyProperty.Register("Fps", typeof(int), typeof(Displayer4));
         public static readonly DependencyProperty IsScrollingProperty = DependencyProperty.Register("IsScrolling", typeof(bool), typeof(Displayer4), new PropertyMetadata(false, OnIsScrollingChanged));
         public static readonly RoutedEvent ShutdownEvent = EventManager.RegisterRoutedEvent("Shutdown", RoutingStrategy.Direct, typeof(RoutedEventHandler), typeof(Displayer4));
+        //public static readonly DependencyProperty BookProperty = DependencyProperty.Register("Book", typeof(IBook), typeof(Displayer4));
 
         public event RoutedEventHandler Shutdown { add { AddHandler(ShutdownEvent, value); } remove { RemoveHandler(ShutdownEvent, value); } }
         public double Speed { get { return (double)GetValue(SpeedProperty); } set { SetValue(SpeedProperty, value); } }
-        public bool IsScrolling { get { return (bool)GetValue(IsScrollingProperty); } set { SetValue(IsScrollingProperty, value); } }
+        public bool IsScrolling { get { return (bool)GetValue(IsScrollingProperty); } set { SetValue(IsScrollingProperty, value); } }        
+        //public IBook Book { get { return (IBook)GetValue(BookProperty); } set { SetValue(BookProperty, value); } }
+        public IBook EmptyBook { get { return G.EmptyBook; } }
+        public IBook Book { get { return G.Book; } set { G.Book = value; } }
         public int Fps { get { return (int)GetValue(FpsProperty); } set { SetValue(FpsProperty, value); } }
-        public int FirstLine { get { return G.Book != null ? G.Book.Position : 0; } set { if (G.Book != null) G.Book.Position = value; } }
-        public double Offset { get { return G.Book != null ? G.Book.Offset : 0; } set { if (G.Book != null) G.Book.Offset = value; } }        
+        public int FirstLine { get { return Book.NotNull() ? Book.Position : 0; } set { if (Book.NotNull()) Book.Position = value; } }
+        public double Offset { get { return Book.NotNull() ? Book.Offset : 0; } set { if (Book.NotNull()) Book.Offset = value; } }        
         public double CanvasHeight { get { return canvas.ActualHeight; } }
-        public double CanvasWidth { get { return canvas.ActualWidth; } }
+        public double CanvasWidth { get { return canvas.ActualWidth; } }        
 
-        public String[] Text { get { if (text == null && G.Book != null) text = G.Book.TotalText.ToArray(); return text; } set { text = value; } }
+        public String[] Text { get { if (text == null && Book.NotNull()) text = Book.TotalText.ToArray(); return text; } set { text = value; } }
 
         private Point? lastPoint = null;
         private Binding widthBinding;
@@ -56,12 +60,24 @@ namespace TXTReader.Display {
         public Displayer4() {
             InitializeComponent();
             InitComponent();
-            if (G.Book != null) G.Book.LoadFinished += (o,e) => { Text = null; };
+            if (EmptyBook!=null) {
+                EmptyBook.Loaded += (d, e) => {
+                    Clear();
+                    Book = d as IBook;
+                    Update();
+                };
+                EventHandler eh = (d, e) => Update();
+                EmptyBook.LoadFinished += eh;
+                EmptyBook.PositionChanged += eh;
+                EmptyBook.OffsetChanged += eh;
+            }
+            if (Book.NotNull()) {
+                Update();
+            }
         }
 
         private void userControl_Loaded(object sender, RoutedEventArgs e) {
-            if (G.Book != null) {
-                //A.CopyText(out text, G.Book.TotalText);
+            if (Book.NotNull()) {
                 Update();
             }
         }       
@@ -109,40 +125,13 @@ namespace TXTReader.Display {
         void timer_Timer(long tick) {
             if (Speed == 0) return;
             Offset -= (double)tick / (Speed * 10000);
-            Update();
-        }
-
-        public void OpenFile(String filename) {
-            OpenBook(new Book(filename));
-        }
-
-        public void OpenBook(Book book) {
-            if (G.Book != book) {
-                Clear();
-                G.Book = book;
-                Text = null;
-                Update();
-            }
-        }
-
-        public void CloseFile() {
-            Text = null;
-            G.Book = null;
-            Clear();          
-            Update();
+            ForceUpdate();
         }
 
         public void Clear() {
-            canvas.Children.Clear();
-            map.Clear();
-        }
-
-        public void ReopenFile() {
-            Book tmp = G.Book;
-            G.Book = null;
-            Clear();
             Text = null;
-            OpenFile(tmp.Source);
+            canvas.Children.Clear();
+            map.Clear();            
         }
 
         protected override void OnMouseDown(MouseButtonEventArgs e) {
@@ -203,12 +192,31 @@ namespace TXTReader.Display {
             return tb;
         }
 
-        public void Update() {
+        private bool updatelock = false;
+        private bool reupdate = false;
+        public async void Update() {            
+            do {
+                if (G.Timer.Status == TRTimerStatus.RUNNING) return;
+                if (updatelock) {
+                    //Debug.WriteLine("Update Refused");
+                    reupdate = true;
+                    return;
+                }
+                updatelock = true;                
+                ForceUpdate();
+                reupdate = false;
+                await 10;
+                updatelock = false;
+            } while (reupdate);
+        }
+
+        public bool ForceUpdate() {
+            //Debug.WriteLine("Updated");
             ++fps;
             bool reupdate = false;
             if (Text == null) {
                 canvas.Children.Clear();
-                return;
+                return false;
             }
             double lastbottom = Offset;
             foreach (var e in map) e.Value.Updated = false;
@@ -237,24 +245,16 @@ namespace TXTReader.Display {
             set.Clear();
             foreach (var e in map) if (e.Value.Updated == false) set.Add(e.Key);
             foreach (var e in set) { canvas.Children.Remove(map[e]); map.Remove(e); }
-            //Debug.WriteLine(canvas.Children.Count);
-            if (reupdate) Update();
+            if (reupdate) return ForceUpdate();
+            return true;
         }
 
-     /*   private void mi_open_Click(object sender, RoutedEventArgs e) {
-            var dlg = new System.Windows.Forms.OpenFileDialog();
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                OpenFile(dlg.FileName);
-            }
-        }
-*/
 
         protected override void OnDrop(DragEventArgs e) {
             if (e.Data.GetFormats().Contains(DataFormats.FileDrop)){
                 Array c = e.Data.GetData(DataFormats.FileDrop) as Array;
                 if (c == null || c.Length <= 0) return;
-                CloseFile();
-                OpenFile(c.GetValue(0).ToString());
+                EmptyBook.Open(c.GetValue(0).ToString());
             }
             base.OnDrop(e);
         }
@@ -268,9 +268,6 @@ namespace TXTReader.Display {
             }
         }
 
-//        private void mi_close_Click(object sender, RoutedEventArgs e) { CloseFile(); }
-   //     private void mi_reopen_Click(object sender, RoutedEventArgs e) { ReopenFile(); }
-  //      private void mi_exit_Click(object sender, RoutedEventArgs e) { App.Current.MainWindow.Close(); }
         public void LineModify(double n = 1) { Offset += lineHeight * n; Update(); }
         public void PageModify(double n = 1) { Offset += (CanvasHeight - lineHeight) * n; Update(); }  
     }

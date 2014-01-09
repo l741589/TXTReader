@@ -1,0 +1,7 @@
+﻿拆分Display模块
+拆分TRBook程序集
+FloatControls模块更多设置
+	浮动类型（Border,Corner,Moving)
+	皮肤，右键菜单
+PluginManager依赖管理，设置面板
+网络部分恢复功能

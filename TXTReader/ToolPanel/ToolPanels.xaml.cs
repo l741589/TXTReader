@@ -14,7 +14,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
-using TXTReader.Utility;
 using System.Diagnostics;
 using System.Windows.Controls.Primitives;
 

@@ -12,7 +12,7 @@ using System.Reflection;
 
 namespace Zlib.Async {
 
-    public class ZTask {
+    public class ZTask : IDisposable{
         public static List<EventWaitHandle> Blockers= new List<EventWaitHandle>();
         public bool IsRunning;
         public static List<ZTask> Tasks = new List<ZTask>();
@@ -21,11 +21,12 @@ namespace Zlib.Async {
         public AutoResetEvent are = new AutoResetEvent(true);
 
         public ZTask(int count = 1) {
+            IsRunning = true;
             while (count-- > 0) {
-                new Thread(DoRun).Start();                
+                new Thread(DoRun).Start();
             }
             Blockers.Add(are);
-            Tasks.Add(this);            
+            lock (Tasks) { Tasks.Add(this); }
         }
 
         public void Add(Task task) {
@@ -57,7 +58,7 @@ namespace Zlib.Async {
                 }
                 are.WaitOne();
             }
-            Tasks.Remove(this);
+            lock (Tasks) { if (Tasks.Count > 0) Tasks.Remove(this); }
         }
 
         public Task Run<T>(Func<T> call) {
@@ -130,6 +131,10 @@ namespace Zlib.Async {
 
         public static void StopAll(){
             foreach (var e in Tasks) e.Stop();
-        }        
+        }
+
+        public void Dispose() {
+            are.Dispose();
+        }
     }
 }

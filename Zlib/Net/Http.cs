@@ -12,7 +12,7 @@ using System.Net.Mime;
 
 namespace Zlib.Net {
     public delegate void MaintainHttpAction(Http request);
-    public class Http :IHttpDelegate {
+    public class Http :IHttpDelegate,IDisposable {
         private String path;
         private Dictionary<String, String> args;
         private MemoryStream ms;
@@ -352,7 +352,7 @@ namespace Zlib.Net {
             StreamReader reader = new StreamReader(dataStream, resEncoding);
             string responseFromServer = reader.ReadToEnd();
             reader.Close();
-            dataStream.Close();
+            //dataStream.Close();
             OnAfterResponse(this);
             response.Close();
             return responseFromServer;            
@@ -377,5 +377,9 @@ namespace Zlib.Net {
             return reader.ToArray();
         }
         #endregion      
+    
+        public void Dispose() {
+            if (response != null) response.Dispose();
+        }
     }
 }

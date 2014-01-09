@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
-using TXTReader.Utility;
+using System.Windows.Forms;
 
 namespace TXTReader.Widget {
-    class TRNotifyIcon : IDisposable{
+    public class TRNotifyIcon : IDisposable{
         private NotifyIcon ni;
         public TRNotifyIcon() {
             ni = new NotifyIcon();

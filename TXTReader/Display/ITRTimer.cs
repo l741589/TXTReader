@@ -1,10 +1,10 @@
 ﻿using System;
 namespace TXTReader.Display {
 
-    delegate void TRTimerHandler(long tick);
-    enum TRTimerStatus { STOPED, RUNNING, PAUSED };
+    public delegate void TRTimerHandler(long tick);
+    public enum TRTimerStatus { STOPED, RUNNING, PAUSED };
 
-    interface ITRTimer {
+    public interface ITRTimer {
         int Interval { get; set; }
         void Pause();
         void Resume();
