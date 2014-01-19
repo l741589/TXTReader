@@ -3,8 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:TXTReader" 
         xmlns:converter="clr-namespace:TXTReader.Converter"
-        xmlns:widget="clr-namespace:TXTReader.Widget"
-        xmlns:display="clr-namespace:TXTReader.Display"
         xmlns:cmd="clr-namespace:TXTReader.Commands"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
         x:Class="TXTReader.MainWindow" x:Name="window"
@@ -12,6 +10,10 @@
         Title="TXTReader" Loaded="window_Loaded"  Height="350" Width="525">
     <Window.Resources>        
         <ResourceDictionary>
+           <!--  <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MetroWPF;component/Themes/Light.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MetroWPF;component/Themes/ControlStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries> -->
             <converter:WindowStyleConverter x:Key="WindowStyleConverter"/>
             <converter:SizeableConverter x:Key="SizeableConverter"/>
             <converter:ToolPanelWidthCvt x:Key="toolPanelWidthCvt"/>
@@ -32,8 +34,8 @@
         <CommandBinding Command="cmd:MyCommands.Exit" x:Name="exit" CanExecute="exit_CanExecute" Executed="exit_Executed"/>
     </Window.CommandBindings>
     <Canvas x:Name="canvas" SizeChanged="canvas_SizeChanged">
-        <display:Displayer4 x:Name="displayer" Canvas.Left="0" Canvas.Top="0"  Panel.ZIndex="0" 
-			Height="{Binding ActualHeight, ElementName=canvas}" Width="{Binding ActualWidth, ElementName=canvas}"/>
+        <!-- <display:Displayer4 x:Name="displayer" Canvas.Left="0" Canvas.Top="0"  Panel.ZIndex="0" 
+			Height="{Binding ActualHeight, ElementName=canvas}" Width="{Binding ActualWidth, ElementName=canvas}"/> -->
         
         <tool:ToolPanels  x:Name="toolPanel" Panel.ZIndex="5"
 			Height="{Binding ActualHeight, ElementName=canvas}" 

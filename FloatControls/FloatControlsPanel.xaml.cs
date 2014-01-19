@@ -24,8 +24,7 @@ namespace FloatControls {
     public partial class FloatControlsPanel : UserControl {
 
         private static FloatControlsPanel instance = null;
-        public static FloatControlsPanel Instance { get { if (instance == null) instance = new FloatControlsPanel(); return instance; } }
-        public static ObservableCollection<IFloatControl> FloatControls { get { return G.FloatControls; } }
+        internal static FloatControlsPanel Instance { get { if (instance == null) instance = new FloatControlsPanel(); return instance; } }
 
         public Panel this[FloatPosition pos] {
             get {

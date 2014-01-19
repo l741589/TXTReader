@@ -15,7 +15,7 @@ namespace TRBook {
             if (Book.I.IsNull()) return;
             SetBinding(ValueProperty, new Binding("CurrentTitle") { Source = Book.I });
             Name = "章节";
-            FloatControlsPanel.FloatControls.Add(this);
+            this.Register();
         }
 
         void Empty_Closed(object sender, EventArgs e) {

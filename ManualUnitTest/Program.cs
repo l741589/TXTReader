@@ -45,7 +45,7 @@ namespace ManualUnitTest
             //Console.WriteLine(Trmex.ToNumber("四亿五"));
             //Console.ReadKey();
 
-            Task t;
+            //Task t;
             
             Console.ReadKey();
         }

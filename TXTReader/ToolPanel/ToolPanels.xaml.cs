@@ -61,15 +61,15 @@ namespace TXTReader.ToolPanel
         public void Show() {
             Visibility = Visibility.Visible;
             this.BeginStoryboard(toolPanelShow, HandoffBehavior.Compose);
-            G.Timer.Pause();
+            //G.Timer.Pause();
         }
 
         public void Hide() {
             toolPanelHide.Completed += (d, e) => { Visibility = Visibility.Collapsed; };
             this.BeginStoryboard(toolPanelHide, HandoffBehavior.Compose);
-            if (!G.MainWindow.IsHolding) G.Timer.Resume();
+            //if (!G.MainWindow.IsHolding) G.Timer.Resume();
             if (tab.TabIndex == 0) tab.Focus();
-            G.Displayer.Focus();
+            (G.Displayer as Control).Focus();
         }
     }
 }

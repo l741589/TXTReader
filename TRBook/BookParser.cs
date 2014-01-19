@@ -47,9 +47,6 @@ namespace TRBook {
         }
 
         public static Book Load(String filename, Book target = null) {
-            if (filename.Contains("魔王奶爸")) {
-                Debug.WriteLine("dsfs");
-            }
             if (!File.Exists(filename)) return target;
             Book b = null;
             if (target == null) b = new Book();

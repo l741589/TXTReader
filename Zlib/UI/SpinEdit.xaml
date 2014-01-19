@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="Zlib.UI.SpinEdit"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" d:DesignHeight="20" d:DesignWidth="64" Loaded="UserControl_Loaded"
+             PreviewKeyDown="tb_PreviewKeyDown">
+    <DockPanel LastChildFill="True">
+        <UniformGrid Rows="2" Columns="1" DockPanel.Dock="Right">
+            <Button Content="▲" x:Name="up" FontSize="6" ClickMode="Hover" MouseLeftButtonDown="up_MouseLeftButtonDown" MouseLeftButtonUp="up_MouseLeftButtonUp" IsTabStop="False"/>
+            <Button Content="▼" x:Name="down" FontSize="6" ClickMode="Hover" MouseLeftButtonDown="down_MouseLeftButtonDown" MouseLeftButtonUp="down_MouseLeftButtonUp"  IsTabStop="False"/>
+        </UniformGrid>
+        <TextBox x:Name="tb" TextChanged="TextBox_TextChanged" MouseWheel="tb_MouseWheel"/>
+    </DockPanel>
+</UserControl>

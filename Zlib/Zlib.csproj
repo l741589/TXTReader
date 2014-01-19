@@ -55,8 +55,12 @@
     <Compile Include="Algorithm\A.cs" />
     <Compile Include="Async\BaseAwaiter.cs" />
     <Compile Include="Async\IBaseAwaiter.cs" />
+    <Compile Include="Converter\ControlRectConverter.cs" />
+    <Compile Include="Converter\DoubleConverter.cs" />
+    <Compile Include="Converter\ImageSourceRectConverter.cs" />
     <Compile Include="Converter\MyDateTimeConverter.cs" />
     <Compile Include="Converter\NotConverter.cs" />
+    <Compile Include="Converter\SolidColorCvt.cs" />
     <Compile Include="Converter\VisiblilityConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -75,6 +79,15 @@
     <Compile Include="Net\Http.cs" />
     <Compile Include="Net\HttpDelegate.cs" />
     <Compile Include="Net\IHttpDelegate.cs" />
+    <Compile Include="Text\IXmlParsable.cs" />
+    <Compile Include="UI\FontEditPanel.xaml.cs">
+      <DependentUpon>FontEditPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Utility\EffectParser.cs" />
+    <Compile Include="UI\Utility\FontParser.cs" />
+    <Compile Include="UI\Utility\UIElementExtentions.cs" />
+    <Compile Include="UI\Utility\ZBrushes.cs" />
+    <Compile Include="Utility\DependencyObjectExtension.cs" />
     <Compile Include="Win32\RegUtil.cs" />
     <Compile Include="Text\Json.cs" />
     <Compile Include="Text\XmlParser.cs" />
@@ -83,22 +96,22 @@
     <Compile Include="Utility\NullObject.cs" />
     <Compile Include="Utility\ObjectExtension.cs" />
     <Compile Include="Utility\StringExtension.cs" />
-    <Compile Include="Widget\CompoundContextMenu.cs" />
-    <Compile Include="Widget\FontPickerCombobox.xaml.cs">
+    <Compile Include="UI\CompoundContextMenu.cs" />
+    <Compile Include="UI\FontPickerCombobox.xaml.cs">
       <DependentUpon>FontPickerCombobox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Widget\HelpProvider.cs" />
-    <Compile Include="Widget\PlaceHolder.cs" />
-    <Compile Include="Widget\SimpleMenuButton.xaml.cs">
+    <Compile Include="UI\HelpProvider.cs" />
+    <Compile Include="UI\PlaceHolder.cs" />
+    <Compile Include="UI\SimpleMenuButton.xaml.cs">
       <DependentUpon>SimpleMenuButton.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Widget\SolidColorPickerCombobox.xaml.cs">
+    <Compile Include="UI\SolidColorPickerCombobox.xaml.cs">
       <DependentUpon>SolidColorPickerCombobox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Widget\SpinEdit.xaml.cs">
+    <Compile Include="UI\SpinEdit.xaml.cs">
       <DependentUpon>SpinEdit.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Widget\StandardColorPicker.xaml.cs">
+    <Compile Include="UI\StandardColorPicker.xaml.cs">
       <DependentUpon>StandardColorPicker.xaml</DependentUpon>
     </Compile>
     <Compile Include="Win32\KeyHook.cs" />
@@ -115,29 +128,33 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Widget\FontPickerCombobox.xaml">
+    <Page Include="UI\FontEditPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\FontPickerCombobox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Widget\SimpleMenuButton.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Widget\SolidColorPickerCombobox.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="Widget\SpinEdit.xaml">
+    <Page Include="UI\SimpleMenuButton.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Widget\StandardColorPicker.xaml">
+    <Page Include="UI\SolidColorPickerCombobox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="UI\SpinEdit.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="UI\StandardColorPicker.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -148,6 +165,11 @@
       <Name>ZlibUAC</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resource\btnface_bold.png" />
+    <Resource Include="Resource\btnface_italic.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

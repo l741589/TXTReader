@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="Zlib.UI.FontPickerCombobox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" Loaded="UserControl_Loaded">
+    <UserControl.Resources>
+        <!--<CollectionViewSource x:Key="systemFonts" Source="{x:Static Fonts.SystemFontFamilies}" />-->
+    </UserControl.Resources>
+    <DockPanel>
+        <ComboBox Margin="2" Name="cbxFont" SelectionChanged="cbxFont_SelectionChanged" Background="{x:Null}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <!--ItemsSource="{Binding Source={StaticResource systemFonts}}"-->
+            <!--this itemssource sometimes encounter problems about localization-->
+            <!--IsSynchronizedWithCurrentItem="True" >-->
+            <ComboBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <!--<StackPanel></StackPanel>-->
+                    <!--use VirtualizingStackPanel for better performance(only render the displayed part of the items in the list)-->
+                    <!--bind width to the actual width of the combobox to prevent autostreching which sometimes causes misoperation-->
+                    <VirtualizingStackPanel 
+                        Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ComboBox},Path=ActualWidth}" />
+                </ItemsPanelTemplate>
+            </ComboBox.ItemsPanel>
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:Name="tmplFont">
+                    <TextBlock x:Name="txbFont"
+                                Text="{Binding}" 
+                                FontFamily="{Binding}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+    </DockPanel>
+</UserControl>

@@ -51,6 +51,7 @@
     <Compile Include="Entry.cs" />
     <Compile Include="FloatControlCollection.cs" />
     <Compile Include="Controls\FloatLog.cs" />
+    <Compile Include="FloatControlExtension.cs" />
     <Compile Include="FloatControlOptionPanel.xaml.cs">
       <DependentUpon>FloatControlOptionPanel.xaml</DependentUpon>
     </Compile>

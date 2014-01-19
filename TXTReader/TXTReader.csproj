@@ -56,6 +56,10 @@
     <ApplicationIcon>res\543.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MetroWPF, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\MetroWPF.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationUI, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="ReachFramework" />
     <Reference Include="System" />
@@ -86,58 +90,32 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\MyCommands.cs" />
-    <Compile Include="Converter\NotConverter.cs" />
-    <Compile Include="Converter\ParaSpacingCvt.cs" />
     <Compile Include="Converter\SizeableConverter.cs" />
-    <Compile Include="Converter\SolidColorCvt.cs" />
     <Compile Include="Converter\ToolPanelTargetLeftCvt.cs" />
     <Compile Include="Converter\ToolPanelWidthCvt.cs" />
-    <Compile Include="Converter\TypefaceToFontFamilyCvt.cs" />
     <Compile Include="Converter\WindowStyleConverter.cs" />
-    <Compile Include="Display\Skin.cs" />
     <Compile Include="Interfaces\IBook.cs" />
+    <Compile Include="Interfaces\ITRTimer.cs" />
+    <Compile Include="OptionsParser.cs" />
     <Compile Include="Plugins\PluginEntry.cs" />
     <Compile Include="Plugins\PluginManager.cs" />
     <Compile Include="Res.xaml.cs">
       <DependentUpon>Res.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ToolPanel\Options.cs" />
-    <Compile Include="Display\IDisplayer.cs" />
-    <Compile Include="Display\Displayer4.xaml.cs">
-      <DependentUpon>Displayer4.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Display\TRText3.xaml.cs">
-      <DependentUpon>TRText3.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Display\ITRTimer.cs" />
-    <Compile Include="Display\TRTimer2.cs" />
-    <Compile Include="Widget\ThicknessSEGroup.xaml.cs">
-      <DependentUpon>ThicknessSEGroup.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Interfaces\IDisplayer.cs" />
     <Compile Include="Net\MyHttp.cs" />
-    <Compile Include="ToolPanel\OptionsParser.cs" />
     <Compile Include="Net\ResponseEntity.cs" />
-    <Compile Include="Display\EnumTypesBinder.cs" />
     <Compile Include="G.cs" />
-    <Compile Include="Display\SkinParser.cs" />
     <Compile Include="ToolPanel\OptionPanel.xaml.cs">
       <DependentUpon>OptionPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="ToolPanel\ToolPanels.xaml.cs">
       <DependentUpon>ToolPanels.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Widget\TRNotifyIcon.cs" />
+    <Compile Include="TRNotifyIcon.cs" />
     <Compile Include="ToolPanel\UserPanel.xaml.cs">
       <DependentUpon>UserPanel.xaml</DependentUpon>
     </Compile>
-    <Page Include="Display\Displayer4.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Display\TRText3.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -157,10 +135,6 @@
     <Page Include="ToolPanel\OptionPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Widget\ThicknessSEGroup.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="ToolPanel\ToolPanels.xaml">
       <SubType>Designer</SubType>
@@ -236,7 +210,12 @@
   <ItemGroup>
     <Resource Include="res\setting.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="待办.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MetroWPF.dll" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

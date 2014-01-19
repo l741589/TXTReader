@@ -14,14 +14,31 @@ namespace Zlib.Text {
     public class XmlParser {
 
         public static XmlNode AppendEmpty(XmlNode parent, String name) {
-            var node = parent.OwnerDocument.CreateElement(name);
+            XmlNode node =null;
+            if (parent.OwnerDocument!=null)
+                node= parent.OwnerDocument.CreateElement(name);
+            else if (parent is XmlDocument) node = (parent as XmlDocument).CreateElement(name);
             parent.AppendChild(node);
             return node;
         }
+
+        public static void Read(String path, IXmlParsable obj) {
+            new Reader(path).Do(obj.Read);
+        }
+
+        public static void Read(XmlDocument doc, IXmlParsable obj){
+            new Reader(doc).Do(obj.Read);
+        }
+
+        public static void Write(String path, IXmlParsable obj) {
+            new Writer().Do(obj.Write).WriteTo(path);
+        }
+
         public static XmlElement Append<T>(XmlNode parent, String name, T value) 
-        { return Append(parent, name, value,default(T)); }
+        { return Append(parent, name, value, null); }
         public static XmlElement Append<T>(XmlNode parent, String name, T value, params T[] ignoreWhenEqual) {
             if (ignoreWhenEqual != null && ignoreWhenEqual.Contains(value)) return null;
+            if (value == null) return null;
             var node = parent.OwnerDocument.CreateElement(name);            
             node.InnerText = value.ToString();
             parent.AppendChild(node);
@@ -30,9 +47,10 @@ namespace Zlib.Text {
 
 
         public static XmlNode AppendAttribute<T>(XmlNode parent, String name, T value) 
-        { return AddAttribute(parent, name, value, default(T)); }
+        { return AddAttribute(parent, name, value, null); }
         public static XmlNode AddAttribute<T>(XmlNode elem, String name, T value, params T[] ignoreWhenEqual) {
             if (ignoreWhenEqual != null && ignoreWhenEqual.Contains(value)) return null;
+            if (value == null) return null;
             XmlAttribute attr=elem.OwnerDocument.CreateAttribute(name);
             attr.Value=value.ToString();
             elem.Attributes.Append(attr);
@@ -70,9 +88,12 @@ namespace Zlib.Text {
                 nulldepth = 0;
             }
 
-            public Writer AddNamespace(String prefix,String uri) {
-                nsm.AddNamespace(prefix, uri);
-                return this;
+            public Writer() {
+                xml = new XmlDocument();
+                nsm = new XmlNamespaceManager(xml.NameTable);
+                WriteHead(xml);
+                bak = node = xml;
+                nulldepth = 0;
             }
 
             public Writer Write<T>(String name, T value, params T[] ignoreWhenEqual) {
@@ -126,14 +147,27 @@ namespace Zlib.Text {
                 AppendAttribute(node, name, value);
                 return this;
             }
-           
+
+            public Writer Ver(Version version) {
+                return Attr("version", version);
+            }
 
             public void WriteTo(String FileName) {
                 XmlParser.WriteTo(xml, FileName);
             }
 
+            public Writer Do(XmlParserNodeCallback callback) {
+                if (xml == null) return this;
+                if (node != null) callback.Invoke(node);
+                return this;
+            }
+
             public Writer Do(XmlParserWriterCallback callback) {
                 return callback(this);
+            }
+
+            public Writer Do(IXmlParsable parsable) {
+                return Do(parsable.Write);
             }
         }
 
@@ -144,11 +178,14 @@ namespace Zlib.Text {
             private uint nulldepth;
             private String keyword;
 
-            public Reader(String FileName) {
+            public Reader(String FileName, bool initToRoot = true) {
                 try {
                     xml = new XmlDocument();
                     xml.LoadXml(File.ReadAllText(FileName));
-                    for (node = xml.FirstChild; node != null && node.NodeType != XmlNodeType.Element; node = node.NextSibling) ;
+                    if (initToRoot)
+                        for (node = xml.FirstChild; node != null && node.NodeType != XmlNodeType.Element; node = node.NextSibling) ;
+                    else
+                        node = xml;
                     nulldepth = 0;
                 } catch (Exception e) {
                     Debug.WriteLine(e.StackTrace);
@@ -158,7 +195,8 @@ namespace Zlib.Text {
 
             public Reader(XmlNode node) {
                 if (node != null) {
-                    xml = node.OwnerDocument;
+                    if (node is XmlDocument) xml = node as XmlDocument;
+                    else xml = node.OwnerDocument;
                     bak = this.node = node;
                     nulldepth = 0;
                     keyword = null;
@@ -176,7 +214,15 @@ namespace Zlib.Text {
                 return callback(this);
             }
 
-            public Reader Child(String name = null) {
+            public Reader Do(IXmlParsable parsable) {
+                return Do(parsable.Read);
+            }
+
+            public Reader Child(String name , Version version) {
+                return Child(name, new Dictionary<String, object> { { "version", version } });
+            }
+
+            public Reader Child(String name = null, Dictionary<String,object> attrs = null) {
                 if (xml == null) return this;
                 if (node == null) {
                     ++nulldepth;
@@ -187,9 +233,23 @@ namespace Zlib.Text {
                 if (node.ChildNodes != null) {
                     foreach (XmlNode n in node.ChildNodes) {
                         if (n.Name == name || keyword == null) {
-                            node = n;
-                            found = true;
-                            break;
+                            if (attrs == null) {
+                                node = n;
+                                found = true;
+                            } else {
+                                found = true;
+                                foreach (var attr in attrs) {
+                                    if (n.Attributes[attr.Key] == null) continue;
+                                    if (n.Attributes[attr.Key].Value != attr.Value.ToString()) {
+                                        found = false;
+                                        break;
+                                    }
+                                }                                
+                            }
+                            if (found) {
+                                node = n;
+                                break;
+                            }
                         }
                     }
                 }

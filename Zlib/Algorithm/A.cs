@@ -128,5 +128,15 @@ namespace Zlib.Algorithm {
             }
             return str;
         }
+
+        public static T WorkWith<T>(T value,Func<T,T> work) {
+            if (work == null) return value;
+            return work(value);
+        }
+
+        public static T WorkWith<T>(Func<T> work) {
+            if (work == null) return default(T);
+            return work();
+        }
     }
 }

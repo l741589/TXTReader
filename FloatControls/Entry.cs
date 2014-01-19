@@ -24,10 +24,10 @@ namespace FloatControls {
                 .ForChildren(null, n => G.FloatControls[n.Name] = bool.Parse(n.InnerText) ? Visibility.Visible : Visibility.Collapsed);
 
             WriteOption = w => {
-                w = w.Attr(S_OPEN, G.FloatControls.Show, new bool[0]);
+                w = w.Attr(S_OPEN, G.FloatControls.Show);
                 foreach (IFloatControl c in G.FloatControls)
                     if (c.Tag!=null)
-                        w = w.Write(c.Tag.ToString(), G.FloatControls[c.Tag.ToString()] == Visibility.Visible, new bool[0]);
+                        w = w.Write(c.Tag.ToString(), G.FloatControls[c.Tag.ToString()] == Visibility.Visible);
                 return w;
             };
         }

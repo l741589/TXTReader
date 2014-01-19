@@ -33,7 +33,6 @@ namespace TRSearchBar {
             ic_cmps.ItemsSource = cmps;
             cmps.Insert(0, cmp=new NormalComparer());
             cmps.Insert(1, new RegexComparer());
-            Visibility = Visibility.Visible;
             G.MainWindow.MouseDown += MainWindow_MouseDown;
             G.MainWindow.CommandBindings.Add(new CommandBinding(ApplicationCommands.Find, find_Executed, find_CanExecute));
             KeyDown += SearchBar_KeyDown;

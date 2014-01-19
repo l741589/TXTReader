@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 using System.Windows;
 
 namespace FloatControls {
-    public class FloatControlCollection : ObservableCollection<IFloatControl> {
+    class FloatControlCollection : ObservableCollection<IFloatControl> {
+
+        private static FloatControlCollection instance = null;
+        public static FloatControlCollection Instance { get { if (instance == null) instance = new FloatControlCollection(); return instance; } }
 
         private Dictionary<String, Visibility> dic = new Dictionary<String, Visibility>();
         private bool show;

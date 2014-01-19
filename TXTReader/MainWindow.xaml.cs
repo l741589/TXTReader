@@ -14,8 +14,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Animation;
 using System.Xml;
-using TXTReader.Widget;
-using TXTReader.Display;
 using System.Diagnostics;
 using System.Windows.Threading;
 using TXTReader.Properties;
@@ -25,7 +23,9 @@ using TXTReader.Commands;
 using System.Windows.Resources;
 using Zlib.Async;
 using TXTReader.Plugins;
-using Zlib.Widget;
+using Zlib.UI;
+using Zlib.UI.Utility;
+using TXTReader.Interfaces;
 
 namespace TXTReader {
     /// <summary>
@@ -39,6 +39,7 @@ namespace TXTReader {
         public const int HC_NORNAL = HCF_NORMAL;
         public const int HC_MOVE = HCF_NORMAL | HCF_MOVE;
         public const int HC_ALL = 0x7fffffff;
+        public IDisplayer Displayer{get{return G.Displayer;}}
 
         public int HoldCode { get; set; }
         public bool IsHolding { get { return HoldCode > 0; } set { if (value && !IsHolding) Hold(HC_NORNAL); } }
@@ -46,8 +47,11 @@ namespace TXTReader {
 
         public MainWindow() {
             InitializeComponent();
+            IsBordered = OptionsParser.IsBordered;
+            IsFullScreen = OptionsParser.IsFullScreen;
+            G.MainWindow = this;
             PluginManager.Instance.OnWindowCreate(this);
-            displayer.ContextMenu = G.ContextMenu.Add(Resources["mainContextMenu"] as ContextMenu).Build();
+            Displayer.ContextMenu = G.ContextMenu.Add(Resources["mainContextMenu"] as ContextMenu).Build();
             Focus();
         }
 
@@ -107,10 +111,7 @@ namespace TXTReader {
         }
 
         private void window_Loaded(object sender, RoutedEventArgs e) {            
-            displayer.UpdateSkin();           
             G.NotifyIcon = new TRNotifyIcon();
-            SetBinding(IsBorderedProperty, new Binding("IsBordered") { Source = G.Options, Mode = BindingMode.TwoWay });
-            SetBinding(IsFullScreenProperty, new Binding("IsFullScreen") { Source = G.Options, Mode = BindingMode.TwoWay });
         }
 
         protected override void OnKeyDown(KeyEventArgs e) {
@@ -120,10 +121,10 @@ namespace TXTReader {
             switch (e.Key) {
                 //case Key.OemComma: --toolPanel.pn_option.seSpeed.Value; break;
                 //case Key.OemPeriod: ++toolPanel.pn_option.seSpeed.Value; break;
-                case Key.Up: displayer.LineModify(+1); break;
-                case Key.Down: displayer.LineModify(-1); break;
-                case Key.PageUp: displayer.PageModify(+1); break;
-                case Key.PageDown: displayer.PageModify(-1); break;
+                case Key.Up: Displayer.LineModify(+1); break;
+                case Key.Down: Displayer.LineModify(-1); break;
+                case Key.PageUp: Displayer.PageModify(+1); break;
+                case Key.PageDown: Displayer.PageModify(-1); break;
                 case Key.Enter:
                 case Key.Space: G.Displayer.IsScrolling = !G.Displayer.IsScrolling; break;
                 case Key.LeftShift: Hold(HC_MOVE); break;
@@ -216,10 +217,7 @@ namespace TXTReader {
         }
 
         private bool OnDisplayer(RoutedEventArgs e) {
-            if (e.OriginalSource==null) return true;
-            if (displayer.IsAncestorOf(e.OriginalSource as DependencyObject)) return true;
-            if ((e.OriginalSource is UIElement)&&(e.OriginalSource as UIElement).IsAncestorOf(displayer)) return true;
-            return false;
+            return (Displayer as Control).IsImmediateFamilyOf(e.OriginalSource as UIElement);
         }
 
         private void bossKey_CanExecute(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }

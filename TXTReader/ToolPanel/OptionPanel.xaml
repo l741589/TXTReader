@@ -1,21 +1,15 @@
 ﻿<UserControl x:Class="TXTReader.ToolPanel.OptionPanel"
-             xmlns:Widget="clr-namespace:TXTReader.Widget"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TXTReader.ToolPanel"
              xmlns:cvt="clr-namespace:TXTReader.Converter"
-             xmlns:disp="clr-namespace:TXTReader.Display"
-             xmlns:tool="clr-namespace:TXTReader.ToolPanel"
-             xmlns:zw="clr-namespace:Zlib.Widget;assembly=Zlib"
+             xmlns:zw="clr-namespace:Zlib.UI;assembly=Zlib"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="300" Loaded="UserControl_Loaded">
+             d:DesignHeight="200" d:DesignWidth="300">
     <UserControl.Resources>
-        <cvt:SolidColorCvt x:Key="brushCvt"/>
-        <cvt:TypefaceToFontFamilyCvt x:Key="fontCvt"/>
-        <ObjectDataProvider ObjectType="{x:Type disp:EnumTypesBinder}" x:Key="enumTypesBinder"/>
-        <ObjectDataProvider ObjectType="{x:Type tool:Options}" x:Key="localOptions"/>
+        
         <Style TargetType="{x:Type CheckBox}">
             <Setter Property="Margin" Value="4"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -39,116 +33,10 @@
         </Style>
     </UserControl.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid DataContext="{DynamicResource localOptions}">
+        <Grid>
             <Border Margin="8">
                 <StackPanel Orientation="Vertical" x:Name="body">
                     <local:UserPanel/>
-                    <Separator/>
-                        <GroupBox x:Name="group_skin">
-                        <GroupBox.Header>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock>外观设置</TextBlock>
-                                <Button Click="bn_saveskin_Click">保存</Button>
-                                <Button Click="bn_loadskin_Click">打开</Button>
-                            </StackPanel>                            
-                        </GroupBox.Header>
-                        <StackPanel>                            
-                            <DockPanel>
-                                <TextBlock Text="字体"/>
-                                <zw:FontPickerCombobox x:Name="cbxFont" FontSize="14" SelectedFontChanged="cbxFont_SelectedFontChanged"
-                		            SelectedFont="{Binding Instance.Skin.Font,Converter={StaticResource fontCvt},Mode=TwoWay}" />
-                            </DockPanel>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <CheckBox Grid.Row="0" Grid.Column="0" Name="ckbBold" Content="粗体" 
-                                    IsChecked="False" Checked="ckbBold_Checked" Unchecked="ckbBold_Unchecked"/>
-                                <CheckBox Grid.Row="0" Grid.Column="1" Name="ckbItalic" Content="斜体" 
-                                    IsChecked="False" Checked="ckbItalic_Checked" Unchecked="ckbItalic_Unchecked"/>
-                                <TextBlock Grid.Row="0" Grid.Column="2" Text="字号"/>
-                                <zw:SpinEdit Grid.Row="0" Grid.Column="3" x:Name="seFontSize" 
-                                    MinValue="1" MaxValue="100"
-                		            Value="{Binding Instance.Skin.FontSize, Mode=TwoWay}"/>
-                                <TextBlock Grid.Row="1" Grid.Column="0" Text="特效"/>
-                                <ComboBox Grid.Row="1" Grid.Column="1" Name="cbxEffectType" 
-                                    ItemsSource="{Binding Source={StaticResource enumTypesBinder}, Path=EffectsDict}"
-                                    SelectedValue="{Binding Path=Instance.Skin.EffectType}"
-                                    DisplayMemberPath="Value"
-                                    SelectedValuePath="Key" >
-                                </ComboBox>
-                                <TextBlock Grid.Row="1" Grid.Column="2" Text="特效大小"/>
-                                <zw:SpinEdit Grid.Row="1" Grid.Column="3" x:Name="seEffectSize" 
-                                    Value="{Binding Path=Instance.Skin.EffectSize, Mode=TwoWay}"/>
-                            </Grid>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Row="0" Grid.Column="0" Text="字色"/>
-                                <zw:StandardColorPicker Grid.Row="0" Grid.Column="1" x:Name="cbxFontColor" 
-                                    SelectedColor="{Binding Path=Instance.Skin.Foreground,Converter={StaticResource brushCvt},Mode=TwoWay}"/>
-                                <TextBlock Grid.Row="1" Grid.Column="0" Text="特效色"/>
-                                <zw:StandardColorPicker x:Name="cbxEffectColor" 
-                                    Grid.Row="1" Grid.Column="1"
-                                    SelectedColor="{Binding Path=Instance.Skin.Effect,Mode=TwoWay}"/>
-                            </Grid>
-                            <DockPanel>
-                                <TextBlock Text="背景"/>
-                                <ComboBox Name="cbxBackgroundType" 
-                                    ItemsSource="{Binding Source={StaticResource enumTypesBinder}, Path=BackGroundDict}"
-                                    SelectedValue="{Binding Path=Instance.Skin.BackGroundType}"
-                                    DisplayMemberPath="Value"
-                                    SelectedValuePath="Key"
-                                    SelectionChanged="cbxBackgroundType_SelectionChanged">
-                                </ComboBox>
-                                <UniformGrid>
-                                    <Button Content="选择背景图片" 
-                                        Name="btnBackgroundImage" Visibility="Collapsed" 
-                                        Click="btnBackgroundImage_Click"/>
-                                    <zw:StandardColorPicker x:Name="cbxBackgroundColor" Visibility="Visible" 
-                                        SelectedColor="{Binding Path=Instance.Skin.BackColor, Mode=TwoWay}"/>
-                                </UniformGrid>
-                            </DockPanel>
-                            <Separator></Separator>
-                            <TextBlock Text="文本区边距"/>
-                            <Widget:ThicknessSEGroup x:Name="segPadding"
-                                Thickness="{Binding Instance.Skin.Padding, Mode=TwoWay}"/>
-                            <UniformGrid Columns="4">
-                                <TextBlock Text="行间距"/>
-                                <zw:SpinEdit x:Name="seLineSpacing" 
-                                     Value="{Binding Path=Instance.Skin.LineSpacing, Mode=TwoWay}"/>
-                                <TextBlock Text="段间距"/>
-                                <zw:SpinEdit x:Name="seParaSpacing" 
-                                     Value="{Binding Path=Instance.Skin.ParaSpacing, Mode=TwoWay}"/>
-                            </UniformGrid>
-                        </StackPanel>
-                    </GroupBox> 
-                    <Separator/>
-                    <GroupBox Header="杂项设置">
-                        <StackPanel>
-                            <DockPanel>
-                                <TextBlock Text="自动滚屏速度"/>
-                                <zw:SpinEdit MaxValue="100" 
-                                     Value="{Binding Path=Instance.Speed, Mode=TwoWay}"  
-                                     MinValue="1" x:Name="seSpeed">
-                                </zw:SpinEdit>
-                            </DockPanel>
-                            <CheckBox Margin="8" x:Name="cb_space_filter" IsChecked="{Binding Instance.IsFilterSpace,Mode=TwoWay}">过滤空行</CheckBox>
-                        </StackPanel>
-                    </GroupBox>
                 </StackPanel> 
             </Border>
         </Grid>

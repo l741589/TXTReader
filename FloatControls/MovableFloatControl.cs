@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace FloatControls {
@@ -18,6 +19,7 @@ namespace FloatControls {
             MouseMove += UserControl_MouseMove;
             MouseLeftButtonDown += UserControl_MouseLeftButtonDown;
             MouseLeftButtonUp += UserControl_MouseLeftButtonUp;
+            SetBinding(ToolTipProperty, new Binding("Name") { Source=this,Mode = BindingMode.OneWay });
             Tag = GetType().Name;
         }
 

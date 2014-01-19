@@ -9,6 +9,6 @@ namespace FloatControls {
     class G : TXTReader.G {
         public static FloatControlsPanel FloatControlsPanel { get; set; }
         public static FloatControlOptionPanel FloatControlOptionPanel { get; set; }
-        public static FloatControlCollection FloatControls = new FloatControlCollection();
+        public static FloatControlCollection FloatControls = FloatControlCollection.Instance;
     }
 }

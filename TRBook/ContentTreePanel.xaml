@@ -39,6 +39,7 @@
         </Grid>
         <Button DockPanel.Dock="Top" Content="[TEST]UPDATE" Click="Button_Click" Visibility="Collapsed"/>
         <TreeView Name="trvContent" SelectedItemChanged="trvContent_SelectedItemChanged"
+                  VirtualizingPanel.IsVirtualizing="True"
                   ItemTemplate="{StaticResource hdtChapter}">
         </TreeView>
     </DockPanel>

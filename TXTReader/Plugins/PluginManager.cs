@@ -13,6 +13,7 @@ namespace TXTReader.Plugins {
     public class PluginManager : PluginEntry{
         private static PluginManager instance;
         public static PluginManager Instance { get { if (instance == null) instance = new PluginManager(); return instance; } }
+        public override string[] Dependency { get { return new String[0]; } }
 
         public Dictionary<String, PluginEntry> Plugins = new Dictionary<String, PluginEntry>();
 

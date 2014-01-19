@@ -26,6 +26,7 @@ namespace TRBook {
         public override string[] Dependency { get { return new String[] { "TXTReader", "*FloatControls", "*TRSearchBar" }; } }
 
         public override void OnLoad(StartupEventArgs e) {
+            G.EmptyBook = Book.Empty;
             Register();
             RuleParser.Load();
             BookParser.Load();

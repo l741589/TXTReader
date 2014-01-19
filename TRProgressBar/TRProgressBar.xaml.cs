@@ -12,7 +12,6 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TXTReader.Display;
 using TXTReader.Interfaces;
 using TXTReader;
 using Zlib.Utility;
@@ -42,7 +41,7 @@ namespace TRProgressBar {
             G.EmptyBook.Loaded += (d, e) => UpdateBinding();
             Loaded += ProgressBar_Loaded;
             Tag = GetType().Name;
-            FloatControlsPanel.FloatControls.Add(this);            
+            this.Register();
         }
 
         void ProgressBar_Loaded(object sender, RoutedEventArgs e) {

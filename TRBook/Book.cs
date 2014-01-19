@@ -75,7 +75,7 @@ namespace TRBook {
             set {
                 if (book == value) return;
                 if (book != null) book.Close();
-                book = value;
+                G.Book = book = value;
                 if (book != null) {
                     book.Load();
                     if (book.Loaded.NotNull()) book.Loaded(I, ExitEventArgs.Empty);

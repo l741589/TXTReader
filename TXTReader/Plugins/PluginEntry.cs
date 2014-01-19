@@ -9,10 +9,11 @@ using System.Windows.Controls;
 using System.Reflection;
 using Zlib.Text;
 using System.Windows.Controls.Primitives;
+using System.Diagnostics;
 
 namespace TXTReader.Plugins {
     public abstract class PluginEntry {
-        public virtual String[] Dependency { get { return new String[0]; } }
+        public abstract String[] Dependency { get; }
         public virtual Version Version { get { return Assembly.GetExecutingAssembly().GetName().Version; } }
         public XmlParserReaderCallback ReadOption { get; set; }
         public XmlParserWriterCallback WriteOption { get; set; }
