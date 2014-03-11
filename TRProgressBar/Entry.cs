@@ -25,7 +25,13 @@ namespace TRProgressBar {
 
         public override string[] Dependency {
             get {
-                return new String[] { "TXTReader", "FloatControls" };
+                return new String[] { "TXTReader", "FloatControls", "TRBook" };
+            }
+        }
+
+        public override string Description {
+            get {
+                return "提供进度条功能";
             }
         }
     }

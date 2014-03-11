@@ -26,10 +26,25 @@ namespace FloatControls {
             WriteOption = w => {
                 w = w.Attr(S_OPEN, G.FloatControls.Show);
                 foreach (IFloatControl c in G.FloatControls)
-                    if (c.Tag!=null)
+                    if (c.Tag != null)
                         w = w.Write(c.Tag.ToString(), G.FloatControls[c.Tag.ToString()] == Visibility.Visible);
                 return w;
             };
+
+            APIs.Add("add", new Action<object>(o => {
+                if (o==null) return;
+                if (!(o is IFloatControl)) return;
+                FloatControlCollection.Instance.Add(o as IFloatControl);
+            })
+            );
+            APIs.Add("remove", new Action<object>(o => {
+                if (o == null) return;
+                if (!(o is IFloatControl)) {
+                    o = FloatControlCollection.Instance.FindByTag(o.ToString());
+                    if (o == null) return;
+                }                
+                FloatControlCollection.Instance.Add(o as IFloatControl);
+            }));
         }
 
         public override void OnWindowCreate(Window window) {
@@ -48,6 +63,12 @@ namespace FloatControls {
         public override string[] Dependency {
             get {
                 return new String[] { "TXTReader" };
+            }
+        }
+
+        public override string Description {
+            get {
+                return "提供悬浮控件的支持，为扩展API类型的插件";
             }
         }
     }

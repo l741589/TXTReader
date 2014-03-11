@@ -31,8 +31,8 @@
             <Image  Width="20" Height="20" Source="res/setting.png"/>
         </Button>
         <ListBox DockPanel.Dock="Bottom" x:Name="lb_book" ScrollViewer.HorizontalScrollBarVisibility="Disabled" AllowDrop="True" 
-                 Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" KeyUp="lb_book_KeyUp"
-                 VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.ScrollUnit="Pixel">
+                 Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" KeyUp="lb_book_KeyUp">
+                 <!-- VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling" VirtualizingPanel.ScrollUnit="Pixel"> -->
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

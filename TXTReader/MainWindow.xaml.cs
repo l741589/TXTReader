@@ -26,6 +26,8 @@ using TXTReader.Plugins;
 using Zlib.UI;
 using Zlib.UI.Utility;
 using TXTReader.Interfaces;
+using Zlib;
+using Zlib.Win32;
 
 namespace TXTReader {
     /// <summary>
@@ -51,7 +53,7 @@ namespace TXTReader {
             IsFullScreen = OptionsParser.IsFullScreen;
             G.MainWindow = this;
             PluginManager.Instance.OnWindowCreate(this);
-            Displayer.ContextMenu = G.ContextMenu.Add(Resources["mainContextMenu"] as ContextMenu).Build();
+            if (Displayer!=null) Displayer.ContextMenu = G.ContextMenu.Add(Resources["mainContextMenu"] as ContextMenu).Build();
             Focus();
         }
 
@@ -143,7 +145,7 @@ namespace TXTReader {
 
         protected override void OnClosing(System.ComponentModel.CancelEventArgs e) {
             base.OnClosing(e);
-            G.Timer.Stop();
+            if (G.Timer!=null) G.Timer.Stop();
             G.IsRunning = false;
             G.NotifyIcon.Close();
             ZTask.StopAll();
@@ -158,7 +160,7 @@ namespace TXTReader {
             ReleaseHold(HC_ALL);
             if (e.ChangedButton == MouseButton.Left) {
                 if (WindowState == WindowState.Normal) lastPoint = e.GetPosition(this);
-                G.Timer.Pause();
+                if (G.Timer!=null) G.Timer.Pause();
             }
         }
 
@@ -188,7 +190,7 @@ namespace TXTReader {
             if (e.Handled) return;
             
             lastPoint = null;
-            if (!IsHolding) G.Timer.Resume();
+            if (!IsHolding&&G.Timer!=null) G.Timer.Resume();
         }
 
         private void canvas_SizeChanged(object sender, SizeChangedEventArgs e) {
@@ -209,14 +211,16 @@ namespace TXTReader {
                 Visibility = Visibility.Hidden;                
             } else {
                 Visibility = Visibility.Visible;
+                Win32Util.SetForegroundWindow(this);
                 Focus();
                 G.Timer.Resume();
             }
-            await Task.Run(() => { Thread.Sleep(100); });
+            await TaskEx.Run(() => { Thread.Sleep(100); });
             toggled = false;
         }
 
         private bool OnDisplayer(RoutedEventArgs e) {
+            if (Displayer == null) return true;
             return (Displayer as Control).IsImmediateFamilyOf(e.OriginalSource as UIElement);
         }
 

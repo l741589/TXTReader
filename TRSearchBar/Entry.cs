@@ -23,5 +23,11 @@ namespace TRSearchBar {
 
         public override void OnUnload(ExitEventArgs e) {
         }
+
+        public override string Description {
+            get {
+                return "提供搜索框功能";
+            }
+        }
     }
 }

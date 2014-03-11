@@ -18,6 +18,7 @@ namespace TRBook {
     /// ContentOptionPanel.xaml 的交互逻辑
     /// </summary>
     public partial class ContentOptionPanel : UserControl {
+       
         public ContentOptionPanel() {
             InitializeComponent();
             seMaxLen.ValueChanged += seMaxLen_ValueChanged;

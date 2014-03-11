@@ -9,6 +9,9 @@ using System.Windows.Media;
 using System.Diagnostics;
 using Zlib.Text;
 using Zlib.Algorithm;
+using Zlib.Utility;
+using TRContent;
+using Zlib.Text.Xml;
 
 namespace TRBook {
     class BookParser :XmlParser{
@@ -30,7 +33,13 @@ namespace TRBook {
         public const String S_ID = "id";
 
         public static String GetBookPath(Book book) {
-            return G.PATH_BOOK + Path.GetFileNameWithoutExtension(book.Source) + A.MD5(Encoding.UTF8.GetBytes(book.Source)) + G.EXT_BOOK;
+            if (book.Md5 == null) book.Md5 = A.MD5(File.ReadAllBytes(book.Source));
+            return G.PATH_BOOK + book.Md5 + G.EXT_BOOK;            
+        }
+
+        public static async Task<String> GetBookPathAsync(Book book) {
+            if (book.Md5 == null) book.Md5 = await TaskEx.Run(() => A.MD5(File.ReadAllBytes(book.Source)));
+            return G.PATH_BOOK +  book.Md5 + G.EXT_BOOK;
         }
 
         public static void Load(){
@@ -42,6 +51,10 @@ namespace TRBook {
             Debug.WriteLine("Loaded Books");
         }
 
+        public static async Task<Book> LoadAsync(Book book) {
+            return Load(await GetBookPathAsync(book), book);
+        }
+
         public static Book Load(Book book) {
             return Load(GetBookPath(book), book);
         }
@@ -51,8 +64,9 @@ namespace TRBook {
             Book b = null;
             if (target == null) b = new Book();
             else b = target;
+            b.Md5 = Path.GetFileNameWithoutExtension(filename);
             var r = new Reader(filename)
-                .Read(S_SOURCE, (n) => { b.Init(n.InnerText); })
+                .Read(S_SOURCE, (n) => { b.Source = n.InnerText; })
                 .Read(S_AUTHOR, (n) => { b.Author = n.InnerText; })
                 .Read(S_COVER, (n) => {
                     String uri = n.InnerText;
@@ -84,7 +98,7 @@ namespace TRBook {
         }
 
         public static void Save(Book book) {
-            if (book == Book.Empty) return;
+            if (book.IsNull()) return;
             if (book.Source == null) return;
             Debug.WriteLine("Save Book: " + book.Source + " : " + GetBookPath(book));
             var w = new Writer(S_BOOK)
@@ -97,11 +111,11 @@ namespace TRBook {
                 .Write(S_TITLE, book.Title)
                 .Write(S_ID, book.Id);
             w = w.Start(S_BOOKMARK);
-            if (Book.I != Book.Empty) {
+            if ((G.Book as Book).NotNull()) {
                 w = w.Start(S_MARK).Attr(S_AUTO, "true")
-                    .Write(S_POSITION, Book.I.Position)
-                    .Write(S_OFFSET, Book.I.Offset)
-                    .Write(S_TIME, Book.I.LastLoadTime)
+                    .Write(S_POSITION, (G.Book as Book).Position)
+                    .Write(S_OFFSET, (G.Book as Book).Offset)
+                    .Write(S_TIME, (G.Book as Book).LastLoadTime)
                 .End;
             }
             foreach (var e in book.Bookmark) {

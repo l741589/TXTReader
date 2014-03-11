@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Diagnostics;
 using System.Windows.Threading;
+using TRContent;
 
 namespace TRBook
 {
     enum MatchType { NoMatch, List, Tree, Both };
     enum MatchLang { Trmex, Regex };
-    class Chapter : DependencyObject, ContentItemAdapter {
+    class Chapter : DependencyObject, IContentItemAdapter {
 
         public static int MaxChapterLength { get; set; }
         public static int MinChapterLength { get; set; }
@@ -24,10 +25,12 @@ namespace TRBook
 
         public string Title { get { return (String)GetValue(TitleProperty); } set { SetValue(TitleProperty, value); } }
         public List<String> Text { get;  set; }
+        IEnumerable<IContentItemAdapter> IContentItemAdapter.Children { get { return Children; } }
         public ChapterCollection Children { get; private set; }
-        public ContentItemAdapter Parent { get; private set; }
+        public IContentItemAdapter Parent { get; private set; }
         private List<String> totalText = null;
         public int? Number { get; set; }
+        public int SerializeId { get { return 0; } }
 
         static Chapter() {
             MaxChapterLength = 15000;
@@ -48,6 +51,11 @@ namespace TRBook
             }
             protected set {
                 totalText = value;
+                if (totalText == null) {
+                    if (Children != null)
+                        foreach (var e in Children)
+                            (e as Chapter).TotalText = null;
+                }
             }
         }
 
@@ -65,7 +73,7 @@ namespace TRBook
             }
         }
 
-        public LinkedListNode<ContentItemAdapter> Node { get; set; }
+        public LinkedListNode<IContentItemAdapter> Node { get; set; }
         private int absolutePosition = -1;
         public int AbsolutePosition {
             get {
@@ -99,13 +107,13 @@ namespace TRBook
                     if (Node == null || Node.Previous == null) {
                         if (Number == null || Number.Value == 0 || Number.Value == 1) return ContentStatus.None;
                         if (Parent != null && Parent.Node != null) {
-                            LinkedListNode<ContentItemAdapter> anyPrev = Parent.Node.Previous;
+                            LinkedListNode<IContentItemAdapter> anyPrev = Parent.Node.Previous;
                             do {
                                 if (anyPrev == null) return ContentStatus.ConfusingIndex;
                                 while (anyPrev.Value.Number != null) {
                                     if (anyPrev.Value.Number + 1 == Number) return ContentStatus.None;
-                                    if (anyPrev.Value.Children == null || anyPrev.Value.Children.Count == 0) break;
-                                    anyPrev = anyPrev.Value.Children.Last;
+                                    if (anyPrev.Value.Children == null || anyPrev.Value.Children.Count() == 0) break;
+                                    anyPrev = (anyPrev.Value.Children as ChapterCollection).Last;
                                 }
                                 if (anyPrev.Value.Number + 1 == Number) return ContentStatus.None;
                                 anyPrev = anyPrev.Value.Parent != null && anyPrev.Value.Parent.Node != null ?
@@ -162,7 +170,7 @@ namespace TRBook
             set { SetValue(LengthProperty, value); }
         }
 
-        public ContentItemAdapter FindChildByTitle(String title) {
+        public IContentItemAdapter FindChildByTitle(String title) {
             if (Children==null) return null;
             foreach (var e in Children)
                 if (e.Title == title) return e;
@@ -180,7 +188,16 @@ namespace TRBook
                 c.Parent = this;
                 return c;
             }
-        }       
+        }
+
+        public IContentItemAdapter AppendSub(String subtitle) {
+            if (subtitle == null) return this;
+            Chapter c = new Chapter() { Title = subtitle };
+            if (Children == null) Children = new ChapterCollection();
+            Children.AddLast(c);
+            c.Parent = this;
+            return c;
+        }
 
         public Chapter AppendText(String text){
             if (Text==null) Text=new List<String>();
@@ -198,19 +215,19 @@ namespace TRBook
                 Children.Clear();
                 Children = null;
             }
-            if (Book.I.Bookmark!=null) Book.I.Bookmark.Clear();
+            if ((G.Book as Book).Bookmark!=null) (G.Book as Book).Bookmark.Clear();
             Parent = null;            
         }
 
         public virtual void Close() {
             Text = null;
             totalText = null;
+            absolutePosition = -1;
             if (Children != null) {
                 foreach (var e in Children) (e as Chapter).Close();
                 Children.Clear();
                 Children = null;
             }
-            Book.I.Bookmark.Clear();
             Parent = null;
         }
 
@@ -221,7 +238,7 @@ namespace TRBook
         public virtual void Notify() {
             if (Children != null) {
                 Children.Notify();
-                foreach (ContentItemAdapter c in Children)
+                foreach (IContentItemAdapter c in Children)
                     c.Notify();
             }
         }
@@ -236,5 +253,8 @@ namespace TRBook
             Length = 0;
             var l = Length;
         }
+
+
+       
     }
 }

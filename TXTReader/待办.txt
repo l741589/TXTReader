@@ -1,19 +1,19 @@
 ﻿拆分Display模块 ok
 	背景设置问题 ok
 	特效设置问题 ok
-把MainWindow.Hold问题解决掉
+把MainWindow.Hold问题解决掉 delay
 XmlParser默认忽略值的问题 ok
 拆分TRBook程序集 delay
 FloatControls模块更多设置 delay
 	浮动类型（Border,Corner,Moving)
 	皮肤，右键菜单
-PluginManager依赖管理，设置面板
-网络部分恢复功能
-阅读记录
+PluginManager依赖管理，设置面板 ok (ex delay)
+网络部分恢复功能 delay
+阅读记录 
 编辑模式
 手动分章
 有声阅读
-扒书
+扒书 
 书库
 评论
 自动调整滚屏速度

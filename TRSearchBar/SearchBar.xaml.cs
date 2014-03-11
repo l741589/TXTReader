@@ -19,14 +19,18 @@ using TXTReader;
 using Zlib.Utility;
 
 namespace TRSearchBar {
+
     /// <summary>
     /// SearchBar.xaml 的交互逻辑
     /// </summary>
     public partial class SearchBar : UserControl {
 
+        
+
         private ObservableCollection<String> buffer = new ObservableCollection<String>();
         private SearchBarComparerCollection cmps = SearchBarComparerCollection.Instance;
         private ISearchBarComparer cmp = null;
+        private TextBox tb;
         public SearchBar() {
             InitializeComponent();
             cb.ItemsSource = buffer;
@@ -35,15 +39,26 @@ namespace TRSearchBar {
             cmps.Insert(1, new RegexComparer());
             G.MainWindow.MouseDown += MainWindow_MouseDown;
             G.MainWindow.CommandBindings.Add(new CommandBinding(ApplicationCommands.Find, find_Executed, find_CanExecute));
-            KeyDown += SearchBar_KeyDown;
+            KeyDown += SearchBar_KeyDown;            
+            Loaded += SearchBar_Loaded;
+
         }
 
+        void SearchBar_Loaded(object sender, RoutedEventArgs e) {
+            tb = cb.Template.FindName("PART_EditableTextBox", cb) as TextBox;
+            Hide();
+        }
+        
         void SearchBar_KeyDown(object sender, KeyEventArgs e) {
-            
+            if (!IsVisible) return;
+            if (e.Key == Key.Escape) {
+                Hide();
+                e.Handled = true;
+            }
         }
 
         private void find_CanExecute(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = G.Book.NotNull(); }
-        private void find_Executed(object sender, ExecutedRoutedEventArgs e) { Visibility = Visibility.Visible; }
+        private void find_Executed(object sender, ExecutedRoutedEventArgs e) { Show(); }
 
         void MainWindow_MouseDown(object sender, MouseButtonEventArgs e) {
             if (this.IsAncestorOf(e.OriginalSource as DependencyObject)) return;
@@ -51,8 +66,8 @@ namespace TRSearchBar {
         }
 
         public void Show() {
-            if (!IsVisible) Visibility = Visibility.Visible;
-            cb.Focus();
+            if (!IsVisible) Visibility = Visibility.Visible;  
+            tb.Focus();
         }
 
         public void Hide() {

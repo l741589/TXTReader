@@ -14,7 +14,7 @@ namespace TRBook {
             return igc;
         }
 
-        private static readonly RoutedUICommand reopen = new RoutedUICommand("重开", "Reopen", typeof(MyCommands));
+        private static readonly RoutedUICommand reopen = G.CommandManager.Get("Reopen", "重开", "Reopen", typeof(MyCommands));
         
         public static RoutedUICommand Reopen { get { return reopen; } }
     }

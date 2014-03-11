@@ -1,0 +1,144 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:TRSpider"
+        xmlns:zw="clr-namespace:Zlib.UI;assembly=Zlib"
+        xmlns:Converter="clr-namespace:Zlib.Converter;assembly=Zlib" x:Class="TRSpider.DownloadWindow"
+        Title="DownloadWindow" Height="333" Width="939" WindowState="Maximized">
+    <Window.Resources>
+        <Converter:VisiblilityConverter x:Key="VisiblilityConverter"/>
+        <local:LogStateBrushConverter x:Key="LogStateBrushConverter"/>
+        <local:IsFailBrushConverter x:Key="IsFailBrushConverter"/>
+        <local:ChapterStateBrushConverter x:Key="ChapterStateBrushConverter"/>
+        <Style x:Key="style_imagebutton" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="{x:Null}"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="Width" Value="{Binding ActualHeight}"/>
+        </Style>
+    </Window.Resources>
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top">
+            <ToggleButton DockPanel.Dock="Right" Click="ToggleButton_Click">开始/暂停</ToggleButton>
+        <ItemsControl DockPanel.Dock="Left" x:Name="pn_spiders">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="1" Margin="2,0,2,0" BorderBrush="{Binding Border}" BorderThickness="1">
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox ToolTip="表示是否使用此爬虫" IsChecked="{Binding IsInUse}"/>
+                            <TextBlock Text="{Binding Name}"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        </DockPanel>
+        <StatusBar x:Name="statusBar" DockPanel.Dock="Bottom">
+            <TextBlock x:Name="tb_status"/>
+        </StatusBar>
+        <DockPanel DockPanel.Dock="Left" x:Name="pn_left">
+            <ListView MinWidth="8" Width="400" x:Name="lv_chapter">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid MouseDown="Grid_MouseDown" ToolTip="双击查看或修正章节">
+                            <Rectangle Fill="#9ff" Visibility="{Binding IsManual, Converter={StaticResource VisiblilityConverter}}"/>
+                            <TextBlock Text="{Binding Title}" Foreground="{Binding StandardState, Converter={StaticResource ChapterStateBrushConverter}}"/>
+                            <Grid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="打开目录页面" Click="MenuItem_Click_1"/>
+                                    <MenuItem Header="打开该章节页面" Click="MenuItem_Click_2"/>
+                                    <MenuItem Header="百度搜索该章节" Click="MenuItem_Click_3"/>
+                                    <MenuItem Header="Google搜索该章节" Click="MenuItem_Click_4"/>
+                                    <Separator/>
+                                    <MenuItem Header="还原" Click="MenuItem_Click"/>
+                                </ContextMenu>
+                            </Grid.ContextMenu>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </DockPanel>
+        <Rectangle  Fill="LightGray" Width="4"  Cursor="SizeWE"  x:Name="sp" MouseMove="sp_MouseMove" MouseDown="sp_MouseDown" MouseUp="sp_MouseUp"/>
+        <DataGrid x:Name="dg" IsReadOnly="True" CanUserAddRows="False" ColumnHeaderHeight="24" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Width="Auto" Binding="{Binding Id}" SortMemberPath="Id"/>
+                <DataGridTextColumn Width="Auto" Binding="{Binding State}">
+                    <DataGridTextColumn.Header>
+                        <DockPanel>
+                            <Button DockPanel.Dock="Right" ToolTip="过滤器" Style="{StaticResource style_imagebutton}" x:Name="bn_fstate" Click="bn_fstate_Click">
+                                <Image Source="/TRSpider;component/res/funnel.png" />
+                            </Button>
+                            <TextBlock><Run Text="状态"/></TextBlock>
+                            <zw:ZPopup PlacementTarget="{Binding ElementName=bn_fstate}" Target="{Binding ElementName=bn_fstate}" Placement="Bottom" x:Name="pp_fstate">
+                                <zw:MultiSelectPanel ItemsSource="{x:Static local:Dicts.StateDict}" NamePath="Value" DefaultIsChecked="True" MultiSelectionChanged="MultiSelectPanel_MultiSelectionChanged"/>
+                            </zw:ZPopup>
+                        </DockPanel>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="Auto" Binding="{Binding From}">
+                    <DataGridTextColumn.Header>
+                        <DockPanel>
+                            <Button DockPanel.Dock="Right" ToolTip="过滤器" Style="{StaticResource style_imagebutton}" x:Name="bn_ffrom" Click="bn_fstate_Click">
+                                <Image Source="/TRSpider;component/res/funnel.png" />
+                            </Button>
+                            <TextBlock><Run Text="来自"/></TextBlock>
+                            <zw:ZPopup PlacementTarget="{Binding ElementName=bn_fstate}" Target="{Binding ElementName=bn_ffrom}" Placement="Bottom" x:Name="pp_ffrom">
+                                <zw:MultiSelectPanel ItemsSource="{x:Static local:Dicts.Sites}" DefaultIsChecked="True" MultiSelectionChanged="MultiSelectPanel_MultiSelectionChanged_1"/>
+                            </zw:ZPopup>
+                        </DockPanel>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="标准标题" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding TitleStd}">
+                                <TextBlock.ToolTip>
+                                    <TextBlock Text="{Binding TextStd}" MaxWidth="512" MaxHeight="384" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="实际标题" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding TitleReal}">
+                                <TextBlock.ToolTip>
+                                    <TextBlock Text="{Binding TextReal}" MaxWidth="512" MaxHeight="384" TextWrapping="Wrap" TextTrimming="CharacterEllipsis"/>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Width="Auto" Binding="{Binding Thread}">
+                    <DataGridTextColumn.Header>
+                        <DockPanel>
+                            <Button DockPanel.Dock="Right" ToolTip="过滤器" Style="{StaticResource style_imagebutton}" x:Name="bn_fthread" Click="bn_fstate_Click">
+                                <Image Source="/TRSpider;component/res/funnel.png" />
+                            </Button>
+                            <TextBlock><Run Text="线程"/></TextBlock>
+                            <zw:ZPopup PlacementTarget="{Binding ElementName=bn_fstate}" Target="{Binding ElementName=bn_fthread}" Placement="Bottom" x:Name="pp_fthread">
+                                <zw:MultiSelectPanel ItemsSource="{x:Static local:Dicts.Threads}" DefaultIsChecked="True" MultiSelectionChanged="MultiSelectPanel_MultiSelectionChanged_2"/>
+                            </zw:ZPopup>
+                        </DockPanel>
+                    </DataGridTextColumn.Header>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Background" Value="{Binding RealState, Converter={StaticResource LogStateBrushConverter}}"/>
+                    <Setter Property="Foreground" Value="{Binding RealState, ConverterParameter=F, Converter={StaticResource LogStateBrushConverter}}"/>
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
+    </DockPanel>
+</Window>

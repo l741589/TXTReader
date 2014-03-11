@@ -3,26 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TRContent;
+using Zlib.Utility;
 
 namespace TRBook {
-    class Bookmark : Positionable {
+    class Bookmark : IPositionable {
         public bool IsAuto { get; set; }
         public int Position { get; set; }
         public double Offset { get; set; }
         public DateTime Time { get; set; }
-        public void AssignTo(Positionable target) {
-            if (target == null) return;
-            if (target == Book.Empty) return;
-            target.Position = this.Position;
-            target.Offset = this.Offset;
-        }
+        public IContentItemAdapter Chapter { get; private set; }
+        
 
         public Bookmark() { IsAuto = false; }
-        public Bookmark(Positionable src)
+        public Bookmark(IPositionable src)
             : this() {
             this.Time = DateTime.Now;
             this.Position = src.Position;
             this.Offset = src.Offset;
+            this.Chapter = src.Chapter;
         }
+
+        
     }
 }

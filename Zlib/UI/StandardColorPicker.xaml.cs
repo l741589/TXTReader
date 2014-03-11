@@ -32,41 +32,29 @@ namespace Zlib.UI
         //used to save custom colors in the corresponding ColorDialog.
         private int[] customColorsFromDialog;
 
+        public bool IsAlphaEnabled { get { return (bool)GetValue(IsAlphaEnabledProperty); } set { SetValue(IsAlphaEnabledProperty, value); } }
+        public static readonly DependencyProperty IsAlphaEnabledProperty = DependencyProperty.Register("IsAlphaEnabled", typeof(bool), typeof(StandardColorPicker));
+        public byte Alpha { get { return (byte)GetValue(AlphaProperty); } set { SetValue(AlphaProperty, value); } }
+        public static readonly DependencyProperty AlphaProperty = DependencyProperty.Register("Alpha", typeof(byte), typeof(StandardColorPicker), new PropertyMetadata((byte)255, CompositingPropertyChangedCallback));
+        public byte Red { get { return (byte)GetValue(RedProperty); } set { SetValue(RedProperty, value); } }
+        public static readonly DependencyProperty RedProperty = DependencyProperty.Register("Red", typeof(byte), typeof(StandardColorPicker), new PropertyMetadata((byte)255, CompositingPropertyChangedCallback));
+        public byte Green { get { return (byte)GetValue(GreenProperty); } set { SetValue(GreenProperty, value); } }
+        public static readonly DependencyProperty GreenProperty = DependencyProperty.Register("Green", typeof(byte), typeof(StandardColorPicker), new PropertyMetadata((byte)255, CompositingPropertyChangedCallback));
+        public byte Blue { get { return (byte)GetValue(BlueProperty); } set { SetValue(BlueProperty, value); } }
+        public static readonly DependencyProperty BlueProperty = DependencyProperty.Register("Blue", typeof(byte), typeof(StandardColorPicker), new PropertyMetadata((byte)255, CompositingPropertyChangedCallback));
+        public Color SelectedColor { get { return (Color)GetValue(SelectedColorProperty); } set { SetValue(SelectedColorProperty, value); } }
+        public static readonly DependencyProperty SelectedColorProperty = DependencyProperty.Register("SelectedColor", typeof(Color), typeof(StandardColorPicker), new PropertyMetadata(new PropertyChangedCallback(SelectedColorPropertyChangedCallback)));
+        public String SelectedColorString { get { return (String)GetValue(SelectedColorStringProperty); } set { SetValue(SelectedColorStringProperty, value); } }
+        public static readonly DependencyProperty SelectedColorStringProperty = DependencyProperty.Register("SelectedColorString", typeof(String), typeof(StandardColorPicker));
+
+        public static readonly RoutedEvent SelectedColorChangedEvent = EventManager.RegisterRoutedEvent("SelectedColorChanged", RoutingStrategy.Bubble, typeof(RoutedPropertyChangedEventHandler<Color>), typeof(StandardColorPicker));
+        public event RoutedPropertyChangedEventHandler<Color> SelectedColorChanged { add { this.AddHandler(SelectedColorChangedEvent, value); } remove { this.RemoveHandler(SelectedColorChangedEvent, value); } }
+
         public StandardColorPicker()
         {
             InitializeComponent();
-        }
-
-        public static readonly DependencyProperty SelectedColorProperty =
-            DependencyProperty.Register("SelectedColor", typeof(Color), typeof(StandardColorPicker),
-                new PropertyMetadata(new PropertyChangedCallback(SelectedColorPropertyChangedCallback)));
-
-        public Color SelectedColor
-        {
-            get
-            {
-                return (Color)GetValue(SelectedColorProperty);
-            }
-
-            set
-            {
-                SetValue(SelectedColorProperty, value);
-            }
-        }
-
-        public static readonly DependencyProperty SelectedColorStringProperty =
-           DependencyProperty.Register("SelectedColorString", typeof(String), typeof(StandardColorPicker));
-
-        public String SelectedColorString {
-            get {
-                return (String)GetValue(SelectedColorStringProperty);
-            }
-
-            set {
-                SetValue(SelectedColorStringProperty, value);
-            }
-        }
-
+        }        
+        
         private static void SelectedColorPropertyChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs arg)
         {
             if (sender != null && sender is StandardColorPicker)
@@ -77,33 +65,50 @@ namespace Zlib.UI
             }
         }
 
-        public static readonly RoutedEvent SelectedColorChangedEvent =
-            EventManager.RegisterRoutedEvent("SelectedColorChanged",
-             RoutingStrategy.Bubble, typeof(RoutedPropertyChangedEventHandler<Color>), typeof(StandardColorPicker));
-
-        public event RoutedPropertyChangedEventHandler<Color> SelectedColorChanged
-        {
-            add
-            {
-                this.AddHandler(SelectedColorChangedEvent, value);
-            }
-            remove
-            {
-                this.RemoveHandler(SelectedColorChangedEvent, value);
+        private static void CompositingPropertyChangedCallback(DependencyObject sender, DependencyPropertyChangedEventArgs arg) {
+            if (sender != null && sender is StandardColorPicker) {
+                StandardColorPicker picker = sender as StandardColorPicker;
+                picker.OnCompositingChanged(arg.Property,(byte)arg.OldValue, (byte)arg.NewValue);
             }
         }
 
-        protected virtual void OnSelectedColorChanged(Color oldValue, Color newValue)
-        {
+        protected virtual void OnCompositingChanged(DependencyProperty property, byte oldValue, byte newValue) {
+            if (property == AlphaProperty) {
+                if (SelectedColor.A != newValue)
+                    if (IsAlphaEnabled) SelectedColor = Color.FromArgb(newValue, SelectedColor.R, SelectedColor.G, SelectedColor.B);
+            } else if (property == RedProperty) {
+                if (SelectedColor.R != newValue) {
+                    if (IsAlphaEnabled) SelectedColor = Color.FromArgb(SelectedColor.A, newValue, SelectedColor.G, SelectedColor.B);
+                    else SelectedColor = Color.FromRgb(newValue, SelectedColor.G, SelectedColor.B);
+                }
+            } else if (property == GreenProperty) {
+                if (SelectedColor.R != newValue) {
+                    if (IsAlphaEnabled) SelectedColor = Color.FromArgb(SelectedColor.A, SelectedColor.R, newValue, SelectedColor.B);
+                    else SelectedColor = Color.FromRgb(SelectedColor.R, newValue, SelectedColor.B);
+                }
+            } else if (property == BlueProperty) {
+                if (SelectedColor.R != newValue) {
+                    if (IsAlphaEnabled) SelectedColor = Color.FromArgb(SelectedColor.A, SelectedColor.R, SelectedColor.G, newValue);
+                    else SelectedColor = Color.FromRgb(SelectedColor.R, SelectedColor.G, newValue);
+                }
+            }
+        }
+
+        protected virtual void OnSelectedColorChanged(Color oldValue, Color newValue) {
             if ((newValue.R + newValue.G + newValue.B) / 3 > 128) Foreground = Brushes.Black;
             else Foreground = Brushes.White;
-            SelectedColorString= "#" + SelectedColor.ToString().Substring(3);
+            if (IsAlphaEnabled) SelectedColorString = SelectedColor.ToString();
+            else SelectedColorString = "#" + SelectedColor.ToString().Substring(3);
+            if (IsAlphaEnabled&&Alpha != newValue.A) Alpha = newValue.A;
+            if (Red != newValue.R) Red = newValue.R;
+            if (Green != newValue.G) Green = newValue.G;
+            if (Blue != newValue.B) Blue = newValue.B;
             //update displayed color if necessary
             RoutedPropertyChangedEventArgs<Color> arg =
                 new RoutedPropertyChangedEventArgs<Color>(oldValue, newValue, SelectedColorChangedEvent);
             this.RaiseEvent(arg);
-
         }
+
 
         private void btnChooseColor_Click(object sender, RoutedEventArgs e)
         {

@@ -9,5 +9,9 @@ namespace FloatControls {
         public static void Register(this IFloatControl item){
             FloatControlCollection.Instance.Add(item);
         }
+
+        public static void UnRegister(this IFloatControl item) {
+            FloatControlCollection.Instance.Remove(item);
+        }
     }
 }

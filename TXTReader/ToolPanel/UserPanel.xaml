@@ -18,9 +18,9 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <TextBox x:Name="tb_login_id" Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Center" zw:PlaceHolder.PlaceHolder="账号"/>
+                    <TextBox x:Name="tb_login_id" Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Center" zw:PlaceHolder.Text="账号"/>
                     <Button Grid.Column="1" Grid.Row="0" Content="登录" x:Name="bn_login_login" Click="bn_login_login_Click"/>
-                    <PasswordBox x:Name="tb_login_pw" Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Center"  zw:PlaceHolder.PlaceHolder="密码"/>
+                    <PasswordBox x:Name="tb_login_pw" Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Center"  zw:PlaceHolder.Text="密码"/>
                     <Button Grid.Column="1" Grid.Row="1" Content="注册" x:Name="bn_login_reg" Click="bn_login_reg_Click"/>
                 </Grid>
 
@@ -34,11 +34,11 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <TextBox x:Name="tb_reg_id" Text="{Binding Text,ElementName=tb_login_id}" Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Center" zw:PlaceHolder.PlaceHolder="账号"/>
+                    <TextBox x:Name="tb_reg_id" Text="{Binding Text,ElementName=tb_login_id}" Grid.Column="0" Grid.Row="0" VerticalContentAlignment="Center" zw:PlaceHolder.Text="账号"/>
                     <Button Grid.Column="1" Grid.Row="0" Content="注册" Grid.RowSpan="2" x:Name="bn_reg_reg" Click="bn_reg_reg_Click"/>
-                    <PasswordBox x:Name="tb_reg_pw" Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Center" zw:PlaceHolder.PlaceHolder="密码"/>
+                    <PasswordBox x:Name="tb_reg_pw" Grid.Column="0" Grid.Row="1" VerticalContentAlignment="Center" zw:PlaceHolder.Text="密码"/>
                     <Button Grid.Column="1" Grid.Row="2" Content="登录" x:Name="bn_reg_login" Click="bn_reg_login_Click"/>
-                    <PasswordBox x:Name="tb_reg_conf" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Center" zw:PlaceHolder.PlaceHolder="确认密码"/>                       
+                    <PasswordBox x:Name="tb_reg_conf" Grid.Column="0" Grid.Row="2" VerticalContentAlignment="Center" zw:PlaceHolder.Text="确认密码"/>                       
                 </Grid>
 
                 <Grid Height="64" x:Name="g_online">

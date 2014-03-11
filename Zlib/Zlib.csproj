@@ -9,17 +9,18 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Zlib</RootNamespace>
     <AssemblyName>Zlib</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET40</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -33,9 +34,30 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
+    <Reference Include="HtmlAgilityPack, Version=1.4.6.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\library\HtmlAgilityPack.1.4.6\Net40\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.165\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.165\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.165\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Runtime">
+      <HintPath>..\packages\Microsoft.Bcl.1.0.19\lib\net40\System.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Threading.Tasks">
+      <HintPath>..\packages\Microsoft.Bcl.1.0.19\lib\net40\System.Threading.Tasks.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
@@ -53,8 +75,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Algorithm\A.cs" />
+    <Compile Include="Algorithm\PriorityQueue.cs" />
+    <Compile Include="Algorithm\StringCompare.cs" />
     <Compile Include="Async\BaseAwaiter.cs" />
-    <Compile Include="Async\IBaseAwaiter.cs" />
+    <Compile Include="Async\ZEventTask.cs" />
+    <Compile Include="Async\IAwaiter.cs" />
+    <Compile Include="Async\ZMultiTask.cs" />
     <Compile Include="Converter\ControlRectConverter.cs" />
     <Compile Include="Converter\DoubleConverter.cs" />
     <Compile Include="Converter\ImageSourceRectConverter.cs" />
@@ -62,6 +88,16 @@
     <Compile Include="Converter\NotConverter.cs" />
     <Compile Include="Converter\SolidColorCvt.cs" />
     <Compile Include="Converter\VisiblilityConverter.cs" />
+    <Compile Include="Net\ContentTypes.cs" />
+    <Compile Include="Net\FileEntity.cs" />
+    <Compile Include="Net\FromDataEntity.cs" />
+    <Compile Include="Net\MimeEntity.cs" />
+    <Compile Include="Net\MultipartEntity.cs" />
+    <Compile Include="Net\UrlArgs.cs" />
+    <Compile Include="Net\UrlBuilder.cs" />
+    <Compile Include="Net\ZWeb.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -79,18 +115,67 @@
     <Compile Include="Net\Http.cs" />
     <Compile Include="Net\HttpDelegate.cs" />
     <Compile Include="Net\IHttpDelegate.cs" />
-    <Compile Include="Text\IXmlParsable.cs" />
+    <Compile Include="Text\NumberConverter.cs" />
+    <Compile Include="Text\NumberUtil.cs" />
+    <Compile Include="Text\Xml\XmlEntity.cs" />
+    <Compile Include="Text\Xml\XmlReader.cs" />
+    <Compile Include="Text\Xml\XmlWriter.cs" />
+    <Compile Include="Text\ZMatchExpression\Piece.cs" />
+    <Compile Include="Text\ZMatchExpression\ZME.cs" />
+    <Compile Include="Text\ZMatchExpression\ZMEMatch.cs" />
+    <Compile Include="Text\ZMatchExpression\ZMEMatcher.cs" />
+    <Compile Include="Text\ZMatchExpression\ZMEMatcherCapture.cs" />
+    <Compile Include="Text\ZSpiderScript\IfCommand.cs" />
+    <Compile Include="Text\Xml\IXmlParsable.cs" />
+    <Compile Include="Text\XHtmlTools.cs" />
+    <Compile Include="Text\ZSpiderScript\CallCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\CaseCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\HtmlEncodeCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\IParentCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\IZSpider.cs" />
+    <Compile Include="Text\ZSpiderScript\IZSSCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\JudgeUnit.cs" />
+    <Compile Include="Text\ZSpiderScript\LogCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\ParentCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\ReplaceCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\WhileCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\ZSSRoot.cs" />
+    <Compile Include="Text\ZSpiderScript\SubStringCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\TrimCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\UrlEncodeCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\ZSSException.cs" />
+    <Compile Include="Text\ZSpiderScript\MultiCaptureCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\UrlDecodeCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\HtmlDecodeCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\JsonDecodeCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\JsEncodeCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\PostCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\JsDecodeCommand.cs" />
     <Compile Include="UI\FontEditPanel.xaml.cs">
       <DependentUpon>FontEditPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\InputBox.xaml.cs">
+      <DependentUpon>InputBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MultiSelectPanel.xaml.cs">
+      <DependentUpon>MultiSelectPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ThicknessSEGroup.xaml.cs">
+      <DependentUpon>ThicknessSEGroup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Utility\EffectParser.cs" />
     <Compile Include="UI\Utility\FontParser.cs" />
+    <Compile Include="UI\Utility\ItemsControlExtension.cs" />
     <Compile Include="UI\Utility\UIElementExtentions.cs" />
     <Compile Include="UI\Utility\ZBrushes.cs" />
+    <Compile Include="UI\ZPopup.cs" />
     <Compile Include="Utility\DependencyObjectExtension.cs" />
+    <Compile Include="Utility\EnumerableExtension.cs" />
+    <Compile Include="Utility\ObjectMutexManager.cs" />
+    <Compile Include="Utility\ZComparer.cs" />
     <Compile Include="Win32\RegUtil.cs" />
     <Compile Include="Text\Json.cs" />
-    <Compile Include="Text\XmlParser.cs" />
+    <Compile Include="Text\Xml\XmlParser.cs" />
     <Compile Include="Utility\IntExtention.cs" />
     <Compile Include="Utility\ItemsProxy.cs" />
     <Compile Include="Utility\NullObject.cs" />
@@ -117,10 +202,19 @@
     <Compile Include="Win32\KeyHook.cs" />
     <Compile Include="Win32\MessageConst.cs" />
     <Compile Include="Win32\UAC.cs" />
+    <Compile Include="Text\ZSpiderScript\CaptureCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\ZSSCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\GetCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\SetCommand.cs" />
+    <Compile Include="Text\ZSpiderScript\ZSS.cs" />
+    <Compile Include="Text\ZSpiderScript\ZSSParser.cs" />
+    <Compile Include="Win32\Win32Util.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -136,7 +230,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="UI\InputBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\MultiSelectPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\SimpleMenuButton.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\ThicknessSEGroup.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -169,8 +275,15 @@
     <Resource Include="Resource\btnface_bold.png" />
     <Resource Include="Resource\btnface_italic.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.4\tools\Microsoft.Bcl.Build.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

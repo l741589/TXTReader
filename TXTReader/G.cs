@@ -16,14 +16,31 @@ using Zlib.Async;
 using Zlib.Algorithm;
 using Zlib.UI;
 using TXTReader.Interfaces;
+using TXTReader.Plugins;
+using Zlib.Utility;
+using Zlib;
+using System.Windows.Input;
 
 namespace TXTReader {
+    public class BookChangedEventArgs : EventArgs {
+        public IBook OldBook { get; set; }
+        public IBook NewBook { get; set; }
+        public BookChangedEventArgs() { }
+        public BookChangedEventArgs(IBook OldBook, IBook NewBook) {
+            this.OldBook = OldBook;
+            this.NewBook = NewBook;
+        }
+    }
+    public delegate void BookChangedEventHandler(object sender,BookChangedEventArgs e);
+
     public class G  {
 
         static G() {
             KeyHook = new KeyHook();
             Net = new MyHttp(Properties.Settings.Default.SERVER_URL);
             ContextMenu = new CompoundContextMenu();
+            ContextMenu.IsMutexCommand = true;
+            CommandManager = new ObjectMutexManager<RoutedUICommand>();
         }
         public static bool IsRunning = true;
 
@@ -35,6 +52,7 @@ namespace TXTReader {
         public static String NAME_SKIN { get { return PATH + "skin" + EXT_SKIN; } }
         public static String NAME_OPTION { get { return PATH + "option" + EXT_OPTION; } }
         public static String PATH_PLUGINS { get { return A.CheckDir(PATH + @"plugins\"); } }
+        public static String PATH_SOURCE { get { return A.CheckDir(PATH + @"source\"); } }
         #endregion
 
 
@@ -44,8 +62,20 @@ namespace TXTReader {
         public static CompoundContextMenu ContextMenu { get; private set; }
         public static Canvas MainCanvas { get { return MainWindow.canvas; } }
 
-        public static IBook Book { get; set; }
-        public static IBook EmptyBook { get; set; }
+        private static IBook book;
+        public static IBook Book {
+            get { return book; }
+            set {
+                if (book == value) return;
+                if (book != null) book.Close();
+                book = value;
+                if (book != null) book.Load();
+                var old = book; book = value;
+                if (BookChanged != null) BookChanged(book, new BookChangedEventArgs(old, book));
+            }
+        }
+        public static event BookChangedEventHandler BookChanged;
+        //public static IBook EmptyBook { get; set; }
 
         public static IDisplayer Displayer { get; set; }
         public static TRNotifyIcon NotifyIcon { get; set; }
@@ -53,5 +83,6 @@ namespace TXTReader {
         public static List<EventWaitHandle> Blockers { get { return ZTask.Blockers; } }
         public static ITRTimer Timer { get; set; }
         public static MyHttp Net { get; private set; }
+        public static ObjectMutexManager<RoutedUICommand> CommandManager { get; private set; }
     }
 }

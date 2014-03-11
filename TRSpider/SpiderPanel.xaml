@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="TRSpider.SpiderPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:zw="clr-namespace:Zlib.UI;assembly=Zlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="300" Padding="8">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top" Height="20">
+            <Button DockPanel.Dock="Right" Click="Button_Click_1"  Width="{Binding ActualHeight}" ToolTip="测试工具"
+                    Background="{x:Null}" BorderBrush="{x:Null}">
+                <Image Source="/TRSpider;component/res/bug.png" />
+            </Button>
+            <Button DockPanel.Dock="Right" Click="Button_Click" Width="{Binding ActualHeight}" ToolTip="重新载入" 
+                    Background="{x:Null}" BorderBrush="{x:Null}">
+                <Image Source="/TRSpider;component/res/refresh.png" />
+            </Button>
+            <Button DockPanel.Dock="Right" Click="Button_Click_2" Width="{Binding ActualHeight}" ToolTip="重新载入" 
+                    Background="{x:Null}" BorderBrush="{x:Null}">
+                <Image Source="res/magnifier.png" />
+            </Button>
+            <TextBox x:Name="tb" DockPanel.Dock="Top" zw:PlaceHolder.Text="关键字"/>
+        </DockPanel>
+        <ProgressBar DockPanel.Dock="Top" Height="8" Visibility="Hidden" IsIndeterminate="True" x:Name="pb"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1.618*" x:Name="rd_1"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <ListView Grid.Row="0" x:Name="lv_book">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid MouseDown="Grid_MouseDown">
+                            <TextBlock Text="{Binding}"/>
+                            <Grid.ToolTip>
+                                <ToolTip MaxWidth="256">
+                                    <TextBlock Text="{Binding ToolTip}" TextWrapping="Wrap"/>
+                                </ToolTip>
+                            </Grid.ToolTip>
+                        </Grid>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <ListView x:Name="lv" Grid.Row="1">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}">
+                            <TextBlock.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="抓取书籍信息" Click="MenuItem_Click"/>
+                                    <MenuItem Header="抓取目录" Click="MenuItem_Click_1"/>
+                                    <MenuItem Header="抓取全文"/>
+                                </ContextMenu>
+                            </TextBlock.ContextMenu>
+                        </TextBlock>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            
+        </Grid>
+    </DockPanel>
+</UserControl>

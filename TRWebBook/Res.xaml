@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="TRWebBook.Res"
+                    xmlns:local="clr-namespace:TRWebBook"
+                    >
+    <ContextMenu x:Key="menu">
+        <MenuItem Command="local:MyCommands.Search"/>
+        <MenuItem Header="关闭(_C)" Command="ApplicationCommands.Close"/>
+        <MenuItem Header="重开(_R)" Command="local:MyCommands.Reopen"/>
+    </ContextMenu>
+    <CommandBinding x:Key="searchBinding" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed" Command="local:MyCommands.Search"/>
+    <BitmapImage x:Key="src_nocover" UriSource="/TRWebBook;component/res/no_cover.png"/>
+</ResourceDictionary>

@@ -150,11 +150,11 @@
                                                   Content="{TemplateBinding Header}" 
                                                   ContentStringFormat="{TemplateBinding HeaderStringFormat}" 
                                                   ContentSource="Header" Focusable="False" 
-                                                  HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}" 
                                                   Margin="{TemplateBinding Padding}" 
                                                   RecognizesAccessKey="True" 
-                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
-                                                  VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type ItemsControl}}}"/>
+                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                  VerticalAlignment="Center"
+                                                  HorizontalAlignment="Center" />
                             </Grid>
                             <ControlTemplate.Triggers>
                                 <MultiDataTrigger>
@@ -216,7 +216,9 @@
         <TabItem Header="设置">
             <tool:OptionPanel x:Name="pn_option"/>
         </TabItem>
-        <TabItem Header="32"/>
+        <TabItem Header="插件">
+            <tool:PluginsPanel/>
+        </TabItem>
     </TabControl>
 
 </UserControl>

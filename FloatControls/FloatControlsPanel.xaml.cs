@@ -90,6 +90,10 @@ namespace FloatControls {
                 this[control.Position].Children.Add(control as UIElement);
         }
 
+        public void Remove(IFloatControl control) {
+                this[control.Position].Children.Remove(control as UIElement);
+        }
+
         public void Remove(IList controls) {
             foreach (IFloatControl control in controls)
                 this[control.Position].Children.Remove(control as UIElement);

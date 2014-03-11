@@ -5,6 +5,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
+using Zlib.Text;
+using System.IO;
+using Zlib.Text.ZMatchExpression;
 
 namespace ManualUnitTest
 {
@@ -46,8 +49,20 @@ namespace ManualUnitTest
             //Console.ReadKey();
 
             //Task t;
+            //try {
+            //    var js = File.ReadAllText("e:/test/inf.js");
+            //    var xml = Json.ToXml(js);
+            //    File.WriteAllText("e:/test/ouf.xml", xml);
+            //    var js2 = Json.FromXml(xml);
+            //    File.WriteAllText("e:/test/ouf.js", js2);
+            //
+            //   // Console.ReadKey();
+            //} catch(FileNotFoundException) { }
+
+            String s = "\"第#{卷}[章]   *\" \"第#{章}[节]   *\"";
+            var zme=ZME.Compile(s);
+            var zm = zme.Match("第十卷     比雷亚内战篇     第426章    未能完成的奇袭");
             
-            Console.ReadKey();
         }
 
         static void printmatch(Match m)
@@ -58,7 +73,7 @@ namespace ManualUnitTest
             }
         }
 
-        
+       
     }
 }
 

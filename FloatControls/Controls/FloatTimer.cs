@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Zlib.Utility;
 
@@ -18,7 +19,8 @@ namespace FloatControls.Controls {
         private async void timer() {
             while (true) {
                 Value = DateTime.Now;
-                await 1000;
+                //await TaskEx.Run(() => { Thread.Sleep(1000); });
+                await 1000.Wait();
             }
         }
     }

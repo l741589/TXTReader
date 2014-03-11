@@ -1,0 +1,12 @@
+﻿<Window x:Class="TRSpider.ChapterDisplayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ChapterDisplayWindow" Height="600" Width="800"
+        xmlns:zw="clr-namespace:Zlib.UI;assembly=Zlib" Closing="Window_Closing">
+    <Grid>
+        <TextBox AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap" x:Name="tb" 
+                 zw:PlaceHolder.Text="在此处添加文本内容" zw:PlaceHolder.AlignmentY="Top"
+                 VerticalScrollBarVisibility="Auto"
+                 />
+    </Grid>
+</Window>

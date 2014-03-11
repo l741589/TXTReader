@@ -9,17 +9,18 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TRBook</RootNamespace>
     <AssemblyName>TRBook</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\bin\Debug\plugins\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET40</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -32,8 +33,31 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.165\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.165\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.165\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Runtime">
+      <HintPath>..\packages\Microsoft.Bcl.1.0.19\lib\net40\System.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Threading.Tasks">
+      <HintPath>..\packages\Microsoft.Bcl.1.0.19\lib\net40\System.Threading.Tasks.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,6 +77,10 @@
       <DependentUpon>BookcasePanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="BookCollection.cs" />
+    <Compile Include="ContentOptionPanel.xaml.cs">
+      <DependentUpon>ContentOptionPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Net\BookInfoManager.cs" />
     <Compile Include="Bookmark.cs" />
     <Compile Include="BookmarkPanel.xaml.cs">
       <DependentUpon>BookmarkPanel.xaml</DependentUpon>
@@ -61,34 +89,17 @@
     <Compile Include="Chapter.cs" />
     <Compile Include="ChapterCollection.cs" />
     <Compile Include="ChapterDesc.cs" />
-    <Compile Include="ContentAdapter.cs" />
-    <Compile Include="ContentOptionPanel.xaml.cs">
-      <DependentUpon>ContentOptionPanel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ContentTreePanel.xaml.cs">
-      <DependentUpon>ContentTreePanel.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Converter\BookLengthConverter.cs" />
     <Compile Include="Converter\BookmarkConverter.cs" />
     <Compile Include="Converter\BookStateVisibilityConverter.cs" />
-    <Compile Include="Converter\ChapterRuleNameConverter.cs" />
-    <Compile Include="Converter\ContentStatusImageConverter.cs" />
-    <Compile Include="Converter\RuleDelButtonVisibilityConverter.cs" />
     <Compile Include="Entry.cs" />
     <Compile Include="FloatTiltle.cs" />
     <Compile Include="G.cs" />
     <Compile Include="MyCommands.cs" />
     <Compile Include="Net\Douban.cs" />
-    <Compile Include="Positionable.cs" />
     <Compile Include="Res.xaml.cs">
       <DependentUpon>Res.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Rules\Rule.cs" />
-    <Compile Include="Rules\RulePanel.xaml.cs">
-      <DependentUpon>RulePanel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Rules\RuleParser.cs" />
-    <Compile Include="Rules\Trmex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -102,12 +113,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Rules\TrmexComparer.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -131,17 +142,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ContentTreePanel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="Res.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Rules\RulePanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -152,9 +153,18 @@
       <Name>FloatControls</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\TRContent\TRContent.csproj">
+      <Project>{b9ae6a73-bf4e-4910-8c24-46ed6a591cfc}</Project>
+      <Name>TRContent</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TRSearchBar\TRSearchBar.csproj">
       <Project>{73285477-e27f-4569-88db-d1507f499e17}</Project>
       <Name>TRSearchBar</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TRSpider\TRSpider.csproj">
+      <Project>{bbeb0804-d1d8-47ac-9819-f2f7558bb9fa}</Project>
+      <Name>TRSpider</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\TXTReader\TXTReader.csproj">
       <Project>{bf28ffda-cdae-4752-b1a5-1c11c7e43508}</Project>
@@ -169,14 +179,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="res\cross.png" />
-    <Resource Include="res\cs_index.png" />
-    <Resource Include="res\cs_index_green.png" />
-    <Resource Include="res\cs_toolong.png" />
-    <Resource Include="res\cs_tooshort.png" />
     <Resource Include="res\no_cover.png" />
     <Resource Include="res\setting.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.4\tools\Microsoft.Bcl.Build.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

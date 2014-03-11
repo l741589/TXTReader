@@ -16,8 +16,7 @@ namespace Zlib.Algorithm {
     static public class A {
         public const String HTTP_HEAD = "http://"; 
         public const String FILE_HEAD = "file:///";
-        public const String PACK_HEAD = "pack://"; 
-       
+        public const String PACK_HEAD = "pack://";       
 
         public static void CopyText(out String[] text,ICollection<String> src, int piecelen = 4096) {
             if (piecelen == 0) {
@@ -137,6 +136,35 @@ namespace Zlib.Algorithm {
         public static T WorkWith<T>(Func<T> work) {
             if (work == null) return default(T);
             return work();
+        }
+
+        public static readonly char[] DICT_NUMBER = CharsBetween('0', '9');
+        public static readonly char[] DICT_UPPER = CharsBetween('A', 'Z');
+        public static readonly char[] DICT_LOWER = CharsBetween('a', 'z');
+
+        public static char[] CharsBetween(char l, char r) {
+            Stack<char> cs = new Stack<char>();
+            for (var c = l; c <= r; ++c) {
+                cs.Push(c);
+            }
+            return cs.ToArray();
+        }
+
+        public static String RandomString(int length, params IEnumerable<char>[] dictionary) {
+            List<char> cs = new List<char>();
+            foreach (var c in dictionary)
+                cs.AddRange(c);
+            return RandomString(length, cs.ToArray()); ;
+        }
+
+        public static String RandomString(int length,params char[] dictionary) {
+            StringBuilder sb = new StringBuilder(length);
+            Random r=new  Random();
+            int l=dictionary.Length;
+            for (int i = 0; i < length; ++i) {
+                sb.Append(dictionary[r.Next(l)]);
+            }
+            return sb.ToString();
         }
     }
 }

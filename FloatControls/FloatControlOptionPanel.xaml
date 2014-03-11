@@ -4,34 +4,79 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Converter="clr-namespace:Zlib.Converter;assembly=Zlib"
+             xmlns:zw="clr-namespace:Zlib.UI;assembly=Zlib"
              xmlns:ctrl="clr-namespace:FloatControls.Controls"
+             xmlns:local="clr-namespace:FloatControls"
+             xmlns:zcvt="clr-namespace:Zlib.Converter;assembly=Zlib"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <Converter:VisiblilityConverter x:Key="VisiblilityConverter"/>
+        <zcvt:SolidColorCvt x:Key="brushCvt"/>
+
     </UserControl.Resources>
-    <GroupBox>
+    <GroupBox DataContext="{x:Static local:Skin.Instance}">
         <GroupBox.Header>
             <CheckBox IsChecked="True" Content="悬浮控件" x:Name="header"/>
-        </GroupBox.Header>
-        <ItemsControl x:Name="body" IsEnabled="{Binding IsChecked, ElementName=header}">
-            <ItemsControl.Template>
-                <ControlTemplate>
-                    <Grid>
-                        <ItemsPresenter/>
-                    </Grid>
-                </ControlTemplate>
-            </ItemsControl.Template>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <CheckBox Content="{Binding Name}" IsChecked="{Binding Visibility, Converter={StaticResource VisiblilityConverter}, Mode=TwoWay}"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        </GroupBox.Header>       
+        <StackPanel Orientation="Vertical">
+            <ItemsControl x:Name="body" IsEnabled="{Binding IsChecked, ElementName=header}">
+                <ItemsControl.Template>
+                    <ControlTemplate>
+                        <Grid>
+                            <ItemsPresenter/>
+                        </Grid>
+                    </ControlTemplate>
+                </ItemsControl.Template>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox Content="{Binding Name}" IsChecked="{Binding Visibility, Converter={StaticResource VisiblilityConverter}, Mode=TwoWay}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Separator/>
+            <Label Content="文字" FontWeight="Bold"/>
+            <zw:FontEditPanel Font="{Binding Font,Mode=TwoWay}" x:Name="pn_font"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="字色"/>
+                <zw:StandardColorPicker Grid.Row="0" Grid.Column="1" x:Name="cbxFontColor" 
+                                    SelectedColor="{Binding Foreground,Converter={StaticResource brushCvt},Mode=TwoWay}"/>
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="字号"/>
+                <zw:SpinEdit Grid.Row="0" Grid.Column="3" x:Name="seFontSize" 
+                                    MinValue="8" MaxValue="100"
+                		            Value="{Binding FontSize, Mode=TwoWay}"/>
+            </Grid>
+            <Label Content="背景" FontWeight="Bold"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0">颜色</TextBlock>
+                <TextBlock Grid.Column="0" Grid.Row="1">透明度</TextBlock>
+                <zw:StandardColorPicker Grid.Column="2" Grid.Row="0" IsAlphaEnabled="True" Name="bgColor"
+                                        SelectedColor="{Binding Background,Converter={StaticResource brushCvt},Mode=TwoWay}"/>
+                <Slider Grid.Column="2" Grid.Row="1" Maximum="255" Minimum="0" Value="{Binding Alpha, ElementName=bgColor, Mode=TwoWay}"/>
+            </Grid>
+            <Label Content="布局" FontWeight="Bold"/>
+            <TextBlock Text="文本区边距"/>
+            <zw:ThicknessSEGroup x:Name="segPadding" Thickness="{Binding Padding, Mode=TwoWay}"/>
+        </StackPanel>
     </GroupBox>
 </UserControl>

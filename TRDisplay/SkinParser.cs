@@ -13,6 +13,7 @@ using TXTReader.ToolPanel;
 using Zlib.Algorithm;
 using Zlib.Text;
 using System.Windows.Controls;
+using Zlib.Text.Xml;
 
 namespace TRDisplay {
     class SkinParser : XmlParser, IXmlParsable{
@@ -263,7 +264,7 @@ namespace TRDisplay {
                 return r => r.Child(S_SKIN, new Version("1.0.0.0"))
                         .Do(G.FontParser).Do(n => Options.Instance.Skin.Font = G.FontParser.Font)
                         .Read(S_FONTSIZE, n => Options.Instance.Skin.FontSize = double.Parse(n.InnerText))
-                        .Read(S_FONTCOLOR, n => Options.Instance.Skin.Foreground = (Brush)new BrushConverter().ConvertFrom(n.InnerText))
+                        .Read(S_FONTCOLOR, n => Options.Instance.Skin.Foreground = n.InnerText!=null?(Brush)new BrushConverter().ConvertFrom(n.InnerText):null)
                         .Do(G.EffectParser).Do(n => Options.Instance.Skin.Effect = G.EffectParser.Effect)
                         .Do(G.Background)
                         .Read(S_PADDING, n => Options.Instance.Skin.Padding = (Thickness)new ThicknessConverter().ConvertFrom(n.InnerText))

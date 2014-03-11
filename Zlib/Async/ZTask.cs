@@ -49,9 +49,9 @@ namespace Zlib.Async {
                         var tmp = work.Call.DynamicInvoke();
                         work.GetAwaiter().DoComplete(tmp);
                         work = Pop();
-                    } catch (Exception e) {
+                    } catch (Exception e) {               
+                        Debug.WriteLine(e.StackTrace);
                         #if DEBUG
-                        Debug.WriteLine(e.StackTrace);                       
                         throw;
                         #endif
                     }
@@ -69,6 +69,19 @@ namespace Zlib.Async {
             return new Task(this, new Func<object>(() => { call(); return null; }));
         }
 
+        public void Stop() {
+            IsRunning = false;
+            are.Set();
+        }
+
+        public static void StopAll() {
+            foreach (var e in Tasks) e.Stop();
+        }
+
+        public void Dispose() {
+            Stop();
+            are.Dispose();
+        }
 
         public class Task {
             public Delegate Call { get; set; }
@@ -85,7 +98,7 @@ namespace Zlib.Async {
             }
         }
 
-        public class ZTaskAwaiter  : INotifyCompletion{
+        public class ZTaskAwaiter  : IAwaiter{
             private SynchronizationContext context;
             public bool IsCompleted { get; private set; }
             private Action continuation;
@@ -122,19 +135,6 @@ namespace Zlib.Async {
             public object GetResult() {
                 return result;
             }
-        }
-
-        public void Stop() {
-            IsRunning = false;
-            are.Set();
-        }
-
-        public static void StopAll(){
-            foreach (var e in Tasks) e.Stop();
-        }
-
-        public void Dispose() {
-            are.Dispose();
-        }
+        }       
     }
 }

@@ -27,6 +27,12 @@ namespace FloatControls {
             base.InsertItem(index, item);
         }
 
+        protected override void RemoveItem(int index) {
+            var item = this[index];
+            G.FloatControlsPanel.Remove(item);
+            base.RemoveItem(index);
+        }
+
         public IFloatControl FindByTag(String tag) {
             foreach (IFloatControl e in this) if (e.Tag!=null&&e.Tag.ToString() == tag) return e;
             return null;

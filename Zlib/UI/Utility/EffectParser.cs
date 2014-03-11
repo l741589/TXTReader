@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using Zlib.Text;
+using Zlib.Text.Xml;
 
 namespace Zlib.UI.Utility {
     public class EffectParser : IXmlParsable {

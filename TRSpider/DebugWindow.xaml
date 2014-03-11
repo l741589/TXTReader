@@ -1,0 +1,71 @@
+﻿<Window x:Class="TRSpider.DebugWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:u="clr-namespace:Zlib.UI;assembly=Zlib"
+        Title="DebugWindow" Height="300" Width="554.167" WindowState="Maximized">
+    <DockPanel>
+        <WrapPanel DockPanel.Dock="Top" Orientation="Horizontal" Height="20">
+            <TextBox MinWidth="128" u:PlaceHolder.Text="INPUT" x:Name="tb_input"/>            
+            <ComboBox x:Name="cb_spider">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ToolTip="{Binding Site}">
+                            <TextBlock Text="{Binding Name}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <Button DockPanel.Dock="Right" Click="Button_Click_2"  Width="{Binding ActualHeight}" ToolTip="重新载入">
+                <Image Source="/TRSpider;component/res/refresh.png" />
+            </Button>
+            <Button Click="Button_Click" >抓取书籍信息</Button>
+            <Button Click="Button_Click_1">抓取目录</Button>
+        </WrapPanel>
+        <ProgressBar DockPanel.Dock="Top" IsIndeterminate="True" Visibility="Collapsed" x:Name="pb"/>
+        <ListView DockPanel.Dock="Left" Width="384" x:Name="lv">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <TextBlock Text="{Binding Title}"/>
+                        <Grid.ToolTip>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="1*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Grid.Row="0">ID:</TextBlock>
+                                <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Id}"/>
+                                <TextBlock Grid.Column="0" Grid.Row="1">Url:</TextBlock>
+                                <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding TextUrl}"/>
+                                <TextBlock Grid.Column="0" Grid.Row="2">预览:</TextBlock>
+                                <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Preview}"/>
+                            </Grid>
+                        </Grid.ToolTip>
+                        <Grid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="抓取该章节" Click="MenuItem_Click_2"/>
+                                <MenuItem Header="打开网页" Click="MenuItem_Click"/>
+                                <MenuItem Header="复制章节信息" Click="MenuItem_Click_3"/>
+                                <MenuItem Header="复制标题" Click="MenuItem_Click_4"/>
+                                <MenuItem Header="复制链接" Click="MenuItem_Click_5"/>
+                                <MenuItem Header="复制id" Click="MenuItem_Click_6"/>                                
+                            </ContextMenu>
+                        </Grid.ContextMenu>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Rectangle  Fill="LightGray" Width="4"  Cursor="SizeWE"  x:Name="sp" MouseMove="sp_MouseMove" MouseDown="sp_MouseDown" MouseUp="sp_MouseUp"/>
+        <TextBox x:Name="tb" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" AcceptsReturn="True" HorizontalScrollBarVisibility="Disabled"/>
+    </DockPanel>
+</Window>

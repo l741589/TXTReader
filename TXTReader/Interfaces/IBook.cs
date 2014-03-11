@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 namespace TXTReader.Interfaces {
     public interface IBook {
-        event EventHandler Loaded;
-        event EventHandler LoadFinished;
-        event EventHandler Closed;
-        event EventHandler PositionChanged;
-        event EventHandler OffsetChanged;
+        //event EventHandler Loaded;
+        event PluginEventHandler LoadFinished;
+        event PluginEventHandler Closed;
+        event PluginEventHandler PositionChanged;
+        event PluginEventHandler OffsetChanged;
 
         string Author { get; }
         string Id { get; }
@@ -16,8 +16,9 @@ namespace TXTReader.Interfaces {
         int Position { get; set; }
         double Offset { get; set; }
         void Close();
-        void Open(String filename);
+        void Open(object arg);
         void Reopen();
         void Delete();
+        void Load();
     }
 }

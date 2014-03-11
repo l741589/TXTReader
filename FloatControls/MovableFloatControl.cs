@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using Zlib.Utility;
 
 namespace FloatControls {
     public class MovableFloatControl : UserControl, IFloatControl {
@@ -21,6 +22,8 @@ namespace FloatControls {
             MouseLeftButtonUp += UserControl_MouseLeftButtonUp;
             SetBinding(ToolTipProperty, new Binding("Name") { Source=this,Mode = BindingMode.OneWay });
             Tag = GetType().Name;
+            this.SetBinding(PaddingProperty, "Padding", Skin.Instance);
+            this.SetBinding(BackgroundProperty, "Background", Skin.Instance);
         }
 
         private void UserControl_MouseMove(object sender, MouseEventArgs e) {

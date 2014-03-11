@@ -30,14 +30,16 @@ namespace Zlib.UI {
 
         public int MaxValue { get { return (int)GetValue(MaxValueProperty); } set { SetValue(MaxValueProperty, value); } }
         public int MinValue { get { return (int)GetValue(MinValueProperty); } set { SetValue(MinValueProperty, value); } }
-        public int Value { get { return (int)GetValue(ValueProperty); } set { SetValue(ValueProperty, value); tb.Text = Value.ToString(); } }
+        public int Value { get { return (int)GetValue(ValueProperty); } set { SetValue(ValueProperty, CoerceValue(this,value)); tb.Text = Value.ToString(); } }
 
         public SpinEdit() {  InitializeComponent(); }
 
         private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             RoutedPropertyChangedEventArgs<int> arg =
                 new RoutedPropertyChangedEventArgs<int>((int)e.OldValue, (int)e.NewValue, ValueChangedEvent);
-            ((UIElement)d).RaiseEvent(arg);
+            SpinEdit se = ((SpinEdit)d);
+            if (se.tb.Text != se.Value.ToString()) se.tb.Text = se.Value.ToString();
+            se.RaiseEvent(arg);
         }
 
         private static object CoerceValue(DependencyObject d, object baseValue) {
@@ -75,7 +77,8 @@ namespace Zlib.UI {
             valuelock = true;
             int time = 1024;
             while (mousedown) {                
-                await time;
+                await time.Wait();
+                if (!mousedown) break;
                 ++Value;
                 if (time > 16) time >>= 1;
             }
@@ -88,7 +91,8 @@ namespace Zlib.UI {
             valuelock = true;            
             int time = 1024;
             while (mousedown) {                
-                await time;
+                await time.Wait();
+                if (!mousedown) break;
                 --Value;
                 if (time > 16) time >>= 1;
             }

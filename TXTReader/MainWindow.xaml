@@ -7,7 +7,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
         x:Class="TXTReader.MainWindow" x:Name="window"
         xmlns:tool="clr-namespace:TXTReader.ToolPanel"
-        Title="TXTReader" Loaded="window_Loaded"  Height="350" Width="525">
+        Title="TXTReader" Loaded="window_Loaded"  Height="350" Width="525" Background="#eee">
     <Window.Resources>        
         <ResourceDictionary>
            <!--  <ResourceDictionary.MergedDictionaries>

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TXTReader;
 using TXTReader.Plugins;
 using Zlib.Text;
+using Zlib.Text.Xml;
 
 namespace TXTReader {
     class OptionsParser : XmlParser{

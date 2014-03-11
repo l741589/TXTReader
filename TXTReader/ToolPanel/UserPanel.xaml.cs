@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using TXTReader.Net;
+using TXTReader.Net;
 
 namespace TXTReader.ToolPanel {
     /// <summary>
@@ -51,6 +51,12 @@ namespace TXTReader.ToolPanel {
         public UserPanel() {
             InitializeComponent();
             Status = UserStatus.Login;
+            
+            //Loaded += (d, e) => {
+            //    tb_login_id.Text = "123456";
+            //    tb_login_pw.Password = "123456";
+            //    bn_login_login_Click(bn_login_login, null);
+            //};
         }
 
         private async void bn_login_login_Click(object sender, RoutedEventArgs e) {

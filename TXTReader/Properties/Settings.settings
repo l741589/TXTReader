@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="SERVER_URL" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">http://221.239.196.147:9999/txt</Value>
+      <Value Profile="(Default)">http://txtreader.500yun.com/</Value>
     </Setting>
   </Settings>
 </SettingsFile>

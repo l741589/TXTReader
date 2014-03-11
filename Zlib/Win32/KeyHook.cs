@@ -66,6 +66,7 @@ namespace Zlib.Win32 {
         }
 
         public int KeyBoardHookProc(int nCode, int wParam, IntPtr lParam) {
+            
             if (nCode >= 0) {
                 KeyBoardHookStruct kbh = (KeyBoardHookStruct)Marshal.PtrToStructure(lParam, typeof(KeyBoardHookStruct));
                 if (KeyDownHook!=null&&(wParam == MessageConst.WM_KEYDOWN || wParam == MessageConst.WM_SYSKEYDOWN)) KeyDownHook(kbh.vkCode);

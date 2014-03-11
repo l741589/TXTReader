@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using Zlib.Text;
+using Zlib.Text.Xml;
 
 namespace Zlib.UI.Utility {
     public class FontParser : IXmlParsable{

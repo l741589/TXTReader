@@ -11,8 +11,8 @@ namespace TRBook {
             if (Contains(item)) return;
             if (item == null || item.State == Book.BookState.Missing) return;
             base.InsertItem(index, item);
-            if (Check(item)) return;
-            item.MoreInfo();
+            item = Check(item);
+            //item.MoreInfo();
             //item.Upload();
         }
 
@@ -22,21 +22,21 @@ namespace TRBook {
             base.RemoveItem(index);        
         }
 
-        public bool Check(Book item) {
+        public Book Check(Book item) {
             foreach (Book b in this) {
                 if (b == item) continue;
-                if (b.Source == item.Source) { Remove(item); return true; }
+                if (b.Source == item.Source) { Remove(item); return b; }
                 if (!String.IsNullOrEmpty(item.Id) && item.Id == b.Id) {
                     if (b.State == Book.BookState.Remote && item.State == Book.BookState.Local) {
                         Remove(b);
-                        return true;
+                        return item;
                     } else {
                         Remove(item);
-                        return true;
+                        return b;
                     }
                 }
             }
-            return false;
+            return item;
         }
 
         public async void UploadAll() {

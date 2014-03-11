@@ -69,7 +69,7 @@ namespace TXTReader.ToolPanel
             this.BeginStoryboard(toolPanelHide, HandoffBehavior.Compose);
             //if (!G.MainWindow.IsHolding) G.Timer.Resume();
             if (tab.TabIndex == 0) tab.Focus();
-            (G.Displayer as Control).Focus();
+            if (G.Displayer!=null) (G.Displayer as Control).Focus();
         }
     }
 }

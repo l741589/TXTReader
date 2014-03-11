@@ -5,7 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TXTReader", "TXTReader\TXTR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ManualUnitTest", "ManualUnitTest\ManualUnitTest.csproj", "{5A33D1A5-8383-4714-A921-7B901C4DF143}"
 EndProject
-Project("{F088123C-0E9E-452A-89E6-6BA2F21D5CAC}") = "TXTReaderUsercase", "TXTReaderUsercase\TXTReaderUsercase.modelproj", "{FCDF03F2-BF60-420E-AE42-36C1DB2A4F62}"
+Project("{F088123C-0E9E-452A-89E6-6BA2F21D5CAC}") = "TXTReaderUML", "TXTReaderUsercase\TXTReaderUML.modelproj", "{FCDF03F2-BF60-420E-AE42-36C1DB2A4F62}"
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Help", "http://localhost:37882", "{7AF2228F-5044-4F1D-B021-3C0144502FE5}"
 	ProjectSection(WebsiteProperties) = preProject
@@ -42,6 +42,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TRSearchBar", "TRSearchBar\TRSearchBar.csproj", "{73285477-E27F-4569-88DB-D1507F499E17}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TRDisplay", "TRDisplay\TRDisplay.csproj", "{23031CC6-6B6A-4190-B759-BB9AF76B08C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TRSpider", "TRSpider\TRSpider.csproj", "{BBEB0804-D1D8-47AC-9819-F2F7558BB9FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TRContent", "TRContent\TRContent.csproj", "{B9AE6A73-BF4E-4910-8C24-46ED6A591CFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TRWebBook", "TRWebBook\TRWebBook.csproj", "{53443D30-FA6B-464D-92B5-F74DC89B89C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +99,18 @@ Global
 		{23031CC6-6B6A-4190-B759-BB9AF76B08C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23031CC6-6B6A-4190-B759-BB9AF76B08C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23031CC6-6B6A-4190-B759-BB9AF76B08C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBEB0804-D1D8-47AC-9819-F2F7558BB9FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBEB0804-D1D8-47AC-9819-F2F7558BB9FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBEB0804-D1D8-47AC-9819-F2F7558BB9FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBEB0804-D1D8-47AC-9819-F2F7558BB9FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9AE6A73-BF4E-4910-8C24-46ED6A591CFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9AE6A73-BF4E-4910-8C24-46ED6A591CFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9AE6A73-BF4E-4910-8C24-46ED6A591CFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9AE6A73-BF4E-4910-8C24-46ED6A591CFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53443D30-FA6B-464D-92B5-F74DC89B89C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53443D30-FA6B-464D-92B5-F74DC89B89C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53443D30-FA6B-464D-92B5-F74DC89B89C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53443D30-FA6B-464D-92B5-F74DC89B89C4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

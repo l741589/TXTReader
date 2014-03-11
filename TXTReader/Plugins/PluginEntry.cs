@@ -10,11 +10,15 @@ using System.Reflection;
 using Zlib.Text;
 using System.Windows.Controls.Primitives;
 using System.Diagnostics;
+using System.Windows.Input;
+using Zlib.Text.Xml;
 
 namespace TXTReader.Plugins {
+    public enum PluginState { NotLoad, Ready, NoEntry, Loaded, Fail, NoEnoughNecessaryDependencies, NoEnoughUnnecessaryDependencies }
     public abstract class PluginEntry {
         public abstract String[] Dependency { get; }
-        public virtual Version Version { get { return Assembly.GetExecutingAssembly().GetName().Version; } }
+        public virtual Version Version { get { return Assembly.GetName().Version; } }
+        public virtual String Author { get { return "<匿名>"; } }
         public XmlParserReaderCallback ReadOption { get; set; }
         public XmlParserWriterCallback WriteOption { get; set; }
         public PluginManager Manager { get { return PluginManager.Instance; } }
@@ -22,6 +26,15 @@ namespace TXTReader.Plugins {
         public abstract void OnLoad(StartupEventArgs e);
         public abstract void OnWindowCreate(Window window);
         public abstract void OnUnload(ExitEventArgs e);
+        public PluginState PluginState { get; set; }
+        public int Index { get; set; }
+        public virtual String Description { get { return "<无描述>"; } }
+
+        protected Dictionary<String, Delegate> APIs = new Dictionary<String, Delegate>();
+
+        public PluginEntry() {
+            PluginState = PluginState.NotLoad;
+        }
 
         public void AddToolTab(object header,object item){
             G.ToolTabControl.Items.Add(new TabItem { Header = header, Content = item });
@@ -40,6 +53,17 @@ namespace TXTReader.Plugins {
 
         public void AddOptionGroup(UIElement e) {
             G.OptionPanel.Children.Add(e);
+        }
+
+        public override string ToString() {
+            return Assembly.GetName().Name;
+        }
+
+        public object Execute(String method, params object[] args) {
+            if (APIs.ContainsKey(method)) {
+                return APIs[method].Method.Invoke(this, args);
+            }
+            return null;
         }
     }
 }

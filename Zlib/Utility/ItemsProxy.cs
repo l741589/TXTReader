@@ -7,8 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Zlib.Utility {
+    public interface IItemProxy{
+        object Target{get;}
+    }
     public class ItemsProxy : INotifyCollectionChanged, IEnumerable {
-        public delegate object ProxyGetter(object obj);
+        public delegate IItemProxy ProxyGetter(object obj);
 
         private ProxyGetter Getter;
 
@@ -35,6 +38,24 @@ namespace Zlib.Utility {
             }
         }
 
+        private List<IItemProxy> Cache = new List<IItemProxy>();
+        private IItemProxy Get(object obj) {
+            if (obj==null) return null;
+            IItemProxy r = null;
+            r = Cache.Find(i => (i as IItemProxy).Target == obj);
+            if (r == null) {
+                r = Getter(obj);
+                Cache.Add(r);
+            }
+            return r;
+        }
+
+        private IItemProxy GetAndRemove(object obj) {
+            var r = Get(obj);
+            Cache.Remove(r);
+            return r;
+        }
+
         private IEnumerable Target;
         public ItemsProxy(IEnumerable target, ProxyGetter Getter) {
             Target = target;
@@ -45,10 +66,11 @@ namespace Zlib.Utility {
         }
 
         void FloatControls_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            
             List<object> NewItems = new List<object>();
             List<object> OldItems = new List<object>();
-            if (e.NewItems != null) for (int i = 0; i < e.NewItems.Count; ++i) NewItems.Add(Getter(e.NewItems[i]));
-            if (e.OldItems != null) for (int i = 0; i < e.OldItems.Count; ++i) OldItems.Add(Getter(e.OldItems[i]));
+            if (e.NewItems != null) for (int i = 0; i < e.NewItems.Count; ++i) NewItems.Add(Get(e.NewItems[i]));
+            if (e.OldItems != null) for (int i = 0; i < e.OldItems.Count; ++i) OldItems.Add(GetAndRemove(e.OldItems[i]));
             NotifyCollectionChangedEventArgs ee = null;
             switch (e.Action) {
                 case NotifyCollectionChangedAction.Add: ee = new NotifyCollectionChangedEventArgs(e.Action, NewItems, e.NewStartingIndex); break;

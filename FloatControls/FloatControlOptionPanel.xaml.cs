@@ -23,8 +23,10 @@ namespace FloatControls {
     /// </summary>
     public partial class FloatControlOptionPanel : UserControl {
 
-        class ItemProxy : DependencyObject {
-            public ItemProxy(IFloatControl target) {                
+        class ItemProxy : DependencyObject, IItemProxy {
+            public object Target { get; private set; }
+            public ItemProxy(IFloatControl target) {
+                Target = target;
                 BindingOperations.SetBinding(this, VisibilityProperty, new Binding("Visibility") { Mode=BindingMode.TwoWay,Source=target});
                 BindingOperations.SetBinding(this, NameProperty, new Binding("Name") { Source=target});
             }
@@ -34,6 +36,7 @@ namespace FloatControls {
 
             public static readonly DependencyProperty NameProperty =
                 DependencyProperty.Register("Name", typeof(String), typeof(ItemProxy));
+
         }
 
         public FloatControlOptionPanel() {

@@ -38,7 +38,7 @@ namespace TRProgressBar {
             show = Resources["show"] as Storyboard;
             hide = Resources["hide"] as Storyboard;
             ValueChanged += TRProgressBar_ValueChanged;
-            G.EmptyBook.Loaded += (d, e) => UpdateBinding();
+            G.BookChanged += (d, e) => UpdateBinding();
             Loaded += ProgressBar_Loaded;
             Tag = GetType().Name;
             this.Register();

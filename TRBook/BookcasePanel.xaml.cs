@@ -18,6 +18,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Collections.Specialized;
 using Zlib.Algorithm;
+using Zlib.Utility;
 
 namespace TRBook {
     /// <summary>
@@ -31,6 +32,11 @@ namespace TRBook {
             lb_book.ItemsSource = Book.Books;
             lb_book.Items.SortDescriptions.Add(new SortDescription("SortArgument", ListSortDirection.Descending));
             lb_book.Items.SortDescriptions.Add(new SortDescription("LastLoadTime", ListSortDirection.Descending));
+            G.BookChanged += (d, e) => {
+                if ((e.NewBook as Book).NotNull()) {
+                    Book.Books.Add(e.NewBook as Book);
+                }
+            };
         }
 
         private void Books_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
@@ -78,7 +84,7 @@ namespace TRBook {
             return false;
         }
 
-        private void OpenBook() {
+        private async void OpenBook() {
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.Multiselect = true;
             dlg.DefaultExt = "txt";
@@ -86,7 +92,7 @@ namespace TRBook {
             if (dlg.ShowDialog() == true) {
                 foreach (var f in dlg.FileNames) {
                     if (IsBookExists(f)) continue;
-                    Book b = new Book(f);
+                    Book b = await Book.CreateAsync(f);
                     if (IsBookExists(f, b.Id)) continue;
                     Book.Books.Add(b);
                     BookParser.Save(b);
@@ -102,14 +108,14 @@ namespace TRBook {
             }
         }
 
-        private void lbi_add_MouseUp(object sender, MouseButtonEventArgs e) { OpenBook(); }
-        private void MenuItem_Click(object sender, RoutedEventArgs e) { OpenBook(); }
+        private async void lbi_add_MouseUp(object sender, MouseButtonEventArgs e) { OpenBook(); }
+        private async void MenuItem_Click(object sender, RoutedEventArgs e) { OpenBook(); }
         private void MenuItem_Click_1(object sender, RoutedEventArgs e) { DelBook(); }
 
         private void lb_book_DoubleClick(object sender, MouseButtonEventArgs e) {
             var li = sender as ListBoxItem;
             var b = li.DataContext as Book;
-            Book.I=b;
+            G.Book=b;
             //new BookInterface().OpenFile()
             //G.Displayer.OpenBook(b);
             var i = Book.Books.IndexOf(b);

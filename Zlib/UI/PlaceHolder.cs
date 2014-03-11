@@ -11,16 +11,18 @@ namespace Zlib.UI {
     public class PlaceHolder :DependencyObject{
 
 
-        public static String GetPlaceHolder(DependencyObject obj) {
-            return (String)obj.GetValue(PlaceHolderProperty);
+
+        public static String GetText(DependencyObject obj) {
+            return (String)obj.GetValue(TextProperty);
         }
 
-        public static void SetPlaceHolder(DependencyObject obj, String value) {
-            obj.SetValue(PlaceHolderProperty, value);
+        public static void SetText(DependencyObject obj, String value) {
+            obj.SetValue(TextProperty, value);
         }
 
-        public static readonly DependencyProperty PlaceHolderProperty =
-            DependencyProperty.RegisterAttached("PlaceHolder", typeof(String), typeof(PlaceHolder), new PropertyMetadata((d, e) => {
+        // Using a DependencyProperty as the backing store for Text.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TextProperty =
+            DependencyProperty.RegisterAttached("Text", typeof(String), typeof(PlaceHolder), new PropertyMetadata((d, e) => {
                 if (GetBackground(d) == null) SetBackground(d, (d as Control).Background);
                 if (d is TextBox) {
                     (d as TextBox).TextChanged += PlaceHolder_TextChanged;
@@ -44,11 +46,36 @@ namespace Zlib.UI {
 
 
 
+        public static AlignmentX GetAlignmentX(DependencyObject obj) {
+            return (AlignmentX)obj.GetValue(AlignmentXProperty);
+        }
+
+        public static void SetAlignmentX(DependencyObject obj, AlignmentX value) {
+            obj.SetValue(AlignmentXProperty, value);
+        }
+
+        public static readonly DependencyProperty AlignmentXProperty =
+            DependencyProperty.RegisterAttached("AlignmentX", typeof(AlignmentX), typeof(PlaceHolder), new PropertyMetadata(AlignmentX.Left));
+
+
+
+        public static AlignmentY GetAlignmentY(DependencyObject obj) {
+            return (AlignmentY)obj.GetValue(AlignmentYProperty);
+        }
+
+        public static void SetAlignmentY(DependencyObject obj, AlignmentY value) {
+            obj.SetValue(AlignmentYProperty, value);
+        }
+
+        // Using a DependencyProperty as the backing store for AlignmentY.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty AlignmentYProperty =
+            DependencyProperty.RegisterAttached("AlignmentY", typeof(AlignmentY), typeof(PlaceHolder), new PropertyMetadata(AlignmentY.Center));
+
 
         static void PlaceHolder_TextChanged(object sender, TextChangedEventArgs e) {
             TextBox tb = sender as TextBox;
             if (tb.Text == null || tb.Text == "") {
-                VisualBrush b = new VisualBrush(new TextBlock() { Text = GetPlaceHolder(tb),FontStyle = FontStyles.Italic }) { TileMode = TileMode.None, Opacity = 0.3, Stretch = Stretch.None, AlignmentX = AlignmentX.Left };
+                VisualBrush b = new VisualBrush(new TextBlock() { Text = GetText(tb), FontStyle = FontStyles.Italic }) { TileMode = TileMode.None, Opacity = 0.3, Stretch = Stretch.None, AlignmentX = GetAlignmentX(tb), AlignmentY = GetAlignmentY(tb) };
                 tb.Background = b;
             } else {
                 tb.Background = GetBackground(tb);
@@ -58,7 +85,7 @@ namespace Zlib.UI {
         static void PlaceHolder_PasswordChanged(object sender, RoutedEventArgs e) {
             PasswordBox tb = sender as PasswordBox;
             if (tb.Password == null || tb.Password == "") {
-                VisualBrush b = new VisualBrush(new TextBlock() { Text = " "+GetPlaceHolder(tb), FontStyle = FontStyles.Italic }) { TileMode = TileMode.None, Opacity = 0.3, Stretch = Stretch.None, AlignmentX = AlignmentX.Left };
+                VisualBrush b = new VisualBrush(new TextBlock() { Text = " " + GetText(tb), FontStyle = FontStyles.Italic }) { TileMode = TileMode.None, Opacity = 0.3, Stretch = Stretch.None, AlignmentX = GetAlignmentX(tb), AlignmentY = GetAlignmentY(tb) };
                 tb.Background = b;
             } else {
                 tb.Background = GetBackground(tb);

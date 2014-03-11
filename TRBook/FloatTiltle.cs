@@ -10,22 +10,18 @@ namespace TRBook {
     class FloatTiltle : FloatMessage {
 
         public FloatTiltle() {
-            Book.Empty.Loaded += Empty_Loaded;
-            Book.Empty.Closed += Empty_Closed;
-            if (Book.I.IsNull()) return;
-            SetBinding(ValueProperty, new Binding("CurrentTitle") { Source = Book.I });
+            G.BookChanged += G_BookChanged;
+            //Book.Empty.Closed += Empty_Closed;
+            if (G.Book.IsNull()) return;
+            SetBinding(ValueProperty, new Binding("CurrentTitle") { Source = G.Book });
             Name = "章节";
             this.Register();
         }
 
-        void Empty_Closed(object sender, EventArgs e) {
-            BindingOperations.ClearAllBindings(this);
+        void G_BookChanged(object sender, TXTReader.BookChangedEventArgs e) {
             Value = null;
-        }
-
-        void Empty_Loaded(object sender, EventArgs e) {
             if (sender.IsNull()) return;
-            BindingOperations.ClearAllBindings(this);
+            BindingOperations.ClearBinding(this, ValueProperty);
             SetBinding(ValueProperty, new Binding("CurrentTitle") { Source = sender });
         }
     }

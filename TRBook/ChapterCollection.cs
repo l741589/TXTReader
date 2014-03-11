@@ -8,15 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using TRContent;
 
 namespace TRBook {
-    class ChapterCollection : IEnumerable<ContentItemAdapter>, INotifyCollectionChanged {
-        private LinkedList<ContentItemAdapter> data;
+    class ChapterCollection : IEnumerable<IContentItemAdapter>, INotifyCollectionChanged {
+        private LinkedList<IContentItemAdapter> data;
         public ChapterCollection() {
-            data = new LinkedList<ContentItemAdapter>();
+            data = new LinkedList<IContentItemAdapter>();
         }
 
-        public LinkedListNode<ContentItemAdapter> AddAfter(LinkedListNode<ContentItemAdapter> node, ContentItemAdapter item) {
+        public LinkedListNode<IContentItemAdapter> AddAfter(LinkedListNode<IContentItemAdapter> node, IContentItemAdapter item) {
             var r = data.AddAfter(node, item);
             item.Node = r;
             if (CollectionChanged!=null)
@@ -25,7 +26,7 @@ namespace TRBook {
 
         }
 
-        public LinkedListNode<ContentItemAdapter> AddFirst(ContentItemAdapter item) {
+        public LinkedListNode<IContentItemAdapter> AddFirst(IContentItemAdapter item) {
             var r = data.AddFirst(item);
             item.Node = r;
             if (CollectionChanged != null)
@@ -33,7 +34,7 @@ namespace TRBook {
             return r;
         }
 
-        public LinkedListNode<ContentItemAdapter> AddLast(ContentItemAdapter item) {
+        public LinkedListNode<IContentItemAdapter> AddLast(IContentItemAdapter item) {
             var r = data.AddLast(item);
             item.Node = r;
             if (CollectionChanged != null)
@@ -41,7 +42,7 @@ namespace TRBook {
             return r;
         }
 
-        public LinkedListNode<ContentItemAdapter> AddBefore(LinkedListNode<ContentItemAdapter> node, ContentItemAdapter item) {
+        public LinkedListNode<IContentItemAdapter> AddBefore(LinkedListNode<IContentItemAdapter> node, IContentItemAdapter item) {
             var r = data.AddBefore(node, item);
             item.Node = r;
             if (CollectionChanged != null)
@@ -54,21 +55,21 @@ namespace TRBook {
             Notify();
         }
 
-        public IEnumerator<ContentItemAdapter> GetEnumerator() { return data.GetEnumerator(); }
+        public IEnumerator<IContentItemAdapter> GetEnumerator() { return data.GetEnumerator(); }
         IEnumerator IEnumerable.GetEnumerator() { return data.GetEnumerator(); }
         //IEnumerator Enumerable.GetEnumerator() { return data.GetEnumerator(); }
         //public IEnumerator<ContentItemAdapter> GetEnumerator() { return data.GetEnumerator(); }
-        public bool Contains(ContentItemAdapter value) { return data.Contains(value); }
-        public void CopyTo(ContentItemAdapter[] array, int index) { data.CopyTo(array, index); }
-        public LinkedListNode<ContentItemAdapter> Find(ContentItemAdapter value) { return data.Find(value); }
-        public LinkedListNode<ContentItemAdapter> FindLast(ContentItemAdapter value) { return data.FindLast(value); }
+        public bool Contains(IContentItemAdapter value) { return data.Contains(value); }
+        public void CopyTo(IContentItemAdapter[] array, int index) { data.CopyTo(array, index); }
+        public LinkedListNode<IContentItemAdapter> Find(IContentItemAdapter value) { return data.Find(value); }
+        public LinkedListNode<IContentItemAdapter> FindLast(IContentItemAdapter value) { return data.FindLast(value); }
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context) { data.GetObjectData(info, context); }
         public virtual void OnDeserialization(object sender) { data.OnDeserialization(sender); }
-        public void Remove(LinkedListNode<ContentItemAdapter> node) {
+        public void Remove(LinkedListNode<IContentItemAdapter> node) {
             data.Remove(node);
             Notify();
         }
-        public bool Remove(ContentItemAdapter value) {
+        public bool Remove(IContentItemAdapter value) {
             var b = data.Remove(value);
             Notify();
             return b;
@@ -83,8 +84,8 @@ namespace TRBook {
                 CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, data.Last.Value, data.Count - 1));
             data.RemoveLast();
         }
-        public LinkedListNode<ContentItemAdapter> First { get { return data.First; } }
-        public LinkedListNode<ContentItemAdapter> Last { get { return data.Last; } }
+        public LinkedListNode<IContentItemAdapter> First { get { return data.First; } }
+        public LinkedListNode<IContentItemAdapter> Last { get { return data.Last; } }
         public int Count { get { return data.Count; } }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;

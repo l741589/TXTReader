@@ -21,6 +21,8 @@ using TXTReader.ToolPanel;
 using TXTReader.Interfaces;
 using Zlib.Utility;
 using TXTReader;
+using Microsoft.Win32;
+using TXTReader.Plugins;
 
 namespace TRDisplay {
     /// <summary>
@@ -40,7 +42,6 @@ namespace TRDisplay {
         public event RoutedEventHandler Shutdown { add { AddHandler(ShutdownEvent, value); } remove { RemoveHandler(ShutdownEvent, value); } }
         public double Speed { get { return (double)GetValue(SpeedProperty); } set { SetValue(SpeedProperty, value); } }
         public bool IsScrolling { get { return (bool)GetValue(IsScrollingProperty); } set { SetValue(IsScrollingProperty, value); } }        
-        public IBook EmptyBook { get { return G.EmptyBook; } }
         public IBook Book { get { return G.Book; } set { G.Book = value; } }
         public int Fps { get { return (int)GetValue(FpsProperty); } set { SetValue(FpsProperty, value); } }
         public int FirstLine { get { return Book.NotNull() ? Book.Position : 0; } set { if (Book.NotNull()) Book.Position = value; } }
@@ -61,22 +62,30 @@ namespace TRDisplay {
             InitComponent();
             G.Displayer = this;
             Loaded += Displayer4_Loaded;
-            if (EmptyBook!=null) {
-                EmptyBook.Loaded += (d, e) => {
+            PluginEventHandler eh1 = (d, e) => {
+                Clear();
+                Book = d as IBook;
+                Update();
+            };
+            PluginEventHandler eh = (d, e) => Update();
+            G.BookChanged += (d, e) => {                
+                if (e.NewBook != null) {                    
+                    e.NewBook.LoadFinished += eh1;
+                    e.NewBook.PositionChanged += eh;
+                    e.NewBook.OffsetChanged += eh;
+                } else {
                     Clear();
-                    Book = d as IBook;
-                    Update();
-                };
-                EventHandler eh = (d, e) => Update();
-                EmptyBook.LoadFinished += eh;
-                EmptyBook.PositionChanged += eh;
-                EmptyBook.OffsetChanged += eh;
-            }
+                }
+                Update();
+            };
+            
             if (Book.NotNull()) {
+                Book.LoadFinished += eh1;
+                Book.PositionChanged += eh;
+                Book.OffsetChanged += eh;
                 Update();
             }
             Options.Instance.Skin.PropertyChanged += (d, e) => UpdateSkin();
-            
         }
 
         void Displayer4_Loaded(object sender, RoutedEventArgs e) {
@@ -201,7 +210,7 @@ namespace TRDisplay {
                 updatelock = true;                
                 ForceUpdate();
                 reupdate = false;
-                await 10;
+                await 10.Wait();
                 updatelock = false;
             } while (reupdate);
         }
@@ -250,7 +259,8 @@ namespace TRDisplay {
             if (e.Data.GetFormats().Contains(DataFormats.FileDrop)){
                 Array c = e.Data.GetData(DataFormats.FileDrop) as Array;
                 if (c == null || c.Length <= 0) return;
-                EmptyBook.Open(c.GetValue(0).ToString());
+                //EmptyBook.Open(c.GetValue(0).ToString());
+                PluginManager.Instance.Execute("TRBook", "open", c.GetValue(0).ToString());
             }
             base.OnDrop(e);
         }
@@ -258,7 +268,7 @@ namespace TRDisplay {
         
         async void fpsTimer() {
             while (G.IsRunning) {
-                await 1000;
+                await 1000.Wait();
                 Fps = fps;
                 fps = 0;
             }

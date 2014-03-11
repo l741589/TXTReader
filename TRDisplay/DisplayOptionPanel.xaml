@@ -8,10 +8,7 @@
              xmlns:cvt="clr-namespace:TRDisplay.Converter"
              xmlns:zcvt="clr-namespace:Zlib.Converter;assembly=Zlib"
              mc:Ignorable="d"
-             d:DesignWidth="300">
-    <UserControl.DataContext>
-        <local:Options/>
-    </UserControl.DataContext>
+             d:DesignWidth="300" DataContext="{x:Static local:Options.Instance}">
     <UserControl.Resources>
         <ResourceDictionary>
             <zcvt:SolidColorCvt x:Key="brushCvt"/>
@@ -95,7 +92,7 @@
                                     SelectedColor="{Binding Foreground,Converter={StaticResource brushCvt},Mode=TwoWay}"/>
                     <TextBlock Grid.Row="0" Grid.Column="2" Text="字号"/>
                     <zw:SpinEdit Grid.Row="0" Grid.Column="3" x:Name="seFontSize" 
-                                    MinValue="1" MaxValue="100"
+                                    MinValue="8" MaxValue="100"
                 		            Value="{Binding FontSize, Mode=TwoWay}"/>
                 </Grid>
                 <local:EffectSelector Value="{Binding Effect, Mode=TwoWay}"/>
@@ -103,7 +100,7 @@
                 <local:BackgroundBrushSelector Value="{Binding Background, Mode=TwoWay}" x:Name="sel_bg"/>
                 <Label Content="布局" FontWeight="Bold"/>
                 <TextBlock Text="文本区边距"/>
-                <local:ThicknessSEGroup x:Name="segPadding" Thickness="{Binding Padding, Mode=TwoWay}"/>
+                <zw:ThicknessSEGroup x:Name="segPadding" Thickness="{Binding Padding, Mode=TwoWay}"/>
                 <UniformGrid Columns="4">
                     <TextBlock Text="行间距"/>
                     <zw:SpinEdit x:Name="seLineSpacing" Value="{Binding LineSpacing, Mode=TwoWay}"/>
@@ -116,7 +113,7 @@
             <StackPanel>
                 <DockPanel>
                     <TextBlock Text="自动滚屏速度"/>
-                    <zw:SpinEdit MaxValue="100" MinValue="1" x:Name="seSpeed"
+                    <zw:SpinEdit MaxValue="1000" MinValue="1" x:Name="seSpeed"
                                          Value="{Binding Speed, Mode=TwoWay}">
                     </zw:SpinEdit>
                 </DockPanel>

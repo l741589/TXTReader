@@ -1,0 +1,7 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="TRContent.Res">
+    <BitmapImage x:Key="cs_toolong" UriSource="/TRContent;component/res/cs_toolong.png"/>
+    <BitmapImage x:Key="cs_tooshort" UriSource="/TRContent;component/res/cs_tooshort.png"/>
+    <BitmapImage x:Key="cs_index" UriSource="/TRContent;component/res/cs_index.png"/>
+    <BitmapImage x:Key="cs_index_green" UriSource="/TRContent;component/res/cs_index_green.png"/>
+</ResourceDictionary>

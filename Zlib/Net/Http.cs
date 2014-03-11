@@ -23,7 +23,7 @@ namespace Zlib.Net {
         private String contentType = "application/x-www-form-urlencoded";
         private static bool doRefuse = false;
         public static bool IsDoRefuse { get; set; }
-        private static async void ResetDoRefuse() { await Task.Run(() => { Thread.Sleep(5000); }); doRefuse = false; }
+        private static async void ResetDoRefuse() { await TaskEx.Run(() => { Thread.Sleep(5000); }); doRefuse = false; }
         private static bool DoRefuse { get { return doRefuse && IsDoRefuse; } set { if (!doRefuse && value) ResetDoRefuse(); doRefuse = value; } }
 
         public String Url { get { return path; } }
@@ -379,7 +379,7 @@ namespace Zlib.Net {
         #endregion      
     
         public void Dispose() {
-            if (response != null) response.Dispose();
+            //if (response != null) response.Dispose();
         }
     }
 }

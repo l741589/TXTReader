@@ -10,6 +10,7 @@ using Zlib.Converter;
 using Zlib.Utility;
 using Zlib.Text;
 using System.Windows.Media.Imaging;
+using Zlib.Text.Xml;
 
 namespace Zlib.UI.Utility {
 

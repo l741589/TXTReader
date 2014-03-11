@@ -5,10 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" Panel.ZIndex="0"
              d:DesignHeight="300" d:DesignWidth="300" AllowDrop="True" Focusable="True">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ImageBrush x:Key="b_tile" TileMode="None" ImageSource="setting.png" Stretch="None" ViewportUnits="Absolute" />
-        </ResourceDictionary>
-    </UserControl.Resources>
-    <Canvas x:Name="canvas" ClipToBounds="True"></Canvas>
+    <Canvas x:Name="canvas" ClipToBounds="True">
+        
+    </Canvas>
 </UserControl>
