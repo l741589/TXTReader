@@ -10,8 +10,9 @@ using System.IO;
 using Zlib.Async;
 using Zlib.Net;
 using Zlib.Algorithm;
+using TXTReader.Interfaces;
 
-namespace TRBook.Net {
+namespace TRBookcase.Net {
     class Douban {
         public const String URL_SEARCH = "http://api.douban.com/book/subjects?q={0}&max-results=1";
         public static readonly Regex R_TOTALRESULTS = new Regex(@"<opensearch:totalResults>(?<R>[^<]*)</opensearch:totalResults>");
@@ -19,11 +20,10 @@ namespace TRBook.Net {
         public static readonly Regex R_AUTHOR = new Regex(@"<db:attribute name=""author"">(?<R>[^<]*)</db:attribute>");
 
         private static ZTask infoTask = new ZTask();
-        public static async void MoreInfo(Book b){
+        public static async void MoreInfo(IBook b){
             var author =b.Author;
             var title = b.Title;
             var cover = b.Cover;
-            var src = b.Source;
             String uri = null;
             await infoTask.Run(() => {
                 if (cover != null && cover != G.NO_COVER && author != null) return;
@@ -37,9 +37,9 @@ namespace TRBook.Net {
                         if (cover == null || cover == G.NO_COVER) {
                             uri = R_COVER.Match(xml).Groups["R"].ToString();
                             if (uri.StartsWith(A.HTTP_HEAD)) {
-                                String path = G.PATH_COVER + title + src.GetHashCode() + Path.GetExtension(uri);
-                                if (!File.Exists(path)) {
-                                    byte[] bs = Http.Create(uri).GetBytes();
+                                byte[] bs = Http.Create(uri).GetBytes();
+                                String path = G.PATH_COVER +  A.MD5(bs) + Path.GetExtension(uri);
+                                if (!File.Exists(path)) {                                    
                                     File.WriteAllBytes(path, bs);
                                     //G.MainWindow.Dispatcher.BeginInvoke(new Action(() => { G.Log = "拉取 " + title + " 封面成功"; }));
                                 }
@@ -50,10 +50,10 @@ namespace TRBook.Net {
                 } catch { }
             });
             b.Author = author;
-            if (uri!=null) b.Cover = new ImageSourceConverter().ConvertFrom(uri) as ImageSource;
+            if (uri != null) b.Cover = uri;
         }
 
-        public static async Task MoreInfoAsync(Book b) {
+        public static async Task MoreInfoAsync(IBook b) {
             if (b.Cover != null && b.Cover != G.NO_COVER && b.Author != null) return;
             String url = String.Format(URL_SEARCH, b.Title);
             /*网络最优策略*/String xml = await Http.Create(url).GetAsync();
@@ -66,21 +66,18 @@ namespace TRBook.Net {
                     if (b.Cover == null || b.Cover == G.NO_COVER) {
                         String uri = R_COVER.Match(xml).Groups["R"].ToString();
                         if (uri.StartsWith(A.HTTP_HEAD)) {
-                            String path = G.PATH_COVER + b.Title + b.Source.GetHashCode() + Path.GetExtension(uri);
+                            byte[] bs = await Http.Create(uri).GetBytesAsync();
+                            String path = G.PATH_COVER + A.MD5(bs) + Path.GetExtension(uri);
                             if (!File.Exists(path)) {
-                                byte[] bs = await Http.Create(uri).GetBytesAsync();
+                                
                                 File.WriteAllBytes(path, bs);
                             }
                             uri = path;
                         }
-                        b.Cover = new ImageSourceConverter().ConvertFrom(uri) as ImageSource;
+                        b.Cover = uri;
                     }
                 }
             } catch { }
-        }
-
-        public static void MoreInfoSync(Book b) {
-           
         }
     }
 }

@@ -15,17 +15,11 @@ using System.Windows.Media.Imaging;
 namespace TRBook {
     internal class G : TXTReader.G {
         public static readonly Res Res;
-        public static readonly ImageSource NO_COVER = null;
-
-      
-        public static String PATH_COVER { get { return A.CheckDir(PATH + @"cover\"); } }
-        public static String PATH_BOOK { get { return A.CheckDir(PATH + @"books\"); } }
-        public static String EXT_BOOK { get { return ".trb"; } }
-        
+        public static readonly String NO_COVER = null;
 
         static G() {
             Res = new Res();
-            NO_COVER = Res["src_nocover"] as ImageSource;
+            NO_COVER = "/TRBook;component/res/no_cover.png";
         }
     }
 }

@@ -25,11 +25,13 @@ namespace TRSpider {
         public SpiderClosure SpiderClosure { get; set; }
         public Exception Exception { get; set; }
         public int Thread { get; set; }
+        public bool AlreadyDone { get; set; }
     }
 
     public delegate void PreparingEventHandler(object sender, PreparingEventArgs e);
     public class PreparingEventArgs : EventArgs {
         public SpiderClosure Spider { get; set; }
+        public bool AlreadyDone { get; set; }
         public Exception Exception { get; set; }
     }
 
@@ -85,8 +87,12 @@ namespace TRSpider {
                     try {
                         e.Search(keyWord);
                         if (e.BookDesc != null) {
-                            e.GetContent(e.BookDesc.ContentUrl);
-                            OnPreparing(e);
+                            if (e.Chapters != null) {
+                                OnPreparing(e, null, true);
+                            } else {
+                                e.GetContent(e.BookDesc.ContentUrl);
+                                OnPreparing(e);
+                            }
                         } else {
                             OnPreparing(e, new Exception("抓取书籍信息失败"));
                         }
@@ -104,16 +110,9 @@ namespace TRSpider {
             if (std == null) return;
             if (std.Chapters == null) return;
             task = new ZMultiTask();
-            //StringBuilder sb = new StringBuilder();
             foreach (var e in std.Chapters) {
                 task.Add(() => {
                     var cd = DownloadChapter(std, e);
-                    //lock (sb) {
-                    //    if (cd == null || cd.State != ChapterDescEx.States.Success)
-                    //        sb.Append(e.Title).Append("\r\n").Append("章节抓取失败").Append("\r\n\r\n");
-                    //    else
-                    //        sb.Append(e.Title).Append("\r\n").Append(cd.Text).Append("\r\n\r\n");
-                    //}
                 }, e);
             }
 
@@ -127,7 +126,6 @@ namespace TRSpider {
             };
             await zmtask;
             task = null;
-            //  return sb.ToString();
         }
 
         public Dictionary<int, ChapterDescEx> GenerateChapterHolder() {            
@@ -145,17 +143,25 @@ namespace TRSpider {
 
 
         //输入要保证cd是std的章节
-        public ChapterDescEx DownloadChapter(SpiderClosure std, ChapterDescEx cd,bool retryfail = false) {
-            if (cd.State == ChapterDescEx.States.Ready || (retryfail && cd.State == ChapterDescEx.States.Fail)) {
-                cd.State = ChapterDescEx.States.Pending;
-                cd.Standard = cd;
-                std.GetText(cd);
-            }
+        public ChapterDescEx DownloadChapter(SpiderClosure std, ChapterDescEx cd, bool retryfail = false) {
             if (cd.State == ChapterDescEx.States.Success) {
-                OnDownloadingChapter(DownloadingChapterEventArgs.States.StandardSuccess, std, cd, cd);
+                OnDownloadingChapter(DownloadingChapterEventArgs.States.StandardSuccess, std, cd, cd, null, true);
                 return cd;
             } else {
-                OnDownloadingChapter(DownloadingChapterEventArgs.States.StandardFail, std, cd, cd);
+                if (cd.State == ChapterDescEx.States.Ready || cd.State == ChapterDescEx.States.Pending || 
+                    (retryfail && cd.State == ChapterDescEx.States.Fail)) {
+                    cd.State = ChapterDescEx.States.Pending;
+                    cd.Standard = cd;
+                    std.GetText(cd);
+                }else if (!retryfail && cd.State == ChapterDescEx.States.Fail){
+                    OnDownloadingChapter(DownloadingChapterEventArgs.States.StandardFail, std, cd, cd);
+                }
+                if (cd.State == ChapterDescEx.States.Success) {
+                    OnDownloadingChapter(DownloadingChapterEventArgs.States.StandardSuccess, std, cd, cd);
+                    return cd;
+                } else {
+                    OnDownloadingChapter(DownloadingChapterEventArgs.States.StandardFail, std, cd, cd);
+                }
             }
             ChapterDescEx r = cd;
             foreach (var e in Spiders) {
@@ -166,12 +172,15 @@ namespace TRSpider {
                 if (r == null) continue;
                 r.Standard = cd;
                 if (r.State == ChapterDescEx.States.Success) {
-                    OnDownloadingChapter(DownloadingChapterEventArgs.States.NonstandardSuccess, e, cd, r);
+                    OnDownloadingChapter(DownloadingChapterEventArgs.States.NonstandardSuccess, e, cd, r, null, true);
                     return r;
                 } else if (r.State == ChapterDescEx.States.Ready || r.State == ChapterDescEx.States.Pending ||
-                    (retryfail && cd.State == ChapterDescEx.States.Fail)) {
+                    (retryfail && r.State == ChapterDescEx.States.Fail)) {
                         r.State = ChapterDescEx.States.Ready;
                     e.GetText(r);
+                }else if (!retryfail && r.State == ChapterDescEx.States.Fail){
+                    OnDownloadingChapter(DownloadingChapterEventArgs.States.NonstandardFail, e, cd, r);
+                    continue;
                 }
                 if (r.State == ChapterDescEx.States.Success && !r.Text.IsNullOrWhiteSpace()) {
                     //cd.State = ChapterDescEx.States.NonstandardSuccess;
@@ -277,7 +286,7 @@ namespace TRSpider {
             //return null;
         }
 
-        private void OnDownloadingChapter(DownloadingChapterEventArgs.States state, SpiderClosure spider, ChapterDescEx std = null, ChapterDescEx real = null, Exception exception = null) {
+        private void OnDownloadingChapter(DownloadingChapterEventArgs.States state, SpiderClosure spider, ChapterDescEx std = null, ChapterDescEx real = null, Exception exception = null, bool alreadyDone = false) {
             if (DownloadingChapter != null) {
                 DownloadingChapterEventArgs e = new DownloadingChapterEventArgs {
                     State = state,
@@ -285,17 +294,19 @@ namespace TRSpider {
                     StandardChapter = std,
                     SpiderClosure = spider,
                     Exception = exception,
-                    Thread = ZMultiTask.CurrentId
+                    Thread = ZMultiTask.CurrentId,
+                    AlreadyDone = alreadyDone
                 };
                 DownloadingChapter(this, e);
             }
         }
 
-        private void OnPreparing(SpiderClosure spider, Exception e = null) {
+        private void OnPreparing(SpiderClosure spider, Exception e = null, bool alreadyDone = false) {
             if (Preparing != null) {
                 var args = new PreparingEventArgs {
                     Spider = spider,
-                    Exception = e
+                    Exception = e,
+                    AlreadyDone = alreadyDone
                 };
                 Preparing(this, args);
             }

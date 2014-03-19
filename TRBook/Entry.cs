@@ -13,50 +13,36 @@ using System.ComponentModel;
 using System.Reflection;
 using FloatControls;
 using Zlib.Win32;
+using TXTReader.Interfaces;
 
 namespace TRBook {
     class Entry  : PluginEntry {
 
-        public static String Filename = null;
         public const String S_BOOK = "book";
         public const String S_MINCHAPTERLENGTH = "minchapterlength";
         public const String S_MAXCHAPTERLENGTH = "maxchapterlength";
 
-        public override string[] Dependency { get { return new String[] { "TXTReader", "TRContent", "*FloatControls", "*TRSpider" }; } }
+        public override string[] Dependency { get { return new String[] { "TXTReader", "TRContent", "*FloatControls", "*TRSpider", "*TRBookcase" }; } }
 
         public override void OnLoad(StartupEventArgs e) {
             Register();
-            BookParser.Load();
-            AddContextMenu(G.Res["contextMenu"] as ContextMenu);
+            RegisterOpenCallback("txt", "文本文档");
 
             ReadOption = r => r
-                .Read(S_BOOK, n => { if (Filename == null) Filename = n.InnerText; })
                 .Read(S_MINCHAPTERLENGTH, (n) => { Chapter.MinChapterLength = int.Parse(n.InnerText); })
                 .Read(S_MAXCHAPTERLENGTH, (n) => { Chapter.MaxChapterLength = int.Parse(n.InnerText); });
 
-            WriteOption = w => w
-                .Write(S_BOOK, Filename)
+            WriteOption = w => w               
                 .Write(S_MINCHAPTERLENGTH, Chapter.MinChapterLength)
                 .Write(S_MAXCHAPTERLENGTH, Chapter.MaxChapterLength);
-
-            if (e.Args != null && e.Args.Length > 0) {
-                Filename = e.Args[0];
-            }
         }
 
         public override void OnWindowCreate(Window window) {
             APIs.Add("open", new Action<String>(s => { Book.Open(s); }));
             AddOptionGroup("目录", new ContentOptionPanel());
             InitCallback(window);
-            InitCommandBinding(window);
-            try {
-                if (!String.IsNullOrEmpty(Filename))
-                    G.Book= new Book(Filename);
-            } catch { }
-            if (Manager["FloatControls"] != null) {
-                Assembly.CreateInstance("TRBook.FloatTiltle");
-                //if (Manager["TRSearchBar"] != null) Assembly.CreateInstance("TRBook.Rules.TrmexComparer");
-            }
+            
+            
         }
 
         private void InitCallback(Window w) {
@@ -65,30 +51,7 @@ namespace TRBook {
             w.KeyDown += w_KeyDown;
         }        
 
-        private void InitCommandBinding(Window w) {
-            /*w.CommandBindings.Add(new CommandBinding(ApplicationCommands.Open,
-            (d, e) => {                
-                var dlg = new System.Windows.Forms.OpenFileDialog();
-                dlg.Filter = Properties.Resources.FILE_FILTER;
-                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) G.Book = new Book(dlg.FileName);
-            }, (d, e) => { e.CanExecute = true; }));*/
-
-            w.CommandBindings.Add(new CommandBinding(ApplicationCommands.Close,
-                (d, e) => { 
-                    G.Book = null; 
-                },
-                (d, e) => { e.CanExecute = G.Book.NotNull(); })
-            );
-
-            w.CommandBindings.Add(new CommandBinding(MyCommands.Reopen,
-                (d, e) => { G.Book.Reopen(); },
-                (d, e) => { e.CanExecute = G.Book.NotNull(); })
-            );
-        }
-
-        void MainWindow_Loaded(object sender, RoutedEventArgs e) {
-            AddToolTab("书签", new BookmarkPanel());
-            AddToolTab("书架", new BookcasePanel());
+        void MainWindow_Loaded(object sender, RoutedEventArgs e) {            
             
         }
 
@@ -106,12 +69,11 @@ namespace TRBook {
         }
 
         void w_Closing(object sender, CancelEventArgs e) {
-            if ((G.Book as Book).NotNull()) Filename = (G.Book as Book).Source; else Filename = null;
-            G.Book = null;
+           
         }
 
         public override void OnUnload(ExitEventArgs e) {
-            BookParser.Save();
+            
         }
 
         private void Register(){
@@ -130,9 +92,14 @@ namespace TRBook {
             RegUtil.CreateSuffixName(".trb", "TXTReaderBook", "TXTReader小说", null, AppDomain.CurrentDomain.BaseDirectory + "TXTReader.exe");
         }
 
-        public override string Description {
-            get {
-                return "占用Book插槽\n提供书籍的管理功能";
+        public override string Description { get { return "占用Book插槽\n提供书籍的管理功能"; } }
+        public override string Author { get { return "大钊"; } }
+
+        public override void OnOpen(object arg) {
+            if (arg is String) {
+                Book.Open((String)arg);
+            } else if (arg is IBook){
+                Book.Open((IBook)arg);
             }
         }
     }

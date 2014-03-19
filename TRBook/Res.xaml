@@ -2,9 +2,4 @@
                     xmlns:local="clr-namespace:TRBook"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="TRBook.Res">
     <BitmapImage x:Key="src_nocover" UriSource="/TRBook;component/res/no_cover.png"/>
-    <ContextMenu x:Key="contextMenu">
-        <MenuItem Header="打开(_O)" Command="ApplicationCommands.Open"/>
-        <MenuItem Header="关闭(_C)" Command="ApplicationCommands.Close"/>
-        <MenuItem Header="重开(_R)" Command="local:MyCommands.Reopen"/>
-    </ContextMenu>
 </ResourceDictionary>

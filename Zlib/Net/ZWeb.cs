@@ -8,6 +8,7 @@ using System.Windows.Input;
 using Zlib.Async;
 using System.ComponentModel;
 using System.Net.Mime;
+using System.Threading;
 
 namespace Zlib.Net {
     
@@ -32,7 +33,14 @@ namespace Zlib.Net {
             Timeout = int.MaxValue;
             ContentType = "application/x-www-form-urlencoded";
         }
-        
+
+        public static void Lock() {
+            Monitor.Enter(Instance);
+        }
+
+        public static void ReleaseLock() {
+            Monitor.Exit(Instance);
+        }
 
         private static ZWeb instance = null;
         public static ZWeb Instance {
@@ -173,5 +181,7 @@ namespace Zlib.Net {
             var fe = new FileEntity(filename, name);
             return UploadEntityTaskAsync(url, fe, progressChanged);
         }
+
+        
     }
 }

@@ -215,7 +215,7 @@ namespace TRBook
                 Children.Clear();
                 Children = null;
             }
-            if ((G.Book as Book).Bookmark!=null) (G.Book as Book).Bookmark.Clear();
+            //if ((G.Book as Book).Bookmark!=null) (G.Book as Book).Bookmark.Clear();
             Parent = null;            
         }
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace TRBook.Converter {
+namespace TRBookcase.Converter {
     class BookLengthConverter :IValueConverter{
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture) {
             int x = int.Parse(value.ToString());

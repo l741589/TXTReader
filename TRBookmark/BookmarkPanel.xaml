@@ -1,10 +1,10 @@
-﻿<UserControl x:Class="TRBook.BookmarkPanel"
+﻿<UserControl x:Class="TRBookmark.BookmarkPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:cvt="clr-namespace:Zlib.Converter;assembly=Zlib"
-             xmlns:bookcvt="clr-namespace:TRBook.Converter"
+             xmlns:bookcvt="clr-namespace:TRBookmark.Converter"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="300" Padding="8">
     <UserControl.Resources>
@@ -44,15 +44,15 @@
                             Text="{Binding Time,Converter={StaticResource ResourceKey=timecvt},ConverterParameter=progress}" 
                             FontWeight="Bold" HorizontalAlignment="Left" Grid.Column="0" Grid.Row="0"/>
                         <TextBlock  FontSize="8" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Foreground="Gray"
-                            Text="{Binding Position,Converter={StaticResource ResourceKey=bmkcvt},ConverterParameter=progress}" 
+                            Text="{Binding Converter={StaticResource ResourceKey=bmkcvt},ConverterParameter=progress}" 
                             FontWeight="Bold" HorizontalAlignment="Right" Grid.Column="1" Grid.Row="0"/>
                         <TextBlock FontSize="12" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" 
-                            Text="{Binding Position,Converter={StaticResource ResourceKey=bmkcvt},ConverterParameter=preview}"
-                            Height="64" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"/>
-                        <ProgressBar Grid.Column="0" Grid.Row="0" Foreground="#b0ffe0" BorderBrush="Transparent"
-                            Value="{Binding Position,Converter={StaticResource ResourceKey=bmkcvt},ConverterParameter=progressbar}"
+                            Text="{Binding Preview}"
+                            Height="64" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"/> 
+                        <!--<ProgressBar Grid.Column="0" Grid.Row="0" Foreground="#b0ffe0" BorderBrush="Transparent"
+                            Value="{Binding Converter={StaticResource ResourceKey=bmkcvt},ConverterParameter=progressbar}"
                             Background="Transparent" Panel.ZIndex="-1" Grid.RowSpan="2" Grid.ColumnSpan="2">
-                        </ProgressBar>
+                        </ProgressBar> -->
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

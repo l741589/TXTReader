@@ -53,6 +53,8 @@ namespace TXTReader {
         public static String NAME_OPTION { get { return PATH + "option" + EXT_OPTION; } }
         public static String PATH_PLUGINS { get { return A.CheckDir(PATH + @"plugins\"); } }
         public static String PATH_SOURCE { get { return A.CheckDir(PATH + @"source\"); } }
+        public static String PATH_BOOK { get { return A.CheckDir(PATH + @"books\"); } }
+        public static String EXT_BOOK { get { return ".trb"; } }
         #endregion
 
 
@@ -67,10 +69,10 @@ namespace TXTReader {
             get { return book; }
             set {
                 if (book == value) return;
-                if (book != null) book.Close();
+                var old = book;
                 book = value;
+                if (old.NotNull()) old.Close();
                 if (book != null) book.Load();
-                var old = book; book = value;
                 if (BookChanged != null) BookChanged(book, new BookChangedEventArgs(old, book));
             }
         }
@@ -84,5 +86,6 @@ namespace TXTReader {
         public static ITRTimer Timer { get; set; }
         public static MyHttp Net { get; private set; }
         public static ObjectMutexManager<RoutedUICommand> CommandManager { get; private set; }
+
     }
 }

@@ -49,6 +49,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TRContent", "TRContent\TRCo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TRWebBook", "TRWebBook\TRWebBook.csproj", "{53443D30-FA6B-464D-92B5-F74DC89B89C4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TRBookcase", "TRBookcase\TRBookcase.csproj", "{554BF4EF-4860-4E2E-AF29-359B8E43D050}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TRBookmark", "TRBookmark\TRBookmark.csproj", "{3E0D15FB-6AAE-4FAF-A80A-AB5834956406}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +115,14 @@ Global
 		{53443D30-FA6B-464D-92B5-F74DC89B89C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53443D30-FA6B-464D-92B5-F74DC89B89C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53443D30-FA6B-464D-92B5-F74DC89B89C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{554BF4EF-4860-4E2E-AF29-359B8E43D050}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{554BF4EF-4860-4E2E-AF29-359B8E43D050}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{554BF4EF-4860-4E2E-AF29-359B8E43D050}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{554BF4EF-4860-4E2E-AF29-359B8E43D050}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E0D15FB-6AAE-4FAF-A80A-AB5834956406}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E0D15FB-6AAE-4FAF-A80A-AB5834956406}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E0D15FB-6AAE-4FAF-A80A-AB5834956406}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E0D15FB-6AAE-4FAF-A80A-AB5834956406}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

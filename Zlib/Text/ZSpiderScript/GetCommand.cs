@@ -38,8 +38,10 @@ namespace Zlib.Text.ZSpiderScript {
                     }
                     String res = null;
                     if (ContainsSwich("-nr")) W.AllowAutoRedirect = false; else W.AllowAutoRedirect = true;
-                    if (this[0] != null) res = Encoding.GetString(W.DownloadData(GenVar(this[0])));
-                    else res = Encoding.GetString(W.DownloadData(input));
+                    lock (W) {
+                        if (this[0] != null) res = Encoding.GetString(W.DownloadData(GenVar(this[0])));
+                        else res = Encoding.GetString(W.DownloadData(input));
+                    }
                     W.AllowAutoRedirect = true;
                     if (ContainsSwich("-dh")) {
                         var keys = W.ResponseHeaders.AllKeys;

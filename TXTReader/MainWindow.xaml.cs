@@ -28,6 +28,7 @@ using Zlib.UI.Utility;
 using TXTReader.Interfaces;
 using Zlib;
 using Zlib.Win32;
+using Zlib.Utility;
 
 namespace TXTReader {
     /// <summary>
@@ -55,6 +56,31 @@ namespace TXTReader {
             PluginManager.Instance.OnWindowCreate(this);
             if (Displayer!=null) Displayer.ContextMenu = G.ContextMenu.Add(Resources["mainContextMenu"] as ContextMenu).Build();
             Focus();
+
+            CommandBindings.Add(new CommandBinding(ApplicationCommands.Close,
+              (d, e) => { G.Book = null; },
+              (d, e) => { e.CanExecute = G.Book.NotNull(); })
+            );
+
+            CommandBindings.Add(new CommandBinding(MyCommands.Reopen,
+                (d, e) => { G.Book.Reopen(); },
+                (d, e) => { e.CanExecute = G.Book.NotNull(); })
+            );
+
+            CommandBindings.Add(new CommandBinding(ApplicationCommands.Open,
+            (d, e) => {
+                var dlg = new System.Windows.Forms.OpenFileDialog();
+                dlg.Filter = PluginManager.Instance.OpenFilter;
+                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                    try {
+                        PluginManager.OpenFile(dlg.FileName);
+                    } catch {
+#if DEBUG
+                        throw;
+#endif
+                    }
+                }
+            }, (d, e) => { e.CanExecute = true; }));
         }
 
         private bool lastIsBordered = true;
@@ -228,7 +254,15 @@ namespace TXTReader {
         private void bossKey_Executed(object sender, ExecutedRoutedEventArgs e) { Toggle(); }
 
         private void exit_CanExecute(object sender, CanExecuteRoutedEventArgs e) { e.CanExecute = true; }
-        private void exit_Executed(object sender, ExecutedRoutedEventArgs e) { Close(); }
+        private void exit_Executed(object sender, ExecutedRoutedEventArgs e) {
+            try {
+                Close();
+            } catch {
+#if DEBUG
+                throw;
+#endif
+            }
+        }
 
         private void mi_scroll_Loaded(object sender, RoutedEventArgs e) {
             (sender as MenuItem).SetBinding(MenuItem.IsCheckedProperty, new Binding("IsScrolling") { Source = G.Displayer });

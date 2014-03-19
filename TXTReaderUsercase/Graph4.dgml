@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DirectedGraph GraphDirection="LeftToRight" Layout="ForceDirected" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+  <Nodes>
+    <Node Id="FloatControls.dll" Bounds="158.952718736798,551.565993429593,133.733333333333,25" Group="Collapsed" UseManualLocation="True" />
+    <Node Id="Json处理工具" Bounds="119.576457825699,120.605993457775,93.323350076294,25.2399999893188" Label="Json处理工具" />
+    <Node Id="TRBook.dll" Bounds="-171.599425583928,127.737818481252,100.99,25" Group="Collapsed" UseManualLocation="True" />
+    <Node Id="TRBookcase.dll" Bounds="527.312586189509,311.788628038901,126.003333333333,25" Group="Collapsed" UseManualLocation="True" />
+    <Node Id="TRBookmark.dll" Bounds="527.312586189509,144.143162821724,129.983333333334,25" Group="Collapsed" UseManualLocation="True" />
+    <Node Id="TRContent.dll" Bounds="124.218293025621,-295.59400647449,206.138072572266,195.720399932265" Group="Expanded" UseManualLocation="True" />
+    <Node Id="TRDisplay.dll" Bounds="-184.002758917262,373.447494208431,113.393333333333,25" Group="Collapsed" UseManualLocation="True" />
+    <Node Id="TRProgressBar.dll" Bounds="42.0411849402417,496.565993429594,140.146666666666,25" Group="Collapsed" UseManualLocation="True" />
+    <Node Id="TRSearchBar.dll" Bounds="-199.382758917262,296.022240930629,128.773333333333,25" Group="Collapsed" UseManualLocation="True" />
+    <Node Id="TRSpider.dll" Bounds="527.312586189509,366.788628038901,108.52,25" Group="Collapsed" UseManualLocation="True" />
+    <Node Id="TRWebBook.dll" Bounds="212.187951606908,496.565993429594,127.673333333333,24.9999999999999" Group="Collapsed" UseManualLocation="True" />
+    <Node Id="TXTReader.exe" Bounds="159.564471635386,441.565993429593,124.44,25" Group="Collapsed" UseManualLocation="True" />
+    <Node Id="Win32工具" Bounds="-20.6093255839287,195.845993447094,241.921811773438,195.7199999825" Group="Expanded" Label="Win32工具" />
+    <Node Id="Xml处理工具" Bounds="-0.609325583928666,120.605993457775,90.1857834096272,25.2399999893188" Label="Xml处理工具" />
+    <Node Id="ZMatchExpression解释器" Bounds="-0.609325583928666,65.3659934577748,160.733333333333,25.24" Label="ZMatchExpression解释器" />
+    <Node Id="ZSpiderScript宿主扩展" Bounds="-42.9655048273569,302.985118186987,145.146666666667,25.24" Label="ZSpiderScript宿主扩展" UseManualLocation="True" />
+    <Node Id="ZSpiderScript解释器" Bounds="-0.609325583928666,10.1259934577748,133.146666666667,25.24" Label="ZSpiderScript解释器" />
+    <Node Id="Zlib.dll" Bounds="-40.6093255839287,-69.8740065422252,537.921811773438,481.439999971819" Group="Expanded" UseManualLocation="True" />
+    <Node Id="ZlibUAC.dll" Bounds="-15.2951403077126,-129.828189273078,109.513333333333,25" Group="Collapsed" Label="ZlibUAC.exe" UseManualLocation="True" />
+    <Node Id="下载信息" Bounds="989.059266151407,167.266696446634,68,25.24" UseManualLocation="True" />
+    <Node Id="主窗口" Bounds="679.566296338748,153.630403926778,132.000905187988,140.480299998594" Group="Expanded" Label="主窗口" UseManualLocation="True" />
+    <Node Id="书签保存扩展" Bounds="1283.27893910525,357.937558242635,92.0466128105468,25.2399999746872" Label="书签保存扩展" UseManualLocation="True" />
+    <Node Id="书签支持" Bounds="1283.27868594021,302.697079714354,68,25.2399999999998" Label="书签支持" UseManualLocation="True" />
+    <Node Id="书籍下载窗口" Bounds="222.351938613398,377.048442161596,92,25.24" Label="书籍下载窗口" UseManualLocation="True" />
+    <Node Id="书籍下载管理器" Bounds="88.351877578242,377.06009987644,104,25.24" UseManualLocation="True" />
+    <Node Id="书籍信息保存及扩展支持" Bounds="1901.96898977949,675.631806447592,152,25.2399999999998" Label="书籍信息保存及扩展支持" UseManualLocation="True" />
+    <Node Id="书籍信息自动获取" Bounds="1901.96904084248,786.112031068257,115.976887620117,25.2399999774216" Label="书籍信息自动获取" UseManualLocation="True" />
+    <Node Id="书籍搜索窗口" Bounds="989.059470694375,222.506763007087,92.07222275,25.239999955" Label="书籍搜索窗口" UseManualLocation="True" />
+    <Node Id="全局上下文" Bounds="841.567310391207,211.25121285495,80.0017596801758,25.2399999992967" Label="全局上下文" UseManualLocation="True" />
+    <Node Id="全局钩子封装" Bounds="-0.650999639822203,235.846297885472,91.9322166666666,25.2387999999998" Label="全局钩子封装" />
+    <Node Id="其他常用小工具" Bounds="373.312486189509,251.085993447094,104,25.24" Label="其他常用小工具" />
+    <Node Id="在线书籍" Bounds="989.059266151407,112.026736689435,68,25.24" Label="在线书籍" UseManualLocation="True" />
+    <Node Id="工具面板" Bounds="699.566298557222,248.871207972138,68.0026236801758,25.2399999992967" Label="工具面板" />
+    <Node Id="帧率悬浮信息" Bounds="818.026513872223,467.524456225514,92.0225718780517,25.2399998417968" Label="帧率悬浮信息" UseManualLocation="True" />
+    <Node Id="常用控件" Bounds="385.312486189509,306.325993447094,67.9217117734377,25.2399999825" Label="常用控件" />
+    <Node Id="常用注册表操作" Bounds="-0.609325583928666,291.085993447093,104,25.2399999999998" Label="常用注册表操作" />
+    <Node Id="常用转换器" Bounds="349.316377856176,195.846593447094,79.9922166666667,25.2388" Label="常用转换器" />
+    <Node Id="并发及异步工具" Bounds="251.312486189509,306.325993447094,104,25.24" Label="并发及异步工具" />
+    <Node Id="悬浮信息支持" Bounds="101.71962467427,497.278975687764,92,25.24" UseManualLocation="True" />
+    <Node Id="悬浮信息管理面板" Bounds="223.71962467427,497.278975687764,116,25.24" UseManualLocation="True" />
+    <Node Id="悬浮信息设置面板" Bounds="101.71962467427,552.518975687764,116,25.24" UseManualLocation="True" />
+    <Node Id="扩展支持" Bounds="1044.9025263777,504.172406158997,115.920853684815,25.2399998930468" Label="搜索方式扩展支持" UseManualLocation="True" />
+    <Node Id="提权操作" Bounds="963.412573819404,1174.30182032731,91.9106978330078,25.2399996492968" Label="提权操作支持" UseManualLocation="True" />
+    <Node Id="插件上下文" Bounds="971.569157781939,193.631217634179,79.9317807190237,25.2400001203137" Label="插件上下文" />
+    <Node Id="插件入口" Bounds="1087.05926615141,112.026736689435,68,25.24" Label="插件入口" UseManualLocation="True" />
+    <Node Id="插件入口1" Bounds="-42.965505234258,506.431834495581,68,25.24" Label="插件入口" UseManualLocation="True" />
+    <Node Id="插件入口2" Bounds="1130.90280916493,448.932446360677,68,25.24" Label="插件入口" UseManualLocation="True" />
+    <Node Id="插件入口3" Bounds="1166.02919617732,402.35536655924,68,25.2399999999998" Label="插件入口" UseManualLocation="True" />
+    <Node Id="插件入口4" Bounds="818.026532451324,357.044445161061,68.005078665161,25.2399999980469" Label="插件入口" UseManualLocation="True" />
+    <Node Id="插件入口5" Bounds="144.218293025621,-255.5935620301,68.0690362861328,25.2399999774216" Label="插件入口" />
+    <Node Id="插件入口6" Bounds="1381.27868594021,302.697201784666,68,25.2399999999998" Label="插件入口" UseManualLocation="True" />
+    <Node Id="插件入口7" Bounds="1901.9689117292,730.871918763569,68.0878636201173,25.2399999774216" Label="插件入口" UseManualLocation="True" />
+    <Node Id="插件入口8" Bounds="1384.70086406599,452.009417761607,68.0025979980469,25.2399999980471" Label="插件入口" UseManualLocation="True" />
+    <Node Id="插件入口9" Bounds="101.71962467427,442.038975687764,68,25.24" Label="插件入口" UseManualLocation="True" />
+    <Node Id="插件接口" Bounds="1081.50092991684,248.871177466522,68.0026236801757,25.239999999297" Label="插件接口" />
+    <Node Id="插件管理器" Bounds="971.569157781939,248.871177406014,79.9317807190237,25.2400001203137" Label="插件管理器" />
+    <Node Id="插件管理面板" Bounds="699.56633857065,193.631217694735,92.0008956801757,25.239999999297" Label="插件管理面板" />
+    <Node Id="插件系统" Bounds="951.569155563465,153.630403745253,217.934426320693,140.480300240627" Group="Expanded" Label="插件系统" UseManualLocation="True" />
+    <Node Id="搜索框" Bounds="1044.90253450673,448.932385337728,56,25.24" Label="搜索框" UseManualLocation="True" />
+    <Node Id="数据数据管理器" Bounds="1111.13167435844,222.506671463142,104.01692675,25.239999955" Label="书籍数据管理器" UseManualLocation="True" />
+    <Node Id="文本处理工具" Bounds="-20.6093255839287,-29.8740065422252,253.509133485921,195.719999989319" Group="Expanded" Label="文本处理工具" />
+    <Node Id="时间信息" Bounds="199.71962467427,442.038975687764,68,25.24" UseManualLocation="True" />
+    <Node Id="显示模块" Bounds="916.031583110504,357.044445161061,68.0050786651611,25.2399999980469" Label="显示面板" UseManualLocation="True" />
+    <Node Id="本地书籍管理模块" Bounds="1286.70033222565,452.009539830943,68,25.24" Label="本地书籍" UseManualLocation="True" />
+    <Node Id="权限操作" Bounds="133.390774416071,291.085993455843,67.9217117734374,25.2399999825002" Label="权限操作" />
+    <Node Id="消息常量" Bounds="-0.609325583928666,346.325993447093,67.9217117734374,25.2399999825002" Label="消息常量" />
+    <Node Id="爬虫上下文" Bounds="-21.6482444920704,377.087809837378,80,25.24" UseManualLocation="True" />
+    <Node Id="爬虫测试窗口、" Bounds="-16.339284531133,451.191813743628,92,25.24" Label="爬虫测试窗口" UseManualLocation="True" />
+    <Node Id="爬虫管理页" Bounds="177.03446001208,506.431834509682,80.0246056401364,25.2399999717968" Label="爬虫管理页" UseManualLocation="True" />
+    <Node Id="皮肤管理器" Bounds="916.031562407379,412.284435395436,80.0026786651612,25.2399999980469" Label="皮肤管理器" UseManualLocation="True" />
+    <Node Id="目录划分算法" Bounds="144.218293025621,-200.353562052678,92.0135482861328,25.2399999774216" Label="目录划分算法" />
+    <Node Id="目录支持" Bounds="144.218293025621,-145.113562075257,92.0135482861328,25.2399999774216" Label="目录支持接口" />
+    <Node Id="目录面板" Bounds="242.287329311754,-255.5935620301,68.0690362861328,25.2399999774216" Label="目录面板" />
+    <Node Id="章节悬浮信息" Bounds="2000.05698898115,730.871918763569,92.0323756201176,25.2399999774216" Label="章节悬浮信息" UseManualLocation="True" />
+    <Node Id="章节编辑窗口" Bounds="55.034494765742,506.431834495581,92,25.24" UseManualLocation="True" />
+    <Node Id="算法工具" Bounds="251.312486189509,195.845993447094,68,25.24" Label="常用算法" />
+    <Node Id="网络通信工具" Bounds="251.312486189509,251.085993447094,92,25.24" Label="网络通信工具" />
+    <Node Id="菜单扩展" Bounds="1087.05926615141,167.266757464212,68,25.24" UseManualLocation="True" />
+    <Node Id="菜单扩展1" Bounds="1286.70086406599,507.249713171764,68.0025979980469,25.2399999980471" Label="菜单扩展" UseManualLocation="True" />
+    <Node Id="设置面板" Bounds="818.026532451325,412.284435395436,68.005078665161,25.2399999980469" Label="设置面板" UseManualLocation="True" />
+    <Node Id="设置面板1" Bounds="1384.70354961286,507.249591101451,68.0025979980469,25.2399999980471" Label="设置面板" UseManualLocation="True" />
+    <Node Id="进度条" Bounds="1166.02944031794,347.115498395178,56,25.2399999999998" UseManualLocation="True" />
+  </Nodes>
+  <Links>
+    <Link Source="FloatControls.dll" Target="TXTReader.exe" Bounds="205.926788330078,475.288696289063,10.7140808105469,76.2772827148438" />
+    <Link Source="FloatControls.dll" Target="Zlib.dll" Bounds="152.761184692383,420.282135009766,67.6647491455078,131.284820556641" />
+    <Link Source="FloatControls.dll" Target="悬浮信息支持" Category="Contains" />
+    <Link Source="FloatControls.dll" Target="悬浮信息管理面板" Category="Contains" />
+    <Link Source="FloatControls.dll" Target="悬浮信息设置面板" Category="Contains" />
+    <Link Source="FloatControls.dll" Target="插件入口9" Category="Contains" />
+    <Link Source="FloatControls.dll" Target="时间信息" Category="Contains" />
+    <Link Source="TRBook.dll" Target="TRContent.dll" Bounds="-117.146430969238,-95.0746688842773,236.405494689941,222.812484741211" />
+    <Link Source="TRBook.dll" Target="TXTReader.exe" Bounds="-116.332427978516,152.737823486328,266.959686279297,292.879089355469" />
+    <Link Source="TRBook.dll" Target="Zlib.dll" Bounds="-70.6447485333133,144.660308830071,21.0343209871895,1.84224342132501" />
+    <Link Source="TRBook.dll" Target="插件入口8" Category="Contains" />
+    <Link Source="TRBook.dll" Target="本地书籍管理模块" Category="Contains" />
+    <Link Source="TRBook.dll" Target="菜单扩展1" Category="Contains" />
+    <Link Source="TRBook.dll" Target="设置面板1" Category="Contains" />
+    <Link Source="TRBookcase.dll" Target="TXTReader.exe" Bounds="292.947265625,336.78857421875,256.982971191406,109.21533203125" />
+    <Link Source="TRBookcase.dll" Target="Zlib.dll" Bounds="505.605010712376,288.378223135677,55.2268956154999,23.4103549032241" />
+    <Link Source="TRBookcase.dll" Target="书籍信息保存及扩展支持" Category="Contains" />
+    <Link Source="TRBookcase.dll" Target="书籍信息自动获取" Category="Contains" />
+    <Link Source="TRBookcase.dll" Target="插件入口7" Category="Contains" />
+    <Link Source="TRBookcase.dll" Target="章节悬浮信息" Category="Contains" />
+    <Link Source="TRBookmark.dll" Target="TRContent.dll" Bounds="338.653625488281,-150.93766784668,249.174560546875,295.080825805664" />
+    <Link Source="TRBookmark.dll" Target="TXTReader.exe" Bounds="292.947265625,169.143157958984,293.801513671875,276.860748291016" />
+    <Link Source="TRBookmark.dll" Target="Zlib.dll" Bounds="506.311893065288,159.179234646944,21.0068442307293,0.819718411955563" />
+    <Link Source="TRBookmark.dll" Target="书签保存扩展" Category="Contains" />
+    <Link Source="TRBookmark.dll" Target="书签支持" Category="Contains" />
+    <Link Source="TRBookmark.dll" Target="插件入口6" Category="Contains" />
+    <Link Source="TRContent.dll" Target="TXTReader.exe" Bounds="-50.7786827087402,-102.98609161377,201.405941009521,548.603004455566" />
+    <Link Source="TRContent.dll" Target="Zlib.dll" Bounds="227.569894484372,-99.8736065422254,0.060635132588402,20.9996375175843" />
+    <Link Source="TRContent.dll" Target="插件入口5" Category="Contains" />
+    <Link Source="TRContent.dll" Target="目录划分算法" Category="Contains" />
+    <Link Source="TRContent.dll" Target="目录支持" Category="Contains" />
+    <Link Source="TRContent.dll" Target="目录面板" Category="Contains" />
+    <Link Source="TRDisplay.dll" Target="TXTReader.exe" Bounds="-71.8686088308923,396.765067119491,224.8805428763,43.8811706228845" />
+    <Link Source="TRDisplay.dll" Target="Zlib.dll" Bounds="-106.672200090198,338.173870704056,58.3262489530714,35.2736235043744" />
+    <Link Source="TRDisplay.dll" Target="帧率悬浮信息" Category="Contains" />
+    <Link Source="TRDisplay.dll" Target="插件入口4" Category="Contains" />
+    <Link Source="TRDisplay.dll" Target="显示模块" Category="Contains" />
+    <Link Source="TRDisplay.dll" Target="皮肤管理器" Category="Contains" />
+    <Link Source="TRDisplay.dll" Target="设置面板" Category="Contains" />
+    <Link Source="TRProgressBar.dll" Target="FloatControls.dll" Bounds="137.956533530368,521.565993429594,53.9188870349062,26.0810188849009" />
+    <Link Source="TRProgressBar.dll" Target="TXTReader.exe" Bounds="137.039507673986,470.600597294126,51.7749778763215,25.9653961354678" />
+    <Link Source="TRProgressBar.dll" Target="Zlib.dll" Bounds="116.409879470686,420.077739658942,26.283869706394,76.4891137795154" />
+    <Link Source="TRProgressBar.dll" Target="插件入口3" Category="Contains" />
+    <Link Source="TRProgressBar.dll" Target="进度条" Category="Contains" />
+    <Link Source="TRSearchBar.dll" Target="TXTReader.exe" Bounds="-118.0302734375,321.022247314453,268.657531738281,124.594665527344" />
+    <Link Source="TRSearchBar.dll" Target="Zlib.dll" Bounds="-102.04022232381,275.948959204199,52.9793207275482,20.0732817264296" />
+    <Link Source="TRSearchBar.dll" Target="扩展支持" Category="Contains" />
+    <Link Source="TRSearchBar.dll" Target="插件入口2" Category="Contains" />
+    <Link Source="TRSearchBar.dll" Target="搜索框" Category="Contains" />
+    <Link Source="TRSpider.dll" Target="TXTReader.exe" Bounds="289.438288152466,390.272189058134,239.287495703642,49.7327507016323" />
+    <Link Source="TRSpider.dll" Target="ZSpiderScript宿主扩展" Category="Contains" />
+    <Link Source="TRSpider.dll" Target="Zlib.dll" Bounds="505.063503802975,334.13911983489,55.3269351633512,32.6495082040116" />
+    <Link Source="TRSpider.dll" Target="书籍下载窗口" Category="Contains" />
+    <Link Source="TRSpider.dll" Target="书籍下载管理器" Category="Contains" />
+    <Link Source="TRSpider.dll" Target="插件入口1" Category="Contains" />
+    <Link Source="TRSpider.dll" Target="爬虫上下文" Category="Contains" />
+    <Link Source="TRSpider.dll" Target="爬虫测试窗口、" Category="Contains" />
+    <Link Source="TRSpider.dll" Target="爬虫管理页" Category="Contains" />
+    <Link Source="TRSpider.dll" Target="章节编辑窗口" Category="Contains" />
+    <Link Source="TRWebBook.dll" Target="TRContent.dll" Bounds="309.13623046875,-150.93766784668,198.316436767578,647.504531860352" />
+    <Link Source="TRWebBook.dll" Target="TXTReader.exe" Bounds="240.431319358248,472.974065924283,23.2659928611923,23.5919275053112" />
+    <Link Source="TRWebBook.dll" Target="Zlib.dll" Bounds="278.941192626953,420.330535888672,13.6590881347656,76.236328125" />
+    <Link Source="TRWebBook.dll" Target="下载信息" Category="Contains" />
+    <Link Source="TRWebBook.dll" Target="书籍搜索窗口" Category="Contains" />
+    <Link Source="TRWebBook.dll" Target="在线书籍" Category="Contains" />
+    <Link Source="TRWebBook.dll" Target="插件入口" Category="Contains" />
+    <Link Source="TRWebBook.dll" Target="数据数据管理器" Category="Contains" />
+    <Link Source="TRWebBook.dll" Target="菜单扩展" Category="Contains" />
+    <Link Source="TXTReader.exe" Target="Zlib.dll" Bounds="222.073668378285,420.563835715144,0.485918031757478,21.0029177233132" />
+    <Link Source="TXTReader.exe" Target="主窗口" Category="Contains" />
+    <Link Source="TXTReader.exe" Target="全局上下文" Category="Contains" />
+    <Link Source="TXTReader.exe" Target="插件系统" Category="Contains" />
+    <Link Source="Win32工具" Target="全局钩子封装" Category="Contains" />
+    <Link Source="Win32工具" Target="常用注册表操作" Category="Contains" />
+    <Link Source="Win32工具" Target="权限操作" Category="Contains" />
+    <Link Source="Win32工具" Target="消息常量" Category="Contains" />
+    <Link Source="ZSpiderScript宿主扩展" Target="ZSpiderScript解释器" Bounds="50.8052537283978,328.225102539062,655.366703337328,390.175874929729" />
+    <Link Source="Zlib.dll" Target="Win32工具" Category="Contains" />
+    <Link Source="Zlib.dll" Target="其他常用小工具" Category="Contains" />
+    <Link Source="Zlib.dll" Target="常用控件" Category="Contains" />
+    <Link Source="Zlib.dll" Target="常用转换器" Category="Contains" />
+    <Link Source="Zlib.dll" Target="并发及异步工具" Category="Contains" />
+    <Link Source="Zlib.dll" Target="文本处理工具" Category="Contains" />
+    <Link Source="Zlib.dll" Target="算法工具" Category="Contains" />
+    <Link Source="Zlib.dll" Target="网络通信工具" Category="Contains" />
+    <Link Source="ZlibUAC.dll" Target="提权操作" Category="Contains" />
+    <Link Source="下载信息" Target="FloatControls.dll" Bounds="1056.58253920708,190.997961407343,303.499739919301,100.499009355635" />
+    <Link Source="主窗口" Target="全局上下文" Bounds="811.567201526736,223.876024182652,21.0168797564211,0.00174192327796163" />
+    <Link Source="主窗口" Target="工具面板" Category="Contains" />
+    <Link Source="主窗口" Target="插件管理面板" Category="Contains" />
+    <Link Source="书签保存扩展" Target="书籍信息保存及扩展支持" Bounds="1355.0815667153,383.176905546587,589.037883588097,288.496252364367" />
+    <Link Source="书籍下载窗口" Target="书籍下载管理器" Bounds="201.351912886918,389.672513403078,21.0001023959943,0.00191415805466022" />
+    <Link Source="书籍下载管理器" Target="爬虫上下文" Bounds="67.3517976410658,389.691823752581,21.0001025917485,0.00477996387940038" />
+    <Link Source="书籍信息自动获取" Target="TRSpider.dll" Bounds="1128.25939543036,628.037914991624,774.571458735469,158.969733263092" />
+    <Link Source="帧率悬浮信息" Target="FloatControls.dll" Bounds="910.049085750274,448.372704867436,521.146393297708,29.1942691595003" />
+    <Link Source="常用注册表操作" Target="权限操作" Bounds="103.39692552258,303.705965868433,21.0001000000008,9.05481493873594E-06" />
+    <Link Source="插件管理面板" Target="插件管理器" Bounds="791.584003404608,215.814968258164,171.189976894652,35.555167962989" />
+    <Link Source="插件系统" Target="全局上下文" Bounds="930.585840914561,223.877418555118,20.9833146489032,0.0013219016678363" />
+    <Link Source="插件系统" Target="插件上下文" Category="Contains" />
+    <Link Source="插件系统" Target="插件接口" Category="Contains" />
+    <Link Source="插件系统" Target="插件管理器" Category="Contains" />
+    <Link Source="文本处理工具" Target="Json处理工具" Category="Contains" />
+    <Link Source="文本处理工具" Target="Xml处理工具" Category="Contains" />
+    <Link Source="文本处理工具" Target="ZMatchExpression解释器" Category="Contains" />
+    <Link Source="文本处理工具" Target="ZSpiderScript解释器" Category="Contains" />
+    <Link Source="时间信息" Target="FloatControls.dll" Bounds="233.719604492188,388.5390625,12.3222808837891,53.4999084472656" />
+    <Link Source="权限操作" Target="ZlibUAC.dll" Bounds="45.8741871987879,-96.216696732812,117.64409121814,387.302933398622" />
+    <Link Source="爬虫上下文" Target="ZSpiderScript宿主扩展" Bounds="20.2687434418465,337.123004725041,6.07056671176873,39.9647618765385" />
+    <Link Source="爬虫测试窗口、" Target="爬虫上下文" Bounds="21.6354800449643,411.224733363366,6.09932168342135,39.9669438915854" />
+    <Link Source="目录划分算法" Target="ZMatchExpression解释器" Bounds="88.4587362450502,-175.11476330968,96.5198325259394,232.17014340884" />
+    <Link Source="章节悬浮信息" Target="FloatControls.dll" Bounds="1095.74414392052,410.833704748902,914.276563409947,320.038238621762" />
+  </Links>
+  <Categories>
+    <Category Id="Contains" Label="包含" Description="链接的源是否包含目标对象" CanBeDataDriven="False" CanLinkedNodesBeDataDriven="True" IncomingActionLabel="包含者" IsContainment="True" OutgoingActionLabel="包含" />
+  </Categories>
+  <Properties>
+    <Property Id="Bounds" DataType="System.Windows.Rect" />
+    <Property Id="CanBeDataDriven" Label="CanBeDataDriven" Description="CanBeDataDriven" DataType="System.Boolean" />
+    <Property Id="CanLinkedNodesBeDataDriven" Label="CanLinkedNodesBeDataDriven" Description="CanLinkedNodesBeDataDriven" DataType="System.Boolean" />
+    <Property Id="GraphDirection" DataType="Microsoft.VisualStudio.Diagrams.Layout.LayoutOrientation" />
+    <Property Id="Group" Label="组" Description="将节点显示为组" DataType="Microsoft.VisualStudio.GraphModel.GraphGroupStyle" />
+    <Property Id="IncomingActionLabel" Label="IncomingActionLabel" Description="IncomingActionLabel" DataType="System.String" />
+    <Property Id="IsContainment" DataType="System.Boolean" />
+    <Property Id="Label" Label="标签" Description="可批注对象的可显示标签" DataType="System.String" />
+    <Property Id="Layout" DataType="System.String" />
+    <Property Id="OutgoingActionLabel" Label="OutgoingActionLabel" Description="OutgoingActionLabel" DataType="System.String" />
+    <Property Id="UseManualLocation" DataType="System.Boolean" />
+  </Properties>
+</DirectedGraph>

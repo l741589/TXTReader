@@ -22,15 +22,17 @@ using TRContent.Rules;
 using TRSpider;
 using System.Windows.Media.Imaging;
 using Zlib.Text.Xml;
+using System.ComponentModel;
+using System.Web;
 
 namespace TRWebBook {
 
     internal partial class Book : Chapter, IContentAdapter, IBook, IXmlParsable {
         public enum BookState { Local, Remote, Downloading, Missing };
         public const int DO_GATE = 500;
-        public event PluginEventHandler LoadFinished;
-        //public event EventHandler Loaded;
+        public event PluginEventHandler Loaded;
         public event PluginEventHandler Closed;
+        public event PluginEventHandler Closing;
         public event PluginEventHandler PositionChanged;
         public event PluginEventHandler OffsetChanged;
 
@@ -39,24 +41,26 @@ namespace TRWebBook {
         public static readonly DependencyProperty OffsetProperty = DependencyProperty.Register("Offset", typeof(double), typeof(Book), new PropertyMetadata(0.0, OnOffsetChanged));
         public static readonly DependencyPropertyKey CurrentTitleProperty = DependencyProperty.RegisterReadOnly("CurrentTitle", typeof(String), typeof(Book), new PropertyMetadata(null));
         public static readonly DependencyPropertyKey PreviewProperty = DependencyProperty.RegisterReadOnly("Preview", typeof(String), typeof(Book), new PropertyMetadata(null));
-        public static readonly DependencyProperty StateProperty = DependencyProperty.Register("State", typeof(BookState), typeof(Book), new PropertyMetadata(BookState.Local));                
+        public static readonly DependencyProperty StateProperty = DependencyProperty.Register("State", typeof(BookState), typeof(Book), new PropertyMetadata(BookState.Local));
 
-        private ImageSource cover = null;
+        private String cover = null;
         private String id = null;
         private static ZTask uploadTask = new ZTask();
         private static ZTask downloadTask = new ZTask();
         private int undoPos = 0;
         private bool IsLoaded { get; set; }
 
-        public ImageSource Cover { get { if (cover.IsNull()) return Entry.NO_COVER; else return cover; } set { cover = value; } }
+        public String Cover { get { if (cover.IsNull()) return Entry.NO_COVER; else return cover; } set { cover = value; } }
         public override int Position { get { return (int)GetValue(PositionProperty); } set { SetValue(PositionProperty, value); } }
         public override double Offset { get { return (double)GetValue(OffsetProperty); } set { SetValue(OffsetProperty, value); } }
         public BookState State { get { return (BookState)GetValue(StateProperty); } set { SetValue(StateProperty, value); } }
         public String CurrentTitle { get { return (String)GetValue(CurrentTitleProperty.DependencyProperty); } }
-        public Chapter CurrentChapter { get; set; }
+        public IContentItemAdapter CurrentChapter { get; set; }
         public String Author { get; set; }
-        public DateTime LastLoadTime { get; set; }
-        public double SortArgument { get; set; }
+        public DateTime LastLoadTime { get { return (DateTime)GetValue(LastLoadTimeProperty); } set { SetValue(LastLoadTimeProperty, value); } }
+        public static readonly DependencyProperty LastLoadTimeProperty = DependencyProperty.Register("LastLoadTime", typeof(DateTime), typeof(Book));
+        public double SortArgument { get { return (double)GetValue(SortArgumentProperty); } set { SetValue(SortArgumentProperty, value); } }
+        public static readonly DependencyProperty SortArgumentProperty = DependencyProperty.Register("SortArgument", typeof(double), typeof(Book));
         public String Id { get { return id; } set { id = value; } }
         public bool IsOpen = false;
         public String Md5 { get; set; }
@@ -65,7 +69,9 @@ namespace TRWebBook {
         private IEnumerable<SpiderClosure> Spiders { get { return Downloader.Spiders; } }
         protected override Book Root { get { return this; } }
         private bool hasContent = false;
-        private String Source { get; set; }
+        public String Source { get { return (String)GetValue(SourceProperty); } set { SetValue(SourceProperty, value); } }
+        public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source", typeof(String), typeof(Book));
+
 
         public Book()
             : base() {
@@ -80,6 +86,17 @@ namespace TRWebBook {
             Downloader = null;
         }
 
+        public Book(IBook b) {
+            Source = b.Source;
+            Downloader = null;
+            Cover = b.Cover;
+            LastLoadTime = b.LastLoadTime;
+            Position = b.Position;
+            Offset = b.Offset;
+            Title = b.Title ?? Title;
+            Author = b.Author ?? Author;
+        }
+
         public Book(BookDownloader downloader)
             : this() {
                 Source = null;
@@ -91,7 +108,7 @@ namespace TRWebBook {
             //Downloader.Concurrence = 5;
             var bd = downloader.StdSpider;
             try {
-                Cover = new BitmapImage(new Uri(bd.BookDesc.CoverUrl));
+                Cover = bd.BookDesc.CoverUrl;
             } catch {
                 Cover = Entry.NO_COVER;
             }
@@ -194,7 +211,7 @@ namespace TRWebBook {
                     }
                 }
                 node.ChapterDesc = chapter;
-                node.AppendText("等待加载中");
+                node.AppendText("(等待加载中)");
                 node.AppendText("");
             }
             hasContent = true;
@@ -206,36 +223,35 @@ namespace TRWebBook {
             if (Downloader == null && Source != null) {
                 Downloader = new BookDownloader(1);
                 XmlParser.Read(Source, this, false);
-                
             }
             if (Downloader == null) return;
             Init(Downloader);
             //var cs = await TaskEx.Run(() => Spider.GetContent(Spider.BookDesc.ContentUrl));
             //var di = new DownloadInfo();
             //di.Start(Downloader);
-            var di = PluginManager.Instance.Execute("TRWebBook", "+downloadinfo", Downloader);
+            var di = PluginManager.Execute("TRWebBook", "+downloadinfo", Downloader);
             Downloader.DownloadAsync(Title);
 
-            var cs = Downloader.StdSpider.Chapters!=null&&Downloader.StdSpider.Chapters.Count()>0?Downloader.StdSpider.Chapters
+            var cs = Downloader.StdSpider.Chapters != null && Downloader.StdSpider.Chapters.Count() > 0 ? Downloader.StdSpider.Chapters
                 : await ZEventTask.Wait<List<ChapterDescEx>>(Downloader, "Preparing", r => {
-                r.Handler = new PreparingEventHandler((d, e) => {
-                    Dispatcher.Invoke(() => {
-                        if (e.Spider == Downloader.StdSpider) {
-                            r.Continue(e.Spider.Chapters);
-                        }
+                    r.Handler = new PreparingEventHandler((d, e) => {
+                        Dispatcher.Invoke(() => {
+                            if (e.Spider == Downloader.StdSpider) {
+                                r.Continue(e.Spider.Chapters);
+                            }
+                        });
                     });
                 });
-            });
             Title = Path.GetFileNameWithoutExtension(Spider.BookDesc.Title);
             if (Text != null) Text.Clear();
-            if (cs!=null) {
+            if (cs != null) {
                 var ss = from c in cs select c.Title;
                 TotalText = ss.ToList();
                 LastLoadTime = DateTime.Now;
                 IsOpen = true;
-                    bool matchresult = await TaskEx.Run(() => Match(cs));
-                    TotalText = null;
-                    if (matchresult) Update();
+                bool matchresult = await TaskEx.Run(() => Match(cs));
+                TotalText = null;
+                if (matchresult) Update();
             } else {
                 State = BookState.Missing;
                 Update();
@@ -244,11 +260,13 @@ namespace TRWebBook {
             TotalText = null;
             ContentTreePanel.Instance.SelectedItemChanged += Instance_SelectedItemChanged;
             Dispatcher.Invoke(() => {
-                if (LoadFinished != null) LoadFinished(this, new PluginEventArgs().Add("state", "init"));
+                if (Loaded != null) Loaded(this, new PluginEventArgs().Add("state", "init"));
             });
             await ZEventTask.Wait(Downloader, "Done", r => { if (!Downloader.IsDone) r.Handler = new EventHandler((d, e) => r.Continue()); });
             IsLoaded = true;
-            PluginManager.Instance.Execute("TRWebBook", "-downloadinfo", di);
+            PluginManager.Execute("TRWebBook", "-downloadinfo", di);
+            Length = 0;
+            var l = Length;
         }
 
 
@@ -257,33 +275,58 @@ namespace TRWebBook {
         }
 
         void d_DownloadingChapter(object sender, DownloadingChapterEventArgs e) {
+            if (e.AlreadyDone) return;
             switch (e.State) {
                 case DownloadingChapterEventArgs.States.StandardSuccess:
                 case DownloadingChapterEventArgs.States.NonstandardSuccess:
-                    var ss = e.RealChapter.Text.Split(new String[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                    var ss = e.RealChapter.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
                     Dispatcher.Invoke(() => {
                         var c = FindChapter(e.StandardChapter);
                         if (c == null) return;
                         dodoLock = true;
-                        var p = new Positionable(CurrentChapter);
+                        var p = new Positionable(CurrentChapter as IPositionable);
                         c.Text = ss.ToList();
+                        c.ChapterDesc = e.RealChapter;
                         c.RefreshTotalText();
                         AbsolutePosition = -1;
                         p.AssignTo(this);
-                        if (LoadFinished != null) LoadFinished(this, new PluginEventArgs().Add("state", "chapter").Add("chapter", c));
+                        ChapterLoadFinished(new PluginEventArgs().Add("state", "chapter").Add("chapter", c));
                         dodoLock = false;
+                        c.Length = 0;
+                        var l = c.Length;
                     });
                     break;
                 case DownloadingChapterEventArgs.States.AllFail:
                     Dispatcher.Invoke(() => {
                         var c = FindChapter(e.StandardChapter);
                         if (c == null) return;
-                        c.Text = new String[] { "<章节抓取失败，请右键自定义抓取>" }.ToList();
+                        c.Text = new String[] { "(加载失败）" }.ToList();
                         c.RefreshTotalText();
-                        if (LoadFinished != null) LoadFinished(this, new PluginEventArgs().Add("state", "chapter").Add("chapter", c));
+                        if (Loaded != null) Loaded(this, new PluginEventArgs().Add("state", "chapter").Add("chapter", c));
+                        c.Length = 0;
+                        var l = c.Length;
                     });
                     break;
             }
+        }
+
+        private bool chapterloadlock = false;
+        private bool chapterloadredo = false;
+        private async void ChapterLoadFinished(PluginEventArgs args) {
+            do{
+                chapterloadredo = false;
+                if (Loaded != null) {
+                    if (chapterloadlock) {
+                        chapterloadredo = true;
+                        return;
+                    }
+                    chapterloadlock = true;
+                    Loaded(this, args);
+                    await 1000.Wait();                    
+                    chapterloadlock = false;
+                }
+            }while(chapterloadredo);
+            chapterloadlock = false;
         }
 
         void Instance_SelectedItemChanged(object sender, ContentSelectedItemChangedEventArgs e) {
@@ -339,13 +382,6 @@ namespace TRWebBook {
             }
         }
 
-       
-
-        public void MoreInfo() {
-            //if (PluginManager.Instance["TRSpider"] != null) BookInfoManager.MoreInfo(this);
-            //else Douban.MoreInfo(this);
-        }
-
         private List<IContentItemAdapter> positions;
         public IContentItemAdapter[] Positions;
         private void GenerateIndex() {
@@ -386,8 +422,8 @@ namespace TRWebBook {
                 if (positions != null) {
                     if (CurrentChapter != positions[m]) {
                         CurrentChapter = positions[m] as Chapter;
-                        if (CurrentChapter.ChapterDesc != null) {
-                            Downloader.CircuteToTop(CurrentChapter.ChapterDesc);
+                        if ((CurrentChapter as Chapter).ChapterDesc != null) {
+                            Downloader.CircuteToTop((CurrentChapter as Chapter).ChapterDesc);
                         }
                     }
                 }
@@ -400,6 +436,7 @@ namespace TRWebBook {
 
         private static void OnPositionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             if (d.IsNull()) return;
+            Debug.WriteLine("pos changed: " + e.OldValue + " -> " + e.NewValue);
             var o = d as Book;
             o.CalculateChapter((int)e.NewValue);
             if (Math.Abs((int)e.OldValue - (int)e.NewValue) > DO_GATE) {
@@ -411,6 +448,7 @@ namespace TRWebBook {
 
         private static void OnOffsetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e){
             if (d.IsNull()) return;
+            Debug.WriteLine("off changed: " + e.OldValue + " -> " + e.NewValue);
             var o = d as Book;
             if (o.OffsetChanged.NotNull()) o.OffsetChanged(o, new PluginEventArgs());
         }
@@ -432,17 +470,18 @@ namespace TRWebBook {
 
         public override void Close() {
             if (this.IsNull()) return;
-            XmlParser.Write(TXTReader.G.PATH_SOURCE + Title + "." + DateTime.Now.ToString("yyyyMMddhhmssfff") + ".trbx", this);
+            if (Source.IsNullOrWhiteSpace()) Source = TXTReader.G.PATH_SOURCE + Title + "." + DateTime.Now.ToString("yyyyMMddhhmssfff") + ".trbx";
+            XmlParser.Write(Source, this);
+            if (Closing != null) Closing(this, new PluginEventArgs());            
             ContentTreePanel.Instance.SelectedItemChanged -= Instance_SelectedItemChanged;
             positions = null;
             var p = Preview;
-            LoadFinished = null;
+            Loaded = null;
             hasContent = false;
             IsOpen = false;
             Downloader.ShutdownAsync();
-            //Downloader.Reset();
-            if (Closed != null) Closed(this, new PluginEventArgs());
             base.Close();
+            if (Closed != null) Closed(this, new PluginEventArgs());            
         }
 
         public static void Open(BookDownloader downloader) {
@@ -450,7 +489,19 @@ namespace TRWebBook {
             TXTReader.G.Book = new Book(downloader);
         }
 
-        void IBook.Open(object bd) { Book.Open((BookDownloader)bd); }
+        public static void Open(String path) {
+            TXTReader.G.Book = new Book(path);
+        }
+
+        public static void Open(IBook book) {
+            TXTReader.G.Book = new Book(book);
+        }
+
+        void IBook.Open(object bd) {
+            if (bd is BookDownloader) Book.Open((BookDownloader)bd);
+            else if (bd is IBook) Book.Open((IBook)bd);
+            else Book.Open(bd.ToString());
+        }
 
         public void Reopen() {
             Close();
@@ -497,7 +548,7 @@ namespace TRWebBook {
             if (dodoLock) return;
             dodoLock = true;
             Debug.WriteLine("DODO");
-            Positionable bmk = new Positionable(CurrentChapter);
+            Positionable bmk = new Positionable(CurrentChapter as IPositionable);
             while (undoList.Count > undoPos) undoList.RemoveAt(undoList.Count - 1);
             undoList.Add(bmk);
             undoPos = undoList.Count;
@@ -523,6 +574,13 @@ namespace TRWebBook {
                     .Do(new ContentParser(this))
                     .End;
             }
+        }
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e) {
+            base.OnPropertyChanged(e);
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(e.Property.Name));
         }
     }
 }

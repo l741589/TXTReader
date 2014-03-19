@@ -23,6 +23,7 @@
     <DefineConstants>TRACE;DEBUG;NET40</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
@@ -171,6 +173,7 @@
     <Compile Include="UI\ZPopup.cs" />
     <Compile Include="Utility\DependencyObjectExtension.cs" />
     <Compile Include="Utility\EnumerableExtension.cs" />
+    <Compile Include="Utility\INotifyPropertyChangedExtension.cs" />
     <Compile Include="Utility\ObjectMutexManager.cs" />
     <Compile Include="Utility\ZComparer.cs" />
     <Compile Include="Win32\RegUtil.cs" />

@@ -28,6 +28,9 @@
     <Content Include="Graph3.dgml">
       <SubType>Content</SubType>
     </Content>
+    <Content Include="Graph4.dgml">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="ModelDefinition\Package_2240.uml">
       <SubType>Content</SubType>
     </Content>

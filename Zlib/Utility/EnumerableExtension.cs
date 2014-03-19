@@ -24,6 +24,33 @@ namespace Zlib.Utility {
             return true;
         }
 
+        public static bool Contains<T>(this IEnumerable<T> t, Predicate<T> p) {
+            foreach (var e in t) {
+                if (p(e)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool Contains(this IEnumerable t, Predicate<object> p) {
+            foreach (var e in t) {
+                if (p(e)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static T Find<T>(this IEnumerable<T> t, Predicate<T> p) {
+            foreach (var e in t) {
+                if (p(e)) {
+                    return e;
+                }
+            }
+            return default(T);
+        }
+
         public static object Find(this IEnumerable t, Predicate<object> p) {
             foreach (var e in t) {
                 if (p(e)) {
@@ -32,6 +59,8 @@ namespace Zlib.Utility {
             }
             return null;
         }
+
+       
 
         public static bool ContainsAll<T>(this IEnumerable<T> t, IEnumerable p) {
             foreach (T e in p) if (!t.Contains(e)) return false;

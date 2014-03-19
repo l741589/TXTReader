@@ -10,13 +10,14 @@ using System.Windows;
 using Zlib.Utility;
 
 namespace TXTReader.Plugins {
-    public class PluginManager : PluginEntry{
+    public class PluginManager : PluginEntry {
         private static PluginManager instance;
         private int _pluginIndex = 0;
         public static PluginManager Instance { get { if (instance == null) instance = new PluginManager(); return instance; } }
         public override string[] Dependency { get { return new String[0]; } }
 
         public Dictionary<String, PluginEntry> Plugins = new Dictionary<String, PluginEntry>();
+        public Dictionary<String, Tuple<String, PluginEntry>> OpenCallback = new Dictionary<String, Tuple<String, PluginEntry>>();
 
         private PluginManager() {
             Index = _pluginIndex++;
@@ -42,10 +43,10 @@ namespace TXTReader.Plugins {
         }
 
         public void Load(StartupEventArgs e = null) {
-            var d=Directory.CreateDirectory(G.PATH_PLUGINS);
+            var d = Directory.CreateDirectory(G.PATH_PLUGINS);
             //var d = Directory.CreateDirectory(G.PATH);
             var fis = d.GetFiles("*.dll", SearchOption.TopDirectoryOnly);
-            foreach(var fi in fis) Load(fi.FullName);
+            foreach (var fi in fis) Load(fi.FullName);
             OnLoad(e);
         }
 
@@ -82,7 +83,7 @@ namespace TXTReader.Plugins {
                 if (e.PluginState == PluginState.Ready)
                     e.PluginState = PluginState.Loaded;
                 return true;
-            } catch(Exception) {
+            } catch (Exception) {
                 Debug.WriteLine("Load Plugin '{0}' Fail", (object)e.Assembly.FullName);
                 e.PluginState = PluginState.Fail;
                 return false;
@@ -106,11 +107,40 @@ namespace TXTReader.Plugins {
             foreach (var i in Plugins) i.Value.OnUnload(e);
         }
 
+        public static bool Has(String plugin) {
+            return Instance[plugin] != null;
+        }
 
-        public object Execute(String plugin, String method, params object[] args) {
-            var p = this[plugin];
+        public static object Execute(String plugin, String method, params object[] args) {
+            var p = Instance[plugin];
             if (p == null) return null;
             return p.Execute(method, args);
+        }
+
+        public String OpenFilter {
+            get {
+                bool start = true;
+                StringBuilder sa = new StringBuilder();
+                StringBuilder sb = new StringBuilder();
+                foreach (var e in OpenCallback) {
+                    if (start) start = false;
+                    else {
+                        sa.Append(';');
+                        sb.Append('|');
+                    }
+                    sa.Append("*.").Append(e.Key);
+                    sb.Append(e.Value.Item1).Append("(*.").Append(e.Key).Append(")|*.").Append(e.Key);
+                }
+                return "所有支持类型(" + sa + ")|" + sa + "|" + sb.ToString();
+            }
+        }
+
+        public static void OpenFile(String filename){
+            String f = filename;
+            String ext = System.IO.Path.GetExtension(f).Trim('*', ' ', '.').ToLower();
+            if (Instance.OpenCallback.ContainsKey(ext)) {
+                Instance.OpenCallback[ext].Item2.OnOpen(f);
+            }
         }
     }
 }

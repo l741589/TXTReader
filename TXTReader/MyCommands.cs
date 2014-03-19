@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace TRBook {
+namespace TXTReader {
     public static class MyCommands {
 
         private static InputGestureCollection g(params InputGesture[] ig) {

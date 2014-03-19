@@ -10,7 +10,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using TRBook.Net;
 using TXTReader.Interfaces;
 using TXTReader.Net;
 using TXTReader.Plugins;
@@ -20,14 +19,15 @@ using Zlib.Text.ZMatchExpression;
 using Zlib.Utility;
 using TRContent;
 using TRContent.Rules;
+using System.ComponentModel;
 
 namespace TRBook {
     internal class Book : Chapter, IContentAdapter, IPositionable, IBook {
         public enum BookState { Local, Remote, Downloading, Missing };
         public const int DO_GATE = 500;
-        public event PluginEventHandler LoadFinished;
-        //public event EventHandler Loaded;
+        public event PluginEventHandler Loaded;
         public event PluginEventHandler Closed;
+        public event PluginEventHandler Closing;
         public event PluginEventHandler PositionChanged;
         public event PluginEventHandler OffsetChanged;
 
@@ -36,82 +36,62 @@ namespace TRBook {
         public static readonly DependencyProperty OffsetProperty = DependencyProperty.Register("Offset", typeof(double), typeof(Book), new PropertyMetadata(0.0, OnOffsetChanged));
         public static readonly DependencyPropertyKey CurrentTitleProperty = DependencyProperty.RegisterReadOnly("CurrentTitle", typeof(String), typeof(Book), new PropertyMetadata(null));
         public static readonly DependencyPropertyKey PreviewProperty = DependencyProperty.RegisterReadOnly("Preview", typeof(String), typeof(Book), new PropertyMetadata(null));
-        public static readonly DependencyProperty StateProperty = DependencyProperty.Register("State", typeof(BookState), typeof(Book), new PropertyMetadata(BookState.Local));                
+        public static readonly DependencyProperty StateProperty = DependencyProperty.Register("State", typeof(BookState), typeof(Book), new PropertyMetadata(BookState.Local));
 
-        private ImageSource cover = null;
+        private String cover = null;
         private String source = null;
         private String id = null;
         private static ZTask uploadTask = new ZTask();
         private static ZTask downloadTask = new ZTask();
-        private List<Bookmark> undoList = new List<Bookmark>();
+        private List<Positionable> undoList = new List<Positionable>();
         private int undoPos = 0;
         private bool IsLoaded { get; set; }
 
-        public ImageSource Cover { get { if (cover.IsNull()) return G.NO_COVER; else return cover; } set { cover = value; } }
+        public String Cover { get { if (cover.IsNull()) return G.NO_COVER; else return cover; } set { cover = value; } }
         public int Position { get { return (int)GetValue(PositionProperty); } set { SetValue(PositionProperty, value); } }
         public double Offset { get { return (double)GetValue(OffsetProperty); } set { SetValue(OffsetProperty, value); } }
         public BookState State { get { return (BookState)GetValue(StateProperty); } set { SetValue(StateProperty, value); } }
         public String CurrentTitle { get { return (String)GetValue(CurrentTitleProperty.DependencyProperty); } }
         public String Author { get; set; }
-        public DateTime LastLoadTime { get; set; }
-        public double SortArgument { get; set; }
-        public String Id { get { return id; } set { id = value; Books.Check(this); } }
-        public ObservableCollection<Bookmark> Bookmark { get; private set; }
+        public DateTime LastLoadTime { get { return (DateTime)GetValue(LastLoadTimeProperty); } set { SetValue(LastLoadTimeProperty, value); } }
+        public static readonly DependencyProperty LastLoadTimeProperty = DependencyProperty.Register("LastLoadTime", typeof(DateTime), typeof(Book));
+        public double SortArgument { get { return (double)GetValue(SortArgumentProperty); } set { SetValue(SortArgumentProperty, value); } }
+        public static readonly DependencyProperty SortArgumentProperty = DependencyProperty.Register("SortArgument", typeof(double), typeof(Book));
+        public String Id { get { return id; } set { id = value; PluginManager.Execute("TRBookcase", "check", this); } }
         public bool IsOpen = false;
         public String Md5 { get; set; }
-        public static BookCollection Books { get; private set; }
         public IContentItemAdapter Chapter { get { return null; } }
-
+        public IContentItemAdapter CurrentChapter { get; set; }
         static Book() {
-            //NullObject.Add(Empty);
-            Books = new BookCollection();
         }
 
         public Book()
             : base() {
+            CurrentChapter = this;
             IsLoaded = false;
             Position = 0; Offset = 0;
-            Bookmark = new ObservableCollection<Bookmark>();
             Node = new LinkedListNode<IContentItemAdapter>(this);
         }
 
         public Book(String src)
             : this() {
-            if (Path.GetExtension(src) == G.EXT_BOOK) {
-                BookParser.Load(src, this);
-            } else {
-                SortArgument = 0;
-                Source = src;
-                if (File.Exists(BookParser.GetBookPath(this))) BookParser.Load(this);
-                LastLoadTime = default(DateTime);
-            }
+            CurrentChapter = this;
+            Id = A.MD5F(src);
+            SortArgument = 0;
+            Source = src;
+            LastLoadTime = default(DateTime);
         }
 
-        public static async Task<Book> CreateAsync(String src) {
-            Book b = new Book();
-            if (Path.GetExtension(src) == G.EXT_BOOK) {
-                BookParser.Load(src, b);
-            } else {
-                b.SortArgument = 0;
-                b.Source = src;
-                if (File.Exists(await BookParser.GetBookPathAsync(b))) BookParser.Load(b);
-                b.LastLoadTime = default(DateTime);
-            }
-            return b;
+        public Book(IBook b) {
+            CurrentChapter = this;
+            Source = b.Source;
+            Cover = b.Cover;
+            LastLoadTime = b.LastLoadTime;
+            Position = b.Position;
+            Offset = b.Offset;
+            Title = b.Title ?? Title;
+            Author = b.Author ?? Author;
         }
-        
-        //public static Book I {
-        //    get { return book; }
-        //    set {
-        //        if (book == value) return;
-        //        if (book != null) book.Close();
-        //        G.Book = book = value;
-        //        if (book != null) {
-        //            Book.Books.Add(book);
-        //            book.Load();
-        //        }
-        //    }
-        //}
 
         private Chapter Insert(List<String> subtitles, List<int?> numbers, int level, Chapter node) {
             Chapter ret = null;
@@ -224,7 +204,7 @@ namespace TRBook {
                 if (Text != null) Text.Clear();
                 if (File.Exists(Source)) {
                     TotalText = ss.ToList();
-                    await BookParser.LoadAsync(this);
+                    //await BookParser.LoadAsync(this);
                     LastLoadTime = DateTime.Now;
                     IsOpen = true;
                     bool matchresult = await TaskEx.Run(() => Match(TotalText));
@@ -237,14 +217,14 @@ namespace TRBook {
                 GenerateIndex();
                 TotalText = null;
 
-                PluginManager.Instance.Execute("TRContent", "+SelectChange", (ContentSelectedItemChangedEventHandler)Instance_SelectedItemChanged);
+                PluginManager.Execute("TRContent", "+SelectChange", (ContentSelectedItemChangedEventHandler)Instance_SelectedItemChanged);
                 Dispatcher.Invoke(() => {
-                    if (LoadFinished != null) LoadFinished(this, new PluginEventArgs().Add("state", "all"));
+                    if (Loaded != null) Loaded(this, new PluginEventArgs().Add("state", "all"));
                     //if (Empty.LoadFinished != null) Empty.LoadFinished(this, EventArgs.Empty);
                 });
             } else {
-                await Download();
-                if (State == BookState.Local) Load(Source);
+                //await Download();
+                //if (State == BookState.Local) Load(Source);
             }
             IsLoaded = true;
         }
@@ -269,7 +249,7 @@ namespace TRBook {
                 if (Title.IsNullOrWhiteSpace()) {
                     Title = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(source));                    
                 }
-                Books.Check(this);
+                PluginManager.Execute("TRBookcase", "check", this);
             }
         }
 
@@ -309,60 +289,6 @@ namespace TRBook {
             }
         }
 
-       
-
-        public async Task Download() {
-            //BookState state = State;
-            //await downloadTask.Run(() => {
-            //    if (state == BookState.Remote) {
-            //        Dispatcher.Invoke(() => { State = BookState.Downloading; });
-            //        string id = Id;
-            //        ResponseEntity s = G.Net.Download(id);
-            //        if (s.status != MyHttp.successCode) {
-            //            Debug.WriteLine(s.msg);
-            //            Dispatcher.Invoke(() => { State = BookState.Remote; });
-            //            Dispatcher.BeginInvoke(new Action(() => { G.Log = Title + " 下载失败"; }));
-            //            return;
-            //        }
-            //        Debug.WriteLine(s.data[0]);
-            //        Debug.WriteLine(Encoding.Default.GetString((byte[])s.data[1]));
-            //        String path = G.PATH_SOURCE + Path.GetFileNameWithoutExtension(s.data[0].ToString()) + "_" + id + Path.GetExtension(s.data[0].ToString());
-            //        File.WriteAllBytes(path, (byte[])s.data[1]);
-            //        Dispatcher.Invoke(() => {
-            //            Source = path;
-            //            Title = Path.GetFileNameWithoutExtension(s.data[0].ToString());
-            //            BookParser.Save(this);
-            //            Dispatcher.BeginInvoke(new Action(() => { G.Log = Title + " 下载完成"; }));
-            //        });
-            //    }
-            //});
-        }
-
-        public async Task Upload() {
-
-            await uploadTask.Run(async () => {
-                String title = Dispatcher.Invoke(() => { return Title; });
-                Debug.WriteLine("Start Upload " + title);
-                String src = Dispatcher.Invoke(() => { return Source; });
-                if (BookState.Local == Dispatcher.Invoke(() => { return State; })) {
-                    ResponseEntity res = await G.Net.Upload(A.CheckExt(title, ".txt"), src);
-                    if (res.status == MyHttp.successCode) {
-                        Debug.WriteLine(title + " Uploaded");
-                        Dispatcher.Invoke(() => {
-                            Id = res.data[0].ToString();
-                            BookParser.Save(this);
-                        });
-                        //Dispatcher.BeginInvoke(new Action(() => { G.Log = Title + " 上传完成"; }));
-                        Debug.WriteLine(Title + " 上传完成");
-                    } else {
-                        Debug.WriteLine(title + " Upload Error:" + res.msg);
-                        //Dispatcher.BeginInvoke(new Action(() => { G.Log = Title + " 上传失败:" + G.Net[res.status][1]; }));
-                    }
-                }
-            });
-
-        }
-
         public String ToolTip {
             get {
                 String ret = "";
@@ -378,10 +304,10 @@ namespace TRBook {
 
        
 
-        public void MoreInfo() {
-            if (PluginManager.Instance["TRSpider"] != null) BookInfoManager.MoreInfo(this);
-            else Douban.MoreInfo(this);
-        }
+        //public void MoreInfo() {
+        //    if (PluginManager.Instance["TRSpider"] != null) BookInfoManager.MoreInfo(this);
+        //    else Douban.MoreInfo(this);
+        //}
 
         private List<IContentItemAdapter> positions;
         public IContentItemAdapter[] Positions;
@@ -401,6 +327,7 @@ namespace TRBook {
 
         private static void OnPositionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             if (d.IsNull()) return;
+            Debug.WriteLine("pos changed: " + e.OldValue + " -> " + e.NewValue);
             var o = d as Book;
             if (Math.Abs((int)e.OldValue - (int)e.NewValue) > DO_GATE) o.DoDo();
             if (o.Positions != null) {
@@ -427,16 +354,14 @@ namespace TRBook {
             } else {
                 o.SetValue(Book.CurrentTitleProperty, o.TotalTitle);
             }
-            if (o.PositionChanged.NotNull()) o.PositionChanged(o, new PluginEventArgs());
-            //if (Empty.PositionChanged.NotNull()) Empty.PositionChanged(o, EventArgs.Empty);
-            
+            if (o.PositionChanged.NotNull()) o.PositionChanged(o, new PluginEventArgs());            
         }
 
         private static void OnOffsetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e){
             if (d.IsNull()) return;
+            Debug.WriteLine("off changed: " + e.OldValue + " -> " + e.NewValue);
             var o = d as Book;
             if (o.OffsetChanged.NotNull()) o.OffsetChanged(o, new PluginEventArgs());
-            //if (Empty.OffsetChanged.NotNull())Empty.OffsetChanged(o,EventArgs.Empty);
         }
 
         private static object PositionCeorce(DependencyObject d, object baseValue) {
@@ -485,7 +410,7 @@ namespace TRBook {
             if (dodoLock) return;
             dodoLock = true;
             Debug.WriteLine("DODO");
-            Bookmark bmk = new Bookmark(this);
+            Positionable bmk = new Positionable(this);
             while (undoList.Count > undoPos) undoList.RemoveAt(undoList.Count - 1);
             undoList.Add(bmk);
             undoPos = undoList.Count;
@@ -494,21 +419,15 @@ namespace TRBook {
 
         public override void Close() {
             if (this.IsNull()) return;
-            PluginManager.Instance.Execute("TRContent", "-SelectChange", (ContentSelectedItemChangedEventHandler)Instance_SelectedItemChanged);
+            if (Closing != null) Closing(this, new PluginEventArgs());
+            PluginManager.Execute("TRContent", "-SelectChange", (ContentSelectedItemChangedEventHandler)Instance_SelectedItemChanged);
             positions = null;
             var p = Preview;
-            BookParser.Save(this);
-            LoadFinished = null;
+            Loaded = null;
             IsOpen = false;
-            if (Closed != null) Closed(this, new PluginEventArgs());
-            //if (Empty.Closed != null) Empty.Closed(this, EventArgs.Empty);
-            Bookmark.Clear();
             base.Close();
+            if (Closed != null) Closed(this, new PluginEventArgs());            
         }
-
-       
-
-        //public static Book Empty = new Book() { Bookmark = null };
 
         public static void Reopen(){
             if ((G.Book as Book).IsNull()) return;
@@ -522,19 +441,32 @@ namespace TRBook {
             G.Book = new Book(filename);
         }
 
+        public static void Open(IBook b) {
+            if (b == null) return;
+            if ((G.Book as Book).NotNull() && (G.Book as Book).Source == b.Source) return;
+            G.Book = new Book(b);
+        }
+
         void IBook.Open(object filename) { Book.Open((String)filename); }
 
         void IBook.Reopen() { Book.Reopen(); }
 
         public void Delete() {
-            if (!Source.IsNullOrEmpty())
-                File.Delete(BookParser.GetBookPath(this));
+            //if (!Source.IsNullOrEmpty())
+            //    File.Delete(BookParser.GetBookPath(this));
         }
 
         public override void Update() {
             base.Update();
             var p = Preview;
-            BookParser.Save(this);
+        }
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e) {
+            base.OnPropertyChanged(e);
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(e.Property.Name));
+
         }
     }
 }

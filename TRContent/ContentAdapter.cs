@@ -27,5 +27,7 @@ namespace TRContent {
         void Notify();
     }
 
-    public interface IContentAdapter : IContentItemAdapter { }
+    public interface IContentAdapter : IContentItemAdapter {
+        IContentItemAdapter CurrentChapter { get; set; }
+    }
 }

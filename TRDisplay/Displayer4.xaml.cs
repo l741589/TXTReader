@@ -64,13 +64,16 @@ namespace TRDisplay {
             Loaded += Displayer4_Loaded;
             PluginEventHandler eh1 = (d, e) => {
                 Clear();
-                Book = d as IBook;
                 Update();
+            };
+            PluginEventHandler eh2 = (d, e) => {
+                Clear();
             };
             PluginEventHandler eh = (d, e) => Update();
             G.BookChanged += (d, e) => {                
                 if (e.NewBook != null) {                    
-                    e.NewBook.LoadFinished += eh1;
+                    e.NewBook.Loaded += eh1;
+                    e.NewBook.Closed += eh2;
                     e.NewBook.PositionChanged += eh;
                     e.NewBook.OffsetChanged += eh;
                 } else {
@@ -80,9 +83,10 @@ namespace TRDisplay {
             };
             
             if (Book.NotNull()) {
-                Book.LoadFinished += eh1;
+                Book.Loaded += eh1;
                 Book.PositionChanged += eh;
                 Book.OffsetChanged += eh;
+                Book.Closed += eh2;
                 Update();
             }
             Options.Instance.Skin.PropertyChanged += (d, e) => UpdateSkin();
@@ -246,7 +250,7 @@ namespace TRDisplay {
                 Canvas.SetLeft(tb, 0);
             }
             if (FirstLine == 0 && Offset > 0) { Offset = 0; reupdate = true; }
-            if (FirstLine != 0 && lastbottom < CanvasHeight) { Offset += CanvasHeight - lastbottom; reupdate = true; }
+            if (FirstLine != 0 && lastbottom < CanvasHeight && Offset != lastbottom) { Offset += CanvasHeight - lastbottom; reupdate = true; }
             set.Clear();
             foreach (var e in map) if (e.Value.Updated == false) set.Add(e.Key);
             foreach (var e in set) { canvas.Children.Remove(map[e]); map.Remove(e); }
@@ -260,7 +264,7 @@ namespace TRDisplay {
                 Array c = e.Data.GetData(DataFormats.FileDrop) as Array;
                 if (c == null || c.Length <= 0) return;
                 //EmptyBook.Open(c.GetValue(0).ToString());
-                PluginManager.Instance.Execute("TRBook", "open", c.GetValue(0).ToString());
+                PluginManager.Execute("TRBook", "open", c.GetValue(0).ToString());
             }
             base.OnDrop(e);
         }

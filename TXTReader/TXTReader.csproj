@@ -113,6 +113,7 @@
     <Compile Include="Interfaces\IBook.cs" />
     <Compile Include="Interfaces\ITRTimer.cs" />
     <Compile Include="Interfaces\PluginEventArgs.cs" />
+    <Compile Include="MyCommands.cs" />
     <Compile Include="OptionsParser.cs" />
     <Compile Include="Plugins\PluginEntry.cs" />
     <Compile Include="Plugins\PluginManager.cs" />

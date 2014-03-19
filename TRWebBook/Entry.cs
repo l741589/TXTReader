@@ -7,15 +7,16 @@ using System.Windows.Input;
 using System.Windows.Media;
 using TRSpider;
 using TXTReader;
+using TXTReader.Interfaces;
 using TXTReader.Plugins;
 using Zlib.Utility;
 
 namespace TRWebBook {
     class Entry  : PluginEntry{
         private static Res Res = new Res();
-        public static readonly ImageSource NO_COVER = null;
+        public static readonly String NO_COVER = null;
         static Entry() {
-            NO_COVER = Res["src_nocover"] as ImageSource;
+            NO_COVER = "/TRWebBook;component/res/no_cover.png";;
         }
 
         public override string[] Dependency {
@@ -31,7 +32,7 @@ namespace TRWebBook {
         }
 
         public override void OnLoad(System.Windows.StartupEventArgs e) {
-            AddContextMenu(Res["menu"] as ContextMenu);
+            AddContextMenu(Entry.Res["menu"] as ContextMenu);
             APIs.Add("+downloadinfo", new Func<BookDownloader, object>(d => {
                 if (Manager["FloatControls"] != null) {
                     var t = Type.GetType("TRWebBook.DownloadInfo");
@@ -44,6 +45,7 @@ namespace TRWebBook {
                 return null;
             }));
             APIs.Add("-downloadinfo", new Action<object>(o => {
+                if (o == null) return;
                 var m = o.GetType().GetMethod("Stop");
                 if (m == null) return;
                 m.Invoke(o, null);
@@ -52,22 +54,7 @@ namespace TRWebBook {
 
         public override void OnWindowCreate(System.Windows.Window w) {
             w.CommandBindings.Add(Res["searchBinding"] as CommandBinding);
-            w.CommandBindings.Add(new CommandBinding(ApplicationCommands.Close,
-               (d, e) => { G.Book = null; },
-               (d, e) => { e.CanExecute = G.Book.NotNull(); })
-           );
-
-            w.CommandBindings.Add(new CommandBinding(MyCommands.Reopen,
-                (d, e) => { G.Book.Reopen(); },
-                (d, e) => { e.CanExecute = G.Book.NotNull(); })
-            );
-
-            w.CommandBindings.Add(new CommandBinding(ApplicationCommands.Open,
-            (d, e) => {
-                var dlg = new System.Windows.Forms.OpenFileDialog();
-                dlg.Filter = "可编辑书籍|*.trbx";
-                if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK) G.Book = new Book(dlg.FileName);
-            }, (d, e) => { e.CanExecute = true; }));
+            RegisterOpenCallback("trbx", "可编辑书籍");
             w.KeyDown+=w_KeyDown;
         }
 
@@ -88,6 +75,10 @@ namespace TRWebBook {
             
         }
 
-        
+        public override void OnOpen(object arg) {
+            if (arg is String) Book.Open(arg.ToString());
+            else if (arg is BookDownloader) Book.Open((BookDownloader)arg);
+            else if (arg is IBook) Book.Open((IBook)arg);
+        }
     }
 }

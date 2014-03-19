@@ -6,14 +6,11 @@ using System.Threading.Tasks;
 using FloatControls;
 using System.Windows.Data;
 using Zlib.Utility;
-namespace TRBook {
+namespace TRBookcase {
     class FloatTiltle : FloatMessage {
 
         public FloatTiltle() {
-            G.BookChanged += G_BookChanged;
-            //Book.Empty.Closed += Empty_Closed;
-            if (G.Book.IsNull()) return;
-            SetBinding(ValueProperty, new Binding("CurrentTitle") { Source = G.Book });
+            G.BookChanged += G_BookChanged;       
             Name = "章节";
             this.Register();
         }
@@ -22,7 +19,14 @@ namespace TRBook {
             Value = null;
             if (sender.IsNull()) return;
             BindingOperations.ClearBinding(this, ValueProperty);
-            SetBinding(ValueProperty, new Binding("CurrentTitle") { Source = sender });
+            if (e.NewBook != null) {
+                SetBinding(ValueProperty, new Binding("CurrentTitle") { Source = e.NewBook });
+                e.NewBook.Closed += NewBook_Closed;
+            }
+        }
+
+        void NewBook_Closed(object sender, TXTReader.Interfaces.PluginEventArgs e) {
+            BindingOperations.ClearBinding(this, ValueProperty);
         }
     }
 }

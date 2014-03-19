@@ -10,13 +10,14 @@ using Zlib.Net;
 using System.IO;
 using System.Windows.Media.Imaging;
 using Zlib.Algorithm;
+using TXTReader.Interfaces;
 
-namespace TRBook.Net {
+namespace TRBookcase.Net {
     static class BookInfoManager {
         private static ZTask infoTask = new ZTask();
         private static ZTask coverTask = new ZTask();
 
-        public static bool IsNeedMoreInfo(Book b) {
+        public static bool IsNeedMoreInfo(IBook b) {
             if (b.IsNull()) return false;
             if (b.Title.IsNullOrWhiteSpace()) return false;
             if (b.Author.IsNullOrWhiteSpace()) return true;
@@ -24,7 +25,7 @@ namespace TRBook.Net {
             return false;
         }
 
-        public static async void MoreInfo(Book b) {
+        public static async void MoreInfo(IBook b) {
             
             if (!SpiderCollection.Instance.IsLoaded) {
                 //EventHandler holder=null;
@@ -46,15 +47,11 @@ namespace TRBook.Net {
                 if (!cd.Author.IsNullOrWhiteSpace()) {
                     b.Author = cd.Author;
                 }
-                if (!cd.CoverUrl.IsNullOrWhiteSpace()) {
-                    byte[] bs = (byte[])await coverTask.Run(() => { return new ZWeb().DownloadData(cd.CoverUrl); });
-                    if (bs == null) continue;
-                    String path = G.PATH_COVER + A.MD5(bs) + Path.GetExtension(cd.CoverUrl);
-                    if (!File.Exists(path)) File.WriteAllBytes(path, bs);
-                    b.Cover = new BitmapImage(new Uri(path));
+                if (!cd.CoverUrl.IsNullOrWhiteSpace()) {                    
+                    b.Cover = cd.CoverUrl;
                 }
             }
-            b.Update();
+            //b.Update();
         }
     }
 }

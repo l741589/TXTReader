@@ -14,11 +14,11 @@ using System.Windows.Controls;
 namespace Zlib.Algorithm {
 
     static public class A {
-        public const String HTTP_HEAD = "http://"; 
+        public const String HTTP_HEAD = "http://";
         public const String FILE_HEAD = "file:///";
-        public const String PACK_HEAD = "pack://";       
+        public const String PACK_HEAD = "pack://";
 
-        public static void CopyText(out String[] text,ICollection<String> src, int piecelen = 4096) {
+        public static void CopyText(out String[] text, ICollection<String> src, int piecelen = 4096) {
             if (piecelen == 0) {
                 text = src.ToArray();
                 return;
@@ -37,22 +37,21 @@ namespace Zlib.Algorithm {
         public static String CheckDir(String path) {
             if (Directory.Exists(path)) return path;
             String[] paths = path.Split(new char[] { '\\', '/' });
-            String dir="";
-            foreach (String s in paths)
-            {
-                dir+=s;
+            String dir = "";
+            foreach (String s in paths) {
+                dir += s;
                 if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
                 dir += "/";
             }
             return path;
         }
 
-        public static String CheckExt(String path,String ext) {
+        public static String CheckExt(String path, String ext) {
             if (Path.GetExtension(path) == ext) return path;
             else return path + ext;
         }
 
-        public static bool FileExists(String uri){
+        public static bool FileExists(String uri) {
             if (uri.StartsWith(HTTP_HEAD)) return false;
             if (uri.StartsWith(FILE_HEAD)) return File.Exists(uri.Substring(FILE_HEAD.Length));
             if (uri.StartsWith(PACK_HEAD)) return true;
@@ -76,7 +75,7 @@ namespace Zlib.Algorithm {
             int[,] f = new int[a.Length + 1, b.Length + 1];
             for (int i = 1; i <= a.Length; ++i) {
                 for (int j = 1; j <= b.Length; ++j) {
-                    if (a[i-1] == b[j-1]) f[i, j] = Max(f[i - 1, j - 1] + 1, f[i - 1, j], f[i, j - 1]);
+                    if (a[i - 1] == b[j - 1]) f[i, j] = Max(f[i - 1, j - 1] + 1, f[i - 1, j], f[i, j - 1]);
                     else f[i, j] = Max(f[i - 1, j - 1], f[i - 1, j], f[i, j - 1]);
                 }
             }
@@ -84,7 +83,7 @@ namespace Zlib.Algorithm {
         }
 
         public static void Resort(ListBox lb) {
-            SortDescription[] sds=lb.Items.SortDescriptions.ToArray();
+            SortDescription[] sds = lb.Items.SortDescriptions.ToArray();
             lb.Items.SortDescriptions.Clear();
             foreach (SortDescription sd in sds) lb.Items.SortDescriptions.Add(sd);
         }
@@ -105,16 +104,34 @@ namespace Zlib.Algorithm {
             s = s.Replace("%", String.Format("%{0:x2}", (short)'%'));
             foreach (var c in Path.GetInvalidFileNameChars()) {
                 s = s.Replace(c.ToString(), String.Format("%{0:x2}", (short)c));
-            }            
+            }
             return s;
         }
 
         public static String DecodeFilename(String filename) {
             //return HttpUtility.UrlDecode(filename);
             return R_FILENAME_DECODER.Replace(filename, (n) => {
-                char c=(char)int.Parse(n.Value.Substring(1), System.Globalization.NumberStyles.HexNumber);
+                char c = (char)int.Parse(n.Value.Substring(1), System.Globalization.NumberStyles.HexNumber);
                 return c.ToString();
             });
+        }
+
+        public static String MD5(String s) {
+            return MD5(s, Encoding.UTF8);
+        }
+
+        public static String MD5(String s, Encoding e) {
+            return MD5(e.GetBytes(s));
+        }
+
+        public static String MD5F(String filepath) {
+            try {
+                if (File.Exists(filepath))
+                    return MD5(File.ReadAllBytes(filepath));
+                return null;
+            } catch {
+                return null;
+            }
         }
 
         public static String MD5(byte[] data) {
@@ -122,13 +139,13 @@ namespace Zlib.Algorithm {
             var md5data = md5.ComputeHash(data);
             md5.Clear();
             string str = "";
-            for (int i = 0; i < md5data.Length ; i++) {
+            for (int i = 0; i < md5data.Length; i++) {
                 str += md5data[i].ToString("x").PadLeft(2, '0');
             }
             return str;
         }
 
-        public static T WorkWith<T>(T value,Func<T,T> work) {
+        public static T WorkWith<T>(T value, Func<T, T> work) {
             if (work == null) return value;
             return work(value);
         }
@@ -157,10 +174,10 @@ namespace Zlib.Algorithm {
             return RandomString(length, cs.ToArray()); ;
         }
 
-        public static String RandomString(int length,params char[] dictionary) {
+        public static String RandomString(int length, params char[] dictionary) {
             StringBuilder sb = new StringBuilder(length);
-            Random r=new  Random();
-            int l=dictionary.Length;
+            Random r = new Random();
+            int l = dictionary.Length;
             for (int i = 0; i < length; ++i) {
                 sb.Append(dictionary[r.Next(l)]);
             }

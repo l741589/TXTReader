@@ -65,5 +65,11 @@ namespace TXTReader.Plugins {
             }
             return null;
         }
+
+        public virtual void OnOpen(object arg) { }
+
+        public void RegisterOpenCallback(String ext, String desc) {
+            PluginManager.Instance.OpenCallback.Add(ext.Trim(' ', '*', '.'), new Tuple<string, PluginEntry>(desc, this));
+        }
     }
 }

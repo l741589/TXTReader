@@ -28,7 +28,7 @@ namespace TRSpider {
     /// </summary>
     public partial class SpiderPanel : UserControl {
 
-        private String WorkDir { get { return A.CheckDir(G.PATH + @"spider\"); } }
+        
         private SpiderCollection spiders = SpiderCollection.Instance;
         private GridLength GL_U0 = new GridLength(0);
         private GridLength GL_U1 = new GridLength(1.618, GridUnitType.Star);
@@ -36,25 +36,10 @@ namespace TRSpider {
         public SpiderPanel() {
             InitializeComponent();
             lv.ItemsSource = spiders;
-            Load();
-        }
-
-        public void Load() {
-        #if DEBUG
+#if DEBUG
             tb.Text = "星辰变";
-        #endif
-            spiders.Clear();
-            String[] files = Directory.GetFiles(WorkDir, "*.zss");
-            foreach (var f in files) {
-                try {
-                    CustomSpider cs = TRZSS.Instance.Load(f);
-                    spiders.Add(cs);
-                } catch (ZSSParseException ee) {
-                    MessageBox.Show("Exception Occurs When Parsing '" + f + "':\n" + ee.Message);
-                }
-            }
-            spiders.OnLoaded(spiders, EventArgs.Empty);
-        }
+#endif
+        }        
 
         private void MenuItem_Click(object sender, RoutedEventArgs e) {
             var cs = ((sender as Control).DataContext as CustomSpider);
@@ -69,7 +54,7 @@ namespace TRSpider {
         }
 
         private void Button_Click(object sender, RoutedEventArgs e) {
-            Load();
+            SpiderCollection.Instance.Load();
         }
 
         private void MenuItem_Click_1(object sender, RoutedEventArgs e) {

@@ -18,7 +18,10 @@
             <converter:SizeableConverter x:Key="SizeableConverter"/>
             <converter:ToolPanelWidthCvt x:Key="toolPanelWidthCvt"/>
             <ContextMenu x:Key="mainContextMenu">
-                
+                <MenuItem Header="打开(_O)" Command="ApplicationCommands.Open"/>
+                <MenuItem Header="关闭(_C)" Command="ApplicationCommands.Close"/>
+                <MenuItem Header="重开(_R)" Command="local:MyCommands.Reopen"/>
+                <Separator/>
                 <MenuItem Header="滚屏(_S)" IsCheckable="True" Loaded="mi_scroll_Loaded"/>
                 <Separator/>
                 <MenuItem Header="边框" IsCheckable="True" Loaded="mi_border_Loaded"/>

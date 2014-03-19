@@ -5,6 +5,7 @@ using System.Text;
 using TRContent;
 using TRSpider;
 using Zlib.Text.Xml;
+using Zlib.Utility;
 
 namespace TRWebBook {
     internal partial class Book {
@@ -40,11 +41,24 @@ namespace TRWebBook {
                 r=r.Read("text",n => {
                     var a = n.Attributes["ref"];
                     if (a == null&&dic!=null) {
-                        target.Text=(n.InnerText.Split(new String[] { "\r\n" }, StringSplitOptions.None)).ToList();
+                        target.Text=(n.InnerText.Split(new char[] { '\r','\n' }, StringSplitOptions.RemoveEmptyEntries)).ToList();
                     } else {
                         ChapterDescEx cd;
                         dic.TryGetValue(int.Parse(a.Value), out cd);
                         target.ChapterDesc = cd;
+                        switch(cd.State) {
+                            case ChapterDescEx.States.Success:
+                            if (cd.IsManual && cd.ManualText!=null) {
+                                target.Text = (cd.ManualText.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)).ToList();
+                            } else {
+                                if (cd.Text != null)
+                                    target.Text = (cd.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)).ToList();
+                            }
+                            break;
+                            case ChapterDescEx.States.Fail: target.Text = new string[] { "(加载失败)" }.ToList(); break;
+                            case ChapterDescEx.States.Pending:
+                            case ChapterDescEx.States.Ready: target.Text = new string[] { "(等待加载中)" }.ToList(); break;
+                        }
                     }
                 });
                 if (target.Children != null) target.Children.Clear();

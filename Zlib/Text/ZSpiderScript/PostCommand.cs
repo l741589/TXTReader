@@ -38,9 +38,11 @@ namespace Zlib.Text.ZSpiderScript {
                     String res = null;
                     foreach (var p in Header) W.Headers[p.Key] = p.Value;
                     if (ContainsSwich("-nr")) W.AllowAutoRedirect = false; else W.AllowAutoRedirect = true;
-                    if (this[0] != null && this[1] != null) res = W.UploadString(GenVar(this[0]), GenVar(this[1]));
-                    else if (this[0] != null) res = W.UploadString(input, GenVar(this[0]));
-                    else res = W.UploadString(input, "");
+                    lock (W) {
+                        if (this[0] != null && this[1] != null) res = W.UploadString(GenVar(this[0]), GenVar(this[1]));
+                        else if (this[0] != null) res = W.UploadString(input, GenVar(this[0]));
+                        else res = W.UploadString(input, "");
+                    }
                     W.AllowAutoRedirect = true;
                     if (ContainsSwich("-dh")) {
                         var keys = W.ResponseHeaders.AllKeys;

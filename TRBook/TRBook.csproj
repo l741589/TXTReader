@@ -73,30 +73,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Book.cs" />
-    <Compile Include="BookcasePanel.xaml.cs">
-      <DependentUpon>BookcasePanel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BookCollection.cs" />
     <Compile Include="ContentOptionPanel.xaml.cs">
       <DependentUpon>ContentOptionPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Net\BookInfoManager.cs" />
-    <Compile Include="Bookmark.cs" />
-    <Compile Include="BookmarkPanel.xaml.cs">
-      <DependentUpon>BookmarkPanel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="BookParser.cs" />
     <Compile Include="Chapter.cs" />
     <Compile Include="ChapterCollection.cs" />
     <Compile Include="ChapterDesc.cs" />
-    <Compile Include="Converter\BookLengthConverter.cs" />
-    <Compile Include="Converter\BookmarkConverter.cs" />
-    <Compile Include="Converter\BookStateVisibilityConverter.cs" />
     <Compile Include="Entry.cs" />
-    <Compile Include="FloatTiltle.cs" />
     <Compile Include="G.cs" />
-    <Compile Include="MyCommands.cs" />
-    <Compile Include="Net\Douban.cs" />
     <Compile Include="Res.xaml.cs">
       <DependentUpon>Res.xaml</DependentUpon>
     </Compile>
@@ -124,18 +108,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="BookcasePanel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="BookmarkPanel.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Include="ContentOptionPanel.xaml">

@@ -52,6 +52,14 @@ namespace Zlib.Algorithm {
             return s1.Substring(index - length + 1, length);
         }
 
+        public static int LongestCommonSubsequenceLength(String s1, String s2) {
+            return LongestCommonSubsequenceLength(s1.ToArray(), s2.ToArray());
+        }
+
+        public static String LongestCommonSubsequence(String s1, String s2) {
+            return new String(LongestCommonSubsequence(s1.ToArray(), s2.ToArray()).ToArray());
+        }
+
         public static int LongestCommonSubsequenceLength<E>(E[] s1, E[] s2) {
             int[,] num = new int[s1.Length + 1, s2.Length + 1];
             for (int i = 1; i < s1.Length + 1; i++) {

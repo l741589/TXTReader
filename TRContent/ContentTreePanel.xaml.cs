@@ -49,7 +49,7 @@ namespace TRContent {
             G.BookChanged += (d, e) => {
                 UpdateContentUI(e.NewBook as IContentAdapter);
                 if (e.NewBook != null) {
-                    e.NewBook.LoadFinished += delegate { UpdateContentUI(e.NewBook as IContentAdapter); };
+                    e.NewBook.Loaded += delegate { UpdateContentUI(e.NewBook as IContentAdapter); };
                 }
             };
             

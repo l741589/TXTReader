@@ -63,7 +63,8 @@ namespace TRWebBook {
             base.OnPropertyChanged(e);
         }
 
-        void d_DownloadingChapter(object sender, DownloadingChapterEventArgs e) {            
+        void d_DownloadingChapter(object sender, DownloadingChapterEventArgs e) {
+            if (d == null) return;
             Dispatcher.Invoke(() => {
                 if (Format == null) Format = "{0}/{1}(失败{2}){3}";
                 switch (e.State) {
@@ -81,8 +82,10 @@ namespace TRWebBook {
             });
         }
 
-        void d_ContentFetched(object sender, EventArgs e) {           
-            Text = String.Format(Format, Success, Total, Fail, "加载目录完成，正在加载章节s");
+        void d_ContentFetched(object sender, EventArgs e) {
+            if (d == null) return;
+            if (d.StdSpider.BookDesc == null || d.StdSpider.Chapters == null) return;
+            Text = String.Format(Format, Success, Total, Fail, "加载目录完成，正在加载章节");
             Format = null;
             try {
                 Total = d.StdSpider.Chapters.Count;
@@ -93,6 +96,7 @@ namespace TRWebBook {
         }
 
         void d_Preparing(object sender, PreparingEventArgs e) {
+            if (d == null) return;
             if (e.Exception == null) {
                 Dispatcher.Invoke(() => {
                     Text = "从【" + e.Spider.Name + "】抓取目录成功";
@@ -100,10 +104,15 @@ namespace TRWebBook {
                 });
                 
             } else {
-                Dispatcher.Invoke(() => {
+                Dispatcher.Invoke(new Action(() => {
                     Text = "从【" + e.Spider.Name + "】抓取目录失败";
                     ++Fail;
-                });                
+                    if (e.Spider.IsStandard) {
+                        MessageBox.Show(TXTReader.G.MainWindow,"下载小说\"" + e.Spider.BookDesc.Title + "\"失败");
+                        Stop();
+                        TXTReader.G.Book = null;
+                    }                    
+                }));                
             }
         }
     }

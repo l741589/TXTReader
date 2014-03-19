@@ -36,7 +36,7 @@
         <Grid>
             <Border Margin="8">
                 <StackPanel Orientation="Vertical" x:Name="body">
-                    <local:UserPanel/>
+                    <local:UserPanel Visibility="Collapsed"/>
                 </StackPanel> 
             </Border>
         </Grid>
