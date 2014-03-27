@@ -114,12 +114,16 @@ namespace Zlib.Utility {
         }
 
         public static T[] QuickSort<T>(this IEnumerable<T> t) {
+            if (t == null) return null;
+            if (t.IsEmpty()) return null;
             var tt=QuickSort(t, (Comparer<T>)null);
             return tt;
         }
 
         
         public static T[] QuickSort<T>(this IEnumerable<T> t, Comparison<T> comparison) {
+            if (t == null) return null;
+            if (t.IsEmpty()) return null;
             if (comparison == null) return QuickSort(t);
             else return QuickSort(t, new ZComparer<T>(comparison));
         }

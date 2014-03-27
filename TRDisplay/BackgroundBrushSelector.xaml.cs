@@ -78,8 +78,12 @@ namespace TRDisplay {
             dlg.Multiselect = false;
             if (dlg.ShowDialog() == true) {
                 string imageFilename = dlg.FileName;
-                ImageSource imgsrc = new BitmapImage(new Uri(imageFilename));
-                Image = imgsrc;
+                try {
+                    ImageSource imgsrc = new BitmapImage(new Uri(imageFilename));
+                    Image = imgsrc;
+                }catch{
+                    Image = null;
+                }
             }
             //Update(e);
         }

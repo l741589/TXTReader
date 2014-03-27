@@ -16,7 +16,7 @@ namespace TRDisplay {
             instance = this;
         }
 
-        public const int DEFAULT_SPEED = 5;
+        public const int DEFAULT_SPEED = 30;
 
         static private Options instance;
         static public Options Instance { get { if (instance == null) instance = new Options(); return instance; } }

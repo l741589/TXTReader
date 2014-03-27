@@ -11,6 +11,7 @@ using Zlib.Utility;
 using Zlib.Text;
 using System.Windows.Media.Imaging;
 using Zlib.Text.Xml;
+using Zlib.Algorithm;
 
 namespace Zlib.UI.Utility {
 
@@ -279,7 +280,18 @@ namespace Zlib.UI.Utility {
                 return r => r.Child(S_ZBRUSH, new Version("1.0.0.0"))
                     .Read(S_SCALE, n => Scale = (ScaleType)Enum.Parse(typeof(ScaleType), n.InnerText))
                     .Read(S_COLOR, n => Color = (Color)ColorConverter.ConvertFromString(n.InnerText))
-                    .Read(S_IMAGE, n => Image = new BitmapImage(new Uri(n.InnerText)))
+                    .Read(S_IMAGE, n => Image = A.WorkWith(() => {
+                        try {
+                            return new BitmapImage(new Uri(A.WorkWith(() => {
+                                var s = n.InnerText;
+                                if (!s.Contains(":"))
+                                    s = AppDomain.CurrentDomain.BaseDirectory + s;
+                                return s;
+                            })));
+                        } catch {
+                            return null;
+                        }
+                    }))
                     .Parent;
             }
         }

@@ -81,7 +81,7 @@ namespace TRBook {
                 if (!RegUtil.CheckSuffixName(".trb", "TXTReaderBook", "TXTReader小说", null, AppDomain.CurrentDomain.BaseDirectory + "TXTReader.exe")) {
                     if (System.Windows.Forms.MessageBox.Show("你还没有将.trb文件关联到TXTReader，是否设置？", "关联文件", System.Windows.Forms.MessageBoxButtons.YesNo, System.Windows.Forms.MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes) {
                         if (!UAC.Execute(CSN)) {
-                            System.Windows.Forms.MessageBox.Show("设置失败！");
+                            System.Windows.Forms.MessageBox.Show("设置失败！\r\n请检查防火墙设置并请确保您拥有管理员权限。");
                         }
                     }
                 }
